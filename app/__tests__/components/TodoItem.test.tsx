@@ -198,7 +198,9 @@ describe('TodoItem', () => {
         <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
-      const deleteButton = screen.getByRole('button', { name: /delete todo/i });
+      const deleteButton = screen.getByRole('button', {
+        name: /^delete todo/i,
+      });
       expect(deleteButton).toBeInTheDocument();
     });
 
@@ -212,7 +214,9 @@ describe('TodoItem', () => {
         <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
-      const deleteButton = screen.getByRole('button', { name: /delete todo/i });
+      const deleteButton = screen.getByRole('button', {
+        name: /^delete todo/i,
+      });
       await user.click(deleteButton);
 
       expect(mockOnDelete).toHaveBeenCalledWith('delete-test-id');
@@ -225,7 +229,9 @@ describe('TodoItem', () => {
         <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
-      const deleteButton = screen.getByRole('button', { name: /delete todo/i });
+      const deleteButton = screen.getByRole('button', {
+        name: /^delete todo/i,
+      });
       expect(deleteButton).toHaveAttribute(
         'aria-label',
         expect.stringContaining('Accessible delete todo')
@@ -242,7 +248,9 @@ describe('TodoItem', () => {
         <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
-      const deleteButton = screen.getByRole('button', { name: /delete todo/i });
+      const deleteButton = screen.getByRole('button', {
+        name: /^delete todo/i,
+      });
 
       // Focus the delete button and activate with Enter
       deleteButton.focus();
@@ -263,7 +271,9 @@ describe('TodoItem', () => {
         <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
-      const deleteButton = screen.getByRole('button', { name: /delete todo/i });
+      const deleteButton = screen.getByRole('button', {
+        name: /^delete todo/i,
+      });
 
       // Should have proper button type
       expect(deleteButton).toHaveAttribute('type', 'button');
@@ -295,7 +305,7 @@ describe('TodoItem', () => {
         />
       );
 
-      let deleteButton = screen.getByRole('button', { name: /delete todo/i });
+      let deleteButton = screen.getByRole('button', { name: /^delete todo/i });
       await user.click(deleteButton);
       expect(mockOnDelete).toHaveBeenCalledWith('incomplete-to-delete');
 
@@ -309,7 +319,7 @@ describe('TodoItem', () => {
         />
       );
 
-      deleteButton = screen.getByRole('button', { name: /delete todo/i });
+      deleteButton = screen.getByRole('button', { name: /^delete todo/i });
       await user.click(deleteButton);
       expect(mockOnDelete).toHaveBeenCalledWith('completed-to-delete');
     });
@@ -325,7 +335,9 @@ describe('TodoItem', () => {
       );
 
       const toggleButton = screen.getByRole('button', { name: /toggle todo/i });
-      const deleteButton = screen.getByRole('button', { name: /delete todo/i });
+      const deleteButton = screen.getByRole('button', {
+        name: /^delete todo/i,
+      });
 
       // Click toggle button
       await user.click(toggleButton);
@@ -346,7 +358,9 @@ describe('TodoItem', () => {
       );
 
       const toggleButton = screen.getByRole('button', { name: /toggle todo/i });
-      const deleteButton = screen.getByRole('button', { name: /delete todo/i });
+      const deleteButton = screen.getByRole('button', {
+        name: /^delete todo/i,
+      });
 
       // Both buttons should exist and be different elements
       expect(toggleButton).toBeInTheDocument();
