@@ -45,6 +45,19 @@ This file contains specific instructions for Claude Code when working on this To
 - **Atomic commits**: Each commit should represent a complete, logical change
 - **Co-author attribution**: Always include Claude Code co-authorship in commits
 
+### Push Workflow
+
+- **Push after completion**: Always push to remote after completing a feature or issue
+- **Verify push success**: Confirm changes are visible on GitHub
+- **Update remote tracking**: Ensure local branch tracks remote properly
+- **Current branching**: All work is currently done directly on main branch
+- **Feature completion sequence**:
+  1. Complete feature implementation
+  2. Run tests and verify functionality
+  3. Commit changes with issue closure
+  4. Push to remote repository
+  5. Verify GitHub issue was automatically closed
+
 ## Project Structure
 
 ```
