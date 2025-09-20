@@ -32,6 +32,7 @@ Each ADR follows this structure:
 | [007](007-state-management-approach.md)   | Use custom hooks for state management           | Accepted | 2025-09-20 |
 | [008](008-github-issues-workflow.md)      | GitHub Issues for project management            | Accepted | 2025-09-20 |
 | [009](009-pre-commit-linting-strategy.md) | Pre-commit linting strategy                     | Accepted | 2025-09-20 |
+| [010](010-atomic-commit-strategy.md)      | Atomic commit strategy adoption                 | Accepted | 2025-09-20 |
 
 ## Creating New ADRs
 
