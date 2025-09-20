@@ -355,3 +355,85 @@ To deploy your own Next.js project to Vercel:
 - **Environment Variables**: Ensure all required variables are set in Vercel dashboard
 - **Node.js Version**: Verify `engines` field in package.json matches Vercel's Node.js version
 - **Dependencies**: Ensure package-lock.json is committed for reproducible builds
+
+## 📚 Documentation
+
+### Documentation Organization
+
+This project maintains comprehensive documentation across multiple files, each serving specific purposes:
+
+#### Core Documentation Files
+
+- **[README.md](README.md)** (this file): Project overview, setup instructions, and contributor guidance
+- **[CLAUDE.md](CLAUDE.md)**: Development guidelines and Claude Code collaboration instructions
+- **[docs/adr/](docs/adr/)**: Architecture Decision Records documenting technical decisions
+
+#### Specialized Documentation
+
+- **[docs/guidelines/documentation-standards.md](docs/guidelines/documentation-standards.md)**: Documentation consistency requirements and workflows
+- **[docs/guidelines/priority-system.md](docs/guidelines/priority-system.md)**: GitHub issue priority assessment and management
+- **[docs/guidelines/complexity-estimation.md](docs/guidelines/complexity-estimation.md)**: Complexity-based effort estimation guidelines
+- **[docs/adr/010-atomic-commit-strategy.md](docs/adr/010-atomic-commit-strategy.md)**: Atomic commit strategy and implementation
+
+#### Documentation Navigation
+
+**For Contributors:**
+- Start with [README.md](README.md) for project overview and setup
+- Review [CLAUDE.md](CLAUDE.md) for development workflow and coding standards
+- Check relevant [ADRs](docs/adr/) for architectural context
+- Follow [documentation standards](docs/guidelines/documentation-standards.md) for consistency
+
+**For Technical Decisions:**
+- Review [ADR Process](docs/adr/PROCESS.md) before making architectural decisions
+- Browse [ADR Index](docs/adr/README.md) for existing decisions
+- Check [CLAUDE.md](CLAUDE.md) for development practice requirements
+
+**For Project Management:**
+- Use [priority system guidelines](docs/guidelines/priority-system.md) for issue labeling
+- Apply [complexity estimation](docs/guidelines/complexity-estimation.md) for effort planning
+- Follow [atomic commit guidelines](docs/adr/010-atomic-commit-strategy.md) for code history
+
+### Documentation Maintenance
+
+#### Update Requirements
+
+**Major Changes** require updates across multiple documentation files:
+- **Architectural Decisions**: Create ADR, update CLAUDE.md, update README.md
+- **Development Practices**: Update CLAUDE.md, update README.md contributor guidelines
+- **Project Structure**: Update README.md setup, update CLAUDE.md guidelines
+- **Quality Standards**: Update CLAUDE.md standards, create supporting ADR
+
+**Documentation Consistency Checklist:**
+```markdown
+## Documentation Updates Required
+- [ ] Create/update relevant ADR with decision rationale
+- [ ] Update CLAUDE.md development guidelines
+- [ ] Update README.md project information
+- [ ] Ensure cross-references between documents are current
+- [ ] Verify documentation consistency across all files
+```
+
+#### Contributor Responsibilities
+
+**All Contributors:**
+- Update documentation for features being implemented
+- Follow documentation update requirements for changes
+- Maintain consistency with existing documentation standards
+- Include documentation updates in code reviews
+
+**Maintainers:**
+- Enforce documentation standards across the project
+- Review documentation updates for accuracy and consistency
+- Update documentation processes as the project evolves
+- Ensure documentation supports the educational mission
+
+### Documentation Quality Standards
+
+- **Clarity**: Use clear, concise language appropriate to the audience
+- **Consistency**: Maintain consistent terminology and style across documents
+- **Currency**: Keep information up-to-date and relevant to current project state
+- **Completeness**: Include all necessary information for the intended audience
+- **Cross-References**: Provide appropriate links between related documentation
+- **Accessibility**: Ensure documentation is accessible to all intended users
+
+This comprehensive documentation approach ensures that project knowledge is preserved, decisions are traceable, and contributors can effectively understand and contribute to the project's continued development.

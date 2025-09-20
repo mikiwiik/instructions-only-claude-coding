@@ -176,7 +176,7 @@ Ready to proceed with implementation? Please approve or request modifications.
 
 **🔀 REQUIREMENT**: All code changes must follow atomic commit practices for improved code history, review, and debugging.
 
-**📋 Full Guidelines**: See [`docs/guidelines/atomic-commits.md`](docs/guidelines/atomic-commits.md) for
+**📋 Full Guidelines**: See [ADR-010: Atomic Commit Strategy](docs/adr/010-atomic-commit-strategy.md) for
 comprehensive commit strategy and workflow details.
 
 #### Atomic Commit Principles
@@ -303,6 +303,59 @@ git commit -m "test: add edge cases for feature X (#issue)"
 - **Keep Purpose Clear**: Maintain the educational focus and learning objectives in documentation
 - **Project Evolution**: Update project description as new features are added
 - **Learning Context**: Ensure documentation supports the educational mission of the project
+
+### Documentation Consistency Requirements
+
+**🚨 CRITICAL REQUIREMENT**: All major changes must maintain consistency across CLAUDE.md, README.md, and ADRs to preserve project knowledge and ensure accurate guidance.
+
+**📋 Full Guidelines**: See [`docs/guidelines/documentation-standards.md`](docs/guidelines/documentation-standards.md) for comprehensive documentation consistency requirements and workflows.
+
+#### When Documentation Updates Are Required
+
+**Major Changes Requiring Multi-Document Updates:**
+- **Architectural Decisions**: Technology choices, design patterns, system structure changes
+- **Development Practices**: Workflow changes, testing approaches, code review processes
+- **Project Structure**: Directory organization, build process changes, configuration modifications
+- **Quality Standards**: Linting rule changes, testing strategy modifications, code standards updates
+- **Contributor Guidelines**: Onboarding process changes, collaboration tool adoption
+
+**Documentation Update Workflow:**
+1. **Impact Assessment**: Identify which documentation files are affected by the change
+2. **ADR Creation**: Document decision rationale and alternatives considered (if applicable)
+3. **CLAUDE.md Updates**: Update development guidelines, workflows, and standards
+4. **README.md Updates**: Update project overview, setup instructions, contributor guidelines
+5. **Cross-Reference Maintenance**: Ensure links between documents remain current and accurate
+6. **Consistency Verification**: Review all updated documentation for consistency and accuracy
+
+#### Documentation Update Checklist
+
+For major changes, include this checklist in implementation issues:
+
+```markdown
+## Documentation Updates Required
+- [ ] Create/update relevant ADR with decision rationale
+- [ ] Update CLAUDE.md development guidelines
+- [ ] Update README.md project information
+- [ ] Ensure cross-references between documents are current
+- [ ] Verify documentation consistency across all files
+```
+
+#### Integration with Development Workflow
+
+**Task Planning Integration:**
+- Include documentation scope in complexity assessment
+- Add documentation tasks to TodoWrite task breakdowns
+- Plan documentation updates as part of implementation workflow
+
+**Quality Assurance:**
+- Review documentation updates as part of code review process
+- Test updated instructions and verify accuracy
+- Ensure documentation changes support learning objectives
+
+**Commit Strategy:**
+- Include documentation updates with related code changes
+- Reference documentation updates in commit messages
+- Link documentation changes to relevant GitHub issues
 
 ### Priority System Integration
 
