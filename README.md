@@ -159,6 +159,48 @@ Optional footer for issue closure
 - **style**: Formatting changes
 - **chore**: Maintenance tasks
 
+#### GitHub Issue Linking
+
+All commits related to GitHub issues MUST include appropriate linking keywords to automatically connect commits to issues
+and enable automatic issue closure:
+
+**Closing Keywords** (automatically close issues when PR is merged):
+
+- `Closes #123` - Use for feature implementations
+- `Fixes #123` - Use for bug fixes
+- `Resolves #123` - Use for general issue resolution
+
+**Linking Keywords** (reference without closing):
+
+- `References #123` - Use for partial work or related changes
+- `Related to #123` - Use for tangentially related commits
+
+**Examples:**
+
+```bash
+# Feature implementation
+feat: implement todo deletion functionality
+
+Closes #15
+
+# Bug fix
+fix: resolve todo timestamp display issue in Safari
+
+Fixes #23
+
+# Partial work
+test: add initial tests for todo filtering
+
+References #18
+```
+
+**Benefits:**
+
+- Issues automatically close when commits are pushed/merged
+- Clear traceability between commits and issues
+- Improved project tracking and development history
+- Follows GitHub best practices for issue management
+
 ## Dependency Management
 
 This project tracks `package-lock.json` in git for several critical reasons:
