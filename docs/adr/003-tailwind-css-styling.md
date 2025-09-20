@@ -7,6 +7,7 @@ Accepted
 ## Context
 
 We need a CSS strategy for styling our Todo application. Requirements include:
+
 - Rapid development and prototyping
 - Consistent design system
 - Responsive design capabilities
@@ -21,6 +22,7 @@ Use Tailwind CSS as our primary styling solution with utility-first approach.
 ## Consequences
 
 ### Positive
+
 - Rapid development with utility classes
 - Built-in design system with consistent spacing, colors, and typography
 - Excellent responsive design utilities
@@ -31,6 +33,7 @@ Use Tailwind CSS as our primary styling solution with utility-first approach.
 - Excellent integration with Next.js
 
 ### Negative
+
 - Learning curve for developers used to traditional CSS
 - HTML can become verbose with many utility classes
 - Less semantic class names
@@ -38,6 +41,7 @@ Use Tailwind CSS as our primary styling solution with utility-first approach.
 - Potential design inconsistencies without discipline
 
 ### Neutral
+
 - Opinionated design tokens and spacing scale
 - Requires PostCSS setup (handled by Next.js)
 - Different mental model from component-scoped CSS
