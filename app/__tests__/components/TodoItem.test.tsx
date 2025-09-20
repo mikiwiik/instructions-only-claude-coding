@@ -191,6 +191,354 @@ describe('TodoItem', () => {
     expect(completedText).toHaveClass('text-muted-foreground');
   });
 
+  describe('Edit functionality', () => {
+    it('should render edit button for each todo', () => {
+      const todo = createMockTodo({ text: 'Todo with edit' });
+      const mockOnEdit = jest.fn();
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+        />
+      );
+
+      const editButton = screen.getByRole('button', {
+        name: /^edit todo/i,
+      });
+      expect(editButton).toBeInTheDocument();
+    });
+
+    it('should enter edit mode when edit button is clicked', async () => {
+      const user = userEvent.setup();
+      const mockOnEdit = jest.fn();
+      const todo = createMockTodo({
+        id: 'edit-test-id',
+        text: 'Todo to edit',
+      });
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+        />
+      );
+
+      const editButton = screen.getByRole('button', {
+        name: /^edit todo/i,
+      });
+      await user.click(editButton);
+
+      // Should show input field in edit mode
+      const editInput = screen.getByRole('textbox', {
+        name: /edit todo text/i,
+      });
+      expect(editInput).toBeInTheDocument();
+      expect(editInput).toHaveValue('Todo to edit');
+      expect(editInput).toHaveFocus();
+    });
+
+    it('should show save and cancel buttons in edit mode', async () => {
+      const user = userEvent.setup();
+      const mockOnEdit = jest.fn();
+      const todo = createMockTodo({ text: 'Todo to edit' });
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+        />
+      );
+
+      const editButton = screen.getByRole('button', { name: /^edit todo/i });
+      await user.click(editButton);
+
+      expect(
+        screen.getByRole('button', { name: /save edit/i })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /cancel edit/i })
+      ).toBeInTheDocument();
+    });
+
+    it('should update input value as user types', async () => {
+      const user = userEvent.setup();
+      const mockOnEdit = jest.fn();
+      const todo = createMockTodo({ text: 'Original text' });
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+        />
+      );
+
+      const editButton = screen.getByRole('button', { name: /^edit todo/i });
+      await user.click(editButton);
+
+      const editInput = screen.getByRole('textbox', {
+        name: /edit todo text/i,
+      });
+      await user.clear(editInput);
+      await user.type(editInput, 'Updated text');
+
+      expect(editInput).toHaveValue('Updated text');
+    });
+
+    it('should call onEdit when save button is clicked', async () => {
+      const user = userEvent.setup();
+      const mockOnEdit = jest.fn();
+      const todo = createMockTodo({
+        id: 'edit-save-test',
+        text: 'Original text',
+      });
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+        />
+      );
+
+      const editButton = screen.getByRole('button', { name: /^edit todo/i });
+      await user.click(editButton);
+
+      const editInput = screen.getByRole('textbox', {
+        name: /edit todo text/i,
+      });
+      await user.clear(editInput);
+      await user.type(editInput, 'Updated text');
+
+      const saveButton = screen.getByRole('button', { name: /save edit/i });
+      await user.click(saveButton);
+
+      expect(mockOnEdit).toHaveBeenCalledWith('edit-save-test', 'Updated text');
+    });
+
+    it('should save changes on Enter key', async () => {
+      const user = userEvent.setup();
+      const mockOnEdit = jest.fn();
+      const todo = createMockTodo({
+        id: 'edit-enter-test',
+        text: 'Original text',
+      });
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+        />
+      );
+
+      const editButton = screen.getByRole('button', { name: /^edit todo/i });
+      await user.click(editButton);
+
+      const editInput = screen.getByRole('textbox', {
+        name: /edit todo text/i,
+      });
+      await user.clear(editInput);
+      await user.type(editInput, 'Updated via Enter{Enter}');
+
+      expect(mockOnEdit).toHaveBeenCalledWith(
+        'edit-enter-test',
+        'Updated via Enter'
+      );
+    });
+
+    it('should exit edit mode on cancel without calling onEdit', async () => {
+      const user = userEvent.setup();
+      const mockOnEdit = jest.fn();
+      const todo = createMockTodo({ text: 'Original text' });
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+        />
+      );
+
+      const editButton = screen.getByRole('button', { name: /^edit todo/i });
+      await user.click(editButton);
+
+      const editInput = screen.getByRole('textbox', {
+        name: /edit todo text/i,
+      });
+      await user.clear(editInput);
+      await user.type(editInput, 'Should not save this');
+
+      const cancelButton = screen.getByRole('button', { name: /cancel edit/i });
+      await user.click(cancelButton);
+
+      expect(mockOnEdit).not.toHaveBeenCalled();
+      expect(screen.getByText('Original text')).toBeInTheDocument();
+      expect(
+        screen.queryByRole('textbox', { name: /edit todo text/i })
+      ).not.toBeInTheDocument();
+    });
+
+    it('should cancel edit on Escape key', async () => {
+      const user = userEvent.setup();
+      const mockOnEdit = jest.fn();
+      const todo = createMockTodo({ text: 'Original text' });
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+        />
+      );
+
+      const editButton = screen.getByRole('button', { name: /^edit todo/i });
+      await user.click(editButton);
+
+      const editInput = screen.getByRole('textbox', {
+        name: /edit todo text/i,
+      });
+      await user.clear(editInput);
+      await user.type(editInput, 'Should not save this');
+      await user.keyboard('{Escape}');
+
+      expect(mockOnEdit).not.toHaveBeenCalled();
+      expect(screen.getByText('Original text')).toBeInTheDocument();
+    });
+
+    it('should not save empty or whitespace-only text', async () => {
+      const user = userEvent.setup();
+      const mockOnEdit = jest.fn();
+      const todo = createMockTodo({ text: 'Original text' });
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+        />
+      );
+
+      const editButton = screen.getByRole('button', { name: /^edit todo/i });
+      await user.click(editButton);
+
+      const editInput = screen.getByRole('textbox', {
+        name: /edit todo text/i,
+      });
+      await user.clear(editInput);
+      await user.type(editInput, '   '); // Whitespace only
+
+      const saveButton = screen.getByRole('button', { name: /save edit/i });
+      await user.click(saveButton);
+
+      expect(mockOnEdit).not.toHaveBeenCalled();
+      // Should remain in edit mode
+      expect(editInput).toBeInTheDocument();
+    });
+
+    it('should preserve completion status when editing', async () => {
+      const user = userEvent.setup();
+      const mockOnEdit = jest.fn();
+      const todo = createMockTodo({
+        id: 'completed-edit-test',
+        text: 'Completed todo',
+        completed: true,
+      });
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+        />
+      );
+
+      const editButton = screen.getByRole('button', { name: /^edit todo/i });
+      await user.click(editButton);
+
+      const editInput = screen.getByRole('textbox', {
+        name: /edit todo text/i,
+      });
+      await user.clear(editInput);
+      await user.type(editInput, 'Updated completed todo');
+
+      const saveButton = screen.getByRole('button', { name: /save edit/i });
+      await user.click(saveButton);
+
+      expect(mockOnEdit).toHaveBeenCalledWith(
+        'completed-edit-test',
+        'Updated completed todo'
+      );
+      // Completion status should remain unchanged
+      const completedIcon = screen.getByTestId('completed-icon');
+      expect(completedIcon).toBeInTheDocument();
+    });
+
+    it('should have proper accessibility attributes in edit mode', async () => {
+      const user = userEvent.setup();
+      const mockOnEdit = jest.fn();
+      const todo = createMockTodo({ text: 'Accessible edit test' });
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+        />
+      );
+
+      const editButton = screen.getByRole('button', { name: /^edit todo/i });
+      expect(editButton).toHaveAttribute(
+        'aria-label',
+        expect.stringContaining('Accessible edit test')
+      );
+
+      await user.click(editButton);
+
+      const editInput = screen.getByRole('textbox', {
+        name: /edit todo text/i,
+      });
+      expect(editInput).toHaveAttribute('aria-label', expect.any(String));
+      expect(editInput).toHaveAttribute('type', 'text');
+    });
+
+    it('should not interfere with toggle and delete functionality', async () => {
+      const user = userEvent.setup();
+      const mockOnEdit = jest.fn();
+      const todo = createMockTodo({
+        id: 'multi-function-test',
+        text: 'Multi-function todo',
+      });
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+        />
+      );
+
+      // Test toggle still works
+      const toggleButton = screen.getByRole('button', { name: /toggle todo/i });
+      await user.click(toggleButton);
+      expect(mockOnToggle).toHaveBeenCalledWith('multi-function-test');
+
+      // Test delete still works
+      const deleteButton = screen.getByRole('button', {
+        name: /^delete todo/i,
+      });
+      await user.click(deleteButton);
+      expect(mockOnDelete).toHaveBeenCalledWith('multi-function-test');
+
+      // Functions should be separate
+      expect(mockOnEdit).not.toHaveBeenCalled();
+    });
+  });
+
   describe('Delete functionality', () => {
     it('should render delete button for each todo', () => {
       const todo = createMockTodo({ text: 'Todo with delete' });

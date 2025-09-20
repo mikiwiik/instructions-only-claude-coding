@@ -1,19 +1,69 @@
-import { Circle, CheckCircle, X } from 'lucide-react';
+import {
+  Circle,
+  CheckCircle,
+  X,
+  Edit2,
+  Check,
+  X as Cancel,
+} from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
 import { Todo } from '../types/todo';
 
 interface TodoItemProps {
   todo: Todo;
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
+  onEdit?: (id: string, newText: string) => void;
 }
 
-export default function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
+export default function TodoItem({
+  todo,
+  onToggle,
+  onDelete,
+  onEdit,
+}: TodoItemProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editText, setEditText] = useState(todo.text);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
+
   const handleToggle = () => {
     onToggle(todo.id);
   };
 
   const handleDelete = () => {
     onDelete(todo.id);
+  };
+
+  const handleEdit = () => {
+    setEditText(todo.text);
+    setIsEditing(true);
+  };
+
+  const handleSave = () => {
+    const trimmedText = editText.trim();
+    if (trimmedText && onEdit) {
+      onEdit(todo.id, trimmedText);
+      setIsEditing(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setEditText(todo.text);
+    setIsEditing(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSave();
+    } else if (e.key === 'Escape') {
+      handleCancel();
+    }
   };
 
   return (
@@ -41,28 +91,74 @@ export default function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
         )}
       </button>
       <div className='flex-1 min-w-0'>
-        <p
-          className={`text-sm ${
-            todo.completed
-              ? 'line-through text-muted-foreground'
-              : 'text-foreground'
-          }`}
-        >
-          {todo.text}
-        </p>
-        <p className='text-xs text-muted-foreground mt-1'>
-          Added {todo.createdAt.toLocaleDateString()} at{' '}
-          {todo.createdAt.toLocaleTimeString()}
-        </p>
+        {isEditing ? (
+          <div className='space-y-2'>
+            <input
+              ref={inputRef}
+              type='text'
+              value={editText}
+              onChange={(e) => setEditText(e.target.value)}
+              onKeyDown={handleKeyDown}
+              className='w-full text-sm bg-background border border-border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-ring'
+              aria-label='Edit todo text'
+            />
+            <div className='flex gap-1'>
+              <button
+                onClick={handleSave}
+                className='flex-shrink-0 p-1 rounded hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors text-muted-foreground hover:text-green-600'
+                aria-label='Save edit'
+                type='button'
+              >
+                <Check className='h-3 w-3' />
+              </button>
+              <button
+                onClick={handleCancel}
+                className='flex-shrink-0 p-1 rounded hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600'
+                aria-label='Cancel edit'
+                type='button'
+              >
+                <Cancel className='h-3 w-3' />
+              </button>
+            </div>
+          </div>
+        ) : (
+          <>
+            <p
+              className={`text-sm ${
+                todo.completed
+                  ? 'line-through text-muted-foreground'
+                  : 'text-foreground'
+              }`}
+            >
+              {todo.text}
+            </p>
+            <p className='text-xs text-muted-foreground mt-1'>
+              Added {todo.createdAt.toLocaleDateString()} at{' '}
+              {todo.createdAt.toLocaleTimeString()}
+            </p>
+          </>
+        )}
       </div>
-      <button
-        onClick={handleDelete}
-        className='flex-shrink-0 mt-0.5 p-1 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600'
-        aria-label={`Delete todo: ${todo.text}`}
-        type='button'
-      >
-        <X className='h-4 w-4' />
-      </button>
+      <div className='flex flex-col gap-1'>
+        {!isEditing && onEdit && (
+          <button
+            onClick={handleEdit}
+            className='flex-shrink-0 mt-0.5 p-1 rounded-full hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-muted-foreground hover:text-blue-600'
+            aria-label={`Edit todo: ${todo.text}`}
+            type='button'
+          >
+            <Edit2 className='h-4 w-4' />
+          </button>
+        )}
+        <button
+          onClick={handleDelete}
+          className='flex-shrink-0 mt-0.5 p-1 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600'
+          aria-label={`Delete todo: ${todo.text}`}
+          type='button'
+        >
+          <X className='h-4 w-4' />
+        </button>
+      </div>
     </li>
   );
 }
