@@ -1,4 +1,18 @@
 import { Circle } from 'lucide-react';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import { Todo } from '../types/todo';
 import TodoItem from './TodoItem';
 
@@ -7,6 +21,9 @@ interface TodoListProps {
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onEdit?: (id: string, newText: string) => void;
+  reorderTodos?: (sourceIndex: number, destinationIndex: number) => void;
+  moveUp?: (id: string) => void;
+  moveDown?: (id: string) => void;
 }
 
 export default function TodoList({
@@ -14,7 +31,32 @@ export default function TodoList({
   onToggle,
   onDelete,
   onEdit,
+  reorderTodos,
+  moveUp,
+  moveDown,
 }: TodoListProps) {
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const isReorderingEnabled = Boolean(reorderTodos);
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (active.id !== over?.id && reorderTodos) {
+      const oldIndex = todos.findIndex((todo) => todo.id === active.id);
+      const newIndex = todos.findIndex((todo) => todo.id === over?.id);
+
+      if (oldIndex !== -1 && newIndex !== -1) {
+        reorderTodos(oldIndex, newIndex);
+      }
+    }
+  };
+
   if (todos.length === 0) {
     return (
       <div className='text-center py-12'>
@@ -32,22 +74,46 @@ export default function TodoList({
     );
   }
 
+  const todosList = (
+    <ul className='space-y-3' role='list'>
+      {todos.map((todo, index) => (
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          onToggle={onToggle}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          moveUp={moveUp}
+          moveDown={moveDown}
+          isDraggable={isReorderingEnabled}
+          isFirst={index === 0}
+          isLast={index === todos.length - 1}
+        />
+      ))}
+    </ul>
+  );
+
   return (
     <div className='space-y-2'>
       <h3 className='text-lg font-medium text-card-foreground mb-4'>
         Your Todos ({todos.length})
       </h3>
-      <ul className='space-y-3' role='list'>
-        {todos.map((todo) => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            onToggle={onToggle}
-            onDelete={onDelete}
-            onEdit={onEdit}
-          />
-        ))}
-      </ul>
+      {isReorderingEnabled ? (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={todos.map((todo) => todo.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            {todosList}
+          </SortableContext>
+        </DndContext>
+      ) : (
+        todosList
+      )}
     </div>
   );
 }

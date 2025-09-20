@@ -145,6 +145,71 @@ export function useTodos() {
     });
   };
 
+  const reorderTodos = (sourceIndex: number, destinationIndex: number) => {
+    setState((prev) => {
+      // Validate indices
+      if (
+        sourceIndex < 0 ||
+        destinationIndex < 0 ||
+        sourceIndex >= prev.todos.length ||
+        destinationIndex >= prev.todos.length ||
+        sourceIndex === destinationIndex
+      ) {
+        return prev;
+      }
+
+      const newTodos = [...prev.todos];
+      const [movedTodo] = newTodos.splice(sourceIndex, 1);
+      newTodos.splice(destinationIndex, 0, movedTodo);
+
+      saveTodos(newTodos);
+      return {
+        ...prev,
+        todos: newTodos,
+      };
+    });
+  };
+
+  const moveUp = (todoId: string) => {
+    setState((prev) => {
+      const currentIndex = prev.todos.findIndex((todo) => todo.id === todoId);
+
+      if (currentIndex <= 0) {
+        return prev; // Already at top or not found
+      }
+
+      const newTodos = [...prev.todos];
+      const [movedTodo] = newTodos.splice(currentIndex, 1);
+      newTodos.splice(currentIndex - 1, 0, movedTodo);
+
+      saveTodos(newTodos);
+      return {
+        ...prev,
+        todos: newTodos,
+      };
+    });
+  };
+
+  const moveDown = (todoId: string) => {
+    setState((prev) => {
+      const currentIndex = prev.todos.findIndex((todo) => todo.id === todoId);
+
+      if (currentIndex < 0 || currentIndex >= prev.todos.length - 1) {
+        return prev; // Already at bottom or not found
+      }
+
+      const newTodos = [...prev.todos];
+      const [movedTodo] = newTodos.splice(currentIndex, 1);
+      newTodos.splice(currentIndex + 1, 0, movedTodo);
+
+      saveTodos(newTodos);
+      return {
+        ...prev,
+        todos: newTodos,
+      };
+    });
+  };
+
   return {
     todos: state.todos,
     filter: state.filter,
@@ -152,5 +217,8 @@ export function useTodos() {
     toggleTodo,
     deleteTodo,
     editTodo,
+    reorderTodos,
+    moveUp,
+    moveDown,
   };
 }
