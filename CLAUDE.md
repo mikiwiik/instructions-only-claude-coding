@@ -40,14 +40,103 @@ This file contains specific instructions for Claude Code when working on this To
 - **Pre-commit hooks**: All code is automatically linted and formatted before commit
 - **Comments**: Document complex logic and architectural decisions
 
-### Commit Practices
+### Atomic Commit Guidelines
 
-- **Clear messages**: Describe what and why, not just what
-- **Reference issues**: Link commits to GitHub issues when applicable
-- **ADR updates**: Include ADR updates in relevant commits
-- **Issue closure**: Use "Closes #X" or "Fixes #X" in commit messages to automatically close GitHub issues
-- **Atomic commits**: Each commit should represent a complete, logical change
+**🔀 REQUIREMENT**: All code changes must follow atomic commit practices for improved code history, review, and debugging.
+
+**📋 Full Guidelines**: See [`docs/guidelines/atomic-commits.md`](docs/guidelines/atomic-commits.md) for
+comprehensive commit strategy and workflow details.
+
+#### Atomic Commit Principles
+
+- **One Logical Change**: Each commit represents a single, focused change
+- **Self-Contained**: Every commit maintains a working state
+- **Clear Purpose**: Commit message clearly explains the specific change
+- **Issue Linking**: Reference related issue number in each commit
+
+#### Conventional Commit Format
+
+Use standardized commit message format:
+
+```text
+type(scope): description (#issue-number)
+
+Optional body explaining the change in detail
+
+Optional footer for breaking changes or issue closure
+```
+
+**Commit Types:**
+
+- **feat**: New features
+- **fix**: Bug fixes
+- **test**: Adding or updating tests
+- **docs**: Documentation updates
+- **refactor**: Code refactoring without behavior changes
+- **style**: Code style changes (formatting, missing semicolons)
+- **chore**: Maintenance tasks (dependency updates, build changes)
+
+#### Issue Linking Strategy
+
+**Individual Commits:** Reference issue in each commit
+
+```bash
+git commit -m "feat(todo): add completedAt field to TodoItem interface (#33)"
+git commit -m "test(todo): add timestamp tracking tests (#33)"
+git commit -m "docs(todo): update README with completion feature (#33)"
+```
+
+**Final Commit:** Close issue with comprehensive summary
+
+```bash
+git commit -m "feat: complete todo completion timestamp tracking
+
+Implements full completion timestamp functionality including:
+- Data model updates with completedAt field
+- State management for timestamp capture
+- UI component for displaying completion history
+- Comprehensive test coverage
+
+Closes #33"
+```
+
+#### TDD Commit Pattern
+
+Follow test-driven development commit sequence:
+
+```bash
+git commit -m "test: add failing test for feature X (#issue)"
+git commit -m "feat: implement basic feature X functionality (#issue)"
+git commit -m "refactor: extract utility functions for feature X (#issue)"
+git commit -m "test: add edge cases for feature X (#issue)"
+```
+
+#### Development Workflow Integration
+
+1. **Planning**: Break feature into logical atomic changes
+2. **Implementation**: Make focused commits throughout development
+3. **Testing**: Separate commits for test additions and updates
+4. **Documentation**: Document changes in dedicated commits
+5. **Integration**: Final commit summarizes and closes issue
+
+#### Code Review Benefits
+
+- **Focused Review**: Each commit addresses single concern
+- **Logical Progression**: Reviewers follow development thinking
+- **Selective Feedback**: Comments target specific changes
+- **Rollback Precision**: Revert specific changes without losing others
+
+#### Quality Assurance
+
+- **Working State**: Each commit maintains compilation and basic functionality
+- **Commit Size**: Prefer smaller, focused commits over large changes
+- **Message Quality**: Clear, descriptive commit messages
+- **Traceability**: Direct link from code changes to requirements
+
+### Legacy Commit Practices
+
 - **Co-author attribution**: Always include Claude Code co-authorship in commits
+- **ADR updates**: Include ADR updates in relevant commits when applicable
 
 ### Push Workflow
 
