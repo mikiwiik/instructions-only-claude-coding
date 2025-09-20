@@ -1,14 +1,19 @@
-import { Circle, CheckCircle } from 'lucide-react';
+import { Circle, CheckCircle, X } from 'lucide-react';
 import { Todo } from '../types/todo';
 
 interface TodoItemProps {
   todo: Todo;
   onToggle: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
-export default function TodoItem({ todo, onToggle }: TodoItemProps) {
+export default function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
   const handleToggle = () => {
     onToggle(todo.id);
+  };
+
+  const handleDelete = () => {
+    onDelete(todo.id);
   };
 
   return (
@@ -50,6 +55,14 @@ export default function TodoItem({ todo, onToggle }: TodoItemProps) {
           {todo.createdAt.toLocaleTimeString()}
         </p>
       </div>
+      <button
+        onClick={handleDelete}
+        className='flex-shrink-0 mt-0.5 p-1 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600'
+        aria-label={`Delete todo: ${todo.text}`}
+        type='button'
+      >
+        <X className='h-4 w-4' />
+      </button>
     </li>
   );
 }
