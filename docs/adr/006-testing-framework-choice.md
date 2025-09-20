@@ -7,6 +7,7 @@ Accepted
 ## Context
 
 We need to select testing frameworks and libraries that support our TDD approach. Requirements:
+
 - React component testing capabilities
 - Good TypeScript support
 - DOM manipulation and user interaction testing
@@ -17,11 +18,13 @@ We need to select testing frameworks and libraries that support our TDD approach
 
 ## Decision
 
-Use Jest as our test runner with React Testing Library for component testing, complemented by user-event for interaction testing.
+Use Jest as our test runner with React Testing Library for component testing, complemented by
+user-event for interaction testing.
 
 ## Consequences
 
 ### Positive
+
 - React Testing Library promotes testing user behavior over implementation details
 - Jest provides excellent mocking, snapshots, and assertion capabilities
 - Great TypeScript support with @types packages
@@ -32,12 +35,14 @@ Use Jest as our test runner with React Testing Library for component testing, co
 - Rich ecosystem of matchers and utilities
 
 ### Negative
+
 - Learning curve for developers used to Enzyme or other testing libraries
 - Some complex component interactions may require more setup
 - Snapshot testing can create maintenance overhead
 - Limited support for testing implementation details when necessary
 
 ### Neutral
+
 - Requires setup for testing environment and DOM simulation
 - Need to configure custom render functions for providers
 - Mock setup required for browser APIs like localStorage

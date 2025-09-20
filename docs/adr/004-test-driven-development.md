@@ -7,6 +7,7 @@ Accepted
 ## Context
 
 We need to establish a development methodology for building reliable, maintainable code. Key considerations:
+
 - Code quality and bug prevention
 - Development workflow and discipline
 - Confidence in refactoring
@@ -21,6 +22,7 @@ Adopt Test-Driven Development (TDD) as our primary development methodology, writ
 ## Consequences
 
 ### Positive
+
 - Higher code quality with fewer bugs in production
 - Better code design through testability requirements
 - Comprehensive test coverage by default
@@ -31,6 +33,7 @@ Adopt Test-Driven Development (TDD) as our primary development methodology, writ
 - Better separation of concerns
 
 ### Negative
+
 - Slower initial development pace
 - Learning curve for developers new to TDD
 - Requires discipline and process adherence
@@ -38,6 +41,7 @@ Adopt Test-Driven Development (TDD) as our primary development methodology, writ
 - May feel tedious for simple functionality
 
 ### Neutral
+
 - Requires good testing framework and tooling setup
 - Need to balance unit, integration, and e2e tests
 - Team needs to agree on testing standards and practices

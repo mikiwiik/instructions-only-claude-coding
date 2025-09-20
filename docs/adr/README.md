@@ -1,14 +1,18 @@
 # Architecture Decision Records (ADRs)
 
-This directory contains Architecture Decision Records (ADRs) for the Todo App project. ADRs document important architectural decisions, their context, and consequences.
+This directory contains Architecture Decision Records (ADRs) for the Todo App project.
+ADRs document important architectural decisions, their context, and consequences.
 
 ## What are ADRs?
 
-Architecture Decision Records (ADRs) are short text documents that capture important architectural decisions made during the project development. They help maintain a clear history of technical choices and their rationale.
+Architecture Decision Records (ADRs) are short text documents that capture important architectural
+decisions made during the project development. They help maintain a clear history of technical choices
+and their rationale.
 
 ## ADR Format
 
 Each ADR follows this structure:
+
 - **Title**: Brief description of the decision
 - **Status**: Proposed, Accepted, Deprecated, or Superseded
 - **Context**: Situation requiring a decision
@@ -17,16 +21,17 @@ Each ADR follows this structure:
 
 ## Index of ADRs
 
-| Number | Title | Status | Date |
-|--------|--------|--------|------|
-| [001](001-nextjs-app-router.md) | Use Next.js 14 with App Router | Accepted | 2025-09-20 |
-| [002](002-typescript-adoption.md) | Choose TypeScript for type safety | Accepted | 2025-09-20 |
-| [003](003-tailwind-css-styling.md) | Select Tailwind CSS for styling | Accepted | 2025-09-20 |
-| [004](004-test-driven-development.md) | Implement Test-Driven Development approach | Accepted | 2025-09-20 |
-| [005](005-localstorage-persistence.md) | Use localStorage for data persistence | Accepted | 2025-09-20 |
-| [006](006-testing-framework-choice.md) | Choose React Testing Library + Jest for testing | Accepted | 2025-09-20 |
-| [007](007-state-management-approach.md) | Use custom hooks for state management | Accepted | 2025-09-20 |
-| [008](008-github-issues-workflow.md) | GitHub Issues for project management | Accepted | 2025-09-20 |
+| Number                                    | Title                                           | Status   | Date       |
+| ----------------------------------------- | ----------------------------------------------- | -------- | ---------- |
+| [001](001-nextjs-app-router.md)           | Use Next.js 14 with App Router                  | Accepted | 2025-09-20 |
+| [002](002-typescript-adoption.md)         | Choose TypeScript for type safety               | Accepted | 2025-09-20 |
+| [003](003-tailwind-css-styling.md)        | Select Tailwind CSS for styling                 | Accepted | 2025-09-20 |
+| [004](004-test-driven-development.md)     | Implement Test-Driven Development approach      | Accepted | 2025-09-20 |
+| [005](005-localstorage-persistence.md)    | Use localStorage for data persistence           | Accepted | 2025-09-20 |
+| [006](006-testing-framework-choice.md)    | Choose React Testing Library + Jest for testing | Accepted | 2025-09-20 |
+| [007](007-state-management-approach.md)   | Use custom hooks for state management           | Accepted | 2025-09-20 |
+| [008](008-github-issues-workflow.md)      | GitHub Issues for project management            | Accepted | 2025-09-20 |
+| [009](009-pre-commit-linting-strategy.md) | Pre-commit linting strategy                     | Accepted | 2025-09-20 |
 
 ## Creating New ADRs
 

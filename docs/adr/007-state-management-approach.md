@@ -7,6 +7,7 @@ Accepted
 ## Context
 
 We need to choose a state management approach for our Todo application. Considerations:
+
 - Application complexity and scale
 - Developer experience and learning curve
 - Testing and maintainability
@@ -21,6 +22,7 @@ Use custom React hooks (useState, useEffect, useContext) for state management in
 ## Consequences
 
 ### Positive
+
 - Leverages built-in React capabilities without external dependencies
 - Easier to test with React Testing Library
 - Lower learning curve for developers familiar with React
@@ -31,6 +33,7 @@ Use custom React hooks (useState, useEffect, useContext) for state management in
 - Good performance for application of this scale
 
 ### Negative
+
 - May not scale well for very complex state interactions
 - No built-in time-travel debugging like Redux DevTools
 - Potential prop drilling if context is overused
@@ -38,6 +41,7 @@ Use custom React hooks (useState, useEffect, useContext) for state management in
 - Less standardized patterns compared to Redux
 
 ### Neutral
+
 - Requires careful hook design for reusability
 - Need to establish conventions for state organization
 - Performance considerations for context value changes

@@ -7,6 +7,7 @@ Accepted
 ## Context
 
 We need a project management system to track features, bugs, and development progress. Requirements:
+
 - Clear feature breakdown and prioritization
 - Integration with version control
 - Collaborative development support
@@ -21,6 +22,7 @@ Use GitHub Issues as our primary project management tool, with detailed issue te
 ## Consequences
 
 ### Positive
+
 - Native integration with GitHub repository and PRs
 - No additional tools or services required
 - Clear linkage between code changes and requirements
@@ -31,6 +33,7 @@ Use GitHub Issues as our primary project management tool, with detailed issue te
 - Free and no external dependencies
 
 ### Negative
+
 - Limited project management features compared to dedicated tools
 - No built-in time tracking or estimation
 - Basic reporting and analytics capabilities
@@ -38,6 +41,7 @@ Use GitHub Issues as our primary project management tool, with detailed issue te
 - No built-in Kanban board (though Projects can supplement)
 
 ### Neutral
+
 - Requires discipline to maintain issue quality and organization
 - Need to establish conventions for labels and workflows
 - Integration with external tools requires third-party solutions

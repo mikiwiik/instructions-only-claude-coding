@@ -7,6 +7,7 @@ Accepted
 ## Context
 
 We need to decide whether to use JavaScript or TypeScript for our Todo application. Key considerations:
+
 - Type safety and error prevention
 - Developer experience and IDE support
 - Code maintainability and refactoring
@@ -20,6 +21,7 @@ Use TypeScript with strict type checking enabled for the entire codebase.
 ## Consequences
 
 ### Positive
+
 - Compile-time error detection prevents runtime bugs
 - Excellent IDE support with autocomplete and refactoring
 - Better code documentation through type annotations
@@ -29,12 +31,14 @@ Use TypeScript with strict type checking enabled for the entire codebase.
 - Self-documenting code through interfaces and types
 
 ### Negative
+
 - Initial learning curve for developers new to TypeScript
 - Additional compilation step and tooling complexity
 - More verbose code compared to plain JavaScript
 - Potential over-engineering for simple components
 
 ### Neutral
+
 - Industry standard for modern React applications
 - Well-supported by Next.js out of the box
 - Extensive community resources and documentation

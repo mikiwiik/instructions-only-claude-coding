@@ -7,6 +7,7 @@ Accepted
 ## Context
 
 We need to choose a React framework for building our Todo application. The project requires:
+
 - Server-side rendering capabilities
 - Good developer experience
 - Modern React patterns
@@ -21,6 +22,7 @@ Use Next.js 14 with the App Router architecture instead of the older Pages Route
 ## Consequences
 
 ### Positive
+
 - Excellent developer experience with hot reloading and built-in TypeScript support
 - App Router provides modern file-based routing with better organization
 - Built-in performance optimizations (image optimization, code splitting)
@@ -30,12 +32,14 @@ Use Next.js 14 with the App Router architecture instead of the older Pages Route
 - Zero-config deployment with Vercel
 
 ### Negative
+
 - Learning curve for developers unfamiliar with Next.js App Router
 - Framework lock-in (though migration paths exist)
 - Some complexity for simple client-side apps
 - Bundle size overhead compared to plain React
 
 ### Neutral
+
 - Requires Node.js development environment
 - Opinionated file structure and conventions
 

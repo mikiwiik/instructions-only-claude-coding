@@ -9,12 +9,14 @@ This file contains specific instructions for Claude Code when working on this To
 **📋 Process Documentation**: See [`docs/adr/PROCESS.md`](docs/adr/PROCESS.md) for complete ADR requirements and guidelines.
 
 ### Quick Reference
+
 - **When**: Before any significant technical decision
 - **Where**: `docs/adr/###-title.md` using the template
 - **What**: Technology choices, architecture patterns, development practices
 - **Why**: Maintain project knowledge and decision rationale
 
 ### Key Requirements
+
 1. **Create ADR before implementation** - not after
 2. **Use sequential numbering** - next available number
 3. **Document alternatives considered** - show the thinking process
@@ -32,8 +34,10 @@ This file contains specific instructions for Claude Code when working on this To
 ### Code Quality
 
 - **TypeScript**: Use strict typing, avoid `any` types
-- **ESLint**: Follow established linting rules
-- **Prettier**: Maintain consistent code formatting
+- **ESLint**: Follow established linting rules (automatically enforced via pre-commit hooks)
+- **Prettier**: Maintain consistent code formatting (automatically applied via pre-commit hooks)
+- **Markdown linting**: Documentation follows consistent formatting standards
+- **Pre-commit hooks**: All code is automatically linted and formatted before commit
 - **Comments**: Document complex logic and architectural decisions
 
 ### Commit Practices
@@ -60,7 +64,7 @@ This file contains specific instructions for Claude Code when working on this To
 
 ## Project Structure
 
-```
+```text
 my-first-claude-code/
 ├── app/                    # Next.js app directory
 │   ├── components/         # React components
@@ -94,4 +98,5 @@ All Claude Code interactions are logged in `claude-prompts.log` for reference an
 
 ---
 
-**Remember**: When in doubt about architectural decisions, create an ADR to document the thought process and decision rationale. This maintains project knowledge and helps future development.
+**Remember**: When in doubt about architectural decisions, create an ADR to document the thought
+process and decision rationale. This maintains project knowledge and helps future development.
