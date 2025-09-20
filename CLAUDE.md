@@ -51,16 +51,29 @@ This file contains specific instructions for Claude Code when working on this To
 
 ### Push Workflow
 
-- **Push after completion**: Always push to remote after completing a feature or issue
-- **Verify push success**: Confirm changes are visible on GitHub
+- **🚨 CRITICAL**: Always ask user for confirmation before pushing to remote
+- **Local commits**: Continue committing locally without confirmation
+- **User control**: Only push when user explicitly approves
+- **Verify push success**: Confirm changes are visible on GitHub after user approval
 - **Update remote tracking**: Ensure local branch tracks remote properly
 - **Current branching**: All work is currently done directly on main branch
-- **Feature completion sequence**:
-  1. Complete feature implementation
-  2. Run tests and verify functionality
-  3. Commit changes with issue closure
-  4. Push to remote repository
-  5. Verify GitHub issue was automatically closed
+
+### Feature Completion Sequence
+
+1. **Complete feature implementation** (write code, tests, documentation)
+2. **Run tests and verify functionality** (ensure all tests pass)
+3. **Commit changes with issue closure** (local commit with "Closes #X")
+4. **🔴 ASK USER**: "Ready to push changes to remote? (y/n)"
+5. **Push to remote repository** (only if user confirms)
+6. **Verify GitHub issue was automatically closed** (after successful push)
+
+### Push Confirmation Protocol
+
+- **ALWAYS** ask before pushing: "Ready to push [feature name] to remote? This will close Issue #X"
+- **NEVER** push without explicit user approval
+- **WAIT** for user response before proceeding
+- **RESPECT** user's decision if they decline to push
+- **EXPLAIN** what will happen when pushing (issue closure, public visibility)
 
 ## Project Structure
 
