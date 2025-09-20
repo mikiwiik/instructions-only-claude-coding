@@ -41,3 +41,31 @@ The project enforces code quality through automated tools:
 - **Prettier**: Automatic code formatting
 - **markdownlint**: Documentation formatting standards
 - **Husky + lint-staged**: Pre-commit hooks prevent poorly formatted code from being committed
+
+## Dependency Management
+
+This project tracks `package-lock.json` in git for several critical reasons:
+
+### Why package-lock.json is Tracked
+
+- **Reproducible Builds**: Ensures exact same dependency versions across all environments (development, staging, production)
+- **Security**: Locks specific versions, preventing malicious updates from compromising your application
+- **Team Consistency**: All developers get identical dependency trees, eliminating "works on my machine" issues
+- **CI/CD Reliability**: Build processes are deterministic and predictable
+
+### Best Practices
+
+- **Always commit** `package-lock.json` changes alongside `package.json` updates
+- **Never manually edit** package-lock.json - let `npm install` manage it automatically
+- **Keep in sync**: When adding/removing dependencies, commit both files together
+- **Trust the lock**: The lock file takes precedence over package.json version ranges
+
+### Installation
+
+For development setup:
+
+```bash
+npm install  # Uses exact versions from package-lock.json
+```
+
+This ensures everyone gets the exact same dependency tree that was tested and verified.
