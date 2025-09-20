@@ -2,11 +2,11 @@
 
 [![Build and Test](https://github.com/mikiwiik/my-first-claude-code/actions/workflows/build.yml/badge.svg)](https://github.com/mikiwiik/my-first-claude-code/actions/workflows/build.yml)
 
+**🌐 Live Demo**: [Todo App on Vercel](https://my-first-claude-code-fhhkrlt3f-miki-wiiks-projects.vercel.app/)
+
 ## Project Purpose
 
-This Todo application serves as a **learning platform** for Claude Code development workflows and modern web
-development practices. The primary goal is to demonstrate AI-assisted coding, TDD methodology, and collaborative
-development patterns.
+This Todo application serves as a **learning platform** for Claude Code development workflows and modern web development practices. The primary goal is to demonstrate AI-assisted coding, TDD methodology, and collaborative development patterns.
 
 ### Learning Objectives
 
@@ -25,415 +25,128 @@ This is a **learning project** designed to showcase:
 - Structured approach to building applications with proper documentation
 - Integration of testing, linting, and quality assurance tools
 
-A Next.js Todo application built using Test-Driven Development (TDD) with Claude Code assistance.
+## Quick Start
 
-## Development Status
+### Prerequisites
 
-**Current Development Workflow**: `Branch-based with Pull Requests`
-
-- Development follows feature branch workflow with pull requests
-- Each feature is developed on a separate branch (`feature/issue-number-description`)
-- Pull requests are used for code review and CI validation before merge
-- Main branch maintains stable, tested code
-- See [Branch Workflow Documentation](docs/BRANCH_WORKFLOW.md) for detailed guidelines
-
-## Manual configurations done prior to using claude: setup subscription needed for claude code
-
-- <https://claude.com/product/claude-code>
-- Login
-- Upgrade to Monthly Pro plan: <https://claude.ai/upgrade/pro>
-- Setup claude code: <https://claude.ai/settings/claude-code>
-- <https://docs.claude.com/en/docs/claude-code/overview#install-and-authenticate>
-
-```bash
-npm install -g @anthropic-ai/claude-code
-claude
-```
-
-## Project Management
-
-This project uses GitHub Issues for feature tracking and follows a structured development approach:
-
-- Issues are created for each feature with detailed TDD requirements
-- All major architectural decisions are documented as ADRs in `docs/adr/`
-- Development follows Test-Driven Development methodology
-- Pre-commit hooks ensure code quality with automatic linting and formatting
-- Claude Code assistance is used throughout development
-
-### Priority System
-
-The project uses a standardized priority labeling system for effective issue management:
-
-- **priority-1-critical** 🔴: Blocking issues, security vulnerabilities, broken core functionality
-- **priority-2-high** 🟠: Important features, significant improvements, major bugs
-- **priority-3-medium** 🟡: Standard features, minor improvements, non-critical bugs
-- **priority-4-low** 🟢: Nice-to-have features, documentation updates, minor enhancements
-
-#### Priority-Based Development
-
-Development efforts are prioritized based on issue labels:
-
-1. **Critical Priority**: Immediate attention, stop other work
-2. **High Priority**: Primary development focus for current sprint
-3. **Medium Priority**: Standard workflow, next sprint scheduling
-4. **Low Priority**: Backlog items, learning opportunities
-
-This system enables effective resource allocation, clear communication of urgency, and structured project planning as part
-of the learning experience in project management workflows.
-
-### Complexity-Based Effort Estimation
-
-The project uses complexity labels to enable accurate effort estimation in Claude Code development:
-
-- **complexity-minimal** 🟢: Single file changes, quick fixes, documentation updates
-- **complexity-simple** 🔵: Basic features, straightforward logic, standard patterns
-- **complexity-moderate** 🟡: Multi-component changes, state management, integration work
-- **complexity-complex** 🟠: Architecture changes, system design, comprehensive testing
-- **complexity-epic** 🔴: Major overhauls, breaking changes, foundational work
-
-#### Combined Planning Approach
-
-Issues are labeled with both priority and complexity for optimal development planning:
-
-- **High Priority + Low Complexity**: Quick wins and urgent fixes
-- **High Priority + High Complexity**: Major features requiring careful planning
-- **Low Priority + Low Complexity**: Good filler work and maintenance tasks
-- **Low Priority + High Complexity**: Learning opportunities and future preparation
-
-This dual-labeling system reflects the cognitive load and architectural impact of work, enabling better estimation
-than traditional time-based approaches in AI-assisted development workflows.
-
-## Code Quality
-
-The project enforces code quality through automated tools:
-
-- **ESLint**: JavaScript/TypeScript linting with strict rules
-- **Prettier**: Automatic code formatting
-- **markdownlint**: Documentation formatting standards
-- **Husky + lint-staged**: Pre-commit hooks prevent poorly formatted code from being committed
-
-### Development Workflow
-
-#### Atomic Commit Strategy
-
-The project follows professional atomic commit practices for improved code history and collaboration:
-
-- **One Logical Change**: Each commit represents a single, focused change
-- **Conventional Commits**: Standardized format with type prefixes (feat, fix, test, docs)
-- **Issue Linking**: Every commit references the related GitHub issue (#issue-number)
-- **Self-Contained**: Each commit maintains a working application state
-
-**Example Commit Sequence:**
-
-```bash
-feat(todo): add completedAt field to TodoItem interface (#33)
-test(todo): add timestamp tracking tests (#33)
-docs(todo): update README with completion feature (#33)
-feat: complete todo completion timestamp tracking
-
-Closes #33
-```
-
-This approach enables:
-
-- **Focused Code Review**: Individual logical changes are easier to review
-- **Clear Development History**: Logical progression visible in git log
-- **Precise Debugging**: Better git bisect and blame functionality
-- **Selective Rollbacks**: Revert specific changes without losing entire features
-
-#### Commit Message Format
-
-```text
-type(scope): description (#issue-number)
-
-Optional body explaining the change
-
-Optional footer for issue closure
-```
-
-**Commit Types:**
-
-- **feat**: New features
-- **fix**: Bug fixes
-- **test**: Test additions/updates
-- **docs**: Documentation changes
-- **refactor**: Code refactoring
-- **style**: Formatting changes
-- **chore**: Maintenance tasks
-
-#### GitHub Issue Linking
-
-All commits related to GitHub issues MUST include appropriate linking keywords to automatically connect commits to issues
-and enable automatic issue closure:
-
-**Closing Keywords** (automatically close issues when PR is merged):
-
-- `Closes #123` - Use for feature implementations
-- `Fixes #123` - Use for bug fixes
-- `Resolves #123` - Use for general issue resolution
-
-**Linking Keywords** (reference without closing):
-
-- `References #123` - Use for partial work or related changes
-- `Related to #123` - Use for tangentially related commits
-
-**Examples:**
-
-```bash
-# Feature implementation
-feat: implement todo deletion functionality
-
-Closes #15
-
-# Bug fix
-fix: resolve todo timestamp display issue in Safari
-
-Fixes #23
-
-# Partial work
-test: add initial tests for todo filtering
-
-References #18
-```
-
-**Benefits:**
-
-- Issues automatically close when commits are pushed/merged
-- Clear traceability between commits and issues
-- Improved project tracking and development history
-- Follows GitHub best practices for issue management
-
-## Dependency Management
-
-This project tracks `package-lock.json` in git for several critical reasons:
-
-### Why package-lock.json is Tracked
-
-- **Reproducible Builds**: Ensures exact same dependency versions across all environments (development, staging, production)
-- **Security**: Locks specific versions, preventing malicious updates from compromising your application
-- **Team Consistency**: All developers get identical dependency trees, eliminating "works on my machine" issues
-- **CI/CD Reliability**: Build processes are deterministic and predictable
-
-### Best Practices
-
-- **Always commit** `package-lock.json` changes alongside `package.json` updates
-- **Never manually edit** package-lock.json - let `npm install` manage it automatically
-- **Keep in sync**: When adding/removing dependencies, commit both files together
-- **Trust the lock**: The lock file takes precedence over package.json version ranges
+- Node.js 22.x or higher
+- npm 10.x or higher
+- Claude Code Pro subscription ([setup guide](docs/setup/installation.md))
 
 ### Installation
 
-For development setup:
-
 ```bash
-npm install  # Uses exact versions from package-lock.json
+# Clone and install
+git clone https://github.com/mikiwiik/my-first-claude-code.git
+cd my-first-claude-code
+npm install
+
+# Start development server
+npm run dev
 ```
 
-This ensures everyone gets the exact same dependency tree that was tested and verified.
+Visit `http://localhost:3000` to see the application.
 
-## 🚀 Production Deployment
-
-### Live Demo
-
-**🌐 Live Application**: [Todo App on Vercel](https://my-first-claude-code-fhhkrlt3f-miki-wiiks-projects.vercel.app/)
-
-The Todo App is automatically deployed to Vercel and updated on every push to the main branch after CI passes.
-
-### Vercel Deployment Setup
-
-This project is configured for automatic deployment to Vercel with GitHub integration. Here's how to set up deployment for this or similar projects:
-
-#### Prerequisites
-
-- GitHub repository with the Todo App code
-- Vercel account (free tier available)
-- Completed GitHub Actions CI/CD pipeline
-
-#### Step-by-Step Vercel Setup
-
-1. **Create Vercel Account**
-   ```bash
-   # Visit https://vercel.com
-   # Click "Continue with GitHub" to link your GitHub account
-   # Complete the registration process
-   ```
-
-2. **Import Repository**
-   ```bash
-   # In Vercel Dashboard:
-   # 1. Click "New Project"
-   # 2. Find your GitHub repository "my-first-claude-code"
-   # 3. Click "Import"
-   ```
-
-3. **Automatic Configuration**
-   ```bash
-   # Vercel automatically detects:
-   # - Framework: Next.js
-   # - Build Command: npm run build
-   # - Output Directory: .next
-   # - Node.js Version: 22.x (from package.json engines)
-   ```
-
-4. **Deploy**
-   ```bash
-   # Click "Deploy" button
-   # Vercel will build and deploy your application
-   # You'll receive a live URL (e.g., https://project-name.vercel.app)
-   ```
-
-#### Deployment Features
-
-- **Automatic Deployments**: Every push to `main` triggers a new deployment
-- **Preview Deployments**: Pull requests get their own preview URLs for testing
-- **CI Integration**: Deployments wait for GitHub Actions CI to pass
-- **Zero Configuration**: Next.js projects work out of the box
-- **Custom Domains**: Free `.vercel.app` subdomain included
-
-#### Environment Configuration
+### Available Commands
 
 ```bash
-# No environment variables needed for this Todo App
-# All data is stored in localStorage (client-side)
-# Production build automatically optimized by Next.js
+npm run dev          # Start development server
+npm run build        # Create production build
+npm run test         # Run test suite
+npm run lint         # Run code linting
+npm run type-check   # TypeScript type checking
 ```
 
-#### Deployment Workflow
+## Technology Stack
 
-```bash
-# 1. Developer pushes code to GitHub
-git push origin main
+- **Framework**: Next.js 14 with App Router
+- **Language**: TypeScript for type safety
+- **Styling**: Tailwind CSS
+- **Testing**: Jest + React Testing Library
+- **Development**: Test-Driven Development (TDD)
+- **Deployment**: Vercel with GitHub Actions CI/CD
 
-# 2. GitHub Actions CI runs (build, test, lint)
-# 3. If CI passes, Vercel automatically deploys
-# 4. Live site updates with new changes
-# 5. Deployment URL remains consistent
-```
+## Development Status
 
-#### Monitoring & Management
+**Current Workflow**: Branch-based development with pull requests
 
-- **Vercel Dashboard**: Monitor deployments, view logs, manage domains
-- **GitHub Integration**: Deployment status visible in commit history
-- **Automatic Rollbacks**: Previous deployments can be promoted if needed
-- **Analytics**: Basic traffic and performance metrics available
+- Features developed on separate branches (`feature/issue-number-description`)
+- Pull requests used for code review and CI validation
+- Main branch maintains stable, tested code
+- Automatic deployment to production after successful CI
 
-### Deployment Status
+## Documentation
 
-- ✅ **Production**: Deployed to Vercel with automatic updates
-- ✅ **CI/CD Pipeline**: GitHub Actions → Vercel integration complete
-- ✅ **Domain**: Free `.vercel.app` subdomain configured
-- ✅ **SSL**: HTTPS enabled by default
-- ✅ **Performance**: Optimized Next.js production build
+### Quick Navigation
 
-### For Other Projects
-
-To deploy your own Next.js project to Vercel:
-
-1. **Ensure Compatibility**
-   ```json
-   // package.json should include:
-   {
-     "scripts": {
-       "build": "next build",
-       "start": "next start"
-     },
-     "engines": {
-       "node": ">=18.0.0"
-     }
-   }
-   ```
-
-2. **Follow Setup Steps**: Use the same Vercel setup process outlined above
-3. **Configure Environment Variables**: Add any required environment variables in Vercel dashboard
-4. **Custom Domain**: Optional custom domain configuration available in Vercel settings
-
-### Troubleshooting
-
-**Common Issues:**
-
-- **Build Failures**: Check GitHub Actions CI logs first
-- **Environment Variables**: Ensure all required variables are set in Vercel dashboard
-- **Node.js Version**: Verify `engines` field in package.json matches Vercel's Node.js version
-- **Dependencies**: Ensure package-lock.json is committed for reproducible builds
-
-## 📚 Documentation
+- **🚀 [Installation Guide](docs/setup/installation.md)** - Complete development environment setup
+- **📦 [Deployment Guide](docs/setup/deployment.md)** - Production deployment with Vercel
+- **⚙️ [Development Workflow](docs/development/workflow.md)** - Coding standards and practices
+- **📊 [Project Management](docs/development/project-management.md)** - Issue tracking and planning
+- **🏗️ [Architecture Overview](docs/architecture/overview.md)** - Technical architecture and decisions
 
 ### Documentation Organization
 
-This project maintains comprehensive documentation across multiple files, each serving specific purposes:
+- **[docs/setup/](docs/setup/)** - Installation and deployment guides
+- **[docs/development/](docs/development/)** - Development workflow and project management
+- **[docs/architecture/](docs/architecture/)** - Technical architecture and design decisions
+- **[docs/adr/](docs/adr/)** - Architecture Decision Records
+- **[docs/guidelines/](docs/guidelines/)** - Process guidelines and standards
+- **[CLAUDE.md](CLAUDE.md)** - Claude Code development guidelines
 
-#### Core Documentation Files
+## Contributing
 
-- **[README.md](README.md)** (this file): Project overview, setup instructions, and contributor guidance
-- **[CLAUDE.md](CLAUDE.md)**: Development guidelines and Claude Code collaboration instructions
-- **[docs/adr/](docs/adr/)**: Architecture Decision Records documenting technical decisions
+### Getting Started
 
-#### Specialized Documentation
+1. **Review Documentation**: Start with the [installation guide](docs/setup/installation.md)
+2. **Understand Workflow**: Read the [development workflow](docs/development/workflow.md)
+3. **Check Issues**: Browse [GitHub issues](https://github.com/mikiwiik/my-first-claude-code/issues) for tasks
+4. **Follow Standards**: Adhere to project [coding standards](docs/development/workflow.md)
 
-- **[docs/guidelines/documentation-standards.md](docs/guidelines/documentation-standards.md)**: Documentation consistency requirements and workflows
-- **[docs/guidelines/priority-system.md](docs/guidelines/priority-system.md)**: GitHub issue priority assessment and management
-- **[docs/guidelines/complexity-estimation.md](docs/guidelines/complexity-estimation.md)**: Complexity-based effort estimation guidelines
-- **[docs/adr/010-atomic-commit-strategy.md](docs/adr/010-atomic-commit-strategy.md)**: Atomic commit strategy and implementation
+### Development Process
 
-#### Documentation Navigation
+1. **Create Branch**: `feature/issue-number-description`
+2. **Follow TDD**: Write tests first, then implementation
+3. **Maintain Quality**: Pre-commit hooks ensure code quality
+4. **Create PR**: Submit pull request for review
+5. **CI Validation**: Ensure all checks pass before merge
 
-**For Contributors:**
-- Start with [README.md](README.md) for project overview and setup
-- Review [CLAUDE.md](CLAUDE.md) for development workflow and coding standards
-- Check relevant [ADRs](docs/adr/) for architectural context
-- Follow [documentation standards](docs/guidelines/documentation-standards.md) for consistency
+### Issue Management
 
-**For Technical Decisions:**
-- Review [ADR Process](docs/adr/PROCESS.md) before making architectural decisions
-- Browse [ADR Index](docs/adr/README.md) for existing decisions
-- Check [CLAUDE.md](CLAUDE.md) for development practice requirements
+The project uses GitHub Issues with priority and complexity labels:
 
-**For Project Management:**
-- Use [priority system guidelines](docs/guidelines/priority-system.md) for issue labeling
-- Apply [complexity estimation](docs/guidelines/complexity-estimation.md) for effort planning
-- Follow [atomic commit guidelines](docs/adr/010-atomic-commit-strategy.md) for code history
+- **Priority**: `priority-1-critical` 🔴 to `priority-4-low` 🟢
+- **Complexity**: `complexity-minimal` 🟢 to `complexity-epic` 🔴
 
-### Documentation Maintenance
+See [project management guide](docs/development/project-management.md) for detailed workflows.
 
-#### Update Requirements
+## Features
 
-**Major Changes** require updates across multiple documentation files:
-- **Architectural Decisions**: Create ADR, update CLAUDE.md, update README.md
-- **Development Practices**: Update CLAUDE.md, update README.md contributor guidelines
-- **Project Structure**: Update README.md setup, update CLAUDE.md guidelines
-- **Quality Standards**: Update CLAUDE.md standards, create supporting ADR
+- ✅ **Add/Edit/Delete Todos**: Complete todo management functionality
+- ✅ **Toggle Completion**: Mark todos as complete/incomplete
+- ✅ **Local Persistence**: Browser localStorage for data persistence
+- ✅ **Responsive Design**: Works on desktop and mobile devices
+- ✅ **Type Safety**: Full TypeScript implementation
+- ✅ **Test Coverage**: Comprehensive test suite
+- ✅ **CI/CD Pipeline**: Automated testing and deployment
 
-**Documentation Consistency Checklist:**
-```markdown
-## Documentation Updates Required
-- [ ] Create/update relevant ADR with decision rationale
-- [ ] Update CLAUDE.md development guidelines
-- [ ] Update README.md project information
-- [ ] Ensure cross-references between documents are current
-- [ ] Verify documentation consistency across all files
-```
+## Project Management
 
-#### Contributor Responsibilities
+This project demonstrates professional development practices:
 
-**All Contributors:**
-- Update documentation for features being implemented
-- Follow documentation update requirements for changes
-- Maintain consistency with existing documentation standards
-- Include documentation updates in code reviews
+- **Issue-Driven Development**: All features begin with GitHub issues
+- **Atomic Commits**: Clear, focused commit history
+- **Code Quality**: Automated linting, formatting, and testing
+- **Documentation**: Comprehensive project documentation
+- **CI/CD**: Automated quality assurance and deployment
 
-**Maintainers:**
-- Enforce documentation standards across the project
-- Review documentation updates for accuracy and consistency
-- Update documentation processes as the project evolves
-- Ensure documentation supports the educational mission
+## Support and Resources
 
-### Documentation Quality Standards
+- **Project Issues**: [GitHub Issues](https://github.com/mikiwiik/my-first-claude-code/issues)
+- **Architecture Decisions**: [ADR Index](docs/adr/README.md)
+- **Claude Code Documentation**: [Official Docs](https://docs.claude.com/en/docs/claude-code/)
+- **Development Guidelines**: [CLAUDE.md](CLAUDE.md)
 
-- **Clarity**: Use clear, concise language appropriate to the audience
-- **Consistency**: Maintain consistent terminology and style across documents
-- **Currency**: Keep information up-to-date and relevant to current project state
-- **Completeness**: Include all necessary information for the intended audience
-- **Cross-References**: Provide appropriate links between related documentation
-- **Accessibility**: Ensure documentation is accessible to all intended users
+---
 
-This comprehensive documentation approach ensures that project knowledge is preserved, decisions are traceable, and contributors can effectively understand and contribute to the project's continued development.
+**Built with Claude Code** - Demonstrating AI-assisted development workflows and modern web development practices.
