@@ -9,7 +9,7 @@ A Next.js Todo application built using Test-Driven Development (TDD) with Claude
 - Features are implemented, tested, and committed to main
 - Each completed feature is pushed to remote to close GitHub issues
 
-## Setup subscription needed for claude code
+## Manual configurations done prior to using claude: setup subscription needed for claude code
 * https://claude.com/product/claude-code
 * Login
 * Upgrade to Monthly Pro plan: https://claude.ai/upgrade/pro
