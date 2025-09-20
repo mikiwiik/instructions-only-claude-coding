@@ -196,47 +196,61 @@ export default function TodoItem({
           </>
         )}
       </div>
-      <div className='flex flex-col gap-1'>
-        {moveUp && (
-          <button
-            onClick={handleMoveUp}
-            disabled={isFirst}
-            className='flex-shrink-0 mt-0.5 p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground'
-            aria-label={`Move todo up: ${todo.text}`}
-            type='button'
+      <div className='flex items-center gap-2'>
+        {(moveUp || moveDown) && (
+          <div
+            role='group'
+            aria-label='Reorder todo'
+            className='flex items-center gap-0.5'
           >
-            <ChevronUp className='h-4 w-4' />
-          </button>
+            {moveUp && (
+              <button
+                onClick={handleMoveUp}
+                disabled={isFirst}
+                className='flex-shrink-0 p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground min-w-[44px] min-h-[44px] flex items-center justify-center'
+                aria-label={`Move todo up: ${todo.text}`}
+                type='button'
+              >
+                <ChevronUp className='h-4 w-4' />
+              </button>
+            )}
+            {moveDown && (
+              <button
+                onClick={handleMoveDown}
+                disabled={isLast}
+                className='flex-shrink-0 p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground min-w-[44px] min-h-[44px] flex items-center justify-center'
+                aria-label={`Move todo down: ${todo.text}`}
+                type='button'
+              >
+                <ChevronDown className='h-4 w-4' />
+              </button>
+            )}
+          </div>
         )}
-        {moveDown && (
-          <button
-            onClick={handleMoveDown}
-            disabled={isLast}
-            className='flex-shrink-0 mt-0.5 p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground'
-            aria-label={`Move todo down: ${todo.text}`}
-            type='button'
-          >
-            <ChevronDown className='h-4 w-4' />
-          </button>
-        )}
-        {!isEditing && onEdit && (
-          <button
-            onClick={handleEdit}
-            className='flex-shrink-0 mt-0.5 p-1 rounded-full hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-muted-foreground hover:text-blue-600'
-            aria-label={`Edit todo: ${todo.text}`}
-            type='button'
-          >
-            <Edit2 className='h-4 w-4' />
-          </button>
-        )}
-        <button
-          onClick={handleDelete}
-          className='flex-shrink-0 mt-0.5 p-1 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600'
-          aria-label={`Delete todo: ${todo.text}`}
-          type='button'
+        <div
+          role='group'
+          aria-label='Todo actions'
+          className='flex items-center gap-0.5'
         >
-          <X className='h-4 w-4' />
-        </button>
+          {!isEditing && onEdit && (
+            <button
+              onClick={handleEdit}
+              className='flex-shrink-0 p-2 rounded-full hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-muted-foreground hover:text-blue-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
+              aria-label={`Edit todo: ${todo.text}`}
+              type='button'
+            >
+              <Edit2 className='h-4 w-4' />
+            </button>
+          )}
+          <button
+            onClick={handleDelete}
+            className='flex-shrink-0 p-2 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
+            aria-label={`Delete todo: ${todo.text}`}
+            type='button'
+          >
+            <X className='h-4 w-4' />
+          </button>
+        </div>
       </div>
     </li>
   );

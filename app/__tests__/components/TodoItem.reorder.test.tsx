@@ -406,13 +406,18 @@ describe('TodoItem - Reordering functionality', () => {
       });
       const deleteButton = screen.getByRole('button', { name: /delete todo/i });
 
-      // Arrow buttons should come before delete button in the controls section
+      // Arrow buttons should be in reorder group, actions in actions group
       const todoItem = screen.getByRole('listitem');
-      const buttonsContainer = todoItem.querySelector('.flex.flex-col.gap-1');
+      const reorderGroup = todoItem.querySelector(
+        '[aria-label="Reorder todo"]'
+      );
+      const actionsGroup = todoItem.querySelector(
+        '[aria-label="Todo actions"]'
+      );
 
-      expect(buttonsContainer).toContainElement(moveUpButton);
-      expect(buttonsContainer).toContainElement(moveDownButton);
-      expect(buttonsContainer).toContainElement(deleteButton);
+      expect(reorderGroup).toContainElement(moveUpButton);
+      expect(reorderGroup).toContainElement(moveDownButton);
+      expect(actionsGroup).toContainElement(deleteButton);
     });
   });
 });
