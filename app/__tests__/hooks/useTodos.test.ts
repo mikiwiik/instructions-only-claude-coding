@@ -5,10 +5,13 @@ describe('useTodos hook', () => {
   beforeEach(() => {
     // Clear localStorage before each test
     localStorage.clear();
+    // Use fake timers for timestamp tests
+    jest.useFakeTimers();
   });
 
   afterEach(() => {
     localStorage.clear();
+    jest.useRealTimers();
   });
 
   it('should initialize with empty todos array', () => {
@@ -353,6 +356,177 @@ describe('useTodos hook', () => {
 
       const storedTodos = JSON.parse(localStorage.getItem('todos') || '[]');
       expect(storedTodos).toHaveLength(0);
+    });
+  });
+
+  describe('Edit Functionality', () => {
+    it('should edit todo text when editTodo is called', () => {
+      const { result } = renderHook(() => useTodos());
+
+      // Add a todo first
+      act(() => {
+        result.current.addTodo('Original todo text');
+      });
+
+      const todoId = result.current.todos[0].id;
+
+      // Edit the todo
+      act(() => {
+        result.current.editTodo(todoId, 'Updated todo text');
+      });
+
+      expect(result.current.todos).toHaveLength(1);
+      expect(result.current.todos[0].text).toBe('Updated todo text');
+      expect(result.current.todos[0].id).toBe(todoId);
+    });
+
+    it('should preserve completion status when editing', () => {
+      const { result } = renderHook(() => useTodos());
+
+      // Add and complete a todo
+      act(() => {
+        result.current.addTodo('Completed todo');
+      });
+
+      const todoId = result.current.todos[0].id;
+
+      act(() => {
+        result.current.toggleTodo(todoId);
+      });
+
+      expect(result.current.todos[0].completed).toBe(true);
+
+      // Edit the completed todo
+      act(() => {
+        result.current.editTodo(todoId, 'Updated completed todo');
+      });
+
+      expect(result.current.todos[0].text).toBe('Updated completed todo');
+      expect(result.current.todos[0].completed).toBe(true);
+    });
+
+    it('should update updatedAt timestamp when editing', () => {
+      const { result } = renderHook(() => useTodos());
+
+      act(() => {
+        result.current.addTodo('Todo to edit');
+      });
+
+      const todoId = result.current.todos[0].id;
+      const originalUpdatedAt = result.current.todos[0].updatedAt;
+
+      // Wait a small amount to ensure timestamp difference
+      jest.advanceTimersByTime(10);
+
+      act(() => {
+        result.current.editTodo(todoId, 'Edited todo');
+      });
+
+      expect(result.current.todos[0].updatedAt).not.toEqual(originalUpdatedAt);
+      expect(result.current.todos[0].updatedAt.getTime()).toBeGreaterThan(
+        originalUpdatedAt.getTime()
+      );
+    });
+
+    it('should persist edited todos to localStorage', () => {
+      const { result } = renderHook(() => useTodos());
+
+      act(() => {
+        result.current.addTodo('Todo to edit');
+      });
+
+      const todoId = result.current.todos[0].id;
+
+      act(() => {
+        result.current.editTodo(todoId, 'Edited todo text');
+      });
+
+      const storedTodos = JSON.parse(localStorage.getItem('todos') || '[]').map(
+        (todo: any) => ({
+          ...todo,
+          createdAt: new Date(todo.createdAt),
+          updatedAt: new Date(todo.updatedAt),
+        })
+      );
+
+      expect(storedTodos).toHaveLength(1);
+      expect(storedTodos[0].text).toBe('Edited todo text');
+      expect(storedTodos[0].id).toBe(todoId);
+    });
+
+    it('should handle editing non-existent todo gracefully', () => {
+      const { result } = renderHook(() => useTodos());
+
+      act(() => {
+        result.current.addTodo('Existing todo');
+      });
+
+      const originalTodos = [...result.current.todos];
+
+      // Try to edit a non-existent todo
+      act(() => {
+        result.current.editTodo('non-existent-id', 'Should not work');
+      });
+
+      // Todos should remain unchanged
+      expect(result.current.todos).toEqual(originalTodos);
+    });
+
+    it('should handle empty text edit gracefully', () => {
+      const { result } = renderHook(() => useTodos());
+
+      act(() => {
+        result.current.addTodo('Original text');
+      });
+
+      const todoId = result.current.todos[0].id;
+      const originalTodos = [...result.current.todos];
+
+      // Try to edit with empty text
+      act(() => {
+        result.current.editTodo(todoId, '');
+      });
+
+      // Todo should remain unchanged
+      expect(result.current.todos).toEqual(originalTodos);
+    });
+
+    it('should trim whitespace from edited text', () => {
+      const { result } = renderHook(() => useTodos());
+
+      act(() => {
+        result.current.addTodo('Original text');
+      });
+
+      const todoId = result.current.todos[0].id;
+
+      act(() => {
+        result.current.editTodo(todoId, '  Trimmed text  ');
+      });
+
+      expect(result.current.todos[0].text).toBe('Trimmed text');
+    });
+
+    it('should handle editing multiple todos independently', () => {
+      const { result } = renderHook(() => useTodos());
+
+      act(() => {
+        result.current.addTodo('First todo');
+        result.current.addTodo('Second todo');
+        result.current.addTodo('Third todo');
+      });
+
+      const firstId = result.current.todos[0].id;
+      const thirdId = result.current.todos[2].id;
+
+      act(() => {
+        result.current.editTodo(firstId, 'Edited first todo');
+        result.current.editTodo(thirdId, 'Edited third todo');
+      });
+
+      expect(result.current.todos[0].text).toBe('Edited first todo');
+      expect(result.current.todos[1].text).toBe('Second todo'); // Unchanged
+      expect(result.current.todos[2].text).toBe('Edited third todo');
     });
   });
 });
