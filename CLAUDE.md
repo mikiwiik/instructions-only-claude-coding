@@ -83,6 +83,47 @@ This file contains specific instructions for Claude Code when working on this To
 - **Project Evolution**: Update project description as new features are added
 - **Learning Context**: Ensure documentation supports the educational mission of the project
 
+### Priority System Integration
+
+**🏷️ REQUIREMENT**: All GitHub issues must be assigned appropriate priority labels for effective project management.
+
+#### Priority Label Usage
+
+- **priority-1-critical** 🔴: Blocking issues, security vulnerabilities, broken core functionality
+  - **Action**: Stop other work to address immediately
+  - **Review**: Must be validated before closing
+  - **Timeline**: Immediate attention required
+
+- **priority-2-high** 🟠: Important features, significant improvements, major bugs
+  - **Action**: Schedule as primary development focus
+  - **Review**: Technical review required
+  - **Timeline**: Current sprint/milestone priority
+
+- **priority-3-medium** 🟡: Standard features, minor improvements, non-critical bugs
+  - **Action**: Standard development workflow
+  - **Review**: Peer review sufficient
+  - **Timeline**: Next sprint or when capacity allows
+
+- **priority-4-low** 🟢: Nice-to-have features, documentation updates, minor enhancements
+  - **Action**: Good for learning/exploration
+  - **Review**: Self-review acceptable for simple changes
+  - **Timeline**: Backlog items, filler work
+
+#### Priority-Based Development Workflow
+
+1. **Issue Selection**: Always prioritize higher-priority issues first
+2. **Work Planning**: Consider priority when estimating effort and scheduling
+3. **Review Rigor**: Apply appropriate review depth based on priority level
+4. **Claude Code Assistance**: Mention priority level when requesting implementation
+5. **Progress Tracking**: Use priority labels for filtering and project planning
+
+#### Priority Assignment Guidelines
+
+- **Assign on Creation**: Set priority when creating new issues
+- **Regular Review**: Reassess priorities as project evolves
+- **Context Consideration**: Factor in deadlines, dependencies, and impact
+- **Learning Balance**: Mix high-impact work with learning opportunities
+
 ## Project Structure
 
 ```text

@@ -56,6 +56,27 @@ This project uses GitHub Issues for feature tracking and follows a structured de
 - Pre-commit hooks ensure code quality with automatic linting and formatting
 - Claude Code assistance is used throughout development
 
+### Priority System
+
+The project uses a standardized priority labeling system for effective issue management:
+
+- **priority-1-critical** 🔴: Blocking issues, security vulnerabilities, broken core functionality
+- **priority-2-high** 🟠: Important features, significant improvements, major bugs
+- **priority-3-medium** 🟡: Standard features, minor improvements, non-critical bugs
+- **priority-4-low** 🟢: Nice-to-have features, documentation updates, minor enhancements
+
+#### Priority-Based Development
+
+Development efforts are prioritized based on issue labels:
+
+1. **Critical Priority**: Immediate attention, stop other work
+2. **High Priority**: Primary development focus for current sprint
+3. **Medium Priority**: Standard workflow, next sprint scheduling
+4. **Low Priority**: Backlog items, learning opportunities
+
+This system enables effective resource allocation, clear communication of urgency, and structured project planning as part
+of the learning experience in project management workflows.
+
 ## Code Quality
 
 The project enforces code quality through automated tools:
