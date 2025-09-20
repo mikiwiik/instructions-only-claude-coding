@@ -139,4 +139,220 @@ describe('useTodos hook', () => {
 
     expect(result.current.todos[0].text).toBe('Trimmed todo');
   });
+
+  describe('toggleTodo', () => {
+    it('should toggle a todo from incomplete to complete', () => {
+      const { result } = renderHook(() => useTodos());
+
+      act(() => {
+        result.current.addTodo('Todo to toggle');
+      });
+
+      const todoId = result.current.todos[0].id;
+
+      act(() => {
+        result.current.toggleTodo(todoId);
+      });
+
+      expect(result.current.todos[0].completed).toBe(true);
+      expect(result.current.todos[0].updatedAt).toBeInstanceOf(Date);
+    });
+
+    it('should toggle a todo from complete to incomplete', () => {
+      const { result } = renderHook(() => useTodos());
+
+      act(() => {
+        result.current.addTodo('Todo to toggle back');
+      });
+
+      const todoId = result.current.todos[0].id;
+
+      // Toggle to complete
+      act(() => {
+        result.current.toggleTodo(todoId);
+      });
+
+      // Toggle back to incomplete
+      act(() => {
+        result.current.toggleTodo(todoId);
+      });
+
+      expect(result.current.todos[0].completed).toBe(false);
+    });
+
+    it('should not affect other todos when toggling', () => {
+      const { result } = renderHook(() => useTodos());
+
+      act(() => {
+        result.current.addTodo('First todo');
+        result.current.addTodo('Second todo');
+      });
+
+      const secondTodoId = result.current.todos[0].id;
+
+      act(() => {
+        result.current.toggleTodo(secondTodoId);
+      });
+
+      expect(result.current.todos[0].completed).toBe(true);
+      expect(result.current.todos[1].completed).toBe(false);
+    });
+
+    it('should handle toggling non-existent todo gracefully', () => {
+      const { result } = renderHook(() => useTodos());
+
+      act(() => {
+        result.current.addTodo('Existing todo');
+      });
+
+      const originalTodos = result.current.todos;
+
+      act(() => {
+        result.current.toggleTodo('non-existent-id');
+      });
+
+      expect(result.current.todos).toEqual(originalTodos);
+    });
+
+    it('should persist todo state to localStorage when toggling', () => {
+      const { result } = renderHook(() => useTodos());
+
+      act(() => {
+        result.current.addTodo('Todo to persist');
+      });
+
+      const todoId = result.current.todos[0].id;
+
+      act(() => {
+        result.current.toggleTodo(todoId);
+      });
+
+      const storedTodos = JSON.parse(localStorage.getItem('todos') || '[]');
+      expect(storedTodos[0].completed).toBe(true);
+    });
+  });
+
+  describe('deleteTodo', () => {
+    it('should remove todo from list when deleted', () => {
+      const { result } = renderHook(() => useTodos());
+
+      act(() => {
+        result.current.addTodo('Todo to delete');
+        result.current.addTodo('Todo to keep');
+      });
+
+      expect(result.current.todos).toHaveLength(2);
+      const todoToDeleteId = result.current.todos[1].id; // First todo added
+
+      act(() => {
+        result.current.deleteTodo(todoToDeleteId);
+      });
+
+      expect(result.current.todos).toHaveLength(1);
+      expect(result.current.todos[0].text).toBe('Todo to keep');
+    });
+
+    it('should handle deleting non-existent todo gracefully', () => {
+      const { result } = renderHook(() => useTodos());
+
+      act(() => {
+        result.current.addTodo('Existing todo');
+      });
+
+      const originalTodos = result.current.todos;
+
+      act(() => {
+        result.current.deleteTodo('non-existent-id');
+      });
+
+      expect(result.current.todos).toEqual(originalTodos);
+    });
+
+    it('should not affect other todos when one is deleted', () => {
+      const { result } = renderHook(() => useTodos());
+
+      act(() => {
+        result.current.addTodo('First todo');
+        result.current.addTodo('Second todo');
+        result.current.addTodo('Third todo');
+      });
+
+      const middleTodoId = result.current.todos[1].id;
+      const firstTodoText = result.current.todos[0].text;
+      const lastTodoText = result.current.todos[2].text;
+
+      act(() => {
+        result.current.deleteTodo(middleTodoId);
+      });
+
+      expect(result.current.todos).toHaveLength(2);
+      expect(result.current.todos[0].text).toBe(firstTodoText);
+      expect(result.current.todos[1].text).toBe(lastTodoText);
+    });
+
+    it('should work with both completed and incomplete todos', () => {
+      const { result } = renderHook(() => useTodos());
+
+      act(() => {
+        result.current.addTodo('Incomplete todo');
+        result.current.addTodo('Complete todo');
+      });
+
+      const completeTodoId = result.current.todos[0].id;
+
+      // Mark one todo as complete
+      act(() => {
+        result.current.toggleTodo(completeTodoId);
+      });
+
+      expect(result.current.todos[0].completed).toBe(true);
+
+      // Delete the completed todo
+      act(() => {
+        result.current.deleteTodo(completeTodoId);
+      });
+
+      expect(result.current.todos).toHaveLength(1);
+      expect(result.current.todos[0].text).toBe('Incomplete todo');
+      expect(result.current.todos[0].completed).toBe(false);
+    });
+
+    it('should persist updated todo list to localStorage when deleting', () => {
+      const { result } = renderHook(() => useTodos());
+
+      act(() => {
+        result.current.addTodo('Todo to delete');
+        result.current.addTodo('Todo to keep');
+      });
+
+      const todoToDeleteId = result.current.todos[1].id;
+
+      act(() => {
+        result.current.deleteTodo(todoToDeleteId);
+      });
+
+      const storedTodos = JSON.parse(localStorage.getItem('todos') || '[]');
+      expect(storedTodos).toHaveLength(1);
+      expect(storedTodos[0].text).toBe('Todo to keep');
+    });
+
+    it('should handle deleting all todos', () => {
+      const { result } = renderHook(() => useTodos());
+
+      act(() => {
+        result.current.addTodo('Only todo');
+      });
+
+      const todoId = result.current.todos[0].id;
+
+      act(() => {
+        result.current.deleteTodo(todoId);
+      });
+
+      expect(result.current.todos).toHaveLength(0);
+
+      const storedTodos = JSON.parse(localStorage.getItem('todos') || '[]');
+      expect(storedTodos).toHaveLength(0);
+    });
+  });
 });
