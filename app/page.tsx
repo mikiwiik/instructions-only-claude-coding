@@ -6,7 +6,7 @@ import TodoList from './components/TodoList';
 import { useTodos } from './hooks/useTodos';
 
 export default function HomePage() {
-  const { todos, addTodo, toggleTodo, deleteTodo } = useTodos();
+  const { todos, addTodo, toggleTodo, deleteTodo, editTodo } = useTodos();
 
   return (
     <div className='max-w-4xl mx-auto'>
@@ -25,7 +25,12 @@ export default function HomePage() {
 
       <div className='bg-card border rounded-lg p-6 shadow-sm'>
         <TodoForm onAddTodo={addTodo} />
-        <TodoList todos={todos} onToggle={toggleTodo} onDelete={deleteTodo} />
+        <TodoList
+          todos={todos}
+          onToggle={toggleTodo}
+          onDelete={deleteTodo}
+          onEdit={editTodo}
+        />
       </div>
 
       <footer className='text-center mt-8 text-sm text-muted-foreground'>

@@ -6,9 +6,15 @@ interface TodoListProps {
   todos: Todo[];
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
+  onEdit?: (id: string, newText: string) => void;
 }
 
-export default function TodoList({ todos, onToggle, onDelete }: TodoListProps) {
+export default function TodoList({
+  todos,
+  onToggle,
+  onDelete,
+  onEdit,
+}: TodoListProps) {
   if (todos.length === 0) {
     return (
       <div className='text-center py-12'>
@@ -38,6 +44,7 @@ export default function TodoList({ todos, onToggle, onDelete }: TodoListProps) {
             todo={todo}
             onToggle={onToggle}
             onDelete={onDelete}
+            onEdit={onEdit}
           />
         ))}
       </ul>

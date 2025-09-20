@@ -117,11 +117,40 @@ export function useTodos() {
     });
   };
 
+  const editTodo = (id: string, newText: string) => {
+    const trimmedText = newText.trim();
+
+    // Don't edit with empty or whitespace-only text
+    if (!trimmedText) {
+      return;
+    }
+
+    setState((prev) => {
+      const updatedTodos = prev.todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            text: trimmedText,
+            updatedAt: new Date(),
+          };
+        }
+        return todo;
+      });
+
+      saveTodos(updatedTodos);
+      return {
+        ...prev,
+        todos: updatedTodos,
+      };
+    });
+  };
+
   return {
     todos: state.todos,
     filter: state.filter,
     addTodo,
     toggleTodo,
     deleteTodo,
+    editTodo,
   };
 }
