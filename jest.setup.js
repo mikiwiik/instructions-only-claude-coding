@@ -1,14 +1,28 @@
 import '@testing-library/jest-dom';
 
-// Mock localStorage
-const localStorageMock = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
-  clear: jest.fn(),
-  length: 0,
-  key: jest.fn(),
-};
+// Mock localStorage with actual storage functionality
+const localStorageMock = (() => {
+  let store = {};
+  return {
+    getItem: jest.fn((key) => store[key] || null),
+    setItem: jest.fn((key, value) => {
+      store[key] = value.toString();
+    }),
+    removeItem: jest.fn((key) => {
+      delete store[key];
+    }),
+    clear: jest.fn(() => {
+      store = {};
+    }),
+    get length() {
+      return Object.keys(store).length;
+    },
+    key: jest.fn((index) => {
+      const keys = Object.keys(store);
+      return keys[index] || null;
+    }),
+  };
+})();
 
 Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
@@ -31,8 +45,8 @@ Object.defineProperty(window, 'matchMedia', {
 
 // Reset mocks before each test
 beforeEach(() => {
+  localStorageMock.clear();
   localStorageMock.getItem.mockClear();
   localStorageMock.setItem.mockClear();
   localStorageMock.removeItem.mockClear();
-  localStorageMock.clear.mockClear();
 });
