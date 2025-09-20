@@ -5,9 +5,10 @@ import TodoItem from './TodoItem';
 interface TodoListProps {
   todos: Todo[];
   onToggle: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
-export default function TodoList({ todos, onToggle }: TodoListProps) {
+export default function TodoList({ todos, onToggle, onDelete }: TodoListProps) {
   if (todos.length === 0) {
     return (
       <div className='text-center py-12'>
@@ -32,7 +33,12 @@ export default function TodoList({ todos, onToggle }: TodoListProps) {
       </h3>
       <ul className='space-y-3' role='list'>
         {todos.map((todo) => (
-          <TodoItem key={todo.id} todo={todo} onToggle={onToggle} />
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            onToggle={onToggle}
+            onDelete={onDelete}
+          />
         ))}
       </ul>
     </div>
