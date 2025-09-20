@@ -87,42 +87,40 @@ This file contains specific instructions for Claude Code when working on this To
 
 **🏷️ REQUIREMENT**: All GitHub issues must be assigned appropriate priority labels for effective project management.
 
-#### Priority Label Usage
+**📋 Full Guidelines**: See [`docs/guidelines/priority-system.md`](docs/guidelines/priority-system.md) for
+comprehensive priority assessment criteria and workflows.
 
-- **priority-1-critical** 🔴: Blocking issues, security vulnerabilities, broken core functionality
-  - **Action**: Stop other work to address immediately
-  - **Review**: Must be validated before closing
-  - **Timeline**: Immediate attention required
+#### Quick Reference
 
-- **priority-2-high** 🟠: Important features, significant improvements, major bugs
-  - **Action**: Schedule as primary development focus
-  - **Review**: Technical review required
-  - **Timeline**: Current sprint/milestone priority
+- **priority-1-critical** 🔴: Blocking issues, immediate attention required
+- **priority-2-high** 🟠: Important features, current sprint priority
+- **priority-3-medium** 🟡: Standard features, next sprint scheduling
+- **priority-4-low** 🟢: Nice-to-have features, backlog items
 
-- **priority-3-medium** 🟡: Standard features, minor improvements, non-critical bugs
-  - **Action**: Standard development workflow
-  - **Review**: Peer review sufficient
-  - **Timeline**: Next sprint or when capacity allows
+### Complexity-Based Effort Estimation
 
-- **priority-4-low** 🟢: Nice-to-have features, documentation updates, minor enhancements
-  - **Action**: Good for learning/exploration
-  - **Review**: Self-review acceptable for simple changes
-  - **Timeline**: Backlog items, filler work
+**🎯 REQUIREMENT**: All GitHub issues must be assigned complexity labels to enable accurate effort estimation in
+Claude Code development.
 
-#### Priority-Based Development Workflow
+**📋 Full Guidelines**: See [`docs/guidelines/complexity-estimation.md`](docs/guidelines/complexity-estimation.md)
+for detailed complexity assessment criteria and development workflows.
 
-1. **Issue Selection**: Always prioritize higher-priority issues first
-2. **Work Planning**: Consider priority when estimating effort and scheduling
-3. **Review Rigor**: Apply appropriate review depth based on priority level
-4. **Claude Code Assistance**: Mention priority level when requesting implementation
-5. **Progress Tracking**: Use priority labels for filtering and project planning
+#### Quick Reference
 
-#### Priority Assignment Guidelines
+- **complexity-minimal** 🟢: Single file changes, quick fixes
+- **complexity-simple** 🔵: Basic features, straightforward logic
+- **complexity-moderate** 🟡: Multi-component changes, state management
+- **complexity-complex** 🟠: Architecture changes, system design
+- **complexity-epic** 🔴: Major overhauls, breaking changes
 
-- **Assign on Creation**: Set priority when creating new issues
-- **Regular Review**: Reassess priorities as project evolves
-- **Context Consideration**: Factor in deadlines, dependencies, and impact
-- **Learning Balance**: Mix high-impact work with learning opportunities
+#### Combined Usage
+
+Always assign both priority and complexity labels to enable effective planning:
+
+- **High Priority + Low Complexity**: Quick wins and urgent fixes
+- **High Priority + High Complexity**: Major features requiring immediate attention
+- **Low Priority + Low Complexity**: Good filler work and maintenance tasks
+- **Low Priority + High Complexity**: Learning opportunities and future preparation
 
 ## Project Structure
 
