@@ -1,5 +1,7 @@
 # Todo App - My First Claude Code Project
 
+[![Build and Test](https://github.com/mikiwiik/my-first-claude-code/actions/workflows/build.yml/badge.svg)](https://github.com/mikiwiik/my-first-claude-code/actions/workflows/build.yml)
+
 ## Project Purpose
 
 This Todo application serves as a **learning platform** for Claude Code development workflows and modern web
