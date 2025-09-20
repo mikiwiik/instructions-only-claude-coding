@@ -1,0 +1,42 @@
+# Claude Code Prompt Log
+# This file logs all prompts and interactions with Claude Code
+# Started: 2025-09-20
+
+## Session 1: Todo App Project Setup
+- User requested to create a Next.js Todo app
+- User wants TDD approach with testing
+- User wants GitHub issues for project management
+- User requested limited GitHub access (private repos only)
+- User requested prompt logging (this file)
+
+### GitHub Issues Created:
+1. **Issue #1**: 🚀 Setup - Initialize Next.js project with TypeScript and Tailwind + Testing Setup
+2. **Issue #2**: 📝 Core Feature - Add Todo Functionality (TDD)
+3. **Issue #3**: ✅ Core Feature - Display and Toggle Todos (TDD)
+4. **Issue #4**: 🗑️ Core Feature - Delete Todos (TDD)
+5. **Issue #5**: ✏️ Enhancement - Edit Todos (TDD)
+6. **Issue #6**: 🔍 Enhancement - Filter Todos (TDD)
+7. **Issue #7**: 💾 Enhancement - Persist Data with localStorage (TDD)
+8. **Issue #8**: 🎨 Polish - UI/UX Improvements and Responsive Design
+9. **Issue #9**: 📚 Documentation - Create Comprehensive README
+10. **Issue #10**: 🏗️ Documentation - Create Architecture Decision Records (ADRs)
+
+### Configuration:
+- GitHub CLI authenticated with limited scope (repo only)
+- Prompt logging enabled in claude-prompts.log
+
+### ADR Implementation (Issue #10):
+- Created `docs/adr/` directory structure
+- Created ADR template for future decisions
+- Created comprehensive README with ADR index
+- Documented 8 initial architectural decisions:
+  - ADR-001: Next.js 14 with App Router
+  - ADR-002: TypeScript adoption
+  - ADR-003: Tailwind CSS styling
+  - ADR-004: Test-Driven Development approach
+  - ADR-005: localStorage persistence
+  - ADR-006: React Testing Library + Jest
+  - ADR-007: Custom hooks state management
+  - ADR-008: GitHub Issues workflow
+- Created CLAUDE.md with mandatory ADR requirements for all future architectural decisions
+- Established process for maintaining architectural documentation
