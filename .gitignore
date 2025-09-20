@@ -41,6 +41,9 @@ next-env.d.ts
 *.swp
 *.swo
 
+# Claude Code local settings
+.claude/
+
 # OS generated files
 .DS_Store?
 ._*
