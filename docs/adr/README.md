@@ -33,7 +33,8 @@ Each ADR follows this structure:
 | [008](008-github-issues-workflow.md)      | GitHub Issues for project management            | Accepted | 2025-09-20 |
 | [009](009-pre-commit-linting-strategy.md) | Pre-commit linting strategy                     | Accepted | 2025-09-20 |
 | [010](010-atomic-commit-strategy.md)      | Atomic commit strategy adoption                 | Accepted | 2025-09-20 |
-| [011](011-github-actions-ci-cd.md)        | GitHub Actions for CI/CD Pipeline              | Accepted | 2025-09-20 |
+| [011](011-github-actions-ci-cd.md)        | GitHub Actions for CI/CD Pipeline               | Accepted | 2025-09-20 |
+| [012](012-todo-reordering-ux-approach.md) | Todo Reordering UX Approach                     | Accepted | 2025-09-20 |
 
 ## Creating New ADRs
 

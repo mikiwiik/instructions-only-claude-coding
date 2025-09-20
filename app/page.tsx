@@ -6,7 +6,16 @@ import TodoList from './components/TodoList';
 import { useTodos } from './hooks/useTodos';
 
 export default function HomePage() {
-  const { todos, addTodo, toggleTodo, deleteTodo, editTodo } = useTodos();
+  const {
+    todos,
+    addTodo,
+    toggleTodo,
+    deleteTodo,
+    editTodo,
+    reorderTodos,
+    moveUp,
+    moveDown,
+  } = useTodos();
 
   return (
     <div className='max-w-4xl mx-auto'>
@@ -30,6 +39,9 @@ export default function HomePage() {
           onToggle={toggleTodo}
           onDelete={deleteTodo}
           onEdit={editTodo}
+          reorderTodos={reorderTodos}
+          moveUp={moveUp}
+          moveDown={moveDown}
         />
       </div>
 

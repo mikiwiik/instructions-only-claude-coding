@@ -5,8 +5,13 @@ import {
   Edit2,
   Check,
   X as Cancel,
+  GripVertical,
+  ChevronUp,
+  ChevronDown,
 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { Todo } from '../types/todo';
 
 interface TodoItemProps {
@@ -14,6 +19,11 @@ interface TodoItemProps {
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onEdit?: (id: string, newText: string) => void;
+  moveUp?: (id: string) => void;
+  moveDown?: (id: string) => void;
+  isDraggable?: boolean;
+  isFirst?: boolean;
+  isLast?: boolean;
 }
 
 export default function TodoItem({
@@ -21,10 +31,24 @@ export default function TodoItem({
   onToggle,
   onDelete,
   onEdit,
+  moveUp,
+  moveDown,
+  isDraggable = false,
+  isFirst = false,
+  isLast = false,
 }: TodoItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: todo.id, disabled: !isDraggable });
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
@@ -66,11 +90,44 @@ export default function TodoItem({
     }
   };
 
+  const handleMoveUp = () => {
+    if (moveUp && !isFirst) {
+      moveUp(todo.id);
+    }
+  };
+
+  const handleMoveDown = () => {
+    if (moveDown && !isLast) {
+      moveDown(todo.id);
+    }
+  };
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
   return (
     <li
+      ref={setNodeRef}
+      style={style}
       role='listitem'
       className='flex items-start gap-3 p-3 bg-background rounded-lg border'
     >
+      {isDraggable && (
+        <div
+          {...attributes}
+          {...listeners}
+          data-testid='drag-handle'
+          role='button'
+          tabIndex={0}
+          aria-label='Drag to reorder todo'
+          className='flex-shrink-0 mt-0.5 p-1 rounded cursor-grab hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring transition-colors text-muted-foreground hover:text-foreground active:cursor-grabbing'
+        >
+          <GripVertical className='h-4 w-4' />
+        </div>
+      )}
       <button
         onClick={handleToggle}
         className='flex-shrink-0 mt-0.5 p-1 rounded-full hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring transition-colors'
@@ -140,6 +197,28 @@ export default function TodoItem({
         )}
       </div>
       <div className='flex flex-col gap-1'>
+        {moveUp && (
+          <button
+            onClick={handleMoveUp}
+            disabled={isFirst}
+            className='flex-shrink-0 mt-0.5 p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground'
+            aria-label={`Move todo up: ${todo.text}`}
+            type='button'
+          >
+            <ChevronUp className='h-4 w-4' />
+          </button>
+        )}
+        {moveDown && (
+          <button
+            onClick={handleMoveDown}
+            disabled={isLast}
+            className='flex-shrink-0 mt-0.5 p-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground'
+            aria-label={`Move todo down: ${todo.text}`}
+            type='button'
+          >
+            <ChevronDown className='h-4 w-4' />
+          </button>
+        )}
         {!isEditing && onEdit && (
           <button
             onClick={handleEdit}
