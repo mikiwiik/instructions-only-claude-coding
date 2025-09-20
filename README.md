@@ -108,6 +108,55 @@ The project enforces code quality through automated tools:
 - **markdownlint**: Documentation formatting standards
 - **Husky + lint-staged**: Pre-commit hooks prevent poorly formatted code from being committed
 
+### Development Workflow
+
+#### Atomic Commit Strategy
+
+The project follows professional atomic commit practices for improved code history and collaboration:
+
+- **One Logical Change**: Each commit represents a single, focused change
+- **Conventional Commits**: Standardized format with type prefixes (feat, fix, test, docs)
+- **Issue Linking**: Every commit references the related GitHub issue (#issue-number)
+- **Self-Contained**: Each commit maintains a working application state
+
+**Example Commit Sequence:**
+
+```bash
+feat(todo): add completedAt field to TodoItem interface (#33)
+test(todo): add timestamp tracking tests (#33)
+docs(todo): update README with completion feature (#33)
+feat: complete todo completion timestamp tracking
+
+Closes #33
+```
+
+This approach enables:
+
+- **Focused Code Review**: Individual logical changes are easier to review
+- **Clear Development History**: Logical progression visible in git log
+- **Precise Debugging**: Better git bisect and blame functionality
+- **Selective Rollbacks**: Revert specific changes without losing entire features
+
+#### Commit Message Format
+
+```text
+type(scope): description (#issue-number)
+
+Optional body explaining the change
+
+Optional footer for issue closure
+```
+
+**Commit Types:**
+
+- **feat**: New features
+- **fix**: Bug fixes
+- **test**: Test additions/updates
+- **docs**: Documentation changes
+- **refactor**: Code refactoring
+- **style**: Formatting changes
+- **chore**: Maintenance tasks
+
 ## Dependency Management
 
 This project tracks `package-lock.json` in git for several critical reasons:
