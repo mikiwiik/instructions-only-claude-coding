@@ -106,10 +106,22 @@ export function useTodos() {
     });
   };
 
+  const deleteTodo = (id: string) => {
+    setState((prev) => {
+      const updatedTodos = prev.todos.filter((todo) => todo.id !== id);
+      saveTodos(updatedTodos);
+      return {
+        ...prev,
+        todos: updatedTodos,
+      };
+    });
+  };
+
   return {
     todos: state.todos,
     filter: state.filter,
     addTodo,
     toggleTodo,
+    deleteTodo,
   };
 }
