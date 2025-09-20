@@ -13,6 +13,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
+    'next/core-web-vitals',
     'prettier', // Must be last to override other configs
   ],
   rules: {
@@ -45,4 +46,16 @@ module.exports = {
     node: true,
   },
   ignorePatterns: ['node_modules/', '.next/', 'out/', 'build/', 'dist/'],
+  overrides: [
+    {
+      files: ['jest.config.js', 'jest.setup.js', 'next.config.js'],
+      env: {
+        node: true,
+        jest: true,
+      },
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off',
+      },
+    },
+  ],
 };
