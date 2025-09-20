@@ -77,6 +77,28 @@ Development efforts are prioritized based on issue labels:
 This system enables effective resource allocation, clear communication of urgency, and structured project planning as part
 of the learning experience in project management workflows.
 
+### Complexity-Based Effort Estimation
+
+The project uses complexity labels to enable accurate effort estimation in Claude Code development:
+
+- **complexity-minimal** 🟢: Single file changes, quick fixes, documentation updates
+- **complexity-simple** 🔵: Basic features, straightforward logic, standard patterns
+- **complexity-moderate** 🟡: Multi-component changes, state management, integration work
+- **complexity-complex** 🟠: Architecture changes, system design, comprehensive testing
+- **complexity-epic** 🔴: Major overhauls, breaking changes, foundational work
+
+#### Combined Planning Approach
+
+Issues are labeled with both priority and complexity for optimal development planning:
+
+- **High Priority + Low Complexity**: Quick wins and urgent fixes
+- **High Priority + High Complexity**: Major features requiring careful planning
+- **Low Priority + Low Complexity**: Good filler work and maintenance tasks
+- **Low Priority + High Complexity**: Learning opportunities and future preparation
+
+This dual-labeling system reflects the cognitive load and architectural impact of work, enabling better estimation
+than traditional time-based approaches in AI-assisted development workflows.
+
 ## Code Quality
 
 The project enforces code quality through automated tools:
