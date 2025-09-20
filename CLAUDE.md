@@ -75,6 +75,14 @@ This file contains specific instructions for Claude Code when working on this To
 - **RESPECT** user's decision if they decline to push
 - **EXPLAIN** what will happen when pushing (issue closure, public visibility)
 
+### Documentation Maintenance
+
+- **README Updates**: When implementing significant features or architectural changes, update README.md to reflect new
+  capabilities and project status
+- **Keep Purpose Clear**: Maintain the educational focus and learning objectives in documentation
+- **Project Evolution**: Update project description as new features are added
+- **Learning Context**: Ensure documentation supports the educational mission of the project
+
 ## Project Structure
 
 ```text
