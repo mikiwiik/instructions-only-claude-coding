@@ -4,13 +4,17 @@ import { createMockTodo } from '../utils/test-utils';
 
 describe('TodoList', () => {
   const mockOnToggle = jest.fn();
+  const mockOnDelete = jest.fn();
 
   beforeEach(() => {
     mockOnToggle.mockClear();
+    mockOnDelete.mockClear();
   });
 
   it('should render empty state when no todos provided', () => {
-    render(<TodoList todos={[]} onToggle={mockOnToggle} />);
+    render(
+      <TodoList todos={[]} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+    );
 
     expect(screen.getByText(/no todos yet/i)).toBeInTheDocument();
     expect(
@@ -29,7 +33,9 @@ describe('TodoList', () => {
       createMockTodo({ id: '3', text: 'Third todo' }),
     ];
 
-    render(<TodoList todos={todos} onToggle={mockOnToggle} />);
+    render(
+      <TodoList todos={todos} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+    );
 
     expect(screen.getByText('First todo')).toBeInTheDocument();
     expect(screen.getByText('Second todo')).toBeInTheDocument();
@@ -45,7 +51,9 @@ describe('TodoList', () => {
       createMockTodo({ id: '2', text: 'List item 2' }),
     ];
 
-    render(<TodoList todos={todos} onToggle={mockOnToggle} />);
+    render(
+      <TodoList todos={todos} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+    );
 
     const list = screen.getByRole('list');
     expect(list).toBeInTheDocument();
@@ -63,7 +71,9 @@ describe('TodoList', () => {
       }),
     ];
 
-    render(<TodoList todos={todos} onToggle={mockOnToggle} />);
+    render(
+      <TodoList todos={todos} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+    );
 
     // Verify the todo is rendered with correct props
     expect(screen.getByText('Test todo')).toBeInTheDocument();
@@ -80,7 +90,9 @@ describe('TodoList', () => {
       createMockTodo({ id: '3', text: 'Another completed', completed: true }),
     ];
 
-    render(<TodoList todos={todos} onToggle={mockOnToggle} />);
+    render(
+      <TodoList todos={todos} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+    );
 
     // All todos should be rendered
     expect(screen.getByText('Completed todo')).toBeInTheDocument();
@@ -100,7 +112,11 @@ describe('TodoList', () => {
   it('should show correct todo count in heading', () => {
     const oneTodo = [createMockTodo({ text: 'Single todo' })];
     const { rerender } = render(
-      <TodoList todos={oneTodo} onToggle={mockOnToggle} />
+      <TodoList
+        todos={oneTodo}
+        onToggle={mockOnToggle}
+        onDelete={mockOnDelete}
+      />
     );
 
     expect(screen.getByText(/your todos \(1\)/i)).toBeInTheDocument();
@@ -113,7 +129,13 @@ describe('TodoList', () => {
       createMockTodo({ id: '5', text: 'Todo 5' }),
     ];
 
-    rerender(<TodoList todos={multipleTodos} onToggle={mockOnToggle} />);
+    rerender(
+      <TodoList
+        todos={multipleTodos}
+        onToggle={mockOnToggle}
+        onDelete={mockOnDelete}
+      />
+    );
     expect(screen.getByText(/your todos \(5\)/i)).toBeInTheDocument();
   });
 
@@ -123,14 +145,18 @@ describe('TodoList', () => {
       createMockTodo({ id: '2', text: 'Second todo' }),
     ];
 
-    render(<TodoList todos={todos} onToggle={mockOnToggle} />);
+    render(
+      <TodoList todos={todos} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+    );
 
     const list = screen.getByRole('list');
     expect(list).toHaveClass('space-y-3'); // Proper spacing between items
   });
 
   it('should handle empty todos array gracefully', () => {
-    render(<TodoList todos={[]} onToggle={mockOnToggle} />);
+    render(
+      <TodoList todos={[]} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+    );
 
     // Should not crash and should show empty state
     expect(screen.getByText(/no todos yet/i)).toBeInTheDocument();
@@ -142,7 +168,9 @@ describe('TodoList', () => {
 
   it('should have proper heading structure for accessibility', () => {
     const todos = [createMockTodo({ text: 'Test todo' })];
-    render(<TodoList todos={todos} onToggle={mockOnToggle} />);
+    render(
+      <TodoList todos={todos} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+    );
 
     // Should have h3 heading for the todo list
     const heading = screen.getByRole('heading', { level: 3 });
@@ -156,7 +184,9 @@ describe('TodoList', () => {
       createMockTodo({ id: '3', text: 'Third todo' }),
     ];
 
-    render(<TodoList todos={todos} onToggle={mockOnToggle} />);
+    render(
+      <TodoList todos={todos} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+    );
 
     const listItems = screen.getAllByRole('listitem');
 
