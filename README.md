@@ -29,11 +29,13 @@ A Next.js Todo application built using Test-Driven Development (TDD) with Claude
 
 ## Development Status
 
-**Current Development Branch**: `main`
+**Current Development Workflow**: `Branch-based with Pull Requests`
 
-- All development is currently done directly on the main branch
-- Features are implemented, tested, and committed to main
-- Each completed feature is pushed to remote to close GitHub issues
+- Development follows feature branch workflow with pull requests
+- Each feature is developed on a separate branch (`feature/issue-number-description`)
+- Pull requests are used for code review and CI validation before merge
+- Main branch maintains stable, tested code
+- See [Branch Workflow Documentation](docs/BRANCH_WORKFLOW.md) for detailed guidelines
 
 ## Manual configurations done prior to using claude: setup subscription needed for claude code
 
