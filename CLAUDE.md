@@ -23,6 +23,138 @@ This file contains specific instructions for Claude Code when working on this To
 4. **Update ADR index** - maintain `docs/adr/README.md`
 5. **Reference in commits** - link ADRs to related code changes
 
+## Task Planning Protocol
+
+**🚨 CRITICAL REQUIREMENT**: All non-trivial changes must follow a structured task planning process before implementation.
+
+### When Task Planning is Required
+
+**Non-Trivial Changes** (requiring task planning):
+
+- Multi-component modifications affecting 3+ files
+- New feature implementations beyond simple additions
+- Architecture or design pattern changes
+- Breaking changes or API modifications
+- Complex state management updates
+- Integration with external systems or libraries
+- Performance optimizations requiring measurement
+- Accessibility improvements across components
+- Security implementations or updates
+- Database schema or data model changes
+
+**Trivial Changes** (no task planning needed):
+
+- Single file bug fixes
+- Simple text or styling updates
+- Adding comments or documentation
+- Dependency version updates without breaking changes
+- Single component styling adjustments
+- Basic test additions for existing functionality
+
+### Task Planning Process
+
+#### Step 1: Initial Assessment
+
+- Read and thoroughly understand the requirement
+- Identify all affected components, files, and systems
+- Assess technical complexity and implementation scope
+- Determine if the change qualifies as non-trivial
+
+#### Step 2: Task List Creation
+
+Use TodoWrite to create a comprehensive task breakdown including:
+
+**Required Task Categories:**
+
+- **Analysis & Research**: Understanding current codebase state
+- **Implementation**: Core development work broken into logical steps
+- **Testing**: Test creation and validation requirements
+- **Documentation**: README, ADR, or inline documentation updates
+- **Quality Assurance**: Linting, type checking, accessibility validation
+- **Integration**: Ensuring changes work with existing functionality
+
+**Task List Standards:**
+
+- Each task should be specific and actionable
+- Tasks should be granular enough for tracking progress
+- Include both `content` (imperative) and `activeForm` (present continuous)
+- Estimate complexity using established criteria
+- Order tasks logically by dependencies
+
+#### Step 3: User Presentation
+
+Present the task plan to the user with:
+
+```text
+## Task Planning for [Feature/Issue Name]
+
+I've analyzed this request and created a comprehensive implementation plan:
+
+### Task Breakdown:
+[Present complete TodoWrite task list]
+
+### Implementation Approach:
+- **Complexity Assessment**: [Simple/Moderate/Complex/Epic]
+- **Estimated Scope**: [Brief scope description]
+- **Key Technical Considerations**: [Major technical challenges]
+- **Testing Strategy**: [How functionality will be validated]
+
+### Dependencies and Risks:
+- [Any dependencies on other work]
+- [Potential risks or unknowns]
+
+**This plan follows our established [development methodology] and maintains our [quality standards].**
+
+Ready to proceed with implementation? Please approve or request modifications.
+```
+
+#### Step 4: User Approval
+
+- **WAIT** for explicit user approval before proceeding
+- Accept modifications or clarifications to the plan
+- Only begin implementation after receiving clear confirmation
+- Respect user decisions to delay or modify the approach
+
+#### Step 5: Implementation Tracking
+
+- Mark tasks as `in_progress` when beginning work
+- Complete tasks incrementally and update TodoWrite immediately
+- Maintain exactly ONE task as `in_progress` at any time
+- Mark tasks as `completed` only when fully finished
+- Add new tasks if unexpected requirements emerge
+
+### Exemptions
+
+**Emergency Situations** (skip planning for immediate fixes):
+
+- Critical production bugs requiring immediate patches
+- Security vulnerabilities needing urgent resolution
+- User explicitly requests immediate implementation
+- Simple fixes that become complex during implementation (create plan mid-work)
+
+### Benefits of Task Planning
+
+**For Users:**
+
+- Clear visibility into implementation scope and approach
+- Opportunity to provide feedback before work begins
+- Understanding of technical complexity and time investment
+- Confidence in systematic, methodical development
+
+**For Development:**
+
+- Reduced implementation errors through upfront analysis
+- Better code organization and architecture decisions
+- Comprehensive test coverage planning
+- Structured progress tracking and completion verification
+
+### Integration with Existing Processes
+
+- **ADR Requirement**: Task plans should identify when ADRs are needed
+- **Atomic Commits**: Task breakdown guides logical commit structure
+- **Testing Strategy**: Ensures TDD approach is properly planned
+- **Priority Assessment**: Task complexity informs priority assignment
+
 ## Development Guidelines
 
 ### Testing Requirements
