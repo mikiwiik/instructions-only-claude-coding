@@ -35,10 +35,15 @@ describe('RootLayout', () => {
     );
 
     const wrapper = container.querySelector('.min-h-screen');
-    expect(wrapper).toHaveClass('bg-background', 'font-sans', 'antialiased');
+    expect(wrapper).toHaveClass('bg-background');
+    expect(wrapper).toHaveClass('font-sans');
+    expect(wrapper).toHaveClass('antialiased');
 
     const main = container.querySelector('main');
-    expect(main).toHaveClass('container', 'mx-auto', 'px-4', 'py-8');
+    expect(main).toHaveClass('container');
+    expect(main).toHaveClass('mx-auto');
+    expect(main).toHaveClass('px-4');
+    expect(main).toHaveClass('py-8');
   });
 
   it('has proper font class applied', () => {
