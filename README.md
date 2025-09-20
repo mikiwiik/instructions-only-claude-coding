@@ -1,5 +1,28 @@
 # Todo App - My First Claude Code Project
 
+## Project Purpose
+
+This Todo application serves as a **learning platform** for Claude Code development workflows and modern web
+development practices. The primary goal is to demonstrate AI-assisted coding, TDD methodology, and collaborative
+development patterns.
+
+### Learning Objectives
+
+- **Claude Code Collaboration**: Explore AI-assisted development workflows and best practices
+- **Test-Driven Development**: Learn TDD methodology with comprehensive testing strategies
+- **Modern Web Stack**: Practice with Next.js 14, TypeScript, and Tailwind CSS
+- **Architectural Documentation**: Use ADRs to document technical decisions
+- **GitHub Issues Workflow**: Experience issue-driven development and project management
+
+### Educational Focus
+
+This is a **learning project** designed to showcase:
+
+- How to effectively collaborate with Claude Code
+- Best practices for AI-assisted software development
+- Structured approach to building applications with proper documentation
+- Integration of testing, linting, and quality assurance tools
+
 A Next.js Todo application built using Test-Driven Development (TDD) with Claude Code assistance.
 
 ## Development Status
