@@ -3,9 +3,19 @@ import { Todo, TodoState } from '../types/todo';
 
 const STORAGE_KEY = 'todos';
 
-// Generate a simple unique ID for testing compatibility
+// Generate a unique ID compatible with all browsers
 function generateId(): string {
-  return Math.random().toString(36).substring(2) + Date.now().toString(36);
+  // Use crypto.randomUUID if available (modern browsers), otherwise fallback
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  // Fallback for older browsers or test environments
+  return (
+    'todo-' +
+    Math.random().toString(36).substring(2) +
+    '-' +
+    Date.now().toString(36)
+  );
 }
 
 export function useTodos() {
