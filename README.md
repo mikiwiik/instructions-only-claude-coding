@@ -228,3 +228,128 @@ npm install  # Uses exact versions from package-lock.json
 ```
 
 This ensures everyone gets the exact same dependency tree that was tested and verified.
+
+## 🚀 Production Deployment
+
+### Live Demo
+
+**🌐 Live Application**: [Todo App on Vercel](https://my-first-claude-code-fhhkrlt3f-miki-wiiks-projects.vercel.app/)
+
+The Todo App is automatically deployed to Vercel and updated on every push to the main branch after CI passes.
+
+### Vercel Deployment Setup
+
+This project is configured for automatic deployment to Vercel with GitHub integration. Here's how to set up deployment for this or similar projects:
+
+#### Prerequisites
+
+- GitHub repository with the Todo App code
+- Vercel account (free tier available)
+- Completed GitHub Actions CI/CD pipeline
+
+#### Step-by-Step Vercel Setup
+
+1. **Create Vercel Account**
+   ```bash
+   # Visit https://vercel.com
+   # Click "Continue with GitHub" to link your GitHub account
+   # Complete the registration process
+   ```
+
+2. **Import Repository**
+   ```bash
+   # In Vercel Dashboard:
+   # 1. Click "New Project"
+   # 2. Find your GitHub repository "my-first-claude-code"
+   # 3. Click "Import"
+   ```
+
+3. **Automatic Configuration**
+   ```bash
+   # Vercel automatically detects:
+   # - Framework: Next.js
+   # - Build Command: npm run build
+   # - Output Directory: .next
+   # - Node.js Version: 22.x (from package.json engines)
+   ```
+
+4. **Deploy**
+   ```bash
+   # Click "Deploy" button
+   # Vercel will build and deploy your application
+   # You'll receive a live URL (e.g., https://project-name.vercel.app)
+   ```
+
+#### Deployment Features
+
+- **Automatic Deployments**: Every push to `main` triggers a new deployment
+- **Preview Deployments**: Pull requests get their own preview URLs for testing
+- **CI Integration**: Deployments wait for GitHub Actions CI to pass
+- **Zero Configuration**: Next.js projects work out of the box
+- **Custom Domains**: Free `.vercel.app` subdomain included
+
+#### Environment Configuration
+
+```bash
+# No environment variables needed for this Todo App
+# All data is stored in localStorage (client-side)
+# Production build automatically optimized by Next.js
+```
+
+#### Deployment Workflow
+
+```bash
+# 1. Developer pushes code to GitHub
+git push origin main
+
+# 2. GitHub Actions CI runs (build, test, lint)
+# 3. If CI passes, Vercel automatically deploys
+# 4. Live site updates with new changes
+# 5. Deployment URL remains consistent
+```
+
+#### Monitoring & Management
+
+- **Vercel Dashboard**: Monitor deployments, view logs, manage domains
+- **GitHub Integration**: Deployment status visible in commit history
+- **Automatic Rollbacks**: Previous deployments can be promoted if needed
+- **Analytics**: Basic traffic and performance metrics available
+
+### Deployment Status
+
+- ✅ **Production**: Deployed to Vercel with automatic updates
+- ✅ **CI/CD Pipeline**: GitHub Actions → Vercel integration complete
+- ✅ **Domain**: Free `.vercel.app` subdomain configured
+- ✅ **SSL**: HTTPS enabled by default
+- ✅ **Performance**: Optimized Next.js production build
+
+### For Other Projects
+
+To deploy your own Next.js project to Vercel:
+
+1. **Ensure Compatibility**
+   ```json
+   // package.json should include:
+   {
+     "scripts": {
+       "build": "next build",
+       "start": "next start"
+     },
+     "engines": {
+       "node": ">=18.0.0"
+     }
+   }
+   ```
+
+2. **Follow Setup Steps**: Use the same Vercel setup process outlined above
+3. **Configure Environment Variables**: Add any required environment variables in Vercel dashboard
+4. **Custom Domain**: Optional custom domain configuration available in Vercel settings
+
+### Troubleshooting
+
+**Common Issues:**
+
+- **Build Failures**: Check GitHub Actions CI logs first
+- **Environment Variables**: Ensure all required variables are set in Vercel dashboard
+- **Node.js Version**: Verify `engines` field in package.json matches Vercel's Node.js version
+- **Dependencies**: Ensure package-lock.json is committed for reproducible builds
