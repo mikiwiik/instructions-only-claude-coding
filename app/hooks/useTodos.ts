@@ -85,9 +85,31 @@ export function useTodos() {
     });
   };
 
+  const toggleTodo = (id: string) => {
+    setState((prev) => {
+      const updatedTodos = prev.todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            completed: !todo.completed,
+            updatedAt: new Date(),
+          };
+        }
+        return todo;
+      });
+
+      saveTodos(updatedTodos);
+      return {
+        ...prev,
+        todos: updatedTodos,
+      };
+    });
+  };
+
   return {
     todos: state.todos,
     filter: state.filter,
     addTodo,
+    toggleTodo,
   };
 }

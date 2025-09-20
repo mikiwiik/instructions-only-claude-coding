@@ -1,11 +1,12 @@
 'use client';
 
-import { CheckSquare, Circle, CheckCircle } from 'lucide-react';
+import { CheckSquare } from 'lucide-react';
 import TodoForm from './components/TodoForm';
+import TodoList from './components/TodoList';
 import { useTodos } from './hooks/useTodos';
 
 export default function HomePage() {
-  const { todos, addTodo } = useTodos();
+  const { todos, addTodo, toggleTodo } = useTodos();
 
   return (
     <div className='max-w-4xl mx-auto'>
@@ -24,55 +25,7 @@ export default function HomePage() {
 
       <div className='bg-card border rounded-lg p-6 shadow-sm'>
         <TodoForm onAddTodo={addTodo} />
-
-        {todos.length === 0 ? (
-          <div className='text-center py-12'>
-            <Circle className='h-16 w-16 text-muted-foreground mx-auto mb-4' />
-            <h3 className='text-lg font-medium text-card-foreground mb-2'>
-              No todos yet
-            </h3>
-            <p className='text-muted-foreground'>
-              Add your first todo above to get started!
-            </p>
-          </div>
-        ) : (
-          <div className='space-y-2'>
-            <h3 className='text-lg font-medium text-card-foreground mb-4'>
-              Your Todos ({todos.length})
-            </h3>
-            <ul className='space-y-3'>
-              {todos.map((todo) => (
-                <li
-                  key={todo.id}
-                  className='flex items-start gap-3 p-3 bg-background rounded-lg border'
-                >
-                  <div className='flex-shrink-0 mt-0.5'>
-                    {todo.completed ? (
-                      <CheckCircle className='h-5 w-5 text-green-500' />
-                    ) : (
-                      <Circle className='h-5 w-5 text-muted-foreground' />
-                    )}
-                  </div>
-                  <div className='flex-1 min-w-0'>
-                    <p
-                      className={`text-sm ${
-                        todo.completed
-                          ? 'line-through text-muted-foreground'
-                          : 'text-foreground'
-                      }`}
-                    >
-                      {todo.text}
-                    </p>
-                    <p className='text-xs text-muted-foreground mt-1'>
-                      Added {todo.createdAt.toLocaleDateString()} at{' '}
-                      {todo.createdAt.toLocaleTimeString()}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <TodoList todos={todos} onToggle={toggleTodo} />
       </div>
 
       <footer className='text-center mt-8 text-sm text-muted-foreground'>
