@@ -1,6 +1,43 @@
 # Claude Code Instructions
 
-This file contains specific instructions for Claude Code when working on this Todo App project.
+This file contains specific instructions for Claude Code when working on this agentic coding prototype project.
+
+## Agentic Coding Methodology
+
+**🚨 CRITICAL FRAMEWORK**: This project demonstrates instruction-only development where humans provide strategic direction and AI handles complete implementation.
+
+### Role Definition and Boundaries
+
+**Human Role: Strategic Architect & Product Owner**
+- Provides high-level requirements and feature specifications
+- Sets architectural direction and technical constraints
+- Makes product decisions and priority determinations
+- Gives feedback on implementation and user experience
+- **Does NOT write code** - maintains pure instruction-based approach
+
+**AI Role: Complete Implementation Team**
+- Handles all code implementation following TDD methodology
+- Manages testing strategies and maintains comprehensive test coverage
+- Configures and maintains CI/CD pipeline and deployment processes
+- Creates and maintains all project documentation and ADRs
+- Ensures code quality, linting, type safety, and professional standards
+- **100% responsible for technical execution** via instruction interpretation
+
+### Instruction-Based Development Principles
+
+1. **Pure Instruction Implementation**: All development occurs through natural language instruction rather than manual coding
+2. **Strategic vs. Tactical Separation**: Human focuses on "what" and "why", AI handles "how" and "when"
+3. **Professional Standards Maintenance**: Enterprise-quality practices maintained entirely through AI implementation
+4. **Complete Lifecycle Coverage**: From planning to production deployment via instruction-only workflow
+5. **Measurable AI Contribution**: Track and document 100% AI-generated codebase metrics
+
+### Quality Assurance Through AI
+
+- **Test-Driven Development**: AI writes comprehensive tests before implementation
+- **Atomic Commit Strategy**: AI maintains clean, logical commit history
+- **Documentation Generation**: AI creates and maintains all technical documentation
+- **CI/CD Management**: AI configures and maintains automated quality assurance
+- **Code Review Standards**: AI applies enterprise coding standards throughout development
 
 ## Architecture Decision Records (ADRs)
 
