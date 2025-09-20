@@ -241,10 +241,6 @@ Refer to existing ADRs in `docs/adr/` for current architectural decisions:
 7. **Custom React Hooks** - State management approach
 8. **GitHub Issues** - Project management workflow
 
-## Prompt Logging
-
-All Claude Code interactions are logged in `claude-prompts.log` for reference and learning purposes.
-
 ---
 
 **Remember**: When in doubt about architectural decisions, create an ADR to document the thought
