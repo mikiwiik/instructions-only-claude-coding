@@ -61,15 +61,15 @@ export default function TodoList({
 
   if (todos.length === 0) {
     return (
-      <div className='text-center py-12'>
+      <div className='text-center py-8 sm:py-12'>
         <Circle
-          className='h-16 w-16 text-muted-foreground mx-auto mb-4'
+          className='h-12 w-12 sm:h-16 sm:w-16 text-muted-foreground mx-auto mb-3 sm:mb-4'
           data-testid='empty-state-icon'
         />
-        <h3 className='text-lg font-medium text-card-foreground mb-2'>
+        <h3 className='text-base sm:text-lg font-medium text-card-foreground mb-2'>
           No todos yet
         </h3>
-        <p className='text-muted-foreground'>
+        <p className='text-sm sm:text-base text-muted-foreground px-4'>
           Add your first todo above to get started!
         </p>
       </div>
@@ -77,7 +77,7 @@ export default function TodoList({
   }
 
   const todosList = (
-    <ul className='space-y-3' role='list'>
+    <ul className='space-y-2 sm:space-y-3' role='list'>
       {todos.map((todo, index) => (
         <TodoItem
           key={todo.id}
@@ -98,7 +98,7 @@ export default function TodoList({
 
   return (
     <div className='space-y-2'>
-      <h3 className='text-lg font-medium text-card-foreground mb-4'>
+      <h3 className='text-base sm:text-lg font-medium text-card-foreground mb-3 sm:mb-4'>
         Your Todos ({todos.length})
       </h3>
       {isReorderingEnabled ? (

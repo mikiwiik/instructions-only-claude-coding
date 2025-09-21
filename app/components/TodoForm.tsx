@@ -48,8 +48,8 @@ export default function TodoForm({ onAddTodo }: TodoFormProps) {
   const isSubmitDisabled = !text.trim();
 
   return (
-    <form onSubmit={handleSubmit} className='mb-6'>
-      <div className='flex gap-3'>
+    <form onSubmit={handleSubmit} className='mb-4 sm:mb-6'>
+      <div className='flex flex-col md:flex-row gap-3'>
         <div className='flex-1'>
           <label htmlFor='todo-input' className='sr-only'>
             Add new todo
@@ -61,7 +61,7 @@ export default function TodoForm({ onAddTodo }: TodoFormProps) {
             onChange={(e) => setText(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder='What needs to be done?'
-            className='w-full px-4 py-3 border border-input bg-background rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground resize-none overflow-hidden min-h-[3rem]'
+            className='w-full px-3 sm:px-4 py-3 border border-input bg-background rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground resize-none overflow-hidden min-h-[3rem] text-sm sm:text-base'
             aria-label='Add new todo'
             rows={1}
           />
@@ -69,11 +69,12 @@ export default function TodoForm({ onAddTodo }: TodoFormProps) {
         <button
           type='submit'
           disabled={isSubmitDisabled}
-          className='inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
+          className='inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[3rem] text-sm sm:text-base whitespace-nowrap'
           aria-label='Add todo'
         >
           <Plus className='h-4 w-4' />
-          Add Todo
+          <span className='hidden md:inline'>Add Todo</span>
+          <span className='md:hidden'>Add</span>
         </button>
       </div>
     </form>

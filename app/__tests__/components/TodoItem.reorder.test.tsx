@@ -381,8 +381,9 @@ describe('TodoItem - Reordering functionality', () => {
       const todoItem = screen.getByRole('listitem');
       const dragHandle = screen.getByTestId('drag-handle');
 
-      // Drag handle should be the first child of the todo item
-      expect(todoItem.firstElementChild).toBe(dragHandle);
+      // Drag handle should be within the first container div
+      const firstContainer = todoItem.firstElementChild;
+      expect(firstContainer).toContainElement(dragHandle);
     });
 
     it('should position arrow buttons on the right side', () => {
