@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -34,11 +38,42 @@ jobs:
     - name: Run linting
       run: npm run lint
 
-    - name: Run tests
-      run: npm run test
+    - name: Run tests with coverage
+      run: npm run test:coverage
+
+    - name: Coverage Threshold Check
+      if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
+      run: |
+        COVERAGE=$(node -p "Math.round(JSON.parse(require('fs').readFileSync('./coverage/coverage-summary.json')).total.lines.pct)")
+        echo "Coverage: ${COVERAGE}%"
+        if [ $COVERAGE -lt 90 ]; then
+          echo "❌ Coverage ${COVERAGE}% is below 90% threshold"
+          exit 1
+        else
+          echo "✅ Coverage ${COVERAGE}% meets 90% threshold"
+        fi
+
+    - name: Jest Coverage Comment
+      uses: MishaKav/jest-coverage-comment@main
+      if: github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        coverage-summary-path: ./coverage/coverage-summary.json
+        junitxml-path: ./coverage/junit.xml
+        junitxml-title: Test Results
 
     - name: Build application
       run: npm run build
+
+    - name: Upload coverage reports
+      uses: actions/upload-artifact@v4
+      if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
+      with:
+        name: coverage-report
+        path: |
+          coverage/
+          !coverage/.nyc_output
+        retention-days: 30
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4

@@ -19,6 +19,17 @@ const customJestConfig = {
     '!app/**/layout.tsx',
     '!app/**/page.tsx',
   ],
+  coverageReporters: ['json-summary', 'text', 'lcov', 'html'],
+  reporters: [
+    'default',
+    [
+      'jest-junit',
+      {
+        outputDirectory: './coverage',
+        outputName: 'junit.xml',
+      },
+    ],
+  ],
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
