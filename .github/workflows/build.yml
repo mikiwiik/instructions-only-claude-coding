@@ -49,3 +49,19 @@ jobs:
           .next/
           !.next/cache/
         retention-days: 7
+  build-summary:
+      name: Build and Test
+      runs-on: ubuntu-latest
+      needs: build
+      if: always()
+
+      steps:
+      - name: Check build matrix success
+        run: |
+          if [[ "${{ needs.build.result }}" == "success" ]]; then
+            echo "All build matrix jobs completed successfully"
+            exit 0
+          else
+            echo "One or more build matrix jobs failed"
+            exit 1
+          fi
