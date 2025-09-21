@@ -89,6 +89,25 @@
 - **Medium**: Standard progress tracking
 - **Low**: Completed notification only
 
+## Integration with Other Labels
+
+### Claude-Workflow Integration
+
+For AI collaboration and Claude Code workflow issues, combine priority labels with the `claude-workflow` label:
+
+- **priority-1-critical + claude-workflow**: Urgent AI workflow blockers
+- **priority-2-high + claude-workflow**: Important AI collaboration improvements
+- **priority-3-medium + claude-workflow**: Standard AI methodology enhancements
+- **priority-4-low + claude-workflow**: AI workflow nice-to-have improvements
+
+**📋 Full Guidelines**: See [`claude-workflow-labels.md`](claude-workflow-labels.md) for comprehensive AI collaboration issue management.
+
+### Related Documentation
+
+- **Complexity Estimation**: [`complexity-estimation.md`](complexity-estimation.md)
+- **Claude-Workflow Labels**: [`claude-workflow-labels.md`](claude-workflow-labels.md)
+- **Project Management**: [`../development/project-management.md`](../development/project-management.md)
+
 ---
 
 **Note**: This priority system is designed specifically for Claude Code-assisted development and learning

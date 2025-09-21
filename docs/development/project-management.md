@@ -134,6 +134,54 @@ Issues are labeled with both priority and complexity for optimal development pla
   - Technology evaluation and prototyping
   - Long-term strategic improvements
 
+## Claude-Workflow Label Integration
+
+### AI Collaboration Issue Management
+
+The project includes specialized tracking for AI collaboration and Claude Code workflow improvements through the `claude-workflow` label.
+
+**📋 Full Guidelines**: See [`docs/guidelines/claude-workflow-labels.md`](../guidelines/claude-workflow-labels.md) for comprehensive claude-workflow label usage and integration guidelines.
+
+#### When to Use claude-workflow Label
+
+**✅ Use for AI-related issues:**
+- Claude Code usage and instruction improvements
+- AI collaboration patterns and methodologies
+- CLAUDE.md documentation and requirements
+- Task planning protocols for agentic coding
+- Issue creation and labeling processes for AI development
+- Documentation consistency across AI-assisted development
+
+**❌ Standard development issues:**
+- General git/CI/CD workflow (use standard labels)
+- Feature implementations (focus on functionality)
+- UI/UX improvements (unless AI interaction specific)
+- Infrastructure changes (unless Claude Code related)
+
+#### Combined Label Patterns
+
+**Critical AI Workflow Issues:**
+```bash
+--label "claude-workflow,priority-1-critical,complexity-simple"
+```
+
+**AI Documentation and Guidelines:**
+```bash
+--label "claude-workflow,documentation,priority-2-high,complexity-simple"
+```
+
+**AI Process Improvements:**
+```bash
+--label "claude-workflow,process-improvement,priority-2-high,complexity-moderate"
+```
+
+#### Integration Benefits
+
+- **Clear AI Focus**: Easy identification of AI collaboration improvements
+- **Methodology Tracking**: Monitor agentic coding workflow evolution
+- **Knowledge Management**: Organize learnings about instruction-based development
+- **Process Optimization**: Track and improve human-AI collaboration patterns
+
 ## Issue Management Workflow
 
 ### Issue Creation
@@ -142,7 +190,8 @@ Issues are labeled with both priority and complexity for optimal development pla
 2. **Title Format**: Clear, descriptive title following naming conventions
 3. **Priority Label**: Assign appropriate priority level
 4. **Complexity Label**: Estimate complexity based on assessment guidelines
-5. **Additional Labels**: Add relevant labels (enhancement, bug, documentation, etc.)
+5. **Claude-Workflow Label**: Add if issue relates to AI collaboration or Claude Code usage
+6. **Additional Labels**: Add relevant labels (enhancement, bug, documentation, etc.)
 
 ### Issue Description Requirements
 
