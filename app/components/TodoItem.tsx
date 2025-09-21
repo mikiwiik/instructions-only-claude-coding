@@ -8,6 +8,7 @@ import {
   GripVertical,
   ChevronUp,
   ChevronDown,
+  Undo2,
 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
@@ -19,6 +20,7 @@ interface TodoItemProps {
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onEdit?: (id: string, newText: string) => void;
+  onRestore?: (id: string) => void;
   moveUp?: (id: string) => void;
   moveDown?: (id: string) => void;
   isDraggable?: boolean;
@@ -31,6 +33,7 @@ export default function TodoItem({
   onToggle,
   onDelete,
   onEdit,
+  onRestore,
   moveUp,
   moveDown,
   isDraggable = false,
@@ -71,7 +74,16 @@ export default function TodoItem({
   }, [editText, isEditing]);
 
   const handleToggle = () => {
-    onToggle(todo.id);
+    // Only allow checking (not unchecking) via the checkbox
+    if (!todo.completed) {
+      onToggle(todo.id);
+    }
+  };
+
+  const handleRestore = () => {
+    if (onRestore && todo.completed) {
+      onRestore(todo.id);
+    }
   };
 
   const handleDelete = () => {
@@ -145,9 +157,14 @@ export default function TodoItem({
       )}
       <button
         onClick={handleToggle}
-        className='flex-shrink-0 mt-0.5 p-1 rounded-full hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring transition-colors'
+        className={`flex-shrink-0 mt-0.5 p-1 rounded-full transition-colors ${
+          todo.completed
+            ? 'cursor-default opacity-75'
+            : 'hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer'
+        }`}
         aria-label={`Toggle todo: ${todo.text}`}
         aria-pressed={todo.completed}
+        aria-disabled={todo.completed}
         type='button'
       >
         {todo.completed ? (
@@ -247,7 +264,17 @@ export default function TodoItem({
           aria-label='Todo actions'
           className='flex items-center gap-0.5'
         >
-          {!isEditing && onEdit && (
+          {todo.completed && onRestore && (
+            <button
+              onClick={handleRestore}
+              className='flex-shrink-0 p-2 rounded-full hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-colors text-muted-foreground hover:text-yellow-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
+              aria-label={`Undo completion: ${todo.text}`}
+              type='button'
+            >
+              <Undo2 className='h-4 w-4' />
+            </button>
+          )}
+          {!isEditing && onEdit && !todo.completed && (
             <button
               onClick={handleEdit}
               className='flex-shrink-0 p-2 rounded-full hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-muted-foreground hover:text-blue-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
