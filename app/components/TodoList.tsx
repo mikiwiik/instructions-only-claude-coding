@@ -21,6 +21,7 @@ interface TodoListProps {
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onEdit?: (id: string, newText: string) => void;
+  onRestore?: (id: string) => void;
   reorderTodos?: (sourceIndex: number, destinationIndex: number) => void;
   moveUp?: (id: string) => void;
   moveDown?: (id: string) => void;
@@ -31,6 +32,7 @@ export default function TodoList({
   onToggle,
   onDelete,
   onEdit,
+  onRestore,
   reorderTodos,
   moveUp,
   moveDown,
@@ -83,6 +85,7 @@ export default function TodoList({
           onToggle={onToggle}
           onDelete={onDelete}
           onEdit={onEdit}
+          onRestore={onRestore}
           moveUp={moveUp}
           moveDown={moveDown}
           isDraggable={isReorderingEnabled}

@@ -440,8 +440,7 @@ describe('TodoItem', () => {
       expect(editInput).toBeInTheDocument();
     });
 
-    it('should preserve completion status when editing', async () => {
-      const user = userEvent.setup();
+    it('should not show edit button for completed todos', () => {
       const mockOnEdit = jest.fn();
       const todo = createMockTodo({
         id: 'completed-edit-test',
@@ -457,23 +456,11 @@ describe('TodoItem', () => {
         />
       );
 
-      const editButton = screen.getByRole('button', { name: /^edit todo/i });
-      await user.click(editButton);
+      // Completed todos should not show edit button
+      const editButton = screen.queryByRole('button', { name: /^edit todo/i });
+      expect(editButton).not.toBeInTheDocument();
 
-      const editInput = screen.getByRole('textbox', {
-        name: /edit todo text/i,
-      });
-      await user.clear(editInput);
-      await user.type(editInput, 'Updated completed todo');
-
-      const saveButton = screen.getByRole('button', { name: /save edit/i });
-      await user.click(saveButton);
-
-      expect(mockOnEdit).toHaveBeenCalledWith(
-        'completed-edit-test',
-        'Updated completed todo'
-      );
-      // Completion status should remain unchanged
+      // Should show completed status
       const completedIcon = screen.getByTestId('completed-icon');
       expect(completedIcon).toBeInTheDocument();
     });

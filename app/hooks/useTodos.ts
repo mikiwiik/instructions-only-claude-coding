@@ -106,6 +106,27 @@ export function useTodos() {
     });
   };
 
+  const restoreTodo = (id: string) => {
+    setState((prev) => {
+      const updatedTodos = prev.todos.map((todo) => {
+        if (todo.id === id && todo.completed) {
+          return {
+            ...todo,
+            completed: false,
+            updatedAt: new Date(),
+          };
+        }
+        return todo;
+      });
+
+      saveTodos(updatedTodos);
+      return {
+        ...prev,
+        todos: updatedTodos,
+      };
+    });
+  };
+
   const deleteTodo = (id: string) => {
     setState((prev) => {
       const updatedTodos = prev.todos.filter((todo) => todo.id !== id);
@@ -215,6 +236,7 @@ export function useTodos() {
     filter: state.filter,
     addTodo,
     toggleTodo,
+    restoreTodo,
     deleteTodo,
     editTodo,
     reorderTodos,
