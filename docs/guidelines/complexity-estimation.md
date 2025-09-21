@@ -178,6 +178,33 @@ Claude Code development.
 - **Low Priority + Low Complexity**: Filler work, learning opportunities
 - **Low Priority + High Complexity**: Research, future preparation
 
+## Integration with Other Labels
+
+### Claude-Workflow Integration
+
+For AI collaboration and Claude Code workflow issues, complexity assessment includes:
+
+**AI-Specific Complexity Factors:**
+- **Instruction clarity requirements**: How clear the AI instructions need to be
+- **Methodology documentation**: Level of agentic coding process documentation needed
+- **Cross-reference maintenance**: Documentation consistency requirements
+- **AI collaboration pattern complexity**: How novel the AI interaction pattern is
+
+**Combined Label Examples:**
+- **claude-workflow + complexity-minimal**: Simple CLAUDE.md updates, basic instruction clarifications
+- **claude-workflow + complexity-simple**: Standard AI workflow documentation, basic process improvements
+- **claude-workflow + complexity-moderate**: Comprehensive AI methodology documentation, multi-file process updates
+- **claude-workflow + complexity-complex**: Major agentic coding workflow overhauls, AI agent implementations
+- **claude-workflow + complexity-epic**: Complete AI collaboration methodology redesigns, fundamental process changes
+
+**📋 Full Guidelines**: See [`claude-workflow-labels.md`](claude-workflow-labels.md) for comprehensive AI collaboration issue management.
+
+### Related Documentation
+
+- **Priority System**: [`priority-system.md`](priority-system.md)
+- **Claude-Workflow Labels**: [`claude-workflow-labels.md`](claude-workflow-labels.md)
+- **Project Management**: [`../development/project-management.md`](../development/project-management.md)
+
 ---
 
 **Note**: Complexity estimation is a skill that improves with practice. Regular retrospectives on estimation
