@@ -156,7 +156,7 @@ export default function TodoItem({
               value={editText}
               onChange={(e) => setEditText(e.target.value)}
               onKeyDown={handleKeyDown}
-              className='w-full text-sm bg-background border border-border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-ring'
+              className='w-full text-base bg-background border border-border rounded px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-ring'
               aria-label='Edit todo text'
             />
             <div className='flex gap-1'>
@@ -181,7 +181,7 @@ export default function TodoItem({
         ) : (
           <>
             <p
-              className={`text-sm ${
+              className={`text-base leading-relaxed ${
                 todo.completed
                   ? 'line-through text-muted-foreground'
                   : 'text-foreground'
