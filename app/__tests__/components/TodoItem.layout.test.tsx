@@ -34,11 +34,16 @@ describe('TodoItem - Layout', () => {
 
       const todoItem = screen.getByRole('listitem');
       const buttonContainer = todoItem.querySelector(
-        '.flex.items-center.gap-2'
+        '.flex.flex-col.md\\:flex-row'
       );
 
       expect(buttonContainer).toBeInTheDocument();
-      expect(buttonContainer).toHaveClass('flex', 'items-center', 'gap-2');
+      expect(buttonContainer).toHaveClass(
+        'flex',
+        'flex-col',
+        'md:flex-row',
+        'items-center'
+      );
     });
 
     it('should group reorder buttons together', () => {
@@ -57,7 +62,7 @@ describe('TodoItem - Layout', () => {
       expect(reorderGroup).toBeInTheDocument();
       expect(reorderGroup).toContainElement(moveUpButton);
       expect(reorderGroup).toContainElement(moveDownButton);
-      expect(reorderGroup).toHaveClass('flex', 'items-center', 'gap-0.5');
+      expect(reorderGroup).toHaveClass('flex', 'items-center', 'gap-1');
     });
 
     it('should group action buttons together', () => {
@@ -72,7 +77,7 @@ describe('TodoItem - Layout', () => {
       expect(actionsGroup).toBeInTheDocument();
       expect(actionsGroup).toContainElement(editButton);
       expect(actionsGroup).toContainElement(deleteButton);
-      expect(actionsGroup).toHaveClass('flex', 'items-center', 'gap-0.5');
+      expect(actionsGroup).toHaveClass('flex', 'items-center', 'gap-1');
     });
 
     it('should maintain proper spacing between button groups', () => {
@@ -83,7 +88,14 @@ describe('TodoItem - Layout', () => {
       });
 
       const containerDiv = reorderGroup.parentElement;
-      expect(containerDiv).toHaveClass('gap-2');
+      expect(containerDiv).toHaveClass(
+        'flex',
+        'flex-col',
+        'md:flex-row',
+        'items-center',
+        'gap-1',
+        'md:gap-2'
+      );
     });
   });
 
@@ -166,14 +178,19 @@ describe('TodoItem - Layout', () => {
   });
 
   describe('Layout responsiveness', () => {
-    it('should maintain horizontal layout on different screen sizes', () => {
+    it('should maintain responsive layout on different screen sizes', () => {
       render(<TodoItem {...defaultProps} />);
 
       const buttonContainer = screen
         .getByRole('listitem')
-        .querySelector('.flex.items-center.gap-2');
+        .querySelector('.flex.flex-col.md\\:flex-row');
 
-      expect(buttonContainer).toHaveClass('flex', 'items-center');
+      expect(buttonContainer).toHaveClass(
+        'flex',
+        'flex-col',
+        'md:flex-row',
+        'items-center'
+      );
     });
   });
 });
