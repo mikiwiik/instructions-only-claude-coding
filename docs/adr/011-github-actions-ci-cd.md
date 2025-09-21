@@ -15,6 +15,7 @@ The Todo App project needs a Continuous Integration/Continuous Deployment (CI/CD
 - Enable automated deployment in the future
 
 Key constraints and considerations:
+
 - Project is hosted on GitHub
 - Team familiarity with GitHub ecosystem is important
 - Need integration with existing GitHub Issues workflow
@@ -25,6 +26,7 @@ Key constraints and considerations:
 ## Decision
 
 We will use **GitHub Actions** as our CI/CD platform for the following workflow:
+
 - Build pipeline triggered on push to main and all pull requests
 - Node.js matrix strategy testing versions 18.x and 20.x (LTS)
 - Multi-OS testing (Ubuntu, Windows, macOS)

@@ -33,7 +33,7 @@ The Todo App is a Next.js-based web application built as a learning platform for
 ## Project Structure
 
 ```text
-my-first-claude-code/
+instructions-only-claude-coding/
 ├── app/                    # Next.js app directory (App Router)
 │   ├── components/         # React components
 │   ├── hooks/             # Custom React hooks
@@ -61,16 +61,19 @@ my-first-claude-code/
 The Todo App follows a component-based architecture with clear separation of concerns:
 
 #### Frontend Layer
+
 - **React Components**: Modular UI components with TypeScript interfaces
 - **Custom Hooks**: Reusable logic for state management and side effects
 - **Type Definitions**: Comprehensive TypeScript types for type safety
 
 #### State Management
+
 - **Custom Hooks**: `useTodos` hook for todo state management
 - **Local Storage**: Client-side persistence for todo data
 - **React State**: Component-level state for UI interactions
 
 #### Testing Layer
+
 - **Unit Tests**: Component and hook testing with React Testing Library
 - **Integration Tests**: User workflow testing for complete features
 - **Test Coverage**: Comprehensive coverage of business logic
@@ -99,6 +102,7 @@ interface TodoOperations {
 ```
 
 #### Data Persistence
+
 - **Storage**: Browser localStorage for client-side persistence
 - **Serialization**: JSON serialization with date handling
 - **Synchronization**: Real-time updates across browser tabs
@@ -106,12 +110,14 @@ interface TodoOperations {
 ### Development Architecture
 
 #### Test-Driven Development Flow
+
 1. **Write Tests**: Create failing tests for new functionality
 2. **Implement**: Write minimum code to make tests pass
 3. **Refactor**: Improve code while maintaining passing tests
 4. **Iterate**: Continue cycle for each feature
 
 #### Code Quality Pipeline
+
 1. **Pre-commit**: Automated linting, formatting, and type checking
 2. **CI Pipeline**: Automated testing, building, and validation
 3. **Code Review**: Manual review process for pull requests
@@ -140,11 +146,13 @@ The project documents all major architectural decisions using ADRs (Architecture
 ### Component Design Patterns
 
 #### Custom Hooks Pattern
+
 - **Purpose**: Encapsulate business logic and state management
 - **Benefits**: Reusability, testability, separation of concerns
 - **Example**: `useTodos` hook for todo operations
 
 #### Composition Pattern
+
 - **Purpose**: Build complex UIs from simple, reusable components
 - **Benefits**: Modularity, maintainability, flexibility
 - **Example**: TodoList composed of TodoItem components
@@ -152,11 +160,13 @@ The project documents all major architectural decisions using ADRs (Architecture
 ### Development Patterns
 
 #### Test-Driven Development (TDD)
+
 - **Red**: Write failing test for new functionality
 - **Green**: Implement minimum code to pass test
 - **Refactor**: Improve code while maintaining passing tests
 
 #### Atomic Commits
+
 - **One Change**: Each commit represents single logical change
 - **Descriptive**: Clear commit messages with issue references
 - **Revertible**: Each commit can be safely reverted
@@ -166,12 +176,14 @@ The project documents all major architectural decisions using ADRs (Architecture
 ### Automated Quality Checks
 
 #### Pre-commit Hooks
+
 - **ESLint**: Code quality and style enforcement
 - **Prettier**: Automatic code formatting
 - **TypeScript**: Type checking and compilation
 - **markdownlint**: Documentation formatting
 
 #### CI/CD Pipeline
+
 - **Testing**: Automated test suite execution
 - **Building**: Production build verification
 - **Linting**: Code quality validation
@@ -180,11 +192,13 @@ The project documents all major architectural decisions using ADRs (Architecture
 ### Manual Quality Processes
 
 #### Code Review
+
 - **Pull Requests**: Required for all changes to main branch
 - **Review Criteria**: Code quality, test coverage, documentation
 - **Approval Process**: At least one review required
 
 #### Testing Strategy
+
 - **Unit Tests**: Component and hook testing
 - **Integration Tests**: End-to-end user workflows
 - **Manual Testing**: User acceptance testing
@@ -194,12 +208,14 @@ The project documents all major architectural decisions using ADRs (Architecture
 ### CI/CD Pipeline
 
 #### GitHub Actions Workflow
+
 1. **Trigger**: Push to main branch or pull request creation
 2. **Environment**: Node.js 22.x matrix across multiple operating systems
 3. **Steps**: Install dependencies → Type check → Lint → Test → Build
 4. **Deployment**: Automatic Vercel deployment on successful CI
 
 #### Vercel Deployment
+
 - **Framework Detection**: Automatic Next.js configuration
 - **Build Process**: Optimized production builds
 - **CDN**: Global content delivery network
@@ -208,12 +224,14 @@ The project documents all major architectural decisions using ADRs (Architecture
 ### Production Environment
 
 #### Performance Optimizations
+
 - **Next.js Optimizations**: Automatic code splitting and optimization
 - **Static Generation**: Pre-built pages for optimal performance
 - **CDN Distribution**: Global content delivery
 - **Caching**: Automatic asset caching and optimization
 
 #### Monitoring and Observability
+
 - **Vercel Analytics**: Basic traffic and performance metrics
 - **GitHub Integration**: Deployment status in commit history
 - **Error Tracking**: Built-in error monitoring
@@ -221,11 +239,13 @@ The project documents all major architectural decisions using ADRs (Architecture
 ## Scalability Considerations
 
 ### Current Architecture Limitations
+
 - **Client-side Storage**: Limited to browser localStorage
 - **No Backend**: All logic runs in browser
 - **No Real-time Sync**: No synchronization between devices
 
 ### Future Scalability Options
+
 - **Backend Integration**: Add API layer for server-side persistence
 - **Database**: Transition from localStorage to proper database
 - **Real-time Features**: WebSocket integration for live updates
@@ -234,12 +254,14 @@ The project documents all major architectural decisions using ADRs (Architecture
 ## Security Considerations
 
 ### Current Security Measures
+
 - **HTTPS**: Automatic SSL/TLS encryption via Vercel
 - **Dependency Security**: Regular dependency updates and audits
 - **Code Quality**: Automated linting and security checks
 - **No Sensitive Data**: Client-side only, no server-side secrets
 
 ### Security Best Practices
+
 - **Dependency Management**: Regular security audits and updates
 - **Code Review**: Security considerations in review process
 - **Static Analysis**: Automated security scanning in CI
@@ -248,12 +270,14 @@ The project documents all major architectural decisions using ADRs (Architecture
 ## Development Workflow Integration
 
 ### Claude Code Integration
+
 - **AI-Assisted Development**: Claude Code for implementation guidance
 - **Documentation Generation**: AI assistance for comprehensive documentation
 - **Code Review**: AI support for code quality and best practices
 - **Learning Platform**: Demonstrates AI-assisted development workflows
 
 ### GitHub Integration
+
 - **Issue Tracking**: Comprehensive issue management with labels
 - **Pull Requests**: Branch-based development with review process
 - **Automation**: GitHub Actions for CI/CD and quality assurance
@@ -262,12 +286,14 @@ The project documents all major architectural decisions using ADRs (Architecture
 ## Maintenance and Evolution
 
 ### Documentation Maintenance
+
 - **Consistency Requirements**: Multi-document update workflows
 - **Cross-references**: Maintained links between documentation
 - **Version Control**: Documentation changes tracked with code
 - **Review Process**: Documentation included in code review
 
 ### Architecture Evolution
+
 - **ADR Process**: Document all significant architectural changes
 - **Backward Compatibility**: Careful consideration of breaking changes
 - **Migration Strategies**: Planned approach for major updates

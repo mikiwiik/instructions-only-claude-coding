@@ -37,8 +37,8 @@ claude
 
 ```bash
 # Clone the repository
-git clone https://github.com/mikiwiik/my-first-claude-code.git
-cd my-first-claude-code
+git clone https://github.com/mikiwiik/instructions-only-claude-coding.git
+cd instructions-only-claude-coding
 
 # Verify Node.js version meets requirements
 node --version  # Should be 22.x or higher
@@ -53,6 +53,7 @@ npm install
 ```
 
 **Important**: This project tracks `package-lock.json` in git to ensure:
+
 - **Reproducible Builds**: Exact same dependency versions across all environments
 - **Security**: Locked versions prevent malicious updates
 - **Team Consistency**: All developers get identical dependency trees
@@ -91,6 +92,7 @@ The project uses Husky and lint-staged for automatic code quality enforcement:
 ```
 
 **What happens on commit:**
+
 1. **ESLint**: Checks code for errors and style violations
 2. **Prettier**: Auto-formats code for consistency
 3. **markdownlint**: Ensures documentation follows formatting standards
