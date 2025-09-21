@@ -440,6 +440,38 @@ Always assign both priority and complexity labels to enable effective planning:
 - **Low Priority + Low Complexity**: Good filler work and maintenance tasks
 - **Low Priority + High Complexity**: Learning opportunities and future preparation
 
+### Issue Creation Checklist
+
+**🚨 MANDATORY**: All issues must include both labels before creation:
+
+- [ ] **Priority label** (priority-1-critical through priority-4-low)
+- [ ] **Complexity label** (complexity-minimal through complexity-epic)
+- [ ] **Assessment rationale** documented in issue description
+
+#### Claude Code Instructions
+
+- **Always include** `--label "priority-X-name,complexity-Y-name"` in `gh issue create` commands
+- **Provide label selection reasoning** in issue description
+- **Verify label presence** before submitting
+- **Flag any unlabeled issues** for immediate correction
+
+#### Claude-Workflow Label Usage
+
+**Use `claude-workflow` label for issues related to:**
+- Claude Code usage and instructions
+- AI collaboration patterns and workflows
+- CLAUDE.md documentation and requirements
+- Task planning protocols and methodologies
+- Issue creation and labeling processes
+- Documentation consistency across AI-assisted development
+- Claude Code agent implementations and configurations
+
+**Do NOT use for:**
+- General development workflow (git, CI/CD, testing)
+- Feature implementations or bug fixes
+- UI/UX improvements
+- Infrastructure or deployment changes
+
 ## Project Structure
 
 ```text
