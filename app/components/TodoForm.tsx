@@ -49,7 +49,7 @@ export default function TodoForm({ onAddTodo }: TodoFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className='mb-4 sm:mb-6'>
-      <div className='flex flex-col sm:flex-row gap-3'>
+      <div className='flex flex-col md:flex-row gap-3'>
         <div className='flex-1'>
           <label htmlFor='todo-input' className='sr-only'>
             Add new todo
@@ -73,8 +73,8 @@ export default function TodoForm({ onAddTodo }: TodoFormProps) {
           aria-label='Add todo'
         >
           <Plus className='h-4 w-4' />
-          <span className='hidden xs:inline sm:inline'>Add Todo</span>
-          <span className='xs:hidden sm:hidden'>Add</span>
+          <span className='hidden md:inline'>Add Todo</span>
+          <span className='md:hidden'>Add</span>
         </button>
       </div>
     </form>
