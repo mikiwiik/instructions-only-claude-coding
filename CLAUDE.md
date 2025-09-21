@@ -4,11 +4,12 @@ This file contains specific instructions for Claude Code when working on this ag
 
 ## Agentic Coding Methodology
 
-**🚨 CRITICAL FRAMEWORK**: This project demonstrates instruction-only development where humans provide strategic direction and AI handles complete implementation.
+**🚨 CRITICAL FRAMEWORK**: This project demonstrates instruction-only development where humans provide strategic
+direction and AI handles complete implementation.
 
 ### Role Definition and Boundaries
 
-**Human Role: Strategic Architect & Product Owner**
+#### Human Role: Strategic Architect & Product Owner
 
 - Provides high-level requirements and feature specifications
 - Sets architectural direction and technical constraints
@@ -16,7 +17,7 @@ This file contains specific instructions for Claude Code when working on this ag
 - Gives feedback on implementation and user experience
 - **Does NOT write code** - maintains pure instruction-based approach
 
-**AI Role: Complete Implementation Team**
+#### AI Role: Complete Implementation Team
 
 - Handles all code implementation following TDD methodology
 - Manages testing strategies and maintains comprehensive test coverage
@@ -61,6 +62,43 @@ This file contains specific instructions for Claude Code when working on this ag
 3. **Document alternatives considered** - show the thinking process
 4. **Update ADR index** - maintain `docs/adr/README.md`
 5. **Reference in commits** - link ADRs to related code changes
+
+## Issue Prompt Logs (IPLs)
+
+**📝 METHODOLOGY DOCUMENTATION**: All significant issues should have corresponding Issue Prompt Logs to capture
+the instruction-only development process.
+
+**📋 Process Documentation**: See [`docs/ipl/README.md`](docs/ipl/README.md) for complete IPL guidelines and usage instructions.
+
+### Quick Reference
+
+- **When**: For issues that involve significant requirement evolution or learning value
+- **Where**: `docs/ipl/###-issue-title.md` matching GitHub issue numbers
+- **What**: Prompt evolution, requirement refinements, instruction patterns
+- **Why**: Document instruction-only development methodology and effective AI collaboration
+
+### Key Components
+
+1. **Before Implementation**: Initial user request and problem context
+2. **During Implementation**: Clarifying questions and requirement refinements
+3. **After Implementation**: Final instructions and lessons learned
+4. **Related Issues**: Cross-references to GitHub issues and ADRs
+
+### When to Create IPLs
+
+**Create IPLs for:**
+
+- Complex requirements that evolve through discussion
+- Issues that demonstrate effective instruction patterns
+- Problems that required significant clarification
+- Features with educational value for instruction-only development
+- Issues labeled with `claude-workflow`
+
+**Optional for:**
+
+- Simple, straightforward requests
+- Minor bug fixes with clear requirements
+- Routine maintenance tasks
 
 ## Task Planning Protocol
 
@@ -111,6 +149,7 @@ Use TodoWrite to create a comprehensive task breakdown including:
 - **Documentation**: README, ADR, or inline documentation updates
 - **Quality Assurance**: Linting, type checking, accessibility validation
 - **Integration**: Ensuring changes work with existing functionality
+- **Issue Closure**: Verify GitHub issue status and ensure proper completion
 
 **Task List Standards:**
 
@@ -318,22 +357,58 @@ git commit -m "test: add edge cases for feature X (#issue)"
 - **Update remote tracking**: Ensure local branch tracks remote properly
 - **Current branching**: All work is currently done directly on main branch
 
-### Feature Completion Sequence
+### Issue Completion Protocol
+
+**🚨 CRITICAL REQUIREMENT**: All work must include proper issue closure and PR completion before the work session ends.
+
+#### Pre-Completion Checklist
+
+Before declaring any work complete, verify:
+
+- [ ] All implementation requirements are met
+- [ ] All tests pass and quality checks succeed
+- [ ] Documentation updated as needed
+- [ ] Issue status verified using `gh issue view <issue-number>`
+- [ ] Associated PRs handled appropriately (merged, closed, or documented)
+
+**📋 Developer Guidelines**: See [`docs/development/workflow.md`](docs/development/workflow.md) for comprehensive
+issue and PR completion protocol.
+
+#### Feature Completion Sequence
 
 1. **Complete feature implementation** (write code, tests, documentation)
 2. **Run tests and verify functionality** (ensure all tests pass)
 3. **Commit changes with issue closure** (local commit with "Closes #X")
-4. **🔴 ASK USER**: "Ready to push changes to remote? (y/n)"
-5. **Push to remote repository** (only if user confirms)
-6. **Verify GitHub issue was automatically closed** (after successful push)
+4. **🔴 ASK USER**: "Should I automatically merge after CI passes? This will close Issue #X"
+   - If **Yes**: Create PR with auto-merge enabled (`gh pr create` + `gh pr merge --auto`)
+   - If **No**: Create PR and wait for manual approval (`gh pr create` only)
+5. **Create PR** (always required due to branch protection)
+6. **Wait for CI completion and user verification** (auto-merge or manual approval)
+7. **Verify GitHub issue closure** (after PR merge completion)
+8. **Confirm workflow completion** (all requirements satisfied, no orphaned issues)
 
-### Push Confirmation Protocol
+### Pull Request and Merge Protocol
 
-- **ALWAYS** ask before pushing: "Ready to push [feature name] to remote? This will close Issue #X"
-- **NEVER** push without explicit user approval
-- **WAIT** for user response before proceeding
-- **RESPECT** user's decision if they decline to push
-- **EXPLAIN** what will happen when pushing (issue closure, public visibility)
+**🚨 REQUIREMENT**: All changes must go through Pull Requests due to branch protection rules.
+
+#### Auto-merge Option (Streamlined)
+
+- **ALWAYS** ask first: "Should I automatically merge after CI passes? This will close Issue #X"
+- **Auto-merge workflow**: Create PR with auto-merge enabled for CI-gated merging
+- **Benefits**: Automatic merge once CI passes, no manual intervention needed
+
+#### Manual Approval Option (User Control)
+
+- **Alternative**: Create PR and wait for user to verify and manually merge
+- **Workflow**: User reviews PR, verifies CI passes, then merges when satisfied
+- **Benefits**: Full user control over timing and final approval
+
+#### Protocol Requirements
+
+- **NEVER** attempt direct push to main (branch protection prevents this)
+- **ALWAYS** create feature branch and PR for all changes
+- **WAIT** for user response before proceeding with either option
+- **EXPLAIN** the chosen workflow and expected outcome
 
 ### Documentation Maintenance
 
@@ -343,11 +418,39 @@ git commit -m "test: add edge cases for feature X (#issue)"
 - **Project Evolution**: Update project description as new features are added
 - **Learning Context**: Ensure documentation supports the educational mission of the project
 
+### Screenshot and Image Handling Protocol
+
+**🚨 LIMITATION**: Claude Code cannot directly upload images to GitHub issues.
+
+#### When User Provides Screenshots
+
+**For GitHub issue documentation:**
+
+1. **Acknowledge receipt**: Confirm you can see and analyze the image
+2. **Create placeholder**: Use `![Description](placeholder-url)` in issue content
+3. **Add user reminder**: Always include manual upload instruction:
+
+```markdown
+**📸 MANUAL ACTION REQUIRED**:
+Please add the screenshot to GitHub issue #[number] by opening it in browser and drag-dropping the image into a comment. GitHub will auto-upload and generate the proper URL.
+```
+
+1. **Document context**: Describe what the screenshot shows and its relevance
+
+#### Best Practices
+
+- **Descriptive alt text**: `![Button whitespace issue after typography changes](placeholder)`
+- **Explain context**: Always describe what the image demonstrates
+- **Link to code**: Reference specific files/lines shown in screenshots
+- **Update placeholders**: Remind user to replace placeholder URLs
+
 ### Documentation Consistency Requirements
 
-**🚨 CRITICAL REQUIREMENT**: All major changes must maintain consistency across CLAUDE.md, README.md, and ADRs to preserve project knowledge and ensure accurate guidance.
+**🚨 CRITICAL REQUIREMENT**: All major changes must maintain consistency across CLAUDE.md, README.md, and ADRs
+to preserve project knowledge and ensure accurate guidance.
 
-**📋 Full Guidelines**: See [`docs/guidelines/documentation-standards.md`](docs/guidelines/documentation-standards.md) for comprehensive documentation consistency requirements and workflows.
+**📋 Full Guidelines**: See [`docs/guidelines/documentation-standards.md`](docs/guidelines/documentation-standards.md)
+for comprehensive documentation consistency requirements and workflows.
 
 #### When Documentation Updates Are Required
 
@@ -374,6 +477,7 @@ For major changes, include this checklist in implementation issues:
 
 ```markdown
 ## Documentation Updates Required
+
 - [ ] Create/update relevant ADR with decision rationale
 - [ ] Update CLAUDE.md development guidelines
 - [ ] Update README.md project information
@@ -458,6 +562,7 @@ Always assign both priority and complexity labels to enable effective planning:
 #### Claude-Workflow Label Usage
 
 **Use `claude-workflow` label for issues related to:**
+
 - Claude Code usage and instructions
 - AI collaboration patterns and workflows
 - CLAUDE.md documentation and requirements
@@ -467,6 +572,7 @@ Always assign both priority and complexity labels to enable effective planning:
 - Claude Code agent implementations and configurations
 
 **Do NOT use for:**
+
 - General development workflow (git, CI/CD, testing)
 - Feature implementations or bug fixes
 - UI/UX improvements
@@ -482,7 +588,8 @@ instructions-only-claude-coding/
 │   ├── types/             # TypeScript type definitions
 │   └── __tests__/         # Component tests
 ├── docs/                  # Project documentation
-│   └── adr/              # Architecture Decision Records
+│   ├── adr/              # Architecture Decision Records
+│   └── ipl/              # Issue Prompt Logs
 ├── public/               # Static assets
 ├── CLAUDE.md            # This file - Claude Code instructions
 ├── README.md            # Project documentation

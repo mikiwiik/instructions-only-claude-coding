@@ -97,7 +97,8 @@ Closes #33
 
 ### Issue Linking Requirements
 
-All commits related to GitHub issues MUST include appropriate linking keywords to automatically connect commits to issues and enable automatic issue closure.
+All commits related to GitHub issues MUST include appropriate linking keywords to automatically connect commits to
+issues and enable automatic issue closure.
 
 ### Closing Keywords
 
@@ -274,6 +275,110 @@ npm run start        # Start production server
 - **Standard Evolution**: Adapt standards as project grows
 - **Learning**: Share knowledge and best practices
 
+## Issue and Pull Request Completion Protocol
+
+**🚨 CRITICAL REQUIREMENT**: All development work must follow this completion protocol to ensure proper project
+management and workflow integrity.
+
+### Mandatory Completion Workflow
+
+All development work must follow this completion protocol before considering any work finished.
+
+#### Issue Lifecycle Management
+
+**Before Considering Work Complete:**
+
+1. **Verify Implementation**: Confirm all requirements from the issue are fully implemented
+2. **Test Validation**: Ensure all tests pass and new functionality works as expected
+3. **Documentation**: Update any relevant documentation (README, ADRs, inline docs)
+4. **Status Check**: Use `gh issue view <issue-number>` to verify current issue status
+5. **Explicit Closure**: Close the issue if work is truly complete
+
+**Commands for Issue Management:**
+
+```bash
+# Check issue status
+gh issue view <issue-number>
+
+# Close issue with comment
+gh issue close <issue-number> --comment "Implementation complete and tested"
+
+# Verify closure
+gh issue view <issue-number> --json state
+```
+
+#### Pull Request Lifecycle Management
+
+**For Branch-Based Development:**
+
+1. **PR Creation**: Create pull request with comprehensive description
+2. **CI Validation**: Ensure all continuous integration checks pass
+3. **Code Review**: Complete any required code review process
+4. **Merge Completion**: Merge PR using appropriate merge strategy
+5. **Branch Cleanup**: Delete feature branch after successful merge
+6. **Issue Auto-Closure**: Verify associated issues were automatically closed
+
+**Commands for PR Management:**
+
+```bash
+# Create pull request
+gh pr create --title "..." --body "..."
+
+# Check PR status
+gh pr view <pr-number> --json state,mergeable,statusCheckRollup
+
+# Merge pull request
+gh pr merge <pr-number> --squash --delete-branch
+
+# Verify associated issues were closed
+gh issue list --state closed --search "linked:pr-<pr-number>"
+```
+
+#### Quality Assurance Checklist
+
+**Development Completion Checklist:**
+
+- [ ] All implementation requirements satisfied
+- [ ] Test suite passes completely (`npm test`)
+- [ ] Code quality checks pass (`npm run lint`, `npm run type-check`)
+- [ ] Documentation updated as needed
+- [ ] GitHub issue status verified and closed
+- [ ] Pull request merged and branch cleaned up
+- [ ] No orphaned issues or incomplete workflows
+
+#### Best Practices
+
+**Issue Management:**
+
+- Link commits to issues using `#issue-number` in commit messages
+- Use conventional commit messages for clear traceability
+- Close issues only when work is completely finished and tested
+- Add closing comments that summarize what was accomplished
+
+**Pull Request Management:**
+
+- Include comprehensive descriptions of changes
+- Reference related issues using "Closes #issue-number"
+- Ensure all CI checks pass before merging
+- Use appropriate merge strategy (squash for feature branches)
+- Clean up feature branches after successful merge
+
+#### Troubleshooting Workflow Issues
+
+**Common Issues:**
+
+- **Issue Not Auto-Closing**: Verify PR description includes "Closes #issue-number"
+- **Failed CI Checks**: Review and fix all failing tests and quality checks
+- **Merge Conflicts**: Resolve conflicts and update PR branch
+- **Orphaned Branches**: Use `git branch -d branch-name` to clean up merged branches
+
+**Recovery Actions:**
+
+- If issue remains open after PR merge, manually close with explanation
+- If CI fails after merge, create hotfix issue and immediate resolution
+- If branch wasn't deleted, clean up using GitHub interface or CLI
+
 ---
 
-This development workflow ensures high code quality, clear project history, and effective collaboration while supporting the educational objectives of the Todo App project.
+This development workflow ensures high code quality, clear project history, effective collaboration, and complete
+issue/PR lifecycle management while supporting the educational objectives of the Todo App project.

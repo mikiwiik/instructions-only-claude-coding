@@ -42,7 +42,7 @@ export default function TodoItem({
 }: TodoItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const {
     attributes,
@@ -54,10 +54,24 @@ export default function TodoItem({
   } = useSortable({ id: todo.id, disabled: !isDraggable });
 
   useEffect(() => {
-    if (isEditing && inputRef.current) {
-      inputRef.current.focus();
+    if (isEditing && textareaRef.current) {
+      textareaRef.current.focus();
     }
   }, [isEditing]);
+
+  // Auto-resize textarea based on content
+  const autoResize = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  useEffect(() => {
+    if (isEditing) {
+      autoResize();
+    }
+  }, [editText, isEditing]);
 
   const handleToggle = () => {
     // Only allow checking (not unchecking) via the checkbox
@@ -95,7 +109,8 @@ export default function TodoItem({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
       handleSave();
     } else if (e.key === 'Escape') {
       handleCancel();
@@ -167,14 +182,14 @@ export default function TodoItem({
       <div className='flex-1 min-w-0'>
         {isEditing ? (
           <div className='space-y-2'>
-            <input
-              ref={inputRef}
-              type='text'
+            <textarea
+              ref={textareaRef}
               value={editText}
               onChange={(e) => setEditText(e.target.value)}
               onKeyDown={handleKeyDown}
-              className='w-full text-base bg-background border border-border rounded px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-ring'
+              className='w-full text-base bg-background border border-border rounded px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-ring resize-none overflow-hidden min-h-[2.5rem]'
               aria-label='Edit todo text'
+              rows={1}
             />
             <div className='flex gap-1'>
               <button
@@ -198,7 +213,7 @@ export default function TodoItem({
         ) : (
           <>
             <p
-              className={`text-base leading-relaxed ${
+              className={`text-base leading-relaxed whitespace-pre-line ${
                 todo.completed
                   ? 'line-through text-muted-foreground'
                   : 'text-foreground'
