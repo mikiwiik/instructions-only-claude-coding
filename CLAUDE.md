@@ -381,26 +381,34 @@ issue and PR completion protocol.
 3. **Commit changes with issue closure** (local commit with "Closes #X")
 4. **🔴 ASK USER**: "Should I automatically merge after CI passes? This will close Issue #X"
    - If **Yes**: Create PR with auto-merge enabled (`gh pr create` + `gh pr merge --auto`)
-   - If **No**: Ask "Ready to push changes to remote?" and push to main branch
-5. **Push/Create PR** (based on user preference)
-6. **Verify GitHub issue closure** (after merge/push completion)
-7. **Confirm workflow completion** (all requirements satisfied, no orphaned issues)
+   - If **No**: Create PR and wait for manual approval (`gh pr create` only)
+5. **Create PR** (always required due to branch protection)
+6. **Wait for CI completion and user verification** (auto-merge or manual approval)
+7. **Verify GitHub issue closure** (after PR merge completion)
+8. **Confirm workflow completion** (all requirements satisfied, no orphaned issues)
 
-### Auto-merge and Push Protocol
+### Pull Request and Merge Protocol
 
-#### Auto-merge Option (Preferred)
+**🚨 REQUIREMENT**: All changes must go through Pull Requests due to branch protection rules.
+
+#### Auto-merge Option (Streamlined)
 
 - **ALWAYS** ask first: "Should I automatically merge after CI passes? This will close Issue #X"
 - **Auto-merge workflow**: Create PR with auto-merge enabled for CI-gated merging
-- **Benefits**: Ensures CI passes before merge, maintains quality gates
+- **Benefits**: Automatic merge once CI passes, no manual intervention needed
 
-#### Direct Push Alternative
+#### Manual Approval Option (User Control)
 
-- **Fallback option**: If user declines auto-merge, ask "Ready to push changes to remote?"
-- **NEVER** push without explicit user approval
-- **WAIT** for user response before proceeding
-- **RESPECT** user's decision if they decline to push
-- **EXPLAIN** what will happen when pushing (issue closure, public visibility)
+- **Alternative**: Create PR and wait for user to verify and manually merge
+- **Workflow**: User reviews PR, verifies CI passes, then merges when satisfied
+- **Benefits**: Full user control over timing and final approval
+
+#### Protocol Requirements
+
+- **NEVER** attempt direct push to main (branch protection prevents this)
+- **ALWAYS** create feature branch and PR for all changes
+- **WAIT** for user response before proceeding with either option
+- **EXPLAIN** the chosen workflow and expected outcome
 
 ### Documentation Maintenance
 
