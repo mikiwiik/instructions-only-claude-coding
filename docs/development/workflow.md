@@ -236,6 +236,50 @@ npm run start        # Start production server
 - **Process Documentation**: Document workflow changes
 - **Cross-References**: Maintain links between related documentation
 
+### Mermaid Diagram Guidelines
+
+**🚨 REQUIREMENT**: All Mermaid diagrams must be GitHub-compatible to ensure proper rendering.
+
+#### GitHub Mermaid Best Practices
+
+**Syntax Requirements:**
+
+- **No Emojis**: Remove all emojis from node labels and comments
+- **No Comments**: Remove all `%%` comments from diagram syntax
+- **Simple Labels**: Use plain text without special characters
+- **Standard Syntax**: Stick to basic Mermaid syntax without advanced features
+
+**Example - Incorrect (GitHub-incompatible):**
+
+```mermaid
+graph TB
+    %% User Interface Layer
+    User[👤 User] --> App[📱 App Component<br/>page.tsx]
+```
+
+**Example - Correct (GitHub-compatible):**
+
+```mermaid
+graph TB
+    User[User] --> App[App Component]
+```
+
+#### Diagram Quality Standards
+
+- **Clear Labels**: Use descriptive, plain text labels
+- **Logical Flow**: Ensure diagram flow matches actual code architecture
+- **Consistent Naming**: Use consistent naming with codebase
+- **Appropriate Complexity**: Balance detail with readability
+
+#### Testing Mermaid Diagrams
+
+Before committing Mermaid diagrams:
+
+1. **Local Preview**: Test in VS Code or Mermaid Live Editor
+2. **GitHub Preview**: Use GitHub's file preview to verify rendering
+3. **Syntax Validation**: Ensure no special characters or comments
+4. **Accessibility**: Use clear, descriptive labels for screen readers
+
 ## Quality Metrics
 
 ### Code Quality Indicators
