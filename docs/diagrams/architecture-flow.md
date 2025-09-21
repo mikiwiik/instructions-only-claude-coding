@@ -12,85 +12,72 @@ persistence, and a comprehensive testing strategy.
 
 ```mermaid
 graph TB
-    %% User Interface Layer
-    User[👤 User] --> App[📱 App Component<br/>page.tsx]
+    User[User] --> App[App Component]
 
-    %% Main Application Flow
-    App --> Header[🏷️ Header Section<br/>Title & Description]
-    App --> TodoForm[📝 TodoForm Component<br/>Add new todos]
-    App --> TodoList[📋 TodoList Component<br/>Display & manage todos]
-    App --> Footer[📄 Footer Section<br/>Credits & links]
+    App --> Header[Header Section]
+    App --> TodoForm[TodoForm Component]
+    App --> TodoList[TodoList Component]
+    App --> Footer[Footer Section]
 
-    %% State Management Layer
-    App --> useTodos[🔄 useTodos Hook<br/>State Management]
-    useTodos --> TodoState[📊 TodoState<br/>todos: Todo[]<br/>filter: TodoFilter]
+    App --> useTodos[useTodos Hook]
+    useTodos --> TodoState[TodoState]
 
-    %% Component Hierarchy
-    TodoList --> TodoItem[📌 TodoItem Component<br/>Individual todo management]
+    TodoList --> TodoItem[TodoItem Component]
 
-    %% Data Types Layer
-    TodoState --> Todo[🏗️ Todo Interface<br/>id, text, completed<br/>createdAt, updatedAt]
-    TodoState --> TodoFilter[🔍 TodoFilter Type<br/>all | active | completed]
+    TodoState --> Todo[Todo Interface]
+    TodoState --> TodoFilter[TodoFilter Type]
 
-    %% Persistence Layer
-    useTodos <--> LocalStorage[💾 localStorage<br/>Persistent data storage]
-    LocalStorage --> StorageKey[🔑 Storage Key: 'todos'<br/>JSON serialization]
+    useTodos <--> LocalStorage[localStorage]
+    LocalStorage --> StorageKey[Storage Key: todos]
 
-    %% External Dependencies
-    App --> Lucide[🎨 Lucide React<br/>Icon components]
-    App --> Tailwind[🎨 Tailwind CSS<br/>Styling system]
-    TodoList --> DndKit[🤏 @dnd-kit<br/>Drag & drop functionality]
+    App --> Lucide[Lucide React Icons]
+    App --> Tailwind[Tailwind CSS]
+    TodoList --> DndKit[dnd-kit Library]
 
-    %% Testing Layer
-    subgraph Testing["🧪 Testing Architecture"]
+    subgraph Testing[Testing Architecture]
         JestTests[Jest Test Suites]
         RTL[React Testing Library]
         TestUtils[Test Utilities]
 
-        JestTests --> ComponentTests[Component Tests<br/>TodoForm, TodoList, TodoItem]
-        JestTests --> HookTests[Hook Tests<br/>useTodos]
-        JestTests --> TypeTests[Type Tests<br/>Todo interfaces]
+        JestTests --> ComponentTests[Component Tests]
+        JestTests --> HookTests[Hook Tests]
+        JestTests --> TypeTests[Type Tests]
 
         ComponentTests --> RTL
         HookTests --> RTL
         RTL --> TestUtils
     end
 
-    %% Styling
-    subgraph Styling["🎨 Styling Architecture"]
+    subgraph Styling[Styling Architecture]
         TailwindCSS[Tailwind CSS]
-        CSSVariables[CSS Variables<br/>Theme system]
-        ResponsiveDesign[Responsive Design<br/>Mobile-first approach]
+        CSSVariables[CSS Variables]
+        ResponsiveDesign[Responsive Design]
 
         TailwindCSS --> CSSVariables
         TailwindCSS --> ResponsiveDesign
     end
 
-    %% Build & Development
-    subgraph BuildSystem["🔧 Build System"]
-        NextJS[Next.js 14<br/>App Router]
-        TypeScript[TypeScript<br/>Type safety]
-        ESLint[ESLint<br/>Code quality]
-        Prettier[Prettier<br/>Code formatting]
+    subgraph BuildSystem[Build System]
+        NextJS[Next.js 14]
+        TypeScript[TypeScript]
+        ESLint[ESLint]
+        Prettier[Prettier]
 
         NextJS --> TypeScript
         NextJS --> ESLint
         NextJS --> Prettier
     end
 
-    %% Styling relationships
     TodoForm --> Styling
     TodoList --> Styling
     TodoItem --> Styling
 
-    %% Testing relationships
     TodoForm -.-> Testing
     TodoList -.-> Testing
     TodoItem -.-> Testing
     useTodos -.-> Testing
     Todo -.-> Testing
 
-    %% Build system relationships
     App -.-> BuildSystem
     useTodos -.-> BuildSystem
     Todo -.-> BuildSystem
@@ -130,24 +117,22 @@ graph TB
 
 ```mermaid
 graph LR
-    %% State Flow
-    LocalStorage[💾 localStorage] --> useTodos[🔄 useTodos Hook]
-    useTodos --> TodoState[📊 TodoState]
-    TodoState --> Components[🧩 React Components]
-    Components --> UserActions[👤 User Actions]
+    LocalStorage[localStorage] --> useTodos[useTodos Hook]
+    useTodos --> TodoState[TodoState]
+    TodoState --> Components[React Components]
+    Components --> UserActions[User Actions]
     UserActions --> useTodos
     useTodos --> LocalStorage
 
-    %% State Operations
-    subgraph StateOps["State Operations"]
-        AddTodo[➕ addTodo]
-        ToggleTodo[✅ toggleTodo]
-        DeleteTodo[🗑️ deleteTodo]
-        EditTodo[✏️ editTodo]
-        RestoreTodo[↩️ restoreTodo]
-        ReorderTodos[🔄 reorderTodos]
-        MoveUp[⬆️ moveUp]
-        MoveDown[⬇️ moveDown]
+    subgraph StateOps[State Operations]
+        AddTodo[addTodo]
+        ToggleTodo[toggleTodo]
+        DeleteTodo[deleteTodo]
+        EditTodo[editTodo]
+        RestoreTodo[restoreTodo]
+        ReorderTodos[reorderTodos]
+        MoveUp[moveUp]
+        MoveDown[moveDown]
     end
 
     useTodos --> StateOps
