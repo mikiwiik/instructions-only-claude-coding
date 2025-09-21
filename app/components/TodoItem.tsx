@@ -140,7 +140,7 @@ export default function TodoItem({
       ref={setNodeRef}
       style={style}
       role='listitem'
-      className='flex items-start gap-2 sm:gap-3 p-3 sm:p-4 bg-background rounded-lg border fade-in'
+      className='flex items-start gap-1 sm:gap-2 md:gap-3 p-3 sm:p-4 bg-background rounded-lg border fade-in'
     >
       {isDraggable && (
         <div
@@ -228,7 +228,7 @@ export default function TodoItem({
           </>
         )}
       </div>
-      <div className='flex flex-col md:flex-row items-center gap-1 md:gap-2'>
+      <div className='flex flex-row items-center gap-0.5 sm:gap-1'>
         {(moveUp || moveDown) && (
           <div
             role='group'

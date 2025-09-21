@@ -33,17 +33,10 @@ describe('TodoItem - Layout', () => {
       render(<TodoItem {...defaultProps} />);
 
       const todoItem = screen.getByRole('listitem');
-      const buttonContainer = todoItem.querySelector(
-        '.flex.flex-col.md\\:flex-row'
-      );
+      const buttonContainer = todoItem.querySelector('.flex.flex-row');
 
       expect(buttonContainer).toBeInTheDocument();
-      expect(buttonContainer).toHaveClass(
-        'flex',
-        'flex-col',
-        'md:flex-row',
-        'items-center'
-      );
+      expect(buttonContainer).toHaveClass('flex', 'flex-row', 'items-center');
     });
 
     it('should group reorder buttons together', () => {
@@ -90,11 +83,10 @@ describe('TodoItem - Layout', () => {
       const containerDiv = reorderGroup.parentElement;
       expect(containerDiv).toHaveClass(
         'flex',
-        'flex-col',
-        'md:flex-row',
+        'flex-row',
         'items-center',
-        'gap-1',
-        'md:gap-2'
+        'gap-0.5',
+        'sm:gap-1'
       );
     });
   });
@@ -183,14 +175,9 @@ describe('TodoItem - Layout', () => {
 
       const buttonContainer = screen
         .getByRole('listitem')
-        .querySelector('.flex.flex-col.md\\:flex-row');
+        .querySelector('.flex.flex-row');
 
-      expect(buttonContainer).toHaveClass(
-        'flex',
-        'flex-col',
-        'md:flex-row',
-        'items-center'
-      );
+      expect(buttonContainer).toHaveClass('flex', 'flex-row', 'items-center');
     });
   });
 });
