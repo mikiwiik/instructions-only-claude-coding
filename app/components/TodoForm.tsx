@@ -7,14 +7,26 @@ interface TodoFormProps {
 
 export default function TodoForm({ onAddTodo }: TodoFormProps) {
   const [text, setText] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Focus input on mount
+  // Focus textarea on mount and auto-resize
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
+    if (textareaRef.current) {
+      textareaRef.current.focus();
     }
   }, []);
+
+  // Auto-resize textarea based on content
+  const autoResize = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  useEffect(() => {
+    autoResize();
+  }, [text]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,6 +35,13 @@ export default function TodoForm({ onAddTodo }: TodoFormProps) {
     if (trimmedText) {
       onAddTodo(trimmedText);
       setText('');
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
     }
   };
 
@@ -35,15 +54,16 @@ export default function TodoForm({ onAddTodo }: TodoFormProps) {
           <label htmlFor='todo-input' className='sr-only'>
             Add new todo
           </label>
-          <input
-            ref={inputRef}
+          <textarea
+            ref={textareaRef}
             id='todo-input'
-            type='text'
             value={text}
             onChange={(e) => setText(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder='What needs to be done?'
-            className='w-full px-4 py-3 border border-input bg-background rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground'
+            className='w-full px-4 py-3 border border-input bg-background rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground resize-none overflow-hidden min-h-[3rem]'
             aria-label='Add new todo'
+            rows={1}
           />
         </div>
         <button
