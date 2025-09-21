@@ -34,11 +34,31 @@ jobs:
     - name: Run linting
       run: npm run lint
 
-    - name: Run tests
-      run: npm run test
+    - name: Run tests with coverage
+      run: npm run test:coverage
+
+    - name: Jest Coverage Report
+      uses: ArtiomTr/jest-coverage-report-action@v2
+      if: github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        coverage-file: ./coverage/lcov.info
+        base-coverage-file: ./coverage/lcov.info
+        threshold: 90
+        working-directory: ./
 
     - name: Build application
       run: npm run build
+
+    - name: Upload coverage reports
+      uses: actions/upload-artifact@v4
+      if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
+      with:
+        name: coverage-report
+        path: |
+          coverage/
+          !coverage/.nyc_output
+        retention-days: 30
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
