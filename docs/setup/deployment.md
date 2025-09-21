@@ -4,7 +4,7 @@ This guide covers deploying the Todo App to production using Vercel with automat
 
 ## Live Demo
 
-**🌐 Live Application**: [Todo App on Vercel](https://my-first-claude-code-fhhkrlt3f-miki-wiiks-projects.vercel.app/)
+**🌐 Live Application**: [Todo App on Vercel](https://instructions-only-claude-coding.vercel.app/)
 
 The Todo App is automatically deployed to Vercel and updated on every push to the main branch after CI passes.
 
@@ -34,7 +34,7 @@ This project is configured for automatic deployment to Vercel with GitHub integr
 ```bash
 # In Vercel Dashboard:
 # 1. Click "New Project"
-# 2. Find your GitHub repository "my-first-claude-code"
+# 2. Find your GitHub repository "instructions-only-claude-coding"
 # 3. Click "Import"
 ```
 
@@ -63,21 +63,25 @@ Vercel automatically detects and configures:
 ## Deployment Features
 
 ### Automatic Deployments
+
 - **Main Branch**: Every push to `main` triggers a new deployment
 - **CI Integration**: Deployments wait for GitHub Actions CI to pass
 - **Build Process**: Automatic Next.js optimization and compilation
 
 ### Preview Deployments
+
 - **Pull Requests**: Each PR gets its own preview URL for testing
 - **Branch Previews**: Feature branches can be previewed before merge
 - **Safe Testing**: Test changes without affecting production
 
 ### Zero Configuration
+
 - **Framework Detection**: Automatic Next.js project recognition
 - **Build Optimization**: Production-ready builds with no configuration
 - **Performance**: Automatic CDN, compression, and caching
 
 ### Custom Domains
+
 - **Free Subdomain**: Automatic `.vercel.app` subdomain
 - **Custom Domains**: Optional custom domain configuration
 - **SSL/HTTPS**: Automatic SSL certificate provisioning
@@ -197,22 +201,26 @@ Ensure your `package.json` includes:
 ### Common Deployment Issues
 
 #### Build Failures
+
 - **Check CI Logs**: Review GitHub Actions logs for the failing step
 - **Local Testing**: Ensure `npm run build` works locally
 - **Dependencies**: Verify all dependencies are in package.json
 - **Node Version**: Confirm Node.js version compatibility
 
 #### Environment Variable Issues
+
 - **Missing Variables**: Ensure all required variables are set in Vercel
 - **Environment Scope**: Check variable scope (Production/Preview/Development)
 - **Variable Names**: Verify exact variable names and values
 
 #### Node.js Version Conflicts
+
 - **Package.json**: Verify `engines` field specifies correct Node version
 - **Vercel Settings**: Check Node.js version in Vercel project settings
 - **Dependencies**: Ensure all dependencies support the Node version
 
 #### Dependency Issues
+
 - **Lock File**: Ensure `package-lock.json` is committed to repository
 - **Clean Install**: Try deleting node_modules and reinstalling locally
 - **Audit**: Run `npm audit` to check for security vulnerabilities
@@ -220,6 +228,7 @@ Ensure your `package.json` includes:
 ### Debug Steps
 
 1. **Local Verification**:
+
    ```bash
    npm run build    # Ensure local build works
    npm run start    # Test production build locally
@@ -240,7 +249,7 @@ Ensure your `package.json` includes:
 - **Vercel Documentation**: <https://vercel.com/docs>
 - **Next.js Deployment**: <https://nextjs.org/docs/deployment>
 - **GitHub Actions**: <https://docs.github.com/en/actions>
-- **Project Issues**: <https://github.com/mikiwiik/my-first-claude-code/issues>
+- **Project Issues**: <https://github.com/mikiwiik/instructions-only-claude-coding/issues>
 
 ---
 

@@ -9,6 +9,7 @@ This file contains specific instructions for Claude Code when working on this ag
 ### Role Definition and Boundaries
 
 **Human Role: Strategic Architect & Product Owner**
+
 - Provides high-level requirements and feature specifications
 - Sets architectural direction and technical constraints
 - Makes product decisions and priority determinations
@@ -16,6 +17,7 @@ This file contains specific instructions for Claude Code when working on this ag
 - **Does NOT write code** - maintains pure instruction-based approach
 
 **AI Role: Complete Implementation Team**
+
 - Handles all code implementation following TDD methodology
 - Manages testing strategies and maintains comprehensive test coverage
 - Configures and maintains CI/CD pipeline and deployment processes
@@ -350,6 +352,7 @@ git commit -m "test: add edge cases for feature X (#issue)"
 #### When Documentation Updates Are Required
 
 **Major Changes Requiring Multi-Document Updates:**
+
 - **Architectural Decisions**: Technology choices, design patterns, system structure changes
 - **Development Practices**: Workflow changes, testing approaches, code review processes
 - **Project Structure**: Directory organization, build process changes, configuration modifications
@@ -357,6 +360,7 @@ git commit -m "test: add edge cases for feature X (#issue)"
 - **Contributor Guidelines**: Onboarding process changes, collaboration tool adoption
 
 **Documentation Update Workflow:**
+
 1. **Impact Assessment**: Identify which documentation files are affected by the change
 2. **ADR Creation**: Document decision rationale and alternatives considered (if applicable)
 3. **CLAUDE.md Updates**: Update development guidelines, workflows, and standards
@@ -380,16 +384,19 @@ For major changes, include this checklist in implementation issues:
 #### Integration with Development Workflow
 
 **Task Planning Integration:**
+
 - Include documentation scope in complexity assessment
 - Add documentation tasks to TodoWrite task breakdowns
 - Plan documentation updates as part of implementation workflow
 
 **Quality Assurance:**
+
 - Review documentation updates as part of code review process
 - Test updated instructions and verify accuracy
 - Ensure documentation changes support learning objectives
 
 **Commit Strategy:**
+
 - Include documentation updates with related code changes
 - Reference documentation updates in commit messages
 - Link documentation changes to relevant GitHub issues
@@ -436,7 +443,7 @@ Always assign both priority and complexity labels to enable effective planning:
 ## Project Structure
 
 ```text
-my-first-claude-code/
+instructions-only-claude-coding/
 ├── app/                    # Next.js app directory
 │   ├── components/         # React components
 │   ├── hooks/             # Custom React hooks

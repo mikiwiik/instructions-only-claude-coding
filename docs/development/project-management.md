@@ -74,30 +74,35 @@ The project uses complexity labels to enable accurate effort estimation in Claud
 ### Complexity Assessment Guidelines
 
 #### Minimal Complexity 🟢
+
 - **Scope**: Single file modifications
 - **Examples**: Documentation updates, simple bug fixes, configuration changes
 - **Typical Tasks**: Text changes, comment additions, single line fixes
 - **Considerations**: No architectural impact, minimal testing required
 
 #### Simple Complexity 🔵
+
 - **Scope**: Basic feature additions with straightforward logic
 - **Examples**: New UI components, simple data transformations, basic validations
 - **Typical Tasks**: Single component features, standard patterns
 - **Considerations**: Well-understood requirements, minimal dependencies
 
 #### Moderate Complexity 🟡
+
 - **Scope**: Multi-component changes requiring coordination
 - **Examples**: State management updates, feature integration, cross-component functionality
 - **Typical Tasks**: Complex UI interactions, data flow modifications
 - **Considerations**: Multiple file changes, integration testing required
 
 #### Complex Complexity 🟠
+
 - **Scope**: Architectural changes affecting system design
 - **Examples**: New technology adoption, major refactoring, performance optimization
 - **Typical Tasks**: Framework changes, design pattern implementation
 - **Considerations**: Significant testing, documentation, and review requirements
 
 #### Epic Complexity 🔴
+
 - **Scope**: Major overhauls requiring fundamental changes
 - **Examples**: Complete rewrites, breaking changes, foundational infrastructure
 - **Typical Tasks**: System-wide changes, major version updates

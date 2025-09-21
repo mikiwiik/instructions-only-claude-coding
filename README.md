@@ -1,8 +1,8 @@
 # 🤖 Agentic Coding Prototype - Complete Software Development Through AI Instruction
 
-[![Build and Test](https://github.com/mikiwiik/my-first-claude-code/actions/workflows/build.yml/badge.svg)](https://github.com/mikiwiik/my-first-claude-code/actions/workflows/build.yml)
+[![Build and Test](https://github.com/mikiwiik/instructions-only-claude-coding/actions/workflows/build.yml/badge.svg)](https://github.com/mikiwiik/instructions-only-claude-coding/actions/workflows/build.yml)
 
-**🌐 Live Demo**: [Todo App on Vercel](https://my-first-claude-code-fhhkrlt3f-miki-wiiks-projects.vercel.app/)
+**🌐 Live Demo**: [Todo App on Vercel](https://instructions-only-claude-coding.vercel.app/)
 
 ## Project Purpose
 
@@ -22,12 +22,14 @@ This project proves that sophisticated software can be built entirely through st
 ### Role-Based Interaction Patterns
 
 **Human Role: Strategic Architect & Product Owner**
+
 - Defines requirements, features, and acceptance criteria
 - Sets architectural direction and technical constraints
 - Provides feedback on implementation and user experience
 - Makes product decisions and priority calls
 
 **AI Role: Complete Implementation Team**
+
 - Writes all code following TDD methodology
 - Implements testing strategies and maintains test coverage
 - Handles CI/CD pipeline configuration and deployment
@@ -79,8 +81,8 @@ This project serves as a **template and reference** for:
 
 ```bash
 # Clone and install
-git clone https://github.com/mikiwiik/my-first-claude-code.git
-cd my-first-claude-code
+git clone https://github.com/mikiwiik/instructions-only-claude-coding.git
+cd instructions-only-claude-coding
 npm install
 
 # Start development server
@@ -142,7 +144,7 @@ npm run type-check   # TypeScript type checking
 
 1. **Review Documentation**: Start with the [installation guide](docs/setup/installation.md)
 2. **Understand Workflow**: Read the [development workflow](docs/development/workflow.md)
-3. **Check Issues**: Browse [GitHub issues](https://github.com/mikiwiik/my-first-claude-code/issues) for tasks
+3. **Check Issues**: Browse [GitHub issues](https://github.com/mikiwiik/instructions-only-claude-coding/issues) for tasks
 4. **Follow Standards**: Adhere to project [coding standards](docs/development/workflow.md)
 
 ### Development Process
@@ -184,7 +186,7 @@ This project demonstrates professional development practices:
 
 ## Support and Resources
 
-- **Project Issues**: [GitHub Issues](https://github.com/mikiwiik/my-first-claude-code/issues)
+- **Project Issues**: [GitHub Issues](https://github.com/mikiwiik/instructions-only-claude-coding/issues)
 - **Architecture Decisions**: [ADR Index](docs/adr/README.md)
 - **Claude Code Documentation**: [Official Docs](https://docs.claude.com/en/docs/claude-code/)
 - **Development Guidelines**: [CLAUDE.md](CLAUDE.md)

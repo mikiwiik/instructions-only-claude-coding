@@ -1,5 +1,5 @@
 {
-  "name": "my-first-claude-code",
+  "name": "instructions-only-claude-coding",
   "version": "0.1.0",
   "private": true,
   "description": "A Next.js Todo application built using Test-Driven Development (TDD) with Claude Code assistance",
