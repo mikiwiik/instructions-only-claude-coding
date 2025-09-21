@@ -10,6 +10,7 @@ export default function HomePage() {
     todos,
     addTodo,
     toggleTodo,
+    restoreTodo,
     deleteTodo,
     editTodo,
     reorderTodos,
@@ -39,6 +40,7 @@ export default function HomePage() {
           onToggle={toggleTodo}
           onDelete={deleteTodo}
           onEdit={editTodo}
+          onRestore={restoreTodo}
           reorderTodos={reorderTodos}
           moveUp={moveUp}
           moveDown={moveDown}
