@@ -19,47 +19,58 @@ export default function HomePage() {
   } = useTodos();
 
   return (
-    <div className='max-w-4xl mx-auto'>
-      <header className='text-center mb-8'>
-        <div className='flex items-center justify-center gap-3 mb-4'>
-          <CheckSquare className='h-8 w-8 text-primary' />
-          <h1 className='text-4xl font-bold text-foreground'>Todo App</h1>
-        </div>
-        <p className='text-muted-foreground text-lg'>
-          A Next.js Todo application built with Test-Driven Development
-        </p>
-        <p className='text-muted-foreground text-sm mt-2'>
-          Powered by Claude Code
-        </p>
-      </header>
+    <div className='min-h-screen bg-background safe-area-inset'>
+      <div className='max-w-sm sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto px-4 py-6 sm:px-6 sm:py-8'>
+        <header className='text-center mb-6 sm:mb-8'>
+          <div className='flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4'>
+            <CheckSquare
+              className='h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-primary'
+              aria-hidden='true'
+            />
+            <h1 className='text-2xl sm:text-3xl md:text-4xl font-bold text-foreground text-balance'>
+              Todo App
+            </h1>
+          </div>
+          <p className='text-muted-foreground text-sm sm:text-base md:text-lg px-4 text-balance'>
+            A Next.js Todo application built with Test-Driven Development
+          </p>
+          <p className='text-muted-foreground text-xs sm:text-sm mt-1 sm:mt-2'>
+            Powered by Claude Code
+          </p>
+        </header>
 
-      <div className='bg-card border rounded-lg p-6 shadow-sm'>
-        <TodoForm onAddTodo={addTodo} />
-        <TodoList
-          todos={todos}
-          onToggle={toggleTodo}
-          onDelete={deleteTodo}
-          onEdit={editTodo}
-          onRestore={restoreTodo}
-          reorderTodos={reorderTodos}
-          moveUp={moveUp}
-          moveDown={moveDown}
-        />
+        <main
+          className='bg-card border rounded-lg p-4 sm:p-5 md:p-6 shadow-sm fade-in'
+          role='main'
+          aria-label='Todo application'
+        >
+          <TodoForm onAddTodo={addTodo} />
+          <TodoList
+            todos={todos}
+            onToggle={toggleTodo}
+            onDelete={deleteTodo}
+            onEdit={editTodo}
+            onRestore={restoreTodo}
+            reorderTodos={reorderTodos}
+            moveUp={moveUp}
+            moveDown={moveDown}
+          />
+        </main>
+
+        <footer className='text-center mt-6 sm:mt-8 text-xs sm:text-sm text-muted-foreground px-4'>
+          <p>
+            Built with ❤️ using{' '}
+            <a
+              href='https://claude.ai/code'
+              className='text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              Claude Code
+            </a>
+          </p>
+        </footer>
       </div>
-
-      <footer className='text-center mt-8 text-sm text-muted-foreground'>
-        <p>
-          Built with ❤️ using{' '}
-          <a
-            href='https://claude.ai/code'
-            className='text-primary hover:underline'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            Claude Code
-          </a>
-        </p>
-      </footer>
     </div>
   );
 }

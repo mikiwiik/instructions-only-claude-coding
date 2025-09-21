@@ -140,7 +140,7 @@ export default function TodoItem({
       ref={setNodeRef}
       style={style}
       role='listitem'
-      className='flex items-start gap-3 p-3 bg-background rounded-lg border'
+      className='flex items-start gap-2 sm:gap-3 p-3 sm:p-4 bg-background rounded-lg border fade-in'
     >
       {isDraggable && (
         <div
@@ -150,14 +150,14 @@ export default function TodoItem({
           role='button'
           tabIndex={0}
           aria-label='Drag to reorder todo'
-          className='flex-shrink-0 mt-0.5 p-1 rounded cursor-grab hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring transition-colors text-muted-foreground hover:text-foreground active:cursor-grabbing'
+          className='flex-shrink-0 mt-0.5 p-2 rounded cursor-grab hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring transition-colors text-muted-foreground hover:text-foreground active:cursor-grabbing min-w-[44px] min-h-[44px] flex items-center justify-center'
         >
           <GripVertical className='h-4 w-4' />
         </div>
       )}
       <button
         onClick={handleToggle}
-        className={`flex-shrink-0 mt-0.5 p-1 rounded-full transition-colors ${
+        className={`flex-shrink-0 mt-0.5 p-2 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${
           todo.completed
             ? 'cursor-default opacity-75'
             : 'hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer'
@@ -187,33 +187,33 @@ export default function TodoItem({
               value={editText}
               onChange={(e) => setEditText(e.target.value)}
               onKeyDown={handleKeyDown}
-              className='w-full text-base bg-background border border-border rounded px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-ring resize-none overflow-hidden min-h-[2.5rem]'
+              className='w-full text-sm sm:text-base bg-background border border-border rounded px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-ring resize-none overflow-hidden min-h-[2.5rem]'
               aria-label='Edit todo text'
               rows={1}
             />
-            <div className='flex gap-1'>
+            <div className='flex gap-2'>
               <button
                 onClick={handleSave}
-                className='flex-shrink-0 p-1 rounded hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors text-muted-foreground hover:text-green-600'
+                className='flex-shrink-0 p-2 rounded hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors text-muted-foreground hover:text-green-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
                 aria-label='Save edit'
                 type='button'
               >
-                <Check className='h-3 w-3' />
+                <Check className='h-4 w-4' />
               </button>
               <button
                 onClick={handleCancel}
-                className='flex-shrink-0 p-1 rounded hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600'
+                className='flex-shrink-0 p-2 rounded hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
                 aria-label='Cancel edit'
                 type='button'
               >
-                <Cancel className='h-3 w-3' />
+                <Cancel className='h-4 w-4' />
               </button>
             </div>
           </div>
         ) : (
           <>
             <p
-              className={`text-base leading-relaxed whitespace-pre-line ${
+              className={`text-sm sm:text-base leading-relaxed whitespace-pre-line break-words ${
                 todo.completed
                   ? 'line-through text-muted-foreground'
                   : 'text-foreground'
@@ -221,19 +221,19 @@ export default function TodoItem({
             >
               {todo.text}
             </p>
-            <p className='text-xs text-muted-foreground mt-1'>
+            <p className='text-xs text-muted-foreground mt-1 sm:mt-2'>
               Added {todo.createdAt.toLocaleDateString()} at{' '}
               {todo.createdAt.toLocaleTimeString()}
             </p>
           </>
         )}
       </div>
-      <div className='flex items-center gap-2'>
+      <div className='flex flex-col sm:flex-row items-center gap-1 sm:gap-2'>
         {(moveUp || moveDown) && (
           <div
             role='group'
             aria-label='Reorder todo'
-            className='flex items-center gap-0.5'
+            className='flex items-center gap-1'
           >
             {moveUp && (
               <button
@@ -262,7 +262,7 @@ export default function TodoItem({
         <div
           role='group'
           aria-label='Todo actions'
-          className='flex items-center gap-0.5'
+          className='flex items-center gap-1'
         >
           {todo.completed && onRestore && (
             <button
