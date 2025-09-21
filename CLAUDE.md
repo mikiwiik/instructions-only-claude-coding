@@ -62,6 +62,42 @@ This file contains specific instructions for Claude Code when working on this ag
 4. **Update ADR index** - maintain `docs/adr/README.md`
 5. **Reference in commits** - link ADRs to related code changes
 
+## Issue Prompt Logs (IPLs)
+
+**📝 METHODOLOGY DOCUMENTATION**: All significant issues should have corresponding Issue Prompt Logs to capture the instruction-only development process.
+
+**📋 Process Documentation**: See [`docs/ipl/README.md`](docs/ipl/README.md) for complete IPL guidelines and usage instructions.
+
+### Quick Reference
+
+- **When**: For issues that involve significant requirement evolution or learning value
+- **Where**: `docs/ipl/###-issue-title.md` matching GitHub issue numbers
+- **What**: Prompt evolution, requirement refinements, instruction patterns
+- **Why**: Document instruction-only development methodology and effective AI collaboration
+
+### Key Components
+
+1. **Before Implementation**: Initial user request and problem context
+2. **During Implementation**: Clarifying questions and requirement refinements
+3. **After Implementation**: Final instructions and lessons learned
+4. **Related Issues**: Cross-references to GitHub issues and ADRs
+
+### When to Create IPLs
+
+**Create IPLs for:**
+
+- Complex requirements that evolve through discussion
+- Issues that demonstrate effective instruction patterns
+- Problems that required significant clarification
+- Features with educational value for instruction-only development
+- Issues labeled with `claude-workflow`
+
+**Optional for:**
+
+- Simple, straightforward requests
+- Minor bug fixes with clear requirements
+- Routine maintenance tasks
+
 ## Task Planning Protocol
 
 **🚨 CRITICAL REQUIREMENT**: All non-trivial changes must follow a structured task planning process before implementation.
@@ -458,6 +494,7 @@ Always assign both priority and complexity labels to enable effective planning:
 #### Claude-Workflow Label Usage
 
 **Use `claude-workflow` label for issues related to:**
+
 - Claude Code usage and instructions
 - AI collaboration patterns and workflows
 - CLAUDE.md documentation and requirements
@@ -467,6 +504,7 @@ Always assign both priority and complexity labels to enable effective planning:
 - Claude Code agent implementations and configurations
 
 **Do NOT use for:**
+
 - General development workflow (git, CI/CD, testing)
 - Feature implementations or bug fixes
 - UI/UX improvements
@@ -482,7 +520,8 @@ instructions-only-claude-coding/
 │   ├── types/             # TypeScript type definitions
 │   └── __tests__/         # Component tests
 ├── docs/                  # Project documentation
-│   └── adr/              # Architecture Decision Records
+│   ├── adr/              # Architecture Decision Records
+│   └── ipl/              # Issue Prompt Logs
 ├── public/               # Static assets
 ├── CLAUDE.md            # This file - Claude Code instructions
 ├── README.md            # Project documentation
