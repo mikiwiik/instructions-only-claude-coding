@@ -6,11 +6,15 @@
 
 ## Project Purpose
 
-**This project demonstrates groundbreaking agentic coding methodology** - building complete, production-ready software through pure instruction-based collaboration with Claude Code. This Todo application showcases how complex applications can be developed with **zero manual coding**, where the human acts as architect/product manager and AI handles all implementation.
+**This project demonstrates groundbreaking agentic coding methodology** - building complete, production-ready software
+through pure instruction-based collaboration with Claude Code. This Todo application showcases how complex applications
+can be developed with **zero manual coding**, where the human acts as architect/product manager and AI handles all
+implementation.
 
 ### Core Innovation: Instruction-Only Development
 
-This project proves that sophisticated software can be built entirely through strategic instruction rather than traditional hand-coding. The methodology demonstrates:
+This project proves that sophisticated software can be built entirely through strategic instruction rather than
+traditional hand-coding. The methodology demonstrates:
 
 - **Pure AI Implementation**: 100% AI-generated codebase following professional development practices
 - **Role-Based Collaboration**: Human provides strategic direction, AI executes technical implementation
@@ -21,14 +25,14 @@ This project proves that sophisticated software can be built entirely through st
 
 ### Role-Based Interaction Patterns
 
-**Human Role: Strategic Architect & Product Owner**
+#### Human Role: Strategic Architect & Product Owner
 
 - Defines requirements, features, and acceptance criteria
 - Sets architectural direction and technical constraints
 - Provides feedback on implementation and user experience
 - Makes product decisions and priority calls
 
-**AI Role: Complete Implementation Team**
+#### AI Role: Complete Implementation Team
 
 - Writes all code following TDD methodology
 - Implements testing strategies and maintains test coverage
@@ -49,7 +53,8 @@ This project proves that sophisticated software can be built entirely through st
 
 - **100% AI-Generated Codebase**: Every line of code written by Claude Code
 - **Professional Development Practices**: TDD, atomic commits, CI/CD maintained throughout
-- **Complex Feature Implementation**: Advanced functionality (drag-and-drop, accessibility, responsive design) built via instruction
+- **Complex Feature Implementation**: Advanced functionality (drag-and-drop, accessibility, responsive design) built via
+  instruction
 - **Production-Ready Quality**: Live deployment with full testing and quality assurance
 
 ### Learning Objectives
@@ -128,6 +133,7 @@ npm run type-check   # TypeScript type checking
 - **⚙️ [Development Workflow](docs/development/workflow.md)** - Coding standards and practices
 - **📊 [Project Management](docs/development/project-management.md)** - Issue tracking and planning
 - **🏗️ [Architecture Overview](docs/architecture/overview.md)** - Technical architecture and decisions
+- **🏗️ [Architecture Flow Diagram](docs/diagrams/architecture-flow.md)** - Visual architecture flow with Mermaid diagrams
 
 ### Documentation Organization
 
@@ -193,4 +199,6 @@ This project demonstrates professional development practices:
 
 ---
 
-**🤖 100% AI-Generated Through Strategic Instruction** - Pioneering agentic coding methodology where human strategy meets AI implementation. This entire codebase demonstrates the future of software development through instruction-only collaboration.
+**🤖 100% AI-Generated Through Strategic Instruction** - Pioneering agentic coding methodology where human strategy
+meets AI implementation. This entire codebase demonstrates the future of software development through instruction-only
+collaboration.
