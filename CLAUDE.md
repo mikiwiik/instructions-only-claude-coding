@@ -4,11 +4,12 @@ This file contains specific instructions for Claude Code when working on this ag
 
 ## Agentic Coding Methodology
 
-**🚨 CRITICAL FRAMEWORK**: This project demonstrates instruction-only development where humans provide strategic direction and AI handles complete implementation.
+**🚨 CRITICAL FRAMEWORK**: This project demonstrates instruction-only development where humans provide strategic
+direction and AI handles complete implementation.
 
 ### Role Definition and Boundaries
 
-**Human Role: Strategic Architect & Product Owner**
+#### Human Role: Strategic Architect & Product Owner
 
 - Provides high-level requirements and feature specifications
 - Sets architectural direction and technical constraints
@@ -16,7 +17,7 @@ This file contains specific instructions for Claude Code when working on this ag
 - Gives feedback on implementation and user experience
 - **Does NOT write code** - maintains pure instruction-based approach
 
-**AI Role: Complete Implementation Team**
+#### AI Role: Complete Implementation Team
 
 - Handles all code implementation following TDD methodology
 - Manages testing strategies and maintains comprehensive test coverage
@@ -64,7 +65,8 @@ This file contains specific instructions for Claude Code when working on this ag
 
 ## Issue Prompt Logs (IPLs)
 
-**📝 METHODOLOGY DOCUMENTATION**: All significant issues should have corresponding Issue Prompt Logs to capture the instruction-only development process.
+**📝 METHODOLOGY DOCUMENTATION**: All significant issues should have corresponding Issue Prompt Logs to capture
+the instruction-only development process.
 
 **📋 Process Documentation**: See [`docs/ipl/README.md`](docs/ipl/README.md) for complete IPL guidelines and usage instructions.
 
@@ -379,11 +381,39 @@ git commit -m "test: add edge cases for feature X (#issue)"
 - **Project Evolution**: Update project description as new features are added
 - **Learning Context**: Ensure documentation supports the educational mission of the project
 
+### Screenshot and Image Handling Protocol
+
+**🚨 LIMITATION**: Claude Code cannot directly upload images to GitHub issues.
+
+#### When User Provides Screenshots
+
+**For GitHub issue documentation:**
+
+1. **Acknowledge receipt**: Confirm you can see and analyze the image
+2. **Create placeholder**: Use `![Description](placeholder-url)` in issue content
+3. **Add user reminder**: Always include manual upload instruction:
+
+```markdown
+**📸 MANUAL ACTION REQUIRED**:
+Please add the screenshot to GitHub issue #[number] by opening it in browser and drag-dropping the image into a comment. GitHub will auto-upload and generate the proper URL.
+```
+
+1. **Document context**: Describe what the screenshot shows and its relevance
+
+#### Best Practices
+
+- **Descriptive alt text**: `![Button whitespace issue after typography changes](placeholder)`
+- **Explain context**: Always describe what the image demonstrates
+- **Link to code**: Reference specific files/lines shown in screenshots
+- **Update placeholders**: Remind user to replace placeholder URLs
+
 ### Documentation Consistency Requirements
 
-**🚨 CRITICAL REQUIREMENT**: All major changes must maintain consistency across CLAUDE.md, README.md, and ADRs to preserve project knowledge and ensure accurate guidance.
+**🚨 CRITICAL REQUIREMENT**: All major changes must maintain consistency across CLAUDE.md, README.md, and ADRs
+to preserve project knowledge and ensure accurate guidance.
 
-**📋 Full Guidelines**: See [`docs/guidelines/documentation-standards.md`](docs/guidelines/documentation-standards.md) for comprehensive documentation consistency requirements and workflows.
+**📋 Full Guidelines**: See [`docs/guidelines/documentation-standards.md`](docs/guidelines/documentation-standards.md)
+for comprehensive documentation consistency requirements and workflows.
 
 #### When Documentation Updates Are Required
 
@@ -410,6 +440,7 @@ For major changes, include this checklist in implementation issues:
 
 ```markdown
 ## Documentation Updates Required
+
 - [ ] Create/update relevant ADR with decision rationale
 - [ ] Update CLAUDE.md development guidelines
 - [ ] Update README.md project information
