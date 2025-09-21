@@ -149,6 +149,7 @@ Use TodoWrite to create a comprehensive task breakdown including:
 - **Documentation**: README, ADR, or inline documentation updates
 - **Quality Assurance**: Linting, type checking, accessibility validation
 - **Integration**: Ensuring changes work with existing functionality
+- **Issue Closure**: Verify GitHub issue status and ensure proper completion
 
 **Task List Standards:**
 
@@ -356,14 +357,32 @@ git commit -m "test: add edge cases for feature X (#issue)"
 - **Update remote tracking**: Ensure local branch tracks remote properly
 - **Current branching**: All work is currently done directly on main branch
 
-### Feature Completion Sequence
+### Issue Completion Protocol
+
+**🚨 CRITICAL REQUIREMENT**: All work must include proper issue closure and PR completion before the work session ends.
+
+#### Pre-Completion Checklist
+
+Before declaring any work complete, verify:
+
+- [ ] All implementation requirements are met
+- [ ] All tests pass and quality checks succeed
+- [ ] Documentation updated as needed
+- [ ] Issue status verified using `gh issue view <issue-number>`
+- [ ] Associated PRs handled appropriately (merged, closed, or documented)
+
+**📋 Developer Guidelines**: See [`docs/development/workflow.md`](docs/development/workflow.md) for comprehensive
+issue and PR completion protocol.
+
+#### Feature Completion Sequence
 
 1. **Complete feature implementation** (write code, tests, documentation)
 2. **Run tests and verify functionality** (ensure all tests pass)
 3. **Commit changes with issue closure** (local commit with "Closes #X")
-4. **🔴 ASK USER**: "Ready to push changes to remote? (y/n)"
+4. **🔴 ASK USER**: "Ready to push changes to remote? This will close Issue #X"
 5. **Push to remote repository** (only if user confirms)
-6. **Verify GitHub issue was automatically closed** (after successful push)
+6. **Verify GitHub issue was automatically closed** (check with `gh issue view <issue-number>`)
+7. **Confirm workflow completion** (all requirements satisfied, no orphaned issues)
 
 ### Push Confirmation Protocol
 
