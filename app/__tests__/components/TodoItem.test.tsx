@@ -320,7 +320,7 @@ describe('TodoItem', () => {
       expect(mockOnEdit).toHaveBeenCalledWith('edit-save-test', 'Updated text');
     });
 
-    it('should save changes on Enter key', async () => {
+    it('should save changes on Enter key (without Shift)', async () => {
       const user = userEvent.setup();
       const mockOnEdit = jest.fn();
       const todo = createMockTodo({
@@ -343,7 +343,8 @@ describe('TodoItem', () => {
         name: /edit todo text/i,
       });
       await user.clear(editInput);
-      await user.type(editInput, 'Updated via Enter{Enter}');
+      await user.type(editInput, 'Updated via Enter');
+      await user.keyboard('{Enter}');
 
       expect(mockOnEdit).toHaveBeenCalledWith(
         'edit-enter-test',
@@ -503,7 +504,7 @@ describe('TodoItem', () => {
         name: /edit todo text/i,
       });
       expect(editInput).toHaveAttribute('aria-label', expect.any(String));
-      expect(editInput).toHaveAttribute('type', 'text');
+      expect(editInput.tagName).toBe('TEXTAREA');
     });
 
     it('should not interfere with toggle and delete functionality', async () => {
@@ -714,6 +715,190 @@ describe('TodoItem', () => {
       expect(toggleButton).toBeInTheDocument();
       expect(deleteButton).toBeInTheDocument();
       expect(toggleButton).not.toBe(deleteButton);
+    });
+  });
+
+  describe('Multi-line text support', () => {
+    it('should display multi-line text with preserved line breaks', () => {
+      const multiLineText = 'First line\nSecond line\nThird line';
+      const todo = createMockTodo({ text: multiLineText });
+      render(
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+      );
+
+      const textElement = screen.getByText((content, element) => {
+        return (
+          element?.tagName.toLowerCase() === 'p' &&
+          element?.textContent === multiLineText
+        );
+      });
+      expect(textElement).toBeInTheDocument();
+      expect(textElement).toHaveClass('whitespace-pre-line');
+    });
+
+    it('should support multi-line editing with textarea', async () => {
+      const user = userEvent.setup();
+      const mockOnEdit = jest.fn();
+      const todo = createMockTodo({
+        id: 'multi-line-edit',
+        text: 'Original single line',
+      });
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+        />
+      );
+
+      const editButton = screen.getByRole('button', { name: /^edit todo/i });
+      await user.click(editButton);
+
+      const editTextarea = screen.getByRole('textbox', {
+        name: /edit todo text/i,
+      });
+      expect(editTextarea.tagName).toBe('TEXTAREA');
+
+      await user.clear(editTextarea);
+      const multiLineText = 'Line 1\nLine 2\nLine 3';
+      await user.type(editTextarea, multiLineText);
+
+      expect(editTextarea).toHaveValue(multiLineText);
+    });
+
+    it('should save multi-line text correctly', async () => {
+      const user = userEvent.setup();
+      const mockOnEdit = jest.fn();
+      const todo = createMockTodo({
+        id: 'save-multi-line',
+        text: 'Single line',
+      });
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+        />
+      );
+
+      const editButton = screen.getByRole('button', { name: /^edit todo/i });
+      await user.click(editButton);
+
+      const editTextarea = screen.getByRole('textbox', {
+        name: /edit todo text/i,
+      });
+      await user.clear(editTextarea);
+      const multiLineText = 'Task:\n- Step 1\n- Step 2\n- Step 3';
+      await user.type(editTextarea, multiLineText);
+
+      const saveButton = screen.getByRole('button', { name: /save edit/i });
+      await user.click(saveButton);
+
+      expect(mockOnEdit).toHaveBeenCalledWith('save-multi-line', multiLineText);
+    });
+
+    it('should handle Shift+Enter for new lines in edit mode', async () => {
+      const user = userEvent.setup();
+      const mockOnEdit = jest.fn();
+      const todo = createMockTodo({
+        text: 'Original text',
+      });
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+        />
+      );
+
+      const editButton = screen.getByRole('button', { name: /^edit todo/i });
+      await user.click(editButton);
+
+      const editTextarea = screen.getByRole('textbox', {
+        name: /edit todo text/i,
+      });
+      await user.clear(editTextarea);
+      await user.type(editTextarea, 'First line');
+      await user.keyboard('{Shift>}{Enter}{/Shift}');
+      await user.type(editTextarea, 'Second line');
+
+      expect(editTextarea).toHaveValue('First line\nSecond line');
+      expect(mockOnEdit).not.toHaveBeenCalled(); // Should not save yet
+    });
+
+    it('should auto-resize textarea in edit mode', async () => {
+      const user = userEvent.setup();
+      const mockOnEdit = jest.fn();
+      const todo = createMockTodo({ text: 'Short text' });
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+        />
+      );
+
+      const editButton = screen.getByRole('button', { name: /^edit todo/i });
+      await user.click(editButton);
+
+      const editTextarea = screen.getByRole('textbox', {
+        name: /edit todo text/i,
+      }) as HTMLTextAreaElement;
+
+      await user.clear(editTextarea);
+      const longText = 'Line 1\nLine 2\nLine 3\nLine 4\nLine 5\nLine 6';
+      await user.type(editTextarea, longText);
+
+      // Verify textarea contains the multi-line text
+      expect(editTextarea).toHaveValue(longText);
+      // Verify auto-resize classes are present
+      expect(editTextarea).toHaveClass('resize-none');
+      expect(editTextarea).toHaveClass('overflow-hidden');
+    });
+
+    it('should preserve line breaks when displaying completed multi-line todos', () => {
+      const multiLineText = 'Completed task:\n✓ Step 1\n✓ Step 2\n✓ Step 3';
+      const todo = createMockTodo({
+        text: multiLineText,
+        completed: true,
+      });
+      render(
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+      );
+
+      const textElement = screen.getByText((content, element) => {
+        return (
+          element?.tagName.toLowerCase() === 'p' &&
+          element?.textContent === multiLineText
+        );
+      });
+      expect(textElement).toBeInTheDocument();
+      expect(textElement).toHaveClass('line-through');
+      expect(textElement).toHaveClass('whitespace-pre-line');
+      expect(textElement).toHaveClass('text-muted-foreground');
+    });
+
+    it('should handle very long multi-line text without layout issues', () => {
+      const veryLongMultiLineText =
+        'This is a very long first line that should wrap properly and not break the layout\nSecond line is also quite long and should wrap correctly\nThird line with more content to test wrapping behavior\nFourth line to ensure proper handling';
+      const todo = createMockTodo({ text: veryLongMultiLineText });
+      render(
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+      );
+
+      const textElement = screen.getByText((content, element) => {
+        return (
+          element?.tagName.toLowerCase() === 'p' &&
+          element?.textContent === veryLongMultiLineText
+        );
+      });
+      expect(textElement).toBeInTheDocument();
+      expect(textElement.closest('div')).toHaveClass('min-w-0'); // Allows text wrapping
+      expect(textElement).toHaveClass('whitespace-pre-line');
     });
   });
 });
