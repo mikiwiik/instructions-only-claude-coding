@@ -37,15 +37,14 @@ jobs:
     - name: Run tests with coverage
       run: npm run test:coverage
 
-    - name: Jest Coverage Report
-      uses: ArtiomTr/jest-coverage-report-action@v2
+    - name: Jest Coverage Comment
+      uses: MishaKav/jest-coverage-comment@main
       if: github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        coverage-file: ./coverage/lcov.info
-        base-coverage-file: ./coverage/lcov.info
+        coverage-summary-path: ./coverage/coverage-summary.json
         threshold: 90
-        working-directory: ./
+        junitxml-path: ./coverage/junit.xml
+        junitxml-title: Test Results
 
     - name: Build application
       run: npm run build
