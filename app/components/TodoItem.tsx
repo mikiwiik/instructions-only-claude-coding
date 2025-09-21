@@ -140,45 +140,47 @@ export default function TodoItem({
       ref={setNodeRef}
       style={style}
       role='listitem'
-      className='flex items-start gap-1 sm:gap-2 md:gap-3 p-3 sm:p-4 bg-background rounded-lg border fade-in'
+      className='flex items-start gap-2 sm:gap-3 p-3 sm:p-4 bg-background rounded-lg border fade-in'
     >
-      {isDraggable && (
-        <div
-          {...attributes}
-          {...listeners}
-          data-testid='drag-handle'
-          role='button'
-          tabIndex={0}
-          aria-label='Drag to reorder todo'
-          className='flex-shrink-0 mt-0.5 p-2 rounded cursor-grab hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring transition-colors text-muted-foreground hover:text-foreground active:cursor-grabbing min-w-[44px] min-h-[44px] flex items-center justify-center'
-        >
-          <GripVertical className='h-4 w-4' />
-        </div>
-      )}
-      <button
-        onClick={handleToggle}
-        className={`flex-shrink-0 mt-0.5 p-2 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${
-          todo.completed
-            ? 'cursor-default opacity-75'
-            : 'hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer'
-        }`}
-        aria-label={`Toggle todo: ${todo.text}`}
-        aria-pressed={todo.completed}
-        aria-disabled={todo.completed}
-        type='button'
-      >
-        {todo.completed ? (
-          <CheckCircle
-            className='h-5 w-5 text-green-500'
-            data-testid='completed-icon'
-          />
-        ) : (
-          <Circle
-            className='h-5 w-5 text-muted-foreground'
-            data-testid='incomplete-icon'
-          />
+      <div className='flex flex-col md:flex-row items-center gap-1 md:gap-2'>
+        {isDraggable && (
+          <div
+            {...attributes}
+            {...listeners}
+            data-testid='drag-handle'
+            role='button'
+            tabIndex={0}
+            aria-label='Drag to reorder todo'
+            className='flex-shrink-0 p-2 rounded cursor-grab hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring transition-colors text-muted-foreground hover:text-foreground active:cursor-grabbing min-w-[44px] min-h-[44px] flex items-center justify-center'
+          >
+            <GripVertical className='h-4 w-4' />
+          </div>
         )}
-      </button>
+        <button
+          onClick={handleToggle}
+          className={`flex-shrink-0 p-2 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${
+            todo.completed
+              ? 'cursor-default opacity-75'
+              : 'hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer'
+          }`}
+          aria-label={`Toggle todo: ${todo.text}`}
+          aria-pressed={todo.completed}
+          aria-disabled={todo.completed}
+          type='button'
+        >
+          {todo.completed ? (
+            <CheckCircle
+              className='h-5 w-5 text-green-500'
+              data-testid='completed-icon'
+            />
+          ) : (
+            <Circle
+              className='h-5 w-5 text-muted-foreground'
+              data-testid='incomplete-icon'
+            />
+          )}
+        </button>
+      </div>
       <div className='flex-1 min-w-0'>
         {isEditing ? (
           <div className='space-y-2'>
@@ -228,7 +230,7 @@ export default function TodoItem({
           </>
         )}
       </div>
-      <div className='flex flex-row items-center gap-0.5 sm:gap-1'>
+      <div className='flex flex-col md:flex-row items-center gap-1 md:gap-2'>
         {(moveUp || moveDown) && (
           <div
             role='group'
