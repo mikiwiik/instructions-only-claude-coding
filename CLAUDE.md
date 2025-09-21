@@ -379,14 +379,24 @@ issue and PR completion protocol.
 1. **Complete feature implementation** (write code, tests, documentation)
 2. **Run tests and verify functionality** (ensure all tests pass)
 3. **Commit changes with issue closure** (local commit with "Closes #X")
-4. **🔴 ASK USER**: "Ready to push changes to remote? This will close Issue #X"
-5. **Push to remote repository** (only if user confirms)
-6. **Verify GitHub issue was automatically closed** (check with `gh issue view <issue-number>`)
+4. **🔴 ASK USER**: "Should I automatically merge after CI passes? This will close Issue #X"
+   - If **Yes**: Create PR with auto-merge enabled (`gh pr create` + `gh pr merge --auto`)
+   - If **No**: Ask "Ready to push changes to remote?" and push to main branch
+5. **Push/Create PR** (based on user preference)
+6. **Verify GitHub issue closure** (after merge/push completion)
 7. **Confirm workflow completion** (all requirements satisfied, no orphaned issues)
 
-### Push Confirmation Protocol
+### Auto-merge and Push Protocol
 
-- **ALWAYS** ask before pushing: "Ready to push [feature name] to remote? This will close Issue #X"
+#### Auto-merge Option (Preferred)
+
+- **ALWAYS** ask first: "Should I automatically merge after CI passes? This will close Issue #X"
+- **Auto-merge workflow**: Create PR with auto-merge enabled for CI-gated merging
+- **Benefits**: Ensures CI passes before merge, maintains quality gates
+
+#### Direct Push Alternative
+
+- **Fallback option**: If user declines auto-merge, ask "Ready to push changes to remote?"
 - **NEVER** push without explicit user approval
 - **WAIT** for user response before proceeding
 - **RESPECT** user's decision if they decline to push
