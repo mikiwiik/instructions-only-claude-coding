@@ -149,6 +149,7 @@ Use TodoWrite to create a comprehensive task breakdown including:
 - **Documentation**: README, ADR, or inline documentation updates
 - **Quality Assurance**: Linting, type checking, accessibility validation
 - **Integration**: Ensuring changes work with existing functionality
+- **Issue Closure**: Verify GitHub issue status and ensure proper completion
 
 **Task List Standards:**
 
@@ -356,22 +357,58 @@ git commit -m "test: add edge cases for feature X (#issue)"
 - **Update remote tracking**: Ensure local branch tracks remote properly
 - **Current branching**: All work is currently done directly on main branch
 
-### Feature Completion Sequence
+### Issue Completion Protocol
+
+**🚨 CRITICAL REQUIREMENT**: All work must include proper issue closure and PR completion before the work session ends.
+
+#### Pre-Completion Checklist
+
+Before declaring any work complete, verify:
+
+- [ ] All implementation requirements are met
+- [ ] All tests pass and quality checks succeed
+- [ ] Documentation updated as needed
+- [ ] Issue status verified using `gh issue view <issue-number>`
+- [ ] Associated PRs handled appropriately (merged, closed, or documented)
+
+**📋 Developer Guidelines**: See [`docs/development/workflow.md`](docs/development/workflow.md) for comprehensive
+issue and PR completion protocol.
+
+#### Feature Completion Sequence
 
 1. **Complete feature implementation** (write code, tests, documentation)
 2. **Run tests and verify functionality** (ensure all tests pass)
 3. **Commit changes with issue closure** (local commit with "Closes #X")
-4. **🔴 ASK USER**: "Ready to push changes to remote? (y/n)"
-5. **Push to remote repository** (only if user confirms)
-6. **Verify GitHub issue was automatically closed** (after successful push)
+4. **🔴 ASK USER**: "Should I automatically merge after CI passes? This will close Issue #X"
+   - If **Yes**: Create PR with auto-merge enabled (`gh pr create` + `gh pr merge --auto`)
+   - If **No**: Create PR and wait for manual approval (`gh pr create` only)
+5. **Create PR** (always required due to branch protection)
+6. **Wait for CI completion and user verification** (auto-merge or manual approval)
+7. **Verify GitHub issue closure** (after PR merge completion)
+8. **Confirm workflow completion** (all requirements satisfied, no orphaned issues)
 
-### Push Confirmation Protocol
+### Pull Request and Merge Protocol
 
-- **ALWAYS** ask before pushing: "Ready to push [feature name] to remote? This will close Issue #X"
-- **NEVER** push without explicit user approval
-- **WAIT** for user response before proceeding
-- **RESPECT** user's decision if they decline to push
-- **EXPLAIN** what will happen when pushing (issue closure, public visibility)
+**🚨 REQUIREMENT**: All changes must go through Pull Requests due to branch protection rules.
+
+#### Auto-merge Option (Streamlined)
+
+- **ALWAYS** ask first: "Should I automatically merge after CI passes? This will close Issue #X"
+- **Auto-merge workflow**: Create PR with auto-merge enabled for CI-gated merging
+- **Benefits**: Automatic merge once CI passes, no manual intervention needed
+
+#### Manual Approval Option (User Control)
+
+- **Alternative**: Create PR and wait for user to verify and manually merge
+- **Workflow**: User reviews PR, verifies CI passes, then merges when satisfied
+- **Benefits**: Full user control over timing and final approval
+
+#### Protocol Requirements
+
+- **NEVER** attempt direct push to main (branch protection prevents this)
+- **ALWAYS** create feature branch and PR for all changes
+- **WAIT** for user response before proceeding with either option
+- **EXPLAIN** the chosen workflow and expected outcome
 
 ### Documentation Maintenance
 
