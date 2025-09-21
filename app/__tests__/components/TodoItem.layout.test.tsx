@@ -34,14 +34,14 @@ describe('TodoItem - Layout', () => {
 
       const todoItem = screen.getByRole('listitem');
       const buttonContainer = todoItem.querySelector(
-        '.flex.flex-col.sm\\:flex-row'
+        '.flex.flex-col.md\\:flex-row'
       );
 
       expect(buttonContainer).toBeInTheDocument();
       expect(buttonContainer).toHaveClass(
         'flex',
         'flex-col',
-        'sm:flex-row',
+        'md:flex-row',
         'items-center'
       );
     });
@@ -91,10 +91,10 @@ describe('TodoItem - Layout', () => {
       expect(containerDiv).toHaveClass(
         'flex',
         'flex-col',
-        'sm:flex-row',
+        'md:flex-row',
         'items-center',
         'gap-1',
-        'sm:gap-2'
+        'md:gap-2'
       );
     });
   });
@@ -183,12 +183,12 @@ describe('TodoItem - Layout', () => {
 
       const buttonContainer = screen
         .getByRole('listitem')
-        .querySelector('.flex.flex-col.sm\\:flex-row');
+        .querySelector('.flex.flex-col.md\\:flex-row');
 
       expect(buttonContainer).toHaveClass(
         'flex',
         'flex-col',
-        'sm:flex-row',
+        'md:flex-row',
         'items-center'
       );
     });

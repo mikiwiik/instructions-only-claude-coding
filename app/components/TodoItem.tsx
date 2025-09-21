@@ -228,7 +228,7 @@ export default function TodoItem({
           </>
         )}
       </div>
-      <div className='flex flex-col sm:flex-row items-center gap-1 sm:gap-2'>
+      <div className='flex flex-col md:flex-row items-center gap-1 md:gap-2'>
         {(moveUp || moveDown) && (
           <div
             role='group'
