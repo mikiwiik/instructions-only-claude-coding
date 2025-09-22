@@ -355,7 +355,7 @@ git commit -m "test: add edge cases for feature X (#issue)"
 - **User control**: Only push when user explicitly approves
 - **Verify push success**: Confirm changes are visible on GitHub after user approval
 - **Update remote tracking**: Ensure local branch tracks remote properly
-- **Current branching**: All work is currently done directly on main branch
+- **Feature branching**: All work must be done on feature branches (e.g., feature/XX-description)
 
 ### Issue Completion Protocol
 
@@ -393,9 +393,13 @@ issue and PR completion protocol.
 
 #### Auto-merge Option (Streamlined)
 
-- **ALWAYS** ask first: "Should I automatically merge after CI passes? This will close Issue #X"
-- **Auto-merge workflow**: Create PR with auto-merge enabled for CI-gated merging
-- **Benefits**: Automatic merge once CI passes, no manual intervention needed
+- **ALWAYS** ask first: "Should I enable auto-merge for this PR? It will merge automatically after CI passes."
+- **Auto-merge workflow**:
+  1. Create PR with `gh pr create`
+  2. Enable auto-merge with `gh pr merge --auto --squash` (or --merge/--rebase as appropriate)
+  3. PR merges automatically when all requirements are satisfied (CI pass + 1 approval)
+- **Benefits**: No manual merge step needed, maintains full protection requirements
+- **Note**: Repository must have auto-merge enabled in Settings → General → Allow auto-merge
 
 #### Manual Approval Option (User Control)
 
@@ -409,6 +413,25 @@ issue and PR completion protocol.
 - **ALWAYS** create feature branch and PR for all changes
 - **WAIT** for user response before proceeding with either option
 - **EXPLAIN** the chosen workflow and expected outcome
+
+#### Branch Protection Troubleshooting
+
+**If push to main is rejected:**
+
+- Error: "GH013: Repository rule violations found"
+- Solution: Create feature branch and PR as required
+
+**If PR won't merge:**
+
+- Check CI status: All checks must pass
+- Check approval: 1 review required (can be self-approved)
+- Check branch status: Must be up to date with main
+
+**Auto-merge not working:**
+
+- Verify repository setting: Settings → General → "Allow auto-merge" must be enabled
+- Check PR requirements: All protection rules must be satisfied
+- Use `gh pr status` to check merge eligibility
 
 ### Documentation Maintenance
 
