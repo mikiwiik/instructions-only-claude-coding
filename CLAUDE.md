@@ -569,18 +569,50 @@ Always assign both priority and complexity labels to enable effective planning:
 
 ### Issue Creation Checklist
 
-**🚨 MANDATORY**: All issues must include both labels before creation:
+**🚨 MANDATORY**: All issues must include these labels before creation:
 
 - [ ] **Priority label** (priority-1-critical through priority-4-low)
 - [ ] **Complexity label** (complexity-minimal through complexity-epic)
+- [ ] **Category label** (see Category Label Guidelines below)
 - [ ] **Assessment rationale** documented in issue description
+
+### Category Label Guidelines
+
+**Every issue must have exactly ONE category label:**
+
+- **`category-feature`** 🟦 - Core application functionality and user features
+  - Todo CRUD operations
+  - UI/UX improvements
+  - User-facing enhancements
+  - Feature bugs and fixes
+
+- **`category-infrastructure`** 🟧 - DevOps, CI/CD, deployment, architecture
+  - GitHub Actions and workflows
+  - Deployment configurations (Vercel, Docker)
+  - Testing infrastructure
+  - Security and performance tooling
+  - Backend architecture planning
+
+- **`category-documentation`** 🟩 - Documentation, diagrams, process docs
+  - README and documentation files
+  - Architecture Decision Records (ADRs)
+  - Mermaid diagrams
+  - Process documentation
+  - Accessibility guidelines
+
+- **`category-dx`** 🟪 - Developer experience, tooling, AI workflow improvements
+  - Claude Code workflows and instructions
+  - Development tooling and automation
+  - Issue/PR management processes
+  - Code quality and standards
+  - All `claude-workflow` labeled issues
 
 #### Claude Code Instructions
 
-- **Always include** `--label "priority-X-name,complexity-Y-name"` in `gh issue create` commands
-- **Provide label selection reasoning** in issue description
-- **Verify label presence** before submitting
-- **Flag any unlabeled issues** for immediate correction
+- **Always include** `--label "priority-X-name,complexity-Y-name,category-Z"` in `gh issue create` commands
+- **Provide label selection reasoning** in issue description (priority, complexity, and category)
+- **Verify all three label types** are present before submitting
+- **Flag any unlabeled or partially labeled issues** for immediate correction
 
 #### Claude-Workflow Label Usage
 
