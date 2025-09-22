@@ -100,6 +100,139 @@ the instruction-only development process.
 - Minor bug fixes with clear requirements
 - Routine maintenance tasks
 
+## Parallel Agent Execution Strategy
+
+**🚨 ENHANCEMENT OPPORTUNITY**: For complexity-moderate+ tasks, leverage Claude Code's Task tool to execute work in
+parallel for improved efficiency and quality.
+
+### When to Use Parallel Agents
+
+**Automatic Suggestion Required** for:
+
+- **complexity-moderate** or higher issues (unless user explicitly requests sequential)
+- Multi-component features requiring implementation + testing + documentation
+- Tasks with clear separation of concerns (frontend/backend, feature/testing, etc.)
+- Complex refactoring affecting multiple systems
+
+**User Prompting Transformation**:
+
+**Current Sequential Approach:**
+
+```text
+User: "implement issue #72"
+Claude: Plans → Implements → Tests → Documents (sequential)
+```
+
+**Target Parallel Approach:**
+
+```text
+User: "implement issue #72"
+Claude: "This is complexity-moderate. Should I use parallel agents for faster delivery?"
+User: "yes" (or just "implement #72 in parallel")
+Claude: [Launches coordinated agents] → [Integrated delivery]
+```
+
+### How to Request Parallel Execution
+
+**Explicit Request (Recommended):**
+
+```text
+"Implement issue #72 using parallel agents"
+"Use parallel execution for #72"
+"Implement #72 in parallel"
+```
+
+**Automatic Suggestion Response:**
+
+```text
+Claude: "This appears to be complexity-moderate. Should I use parallel agents?"
+User: "yes" / "proceed in parallel" / "use agents"
+```
+
+**Always Sequential (Override):**
+
+```text
+"Implement #72 sequentially"
+"Do #72 step by step"
+"No parallel agents for #72"
+```
+
+### Parallel Agent Coordination Pattern
+
+**Standard 3-Agent Pattern for Feature Implementation:**
+
+```text
+Agent A (Core Implementation):
+- Feature code development
+- Integration with existing systems
+- State management updates
+
+Agent B (Quality Assurance):
+- Test-driven development approach
+- Unit and integration tests
+- Type safety validation
+
+Agent C (Documentation & Standards):
+- README updates
+- ADR creation if needed
+- Code quality verification
+```
+
+### Prompting Benefits for Users
+
+**Time Efficiency:**
+
+- 30-40% faster delivery for complex features
+- Parallel work streams reduce total time-to-completion
+- No waiting for sequential step completion
+
+**Quality Enhancement:**
+
+- Focused agent specialization improves output quality
+- Comprehensive testing happens alongside implementation
+- Documentation keeps pace with development
+
+**Reduced Cognitive Load:**
+
+- Single instruction triggers coordinated work
+- No need to track multiple development phases
+- Integrated delivery with consistent standards
+
+### Advanced Prompting Patterns
+
+**Feature + Infrastructure Pattern:**
+
+```text
+"Implement #72 with parallel agents: feature development and CI/CD updates"
+```
+
+**Research + Implementation Pattern:**
+
+```text
+"Research and implement #72 in parallel: analysis agent + implementation agent"
+```
+
+**Multi-Component Pattern:**
+
+```text
+"Implement #72 with component-focused parallel agents"
+```
+
+### Claude's Mandatory Suggestion Protocol
+
+**For complexity-moderate+ issues, Claude MUST:**
+
+1. **Assess task complexity** and identify parallel opportunities
+2. **Suggest parallel agents** unless user explicitly requests sequential:
+
+   ```text
+   "This appears to be complexity-moderate. Should I use parallel agents
+   for faster delivery with coordinated implementation, testing, and documentation?"
+   ```
+
+3. **Execute with Task tool** when approved, launching specialized agents
+4. **Coordinate delivery** ensuring integrated, quality output
+
 ## Task Planning Protocol
 
 **🚨 CRITICAL REQUIREMENT**: All non-trivial changes must follow a structured task planning process before implementation.
