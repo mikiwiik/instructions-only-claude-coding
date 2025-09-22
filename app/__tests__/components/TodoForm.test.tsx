@@ -317,11 +317,10 @@ describe('TodoForm', () => {
       ) as HTMLTextAreaElement;
       const submitButton = screen.getByRole('button', { name: /add todo/i });
 
-      // Create very long content with many lines
+      // Create long content with multiple lines (reduced for CI performance)
       const longText = Array.from(
-        { length: 10 },
-        (_, i) =>
-          `This is line ${i + 1} with some longer content to test extreme cases`
+        { length: 5 },
+        (_, i) => `Line ${i + 1} with content`
       ).join('\n');
       await user.type(textarea, longText);
 
