@@ -49,7 +49,7 @@ export default function TodoForm({ onAddTodo }: TodoFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className='mb-4 sm:mb-6'>
-      <div className='flex flex-col md:flex-row gap-3'>
+      <div className='flex flex-col md:flex-row md:items-start gap-3'>
         <div className='flex-1'>
           <label htmlFor='todo-input' className='sr-only'>
             Add new todo
