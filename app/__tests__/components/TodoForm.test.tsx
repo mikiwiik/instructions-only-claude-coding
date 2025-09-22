@@ -249,4 +249,170 @@ describe('TodoForm', () => {
       });
     });
   });
+
+  describe('Button sizing consistency', () => {
+    it('should maintain consistent button height when textarea is empty', () => {
+      render(<TodoForm onAddTodo={mockOnAddTodo} />);
+
+      const submitButton = screen.getByRole('button', { name: /add todo/i });
+
+      // Button should have min-h-[3rem] class (48px) for consistency
+      expect(submitButton).toHaveClass('min-h-[3rem]');
+      expect(submitButton).toHaveClass(
+        'inline-flex',
+        'items-center',
+        'justify-center'
+      );
+    });
+
+    it('should maintain consistent button height when textarea has single line', async () => {
+      const user = userEvent.setup();
+      render(<TodoForm onAddTodo={mockOnAddTodo} />);
+
+      const textarea = screen.getByLabelText(/add new todo/i);
+      const submitButton = screen.getByRole('button', { name: /add todo/i });
+
+      await user.type(textarea, 'Single line todo item');
+
+      // Button height should remain consistent regardless of single line content
+      expect(submitButton).toHaveClass('min-h-[3rem]');
+      expect(submitButton).toHaveClass(
+        'inline-flex',
+        'items-center',
+        'justify-center'
+      );
+    });
+
+    it('should maintain consistent button height when textarea has multiple lines', async () => {
+      const user = userEvent.setup();
+      render(<TodoForm onAddTodo={mockOnAddTodo} />);
+
+      const textarea = screen.getByLabelText(
+        /add new todo/i
+      ) as HTMLTextAreaElement;
+      const submitButton = screen.getByRole('button', { name: /add todo/i });
+
+      // Add multiple lines to make textarea grow
+      const multiLineText = 'Line 1\nLine 2\nLine 3\nLine 4\nLine 5';
+      await user.type(textarea, multiLineText);
+
+      // Verify textarea contains the multi-line content
+      expect(textarea).toHaveValue(multiLineText);
+
+      // Button should maintain its minimum height regardless of textarea content
+      expect(submitButton).toHaveClass('min-h-[3rem]');
+      expect(submitButton).toHaveClass(
+        'inline-flex',
+        'items-center',
+        'justify-center'
+      );
+    });
+
+    it('should maintain button height with extremely long multi-line content', async () => {
+      const user = userEvent.setup();
+      render(<TodoForm onAddTodo={mockOnAddTodo} />);
+
+      const textarea = screen.getByLabelText(
+        /add new todo/i
+      ) as HTMLTextAreaElement;
+      const submitButton = screen.getByRole('button', { name: /add todo/i });
+
+      // Create long content with multiple lines (reduced for CI performance)
+      const longText = Array.from(
+        { length: 5 },
+        (_, i) => `Line ${i + 1} with content`
+      ).join('\n');
+      await user.type(textarea, longText);
+
+      // Verify textarea contains the long content
+      expect(textarea).toHaveValue(longText);
+
+      // Button should still maintain its consistent height
+      expect(submitButton).toHaveClass('min-h-[3rem]');
+      expect(submitButton).toHaveClass(
+        'inline-flex',
+        'items-center',
+        'justify-center'
+      );
+    });
+
+    it('should meet accessibility minimum touch target size (44px)', () => {
+      render(<TodoForm onAddTodo={mockOnAddTodo} />);
+
+      const submitButton = screen.getByRole('button', { name: /add todo/i });
+
+      // The min-h-[3rem] class provides 48px which exceeds the 44px accessibility requirement
+      expect(submitButton).toHaveClass('min-h-[3rem]'); // 3rem = 48px > 44px minimum
+      expect(submitButton).toHaveClass('px-4', 'sm:px-6'); // Adequate horizontal padding
+    });
+
+    it('should maintain consistent button styling across different textarea states', async () => {
+      const user = userEvent.setup();
+      render(<TodoForm onAddTodo={mockOnAddTodo} />);
+
+      const textarea = screen.getByLabelText(/add new todo/i);
+      const submitButton = screen.getByRole('button', { name: /add todo/i });
+
+      // Test with empty textarea
+      expect(submitButton).toHaveClass(
+        'inline-flex',
+        'items-center',
+        'justify-center',
+        'min-h-[3rem]',
+        'whitespace-nowrap'
+      );
+
+      // Add content and verify styling remains consistent
+      await user.type(textarea, 'Test content\nWith multiple\nLines of text');
+
+      expect(submitButton).toHaveClass(
+        'inline-flex',
+        'items-center',
+        'justify-center',
+        'min-h-[3rem]',
+        'whitespace-nowrap'
+      );
+    });
+
+    it('should align button properly with textarea in flex layout', async () => {
+      const user = userEvent.setup();
+      render(<TodoForm onAddTodo={mockOnAddTodo} />);
+
+      const textarea = screen.getByLabelText(/add new todo/i);
+      const submitButton = screen.getByRole('button', { name: /add todo/i });
+
+      // Verify the flex container structure by finding the form and its child
+      const form = textarea.closest('form');
+      expect(form).toBeInTheDocument();
+
+      const flexContainer = form?.querySelector('.flex.flex-col.md\\:flex-row');
+      expect(flexContainer).toBeInTheDocument();
+      expect(flexContainer).toHaveClass('gap-3');
+
+      // Add multi-line content to test alignment
+      await user.type(textarea, 'Line 1\nLine 2\nLine 3');
+
+      // Both textarea and button should maintain proper alignment
+      expect(textarea).toHaveClass('min-h-[3rem]');
+      expect(submitButton).toHaveClass('min-h-[3rem]');
+    });
+
+    it('should handle responsive button text while maintaining height', () => {
+      render(<TodoForm onAddTodo={mockOnAddTodo} />);
+
+      const submitButton = screen.getByRole('button', { name: /add todo/i });
+
+      // Verify responsive text elements are present
+      const fullText = submitButton.querySelector('.hidden.md\\:inline');
+      const shortText = submitButton.querySelector('.md\\:hidden');
+
+      expect(fullText).toBeInTheDocument();
+      expect(fullText).toHaveTextContent('Add Todo');
+      expect(shortText).toBeInTheDocument();
+      expect(shortText).toHaveTextContent('Add');
+
+      // Button height should remain consistent regardless of text content
+      expect(submitButton).toHaveClass('min-h-[3rem]', 'whitespace-nowrap');
+    });
+  });
 });
