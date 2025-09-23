@@ -520,6 +520,12 @@ describe('TodoItem', () => {
         name: /^delete todo/i,
       });
       await user.click(deleteButton);
+
+      // Confirm deletion
+      const confirmButton = screen.getByRole('button', {
+        name: /delete action/i,
+      });
+      await user.click(confirmButton);
       expect(mockOnDelete).toHaveBeenCalledWith('multi-function-test');
 
       // Functions should be separate
@@ -540,7 +546,7 @@ describe('TodoItem', () => {
       expect(deleteButton).toBeInTheDocument();
     });
 
-    it('should call delete function when delete button is clicked', async () => {
+    it('should show confirmation dialog when delete button is clicked', async () => {
       const user = userEvent.setup();
       const todo = createMockTodo({
         id: 'delete-test-id',
@@ -555,8 +561,215 @@ describe('TodoItem', () => {
       });
       await user.click(deleteButton);
 
-      expect(mockOnDelete).toHaveBeenCalledWith('delete-test-id');
+      // Should show confirmation dialog instead of immediately calling onDelete
+      expect(mockOnDelete).not.toHaveBeenCalled();
+
+      // Check that confirmation dialog is shown
+      expect(screen.getByText('Delete Todo')).toBeInTheDocument();
+      expect(
+        screen.getByText(/are you sure you want to delete "Todo to delete"/i)
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /delete action/i })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /cancel action/i })
+      ).toBeInTheDocument();
+    });
+
+    it('should call delete function when confirmation is confirmed', async () => {
+      const user = userEvent.setup();
+      const todo = createMockTodo({
+        id: 'confirm-delete-test',
+        text: 'Todo to confirm delete',
+      });
+      render(
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+      );
+
+      const deleteButton = screen.getByRole('button', {
+        name: /^delete todo/i,
+      });
+      await user.click(deleteButton);
+
+      // Confirm the deletion
+      const confirmButton = screen.getByRole('button', {
+        name: /delete action/i,
+      });
+      await user.click(confirmButton);
+
+      expect(mockOnDelete).toHaveBeenCalledWith('confirm-delete-test');
       expect(mockOnDelete).toHaveBeenCalledTimes(1);
+
+      // Dialog should be closed
+      expect(screen.queryByText('Delete Todo')).not.toBeInTheDocument();
+    });
+
+    it('should not delete when confirmation is cancelled', async () => {
+      const user = userEvent.setup();
+      const todo = createMockTodo({
+        id: 'cancel-delete-test',
+        text: 'Todo to cancel delete',
+      });
+      render(
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+      );
+
+      const deleteButton = screen.getByRole('button', {
+        name: /^delete todo/i,
+      });
+      await user.click(deleteButton);
+
+      // Cancel the deletion
+      const cancelButton = screen.getByRole('button', {
+        name: /cancel action/i,
+      });
+      await user.click(cancelButton);
+
+      expect(mockOnDelete).not.toHaveBeenCalled();
+
+      // Dialog should be closed
+      expect(screen.queryByText('Delete Todo')).not.toBeInTheDocument();
+    });
+
+    it('should close confirmation dialog with close button', async () => {
+      const user = userEvent.setup();
+      const todo = createMockTodo({
+        id: 'close-dialog-test',
+        text: 'Todo to test close',
+      });
+      render(
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+      );
+
+      const deleteButton = screen.getByRole('button', {
+        name: /^delete todo/i,
+      });
+      await user.click(deleteButton);
+
+      // Close the dialog with X button
+      const closeButton = screen.getByRole('button', { name: /close dialog/i });
+      await user.click(closeButton);
+
+      expect(mockOnDelete).not.toHaveBeenCalled();
+      expect(screen.queryByText('Delete Todo')).not.toBeInTheDocument();
+    });
+
+    it('should close confirmation dialog with Escape key', async () => {
+      const user = userEvent.setup();
+      const todo = createMockTodo({
+        id: 'escape-dialog-test',
+        text: 'Todo to test escape',
+      });
+      render(
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+      );
+
+      const deleteButton = screen.getByRole('button', {
+        name: /^delete todo/i,
+      });
+      await user.click(deleteButton);
+
+      // Close dialog with Escape key
+      await user.keyboard('{Escape}');
+
+      expect(mockOnDelete).not.toHaveBeenCalled();
+      expect(screen.queryByText('Delete Todo')).not.toBeInTheDocument();
+    });
+
+    it('should confirm deletion with Enter key', async () => {
+      const user = userEvent.setup();
+      const todo = createMockTodo({
+        id: 'enter-confirm-test',
+        text: 'Todo to confirm with Enter',
+      });
+      render(
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+      );
+
+      const deleteButton = screen.getByRole('button', {
+        name: /^delete todo/i,
+      });
+      await user.click(deleteButton);
+
+      // Confirm with Enter key
+      await user.keyboard('{Enter}');
+
+      expect(mockOnDelete).toHaveBeenCalledWith('enter-confirm-test');
+      expect(mockOnDelete).toHaveBeenCalledTimes(1);
+    });
+
+    it('should show proper confirmation message with todo text', async () => {
+      const user = userEvent.setup();
+      const todo = createMockTodo({
+        text: 'Important task with details',
+      });
+      render(
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+      );
+
+      const deleteButton = screen.getByRole('button', {
+        name: /^delete todo/i,
+      });
+      await user.click(deleteButton);
+
+      expect(
+        screen.getByText(
+          /are you sure you want to delete "Important task with details"/i
+        )
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/this action cannot be undone/i)
+      ).toBeInTheDocument();
+    });
+
+    it('should handle long todo text in confirmation message', async () => {
+      const user = userEvent.setup();
+      const longText =
+        'This is a very long todo item that should be properly displayed in the confirmation dialog without breaking the layout or causing issues';
+      const todo = createMockTodo({
+        text: longText,
+      });
+      render(
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+      );
+
+      const deleteButton = screen.getByRole('button', {
+        name: /^delete todo/i,
+      });
+      await user.click(deleteButton);
+
+      // The confirmation message should contain the full text
+      expect(
+        screen.getByText(
+          new RegExp(
+            `are you sure you want to delete "${longText.substring(0, 50)}`,
+            'i'
+          )
+        )
+      ).toBeInTheDocument();
+    });
+
+    it('should have proper accessibility attributes in confirmation dialog', async () => {
+      const user = userEvent.setup();
+      const todo = createMockTodo({
+        text: 'Accessible confirmation test',
+      });
+      render(
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
+      );
+
+      const deleteButton = screen.getByRole('button', {
+        name: /^delete todo/i,
+      });
+      await user.click(deleteButton);
+
+      // Check dialog accessibility
+      const dialog = screen.getByRole('dialog');
+      expect(dialog).toBeInTheDocument();
+      expect(dialog).toHaveAttribute('aria-modal', 'true');
+      expect(dialog).toHaveAttribute('aria-labelledby');
+      expect(dialog).toHaveAttribute('aria-describedby');
     });
 
     it('should have proper ARIA label for delete button', () => {
@@ -593,11 +806,24 @@ describe('TodoItem', () => {
       expect(deleteButton).toHaveFocus();
 
       await user.keyboard('{Enter}');
+
+      // Should show confirmation dialog
+      expect(screen.getByText('Delete Todo')).toBeInTheDocument();
+
+      // Confirm with Enter key again
+      await user.keyboard('{Enter}');
       expect(mockOnDelete).toHaveBeenCalledWith('keyboard-delete-test');
 
-      // Also should work with Space
+      // Test Space key activation
       mockOnDelete.mockClear();
+      deleteButton.focus();
       await user.keyboard(' ');
+
+      // Should show confirmation dialog again
+      expect(screen.getByText('Delete Todo')).toBeInTheDocument();
+
+      // Confirm with Enter
+      await user.keyboard('{Enter}');
       expect(mockOnDelete).toHaveBeenCalledWith('keyboard-delete-test');
     });
 
@@ -643,6 +869,12 @@ describe('TodoItem', () => {
 
       let deleteButton = screen.getByRole('button', { name: /^delete todo/i });
       await user.click(deleteButton);
+
+      // Confirm deletion
+      const confirmButton = screen.getByRole('button', {
+        name: /delete action/i,
+      });
+      await user.click(confirmButton);
       expect(mockOnDelete).toHaveBeenCalledWith('incomplete-to-delete');
 
       // Test completed todo deletion
@@ -657,6 +889,12 @@ describe('TodoItem', () => {
 
       deleteButton = screen.getByRole('button', { name: /^delete todo/i });
       await user.click(deleteButton);
+
+      // Confirm deletion
+      const confirmButton2 = screen.getByRole('button', {
+        name: /delete action/i,
+      });
+      await user.click(confirmButton2);
       expect(mockOnDelete).toHaveBeenCalledWith('completed-to-delete');
     });
 
@@ -683,6 +921,12 @@ describe('TodoItem', () => {
       // Click delete button
       mockOnToggle.mockClear();
       await user.click(deleteButton);
+
+      // Confirm deletion
+      const confirmButton = screen.getByRole('button', {
+        name: /delete action/i,
+      });
+      await user.click(confirmButton);
       expect(mockOnDelete).toHaveBeenCalledWith('multi-action-todo');
       expect(mockOnToggle).not.toHaveBeenCalled();
     });
