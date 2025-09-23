@@ -100,6 +100,242 @@ the instruction-only development process.
 - Minor bug fixes with clear requirements
 - Routine maintenance tasks
 
+## Parallel Agent Execution Strategy
+
+**🚨 ENHANCEMENT OPPORTUNITY**: For complexity-moderate+ tasks, leverage Claude Code's Task tool to execute work in
+parallel for improved efficiency and quality.
+
+### When to Use Parallel Agents
+
+**Automatic Suggestion Required** for:
+
+- **complexity-moderate** or higher issues (unless user explicitly requests sequential)
+- Multi-component features requiring implementation + testing + documentation
+- Tasks with clear separation of concerns (frontend/backend, feature/testing, etc.)
+- Complex refactoring affecting multiple systems
+
+**User Prompting Transformation**:
+
+**Current Sequential Approach:**
+
+```text
+User: "implement issue #72"
+Claude: Plans → Implements → Tests → Documents (sequential)
+```
+
+**Target Parallel Approach:**
+
+```text
+User: "implement issue #72"
+Claude: "This is complexity-moderate. Should I use parallel agents for faster delivery?"
+User: "yes" (or just "implement #72 in parallel")
+Claude: [Launches coordinated agents] → [Integrated delivery]
+```
+
+### How to Request Parallel Execution
+
+**Explicit Request (Recommended):**
+
+```text
+"Implement issue #72 using parallel agents"
+"Use parallel execution for #72"
+"Implement #72 in parallel"
+```
+
+**Automatic Suggestion Response:**
+
+```text
+Claude: "This appears to be complexity-moderate. Should I use parallel agents?"
+User: "yes" / "proceed in parallel" / "use agents"
+```
+
+**Always Sequential (Override):**
+
+```text
+"Implement #72 sequentially"
+"Do #72 step by step"
+"No parallel agents for #72"
+```
+
+### Available Agent Types
+
+**Claude Code Built-in Agent Types:**
+
+#### general-purpose
+
+- **Tool Access**: All tools (Read, Write, Edit, Bash, Glob, Grep, etc.)
+- **Use Cases**: Feature implementation, testing, documentation, complex multi-step tasks
+- **Capabilities**: Complete development workflow from research to deployment
+
+#### statusline-setup
+
+- **Tool Access**: Read, Edit tools only
+- **Use Cases**: Claude Code configuration and statusline customization
+- **Capabilities**: Limited to reading and editing Claude Code settings
+
+#### output-style-setup
+
+- **Tool Access**: Read, Write, Edit, Glob, Grep tools
+- **Use Cases**: Development output style customization and formatting
+- **Capabilities**: File operations and search for output configuration
+
+### Specialized Role Patterns
+
+**Using general-purpose agents with focused instructions for role-based specialization:**
+
+#### Code Reviewer Agent
+
+```text
+<invoke name="Task">
+<parameter name="subagent_type">general-purpose</parameter>
+<parameter name="description">Code review and quality analysis</parameter>
+<parameter name="prompt">Focus on code quality, security best practices, performance optimization,
+and architectural consistency. Review implementation for maintainability and standards compliance.</parameter>
+</invoke>
+```
+
+#### Full-Stack Developer Agent
+
+```text
+<invoke name="Task">
+<parameter name="subagent_type">general-purpose</parameter>
+<parameter name="description">Feature implementation and architecture</parameter>
+<parameter name="prompt">Implement core feature functionality, handle system integration,
+state management, and ensure architectural consistency with existing codebase.</parameter>
+</invoke>
+```
+
+#### Quality Analyst Agent
+
+```text
+<invoke name="Task">
+<parameter name="subagent_type">general-purpose</parameter>
+<parameter name="description">Testing strategy and validation</parameter>
+<parameter name="prompt">Develop comprehensive testing approach including unit tests, integration tests,
+coverage analysis, and quality validation following TDD methodology.</parameter>
+</invoke>
+```
+
+### Standard 3-Agent Coordination Patterns
+
+#### Pattern 1: Feature Development (Implementation + Testing + Documentation)
+
+```text
+Agent A (Full-Stack Developer):
+- Feature code development
+- Integration with existing systems
+- State management updates
+
+Agent B (Quality Analyst):
+- Test-driven development approach
+- Unit and integration tests
+- Coverage validation
+
+Agent C (Code Reviewer):
+- Code quality verification
+- README updates
+- ADR creation if needed
+```
+
+#### Pattern 2: Infrastructure + Feature (Parallel Development)
+
+```text
+Agent A (Full-Stack Developer):
+- Core feature implementation
+- Frontend/backend integration
+
+Agent B (Quality Analyst):
+- Testing infrastructure setup
+- CI/CD pipeline validation
+
+Agent C (Code Reviewer):
+- Architecture review
+- Security analysis
+```
+
+### Prompting Benefits for Users
+
+**Time Efficiency:**
+
+- 30-40% faster delivery for complex features
+- Parallel work streams reduce total time-to-completion
+- No waiting for sequential step completion
+
+**Quality Enhancement:**
+
+- Focused agent specialization improves output quality
+- Comprehensive testing happens alongside implementation
+- Documentation keeps pace with development
+
+**Reduced Cognitive Load:**
+
+- Single instruction triggers coordinated work
+- No need to track multiple development phases
+- Integrated delivery with consistent standards
+
+### Agent Selection Guidelines
+
+**When to Use Specialized Agents:**
+
+**statusline-setup agent:**
+
+- Claude Code configuration changes
+- Statusline customization requests
+- Development environment setup
+
+**output-style-setup agent:**
+
+- Output formatting modifications
+- Development style configurations
+- File organization for output management
+
+**Specialized Role-Based general-purpose agents:**
+
+- Complex features requiring focused expertise
+- Quality-critical implementations needing review
+- Large-scale changes requiring architectural oversight
+
+### Advanced Prompting Patterns
+
+**Feature + Infrastructure Pattern:**
+
+```text
+"Implement #72 with parallel agents: feature development and CI/CD updates"
+```
+
+**Research + Implementation Pattern:**
+
+```text
+"Research and implement #72 in parallel: analysis agent + implementation agent"
+```
+
+**Multi-Component Pattern:**
+
+```text
+"Implement #72 with component-focused parallel agents"
+```
+
+**Role-Specialized Pattern:**
+
+```text
+"Implement #72 using specialized agents: full-stack developer, quality analyst, and code reviewer"
+```
+
+### Claude's Mandatory Suggestion Protocol
+
+**For complexity-moderate+ issues, Claude MUST:**
+
+1. **Assess task complexity** and identify parallel opportunities
+2. **Suggest parallel agents** unless user explicitly requests sequential:
+
+   ```text
+   "This appears to be complexity-moderate. Should I use parallel agents
+   for faster delivery with coordinated implementation, testing, and documentation?"
+   ```
+
+3. **Execute with Task tool** when approved, launching specialized agents
+4. **Coordinate delivery** ensuring integrated, quality output
+
 ## Task Planning Protocol
 
 **🚨 CRITICAL REQUIREMENT**: All non-trivial changes must follow a structured task planning process before implementation.
