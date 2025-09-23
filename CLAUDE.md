@@ -157,25 +157,100 @@ User: "yes" / "proceed in parallel" / "use agents"
 "No parallel agents for #72"
 ```
 
-### Parallel Agent Coordination Pattern
+### Available Agent Types
 
-**Standard 3-Agent Pattern for Feature Implementation:**
+**Claude Code Built-in Agent Types:**
+
+#### general-purpose
+
+- **Tool Access**: All tools (Read, Write, Edit, Bash, Glob, Grep, etc.)
+- **Use Cases**: Feature implementation, testing, documentation, complex multi-step tasks
+- **Capabilities**: Complete development workflow from research to deployment
+
+#### statusline-setup
+
+- **Tool Access**: Read, Edit tools only
+- **Use Cases**: Claude Code configuration and statusline customization
+- **Capabilities**: Limited to reading and editing Claude Code settings
+
+#### output-style-setup
+
+- **Tool Access**: Read, Write, Edit, Glob, Grep tools
+- **Use Cases**: Development output style customization and formatting
+- **Capabilities**: File operations and search for output configuration
+
+### Specialized Role Patterns
+
+**Using general-purpose agents with focused instructions for role-based specialization:**
+
+#### Code Reviewer Agent
 
 ```text
-Agent A (Core Implementation):
+<invoke name="Task">
+<parameter name="subagent_type">general-purpose</parameter>
+<parameter name="description">Code review and quality analysis</parameter>
+<parameter name="prompt">Focus on code quality, security best practices, performance optimization,
+and architectural consistency. Review implementation for maintainability and standards compliance.</parameter>
+</invoke>
+```
+
+#### Full-Stack Developer Agent
+
+```text
+<invoke name="Task">
+<parameter name="subagent_type">general-purpose</parameter>
+<parameter name="description">Feature implementation and architecture</parameter>
+<parameter name="prompt">Implement core feature functionality, handle system integration,
+state management, and ensure architectural consistency with existing codebase.</parameter>
+</invoke>
+```
+
+#### Quality Analyst Agent
+
+```text
+<invoke name="Task">
+<parameter name="subagent_type">general-purpose</parameter>
+<parameter name="description">Testing strategy and validation</parameter>
+<parameter name="prompt">Develop comprehensive testing approach including unit tests, integration tests,
+coverage analysis, and quality validation following TDD methodology.</parameter>
+</invoke>
+```
+
+### Standard 3-Agent Coordination Patterns
+
+#### Pattern 1: Feature Development (Implementation + Testing + Documentation)
+
+```text
+Agent A (Full-Stack Developer):
 - Feature code development
 - Integration with existing systems
 - State management updates
 
-Agent B (Quality Assurance):
+Agent B (Quality Analyst):
 - Test-driven development approach
 - Unit and integration tests
-- Type safety validation
+- Coverage validation
 
-Agent C (Documentation & Standards):
+Agent C (Code Reviewer):
+- Code quality verification
 - README updates
 - ADR creation if needed
-- Code quality verification
+```
+
+#### Pattern 2: Infrastructure + Feature (Parallel Development)
+
+```text
+Agent A (Full-Stack Developer):
+- Core feature implementation
+- Frontend/backend integration
+
+Agent B (Quality Analyst):
+- Testing infrastructure setup
+- CI/CD pipeline validation
+
+Agent C (Code Reviewer):
+- Architecture review
+- Security analysis
 ```
 
 ### Prompting Benefits for Users
@@ -198,6 +273,28 @@ Agent C (Documentation & Standards):
 - No need to track multiple development phases
 - Integrated delivery with consistent standards
 
+### Agent Selection Guidelines
+
+**When to Use Specialized Agents:**
+
+**statusline-setup agent:**
+
+- Claude Code configuration changes
+- Statusline customization requests
+- Development environment setup
+
+**output-style-setup agent:**
+
+- Output formatting modifications
+- Development style configurations
+- File organization for output management
+
+**Specialized Role-Based general-purpose agents:**
+
+- Complex features requiring focused expertise
+- Quality-critical implementations needing review
+- Large-scale changes requiring architectural oversight
+
 ### Advanced Prompting Patterns
 
 **Feature + Infrastructure Pattern:**
@@ -216,6 +313,12 @@ Agent C (Documentation & Standards):
 
 ```text
 "Implement #72 with component-focused parallel agents"
+```
+
+**Role-Specialized Pattern:**
+
+```text
+"Implement #72 using specialized agents: full-stack developer, quality analyst, and code reviewer"
 ```
 
 ### Claude's Mandatory Suggestion Protocol
