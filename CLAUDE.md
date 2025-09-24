@@ -761,6 +761,9 @@ If auto-merge is enabled without explicit approval:
 
 - **NEVER** attempt direct push to main (violates development methodology)
 - **ALWAYS** create feature branch and PR for all changes
+- **ITERATIVE IMPROVEMENTS**: All review comments, corrections, and related changes MUST be committed
+  to the same feature branch and update the existing PR
+- **ONE FEATURE = ONE BRANCH = ONE PR**: Never create multiple PRs for related changes or corrections
 - **WAIT** for user response before proceeding with either option
 - **EXPLAIN** the chosen workflow and expected outcome
 
@@ -810,6 +813,13 @@ If auto-merge is enabled without explicit approval:
 - Skipping workflow state progression
 - Missing required approval checkpoints
 
+##### 4. PR Branch Violations
+
+- Creating new PRs for related changes instead of updating existing PR
+- Starting new branches for review comments or corrections
+- Fragmenting related work across multiple PRs
+- Violating "ONE FEATURE = ONE BRANCH = ONE PR" principle
+
 #### Violation Response Protocol
 
 **When a violation occurs:**
@@ -845,6 +855,14 @@ I should have used 'gh issue view #X' to confirm the issue was actually closed b
 before making any closure claims.
 ```
 
+**PR Branch Violation:**
+
+```text
+I apologize - I created a new PR for related changes instead of updating the existing PR.
+I should have continued working on the original feature branch and committed the corrections
+there to update the existing PR. This maintains clean git history and proper workflow.
+```
+
 #### Prevention Strategies
 
 **Built-in Checkpoints:**
@@ -853,6 +871,8 @@ before making any closure claims.
 - Always ask before enabling auto-merge
 - Always verify GitHub status before claiming completion
 - Use exact approval language requirements
+- Continue working on existing feature branch for related changes
+- Update existing PRs rather than creating new ones
 
 **Approval Language Training:**
 
