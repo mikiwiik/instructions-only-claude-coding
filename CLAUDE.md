@@ -614,7 +614,7 @@ git commit -m "test: add edge cases for feature X (#issue)"
 **🚨 CRITICAL REQUIREMENT**: All work must include proper issue closure and PR completion before the work session ends.
 
 **🚨 FEATURE BRANCH REQUIREMENT**: All code changes must be made on feature branches and handled via Pull Requests.
-Direct commits to main branch are prohibited by branch protection rules.
+Direct commits to main branch violate our development methodology and MUST be avoided.
 
 #### Pre-Implementation Completion Checklist
 
@@ -655,7 +655,7 @@ issue and PR completion protocol.
    - **Invalid responses**: "sounds good", "proceed", "continue", "ok", "go ahead" (too general)
    - If **Yes**: Create PR with auto-merge enabled (`gh pr create` + `gh pr merge --auto`)
    - If **No**: Create PR and wait for manual approval (`gh pr create` only)
-6. **Create PR** (always required due to branch protection)
+6. **Create PR** (always required by development methodology)
 7. **Wait for CI completion and required reviewer approval** (auto-merge or manual approval)
 8. **Verify GitHub issue closure** (after PR merge completion)
 9. **Confirm workflow completion** (all requirements satisfied, no orphaned issues)
@@ -679,7 +679,17 @@ issue and PR completion protocol.
 
 ### Pull Request and Merge Protocol
 
-**🚨 REQUIREMENT**: All changes must go through Pull Requests due to branch protection rules.
+**🚨 MANDATORY REQUIREMENT**: All changes MUST go through Pull Requests, regardless of GitHub repository settings.
+
+**Why PRs Are Always Required:**
+
+- **Code Review**: Maintain quality and consistency across all changes
+- **Documentation**: PR descriptions provide context and implementation details
+- **Traceability**: Clear link between issues, commits, and deployed features
+- **Collaboration**: Enable feedback and discussion on all changes
+- **CI Validation**: Ensure all automated checks pass before integration
+
+**Note**: Even though GitHub settings allow direct pushes to main, our development methodology requires PRs for all changes.
 
 #### Auto-merge Protocol (Enhanced Security)
 
@@ -689,7 +699,7 @@ issue and PR completion protocol.
 
 1. **Ensure feature branch is pushed to remote** (prerequisite)
 2. **Create PR first** (without any merge flags)
-3. **Ask exact question**:
+3. **Ask exact question for auto-merge**:
 
    ```text
    "Should I enable auto-merge for PR #X? This will automatically merge after:
@@ -707,7 +717,7 @@ issue and PR completion protocol.
    - "proceed with auto-merge"
    - "auto-merge approved"
 6. **If approved**: Run `gh pr merge --auto --squash --delete-branch`
-7. **If declined**: Inform user PR is ready for manual review
+7. **If declined**: Inform user PR is ready for manual review or bypass rules merge
 
 **What Does NOT Count as Approval:**
 
@@ -724,37 +734,60 @@ If auto-merge is enabled without explicit approval:
 2. Explain what should have happened
 3. Document the incident for process improvement
 
-#### Manual Approval Option (User Control)
+#### Bypass Rules Protocol
+
+**🚨 ADMIN PRIVILEGE USAGE**: Claude can use `gh pr merge --admin` to bypass rules ONLY with explicit user consent.
+
+**When to Use Bypass Rules:**
+
+- CI checks are failing but changes are urgent/safe
+- Branch protection requirements are blocking despite user approval
+- User explicitly requests immediate merge regardless of status
+
+**Required Consent Process:**
+
+1. **Ask explicit permission**: "Should I bypass rules and merge PR #X immediately using admin privileges?"
+2. **Wait for clear consent**: "yes, bypass rules", "merge with admin", "bypass and merge"
+3. **Execute**: `gh pr merge --admin --squash --delete-branch`
+
+#### Manual Merge Options (User Control)
 
 - **Alternative**: Create PR and wait for user to verify and manually merge
-- **Workflow**: User reviews PR, verifies CI passes, then merges when satisfied
+- **Standard Workflow**: User reviews PR, waits for CI to pass and requirements to be met, then merges
+- **GitHub UI Bypass**: User can select "Merge without waiting for requirements to be met (bypass rules)" directly in GitHub
 - **Benefits**: Full user control over timing and final approval
 
 #### Protocol Requirements
 
-- **NEVER** attempt direct push to main (branch protection prevents this)
+- **NEVER** attempt direct push to main (violates development methodology)
 - **ALWAYS** create feature branch and PR for all changes
+- **ITERATIVE IMPROVEMENTS**: All review comments, corrections, and related changes MUST be committed
+  to the same feature branch and update the existing PR
+- **ONE FEATURE = ONE BRANCH = ONE PR**: Never create multiple PRs for related changes or corrections
 - **WAIT** for user response before proceeding with either option
 - **EXPLAIN** the chosen workflow and expected outcome
 
-#### Branch Protection Troubleshooting
+#### Pull Request Troubleshooting
 
-**If push to main is rejected:**
+**If PR creation fails:**
 
-- Error: "GH013: Repository rule violations found"
-- Solution: Create feature branch and PR as required
+- Verify feature branch is pushed to remote repository
+- Ensure branch name follows `feature/XX-description` convention
+- Check that GitHub CLI (`gh`) is properly authenticated
 
 **If PR won't merge:**
 
-- Check CI status: All checks must pass
-- Check approval: 1 review required (can be self-approved)
+- Check CI status: All checks must pass for standard merge
+- Verify all automated quality gates are satisfied
 - Check branch status: Must be up to date with main
+- For auto-merge: Confirm user has provided explicit approval
+- **Alternative**: Ask user for consent to bypass rules with `--admin` flag
 
 **Auto-merge not working:**
 
 - Verify repository setting: Settings → General → "Allow auto-merge" must be enabled
-- Check PR requirements: All protection rules must be satisfied
 - Use `gh pr status` to check merge eligibility
+- Confirm CI checks are passing and branch is up to date
 
 ### Workflow Violation Prevention and Acknowledgment
 
@@ -779,6 +812,13 @@ If auto-merge is enabled without explicit approval:
 - Claiming issue is closed before GitHub verification
 - Skipping workflow state progression
 - Missing required approval checkpoints
+
+##### 4. PR Branch Violations
+
+- Creating new PRs for related changes instead of updating existing PR
+- Starting new branches for review comments or corrections
+- Fragmenting related work across multiple PRs
+- Violating "ONE FEATURE = ONE BRANCH = ONE PR" principle
 
 #### Violation Response Protocol
 
@@ -815,6 +855,14 @@ I should have used 'gh issue view #X' to confirm the issue was actually closed b
 before making any closure claims.
 ```
 
+**PR Branch Violation:**
+
+```text
+I apologize - I created a new PR for related changes instead of updating the existing PR.
+I should have continued working on the original feature branch and committed the corrections
+there to update the existing PR. This maintains clean git history and proper workflow.
+```
+
 #### Prevention Strategies
 
 **Built-in Checkpoints:**
@@ -823,6 +871,8 @@ before making any closure claims.
 - Always ask before enabling auto-merge
 - Always verify GitHub status before claiming completion
 - Use exact approval language requirements
+- Continue working on existing feature branch for related changes
+- Update existing PRs rather than creating new ones
 
 **Approval Language Training:**
 
