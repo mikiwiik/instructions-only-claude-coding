@@ -6,6 +6,8 @@
 
 ## Project Purpose
 
+Just an edti to test PR:s
+
 **This project demonstrates groundbreaking agentic coding methodology** - building complete, production-ready software
 through pure instruction-based collaboration with Claude Code. This Todo application showcases how complex applications
 can be developed with **zero manual coding**, where the human acts as architect/product manager and AI handles all
