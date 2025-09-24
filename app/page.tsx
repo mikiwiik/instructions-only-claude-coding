@@ -3,20 +3,31 @@
 import { CheckSquare } from 'lucide-react';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
+import TodoFilter from './components/TodoFilter';
 import { useTodos } from './hooks/useTodos';
 
 export default function HomePage() {
   const {
     todos,
+    allTodos,
+    filter,
     addTodo,
     toggleTodo,
     restoreTodo,
     deleteTodo,
+    permanentlyDeleteTodo,
+    restoreDeletedTodo,
     editTodo,
     reorderTodos,
     moveUp,
     moveDown,
+    setFilter,
   } = useTodos();
+
+  // Calculate counts for filter display
+  const activeTodosCount = allTodos.filter((todo) => !todo.completed && !todo.deletedAt).length;
+  const completedTodosCount = allTodos.filter((todo) => todo.completed && !todo.deletedAt).length;
+  const deletedTodosCount = allTodos.filter((todo) => todo.deletedAt).length;
 
   return (
     <div className='min-h-screen bg-background safe-area-inset'>
@@ -45,12 +56,21 @@ export default function HomePage() {
           aria-label='Todo application'
         >
           <TodoForm onAddTodo={addTodo} />
+          <TodoFilter
+            currentFilter={filter}
+            onFilterChange={setFilter}
+            activeTodosCount={activeTodosCount}
+            completedTodosCount={completedTodosCount}
+            deletedTodosCount={deletedTodosCount}
+          />
           <TodoList
             todos={todos}
             onToggle={toggleTodo}
             onDelete={deleteTodo}
             onEdit={editTodo}
             onRestore={restoreTodo}
+            onPermanentlyDelete={permanentlyDeleteTodo}
+            onRestoreDeleted={restoreDeletedTodo}
             reorderTodos={reorderTodos}
             moveUp={moveUp}
             moveDown={moveDown}
