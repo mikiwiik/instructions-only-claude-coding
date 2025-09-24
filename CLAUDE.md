@@ -585,14 +585,29 @@ git commit -m "test: add edge cases for feature X (#issue)"
 - **Co-author attribution**: Always include Claude Code co-authorship in commits
 - **ADR updates**: Include ADR updates in relevant commits when applicable
 
-### Push Workflow
+### Push Workflow (Enhanced Enforcement)
 
-- **🚨 CRITICAL**: Always ask user for confirmation before pushing to remote
-- **Local commits**: Continue committing locally without confirmation
-- **User control**: Only push when user explicitly approves
-- **Verify push success**: Confirm changes are visible on GitHub after user approval
-- **Update remote tracking**: Ensure local branch tracks remote properly
-- **Feature branching**: All work must be done on feature branches (e.g., feature/XX-description)
+**🚨 ENHANCED ENFORCEMENT**: Strict push protocol to prevent workflow violations:
+
+**Push Approval Protocol:**
+
+1. **Complete all local commits** (ensure all work is committed locally)
+2. **Push with tracking**: Use `git push -u origin feature/XX-description`
+3. **Verify push success**: Confirm changes are visible on GitHub
+4. **Update workflow status**: Mark as ready for PR creation
+
+**Push Verification Checklist:**
+
+- [ ] Feature branch visible in GitHub repository
+- [ ] All local commits present on remote branch
+- [ ] Branch tracking configured properly
+- [ ] No merge conflicts or push errors
+
+**Integration with Feature Completion:**
+
+- Push happens automatically after local commits
+- Auto-merge approval still required for complete workflow
+- Never skip push verification before PR creation
 
 ### Issue Completion Protocol
 
@@ -623,43 +638,91 @@ issue and PR completion protocol.
 
 #### Feature Completion Sequence
 
+**🚨 CRITICAL WORKFLOW**: Follow this exact sequence to prevent workflow violations:
+
 1. **Complete feature implementation** (write code, tests, documentation)
 2. **Run tests and verify functionality** (ensure all tests pass)
 3. **Commit changes for issue closure** (local commit with "Closes #X" - issue closes when PR merges)
-4. **🔴 ASK USER**: "Should I automatically merge after CI passes? This will close Issue #X"
+4. **Push to remote**: Push feature branch to remote repository
+   - Run `git push -u origin feature/XX-description`
+   - Verify push success with remote branch tracking
+   - Ensure all local commits are available on remote feature branch
+5. **🔴 ASK USER**: "Should I enable auto-merge for this PR?
+   This will automatically merge after CI passes and required reviewer approves.
+   This will close Issue #X"
+   - **BLOCKING REQUIREMENT**: NEVER enable auto-merge without explicit user approval
+   - **Valid approval responses**: "yes", "enable auto-merge", "proceed with auto-merge", "auto-merge approved"
+   - **Invalid responses**: "sounds good", "proceed", "continue", "ok", "go ahead" (too general)
    - If **Yes**: Create PR with auto-merge enabled (`gh pr create` + `gh pr merge --auto`)
    - If **No**: Create PR and wait for manual approval (`gh pr create` only)
-5. **Create PR** (always required due to branch protection)
-6. **Wait for CI completion and user verification** (auto-merge or manual approval)
-7. **Verify GitHub issue closure** (after PR merge completion)
-8. **Confirm workflow completion** (all requirements satisfied, no orphaned issues)
+6. **Create PR** (always required due to branch protection)
+7. **Wait for CI completion and required reviewer approval** (auto-merge or manual approval)
+8. **Verify GitHub issue closure** (after PR merge completion)
+9. **Confirm workflow completion** (all requirements satisfied, no orphaned issues)
 
 #### Issue Closure Workflow States
 
-**Clear workflow progression to prevent premature closure claims:**
+**🚨 MANDATORY PROGRESSION**: Clear workflow progression to prevent premature closure claims:
 
 - **Implementation Complete**: Code written, tested, documented, committed locally to feature branch
-- **PR Created**: Pull request created from feature branch, auto-merge enabled (if approved by user)
+- **Feature Branch Pushed**: All local commits pushed to remote feature branch with tracking
+- **PR Created**: Pull request created from remote feature branch
+- **User Approval Received**: Explicit user consent given for auto-merge (if requested)
+- **Auto-merge Enabled**: Auto-merge configured (only if user approved)
 - **CI Passing**: All automated checks pass on the PR
+- **Reviewer Approval**: Required reviewer has approved the PR (GitHub enforcement)
 - **PR Merged**: Changes merged from feature branch to main branch
 - **Issue Closed**: GitHub automatically closes issue via "Closes #X" commit message
 - **Workflow Complete**: All verification steps confirmed, no orphaned issues
 
-**⚠️ CRITICAL**: Only claim "Issue #X is closed" AFTER step 5 (Issue Closed) is verified via `gh issue view #X`
+**⚠️ CRITICAL**: Only claim "Issue #X is closed" AFTER step 9 (Issue Closed) is verified via `gh issue view #X`
 
 ### Pull Request and Merge Protocol
 
 **🚨 REQUIREMENT**: All changes must go through Pull Requests due to branch protection rules.
 
-#### Auto-merge Option (Streamlined)
+#### Auto-merge Protocol (Enhanced Security)
 
-- **ALWAYS** ask first: "Should I enable auto-merge for this PR? It will merge automatically after CI passes."
-- **Auto-merge workflow**:
-  1. Create PR with `gh pr create`
-  2. Enable auto-merge with `gh pr merge --auto --squash` (or --merge/--rebase as appropriate)
-  3. PR merges automatically when all requirements are satisfied (CI pass + 1 approval)
-- **Benefits**: No manual merge step needed, maintains full protection requirements
-- **Note**: Repository must have auto-merge enabled in Settings → General → Allow auto-merge
+**🚨 BLOCKING REQUIREMENT**: NEVER enable auto-merge without explicit user approval.
+
+**Required Approval Process:**
+
+1. **Ensure feature branch is pushed to remote** (prerequisite)
+2. **Create PR first** (without any merge flags)
+3. **Ask exact question**:
+
+   ```text
+   "Should I enable auto-merge for PR #X? This will automatically merge after:
+   - CI passes ✅
+   - Required reviewer approves ✅
+   - All branch protection rules are satisfied ✅
+
+   This action will close Issue #Y. Please respond 'yes' to proceed or 'no' to leave for manual review."
+   ```
+
+4. **STOP ALL ACTIONS** - Do not proceed until user responds
+5. **Wait for explicit approval**: Only these responses count as approval:
+   - "yes"
+   - "enable auto-merge"
+   - "proceed with auto-merge"
+   - "auto-merge approved"
+6. **If approved**: Run `gh pr merge --auto --squash --delete-branch`
+7. **If declined**: Inform user PR is ready for manual review
+
+**What Does NOT Count as Approval:**
+
+- ❌ Silence or no response
+- ❌ Indirect statements ("looks good", "proceed", etc.)
+- ❌ Assumptions based on previous approvals
+- ❌ Repository permissions or settings
+- ❌ CI passing automatically
+
+**Violation Consequences:**
+If auto-merge is enabled without explicit approval:
+
+1. Immediately acknowledge the workflow violation
+2. Explain what should have happened
+3. Document the incident for process improvement
 
 #### Manual Approval Option (User Control)
 
@@ -692,6 +755,81 @@ issue and PR completion protocol.
 - Verify repository setting: Settings → General → "Allow auto-merge" must be enabled
 - Check PR requirements: All protection rules must be satisfied
 - Use `gh pr status` to check merge eligibility
+
+### Workflow Violation Prevention and Acknowledgment
+
+**🚨 CRITICAL PROTOCOL**: All workflow violations must be immediately acknowledged and documented for continuous improvement.
+
+#### Common Violation Categories
+
+##### 1. Auto-merge Violations
+
+- Enabling auto-merge without explicit user approval
+- Accepting general responses as auto-merge consent
+- Proceeding without waiting for user response
+
+##### 2. Push Protocol Violations
+
+- Skipping push verification steps
+- Creating PRs without confirming remote branch exists
+- Failing to verify push success before PR creation
+
+##### 3. Issue Closure Violations
+
+- Claiming issue is closed before GitHub verification
+- Skipping workflow state progression
+- Missing required approval checkpoints
+
+#### Violation Response Protocol
+
+**When a violation occurs:**
+
+1. **Immediate Acknowledgment**: Stop all actions and acknowledge the violation
+2. **Explain Correct Process**: Detail what should have happened
+3. **Document for Learning**: Add violation to process improvement tracking
+4. **Corrective Action**: Take appropriate steps to resolve if possible
+
+#### Example Violation Acknowledgments
+
+**Auto-merge Violation:**
+
+```text
+I apologize - I enabled auto-merge without explicit approval, violating our workflow protocol.
+I should have asked: "Should I enable auto-merge for this PR?" and waited for your specific
+approval before proceeding. This ensures you maintain full control over merge timing and decisions.
+```
+
+**Push Violation:**
+
+```text
+I apologize - I created a PR without properly verifying the remote branch exists and all commits
+were pushed successfully. Per our enhanced enforcement protocol, I should have verified push
+success and confirmed all local commits are available on the remote branch before PR creation.
+```
+
+**Premature Closure Violation:**
+
+```text
+I apologize - I claimed the issue was closed before verifying the actual GitHub issue status.
+I should have used 'gh issue view #X' to confirm the issue was actually closed by GitHub
+before making any closure claims.
+```
+
+#### Prevention Strategies
+
+**Built-in Checkpoints:**
+
+- Always verify push success before PR creation
+- Always ask before enabling auto-merge
+- Always verify GitHub status before claiming completion
+- Use exact approval language requirements
+
+**Approval Language Training:**
+
+- Recognize only specific approval phrases
+- Reject ambiguous or general responses
+- Provide clear examples of acceptable approval language
+- Document and learn from language interpretation errors
 
 ### Documentation Maintenance
 
