@@ -41,8 +41,10 @@ next-env.d.ts
 *.swp
 *.swo
 
-# Claude Code local settings
-.claude/
+# Claude Code local settings (keep commands/ for project sharing)
+.claude/settings*.json
+.claude/agent-logs/
+.claude/temp/
 
 # OS generated files
 .DS_Store?
