@@ -385,7 +385,8 @@ Use TodoWrite to create a comprehensive task breakdown including:
 - **Documentation**: README, ADR, or inline documentation updates
 - **Quality Assurance**: Linting, type checking, accessibility validation
 - **Integration**: Ensuring changes work with existing functionality
-- **Issue Closure**: Verify GitHub issue status and ensure proper completion
+- **Issue Closure Preparation**: Prepare for GitHub issue closure (commit with "Closes #X", create PR)
+- **Issue Closure Verification**: Verify GitHub issue status after PR merge completion
 
 **Task List Standards:**
 
@@ -597,15 +598,25 @@ git commit -m "test: add edge cases for feature X (#issue)"
 
 **🚨 CRITICAL REQUIREMENT**: All work must include proper issue closure and PR completion before the work session ends.
 
-#### Pre-Completion Checklist
+**🚨 FEATURE BRANCH REQUIREMENT**: All code changes must be made on feature branches and handled via Pull Requests.
+Direct commits to main branch are prohibited by branch protection rules.
 
-Before declaring any work complete, verify:
+#### Pre-Implementation Completion Checklist
+
+Before creating PR, verify:
 
 - [ ] All implementation requirements are met
 - [ ] All tests pass and quality checks succeed
 - [ ] Documentation updated as needed
+- [ ] Code committed with "Closes #X" message
+
+#### Post-Merge Verification Checklist
+
+After PR merges, verify:
+
 - [ ] Issue status verified using `gh issue view <issue-number>`
-- [ ] Associated PRs handled appropriately (merged, closed, or documented)
+- [ ] GitHub issue actually closed
+- [ ] All requirements satisfied, no orphaned issues
 
 **📋 Developer Guidelines**: See [`docs/development/workflow.md`](docs/development/workflow.md) for comprehensive
 issue and PR completion protocol.
@@ -614,7 +625,7 @@ issue and PR completion protocol.
 
 1. **Complete feature implementation** (write code, tests, documentation)
 2. **Run tests and verify functionality** (ensure all tests pass)
-3. **Commit changes with issue closure** (local commit with "Closes #X")
+3. **Commit changes for issue closure** (local commit with "Closes #X" - issue closes when PR merges)
 4. **🔴 ASK USER**: "Should I automatically merge after CI passes? This will close Issue #X"
    - If **Yes**: Create PR with auto-merge enabled (`gh pr create` + `gh pr merge --auto`)
    - If **No**: Create PR and wait for manual approval (`gh pr create` only)
@@ -622,6 +633,19 @@ issue and PR completion protocol.
 6. **Wait for CI completion and user verification** (auto-merge or manual approval)
 7. **Verify GitHub issue closure** (after PR merge completion)
 8. **Confirm workflow completion** (all requirements satisfied, no orphaned issues)
+
+#### Issue Closure Workflow States
+
+**Clear workflow progression to prevent premature closure claims:**
+
+- **Implementation Complete**: Code written, tested, documented, committed locally to feature branch
+- **PR Created**: Pull request created from feature branch, auto-merge enabled (if approved by user)
+- **CI Passing**: All automated checks pass on the PR
+- **PR Merged**: Changes merged from feature branch to main branch
+- **Issue Closed**: GitHub automatically closes issue via "Closes #X" commit message
+- **Workflow Complete**: All verification steps confirmed, no orphaned issues
+
+**⚠️ CRITICAL**: Only claim "Issue #X is closed" AFTER step 5 (Issue Closed) is verified via `gh issue view #X`
 
 ### Pull Request and Merge Protocol
 
