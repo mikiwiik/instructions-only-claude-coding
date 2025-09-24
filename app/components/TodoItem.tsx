@@ -14,6 +14,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Todo } from '../types/todo';
+import ConfirmationDialog from './ConfirmationDialog';
 
 interface TodoItemProps {
   todo: Todo;
@@ -42,6 +43,7 @@ export default function TodoItem({
 }: TodoItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const {
@@ -87,7 +89,16 @@ export default function TodoItem({
   };
 
   const handleDelete = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const handleConfirmDelete = () => {
     onDelete(todo.id);
+    setShowDeleteConfirm(false);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteConfirm(false);
   };
 
   const handleEdit = () => {
@@ -296,6 +307,18 @@ export default function TodoItem({
           </button>
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={showDeleteConfirm}
+        onClose={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+        title='Delete Todo'
+        message={`Are you sure you want to delete "${todo.text}"? This action cannot be undone.`}
+        confirmLabel='Delete'
+        cancelLabel='Cancel'
+        variant='destructive'
+      />
     </li>
   );
 }
