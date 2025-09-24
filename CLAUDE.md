@@ -699,8 +699,7 @@ issue and PR completion protocol.
 
 1. **Ensure feature branch is pushed to remote** (prerequisite)
 2. **Create PR first** (without any merge flags)
-3. **Self-approve if user requests** (GitHub settings now allow self-approval)
-4. **Ask exact question for auto-merge**:
+3. **Ask exact question for auto-merge**:
 
    ```text
    "Should I enable auto-merge for PR #X? This will automatically merge after:
@@ -711,14 +710,14 @@ issue and PR completion protocol.
    This action will close Issue #Y. Please respond 'yes' to proceed or 'no' to leave for manual review."
    ```
 
-5. **STOP ALL ACTIONS** - Do not proceed until user responds
-6. **Wait for explicit approval**: Only these responses count as approval:
+4. **STOP ALL ACTIONS** - Do not proceed until user responds
+5. **Wait for explicit approval**: Only these responses count as approval:
    - "yes"
    - "enable auto-merge"
    - "proceed with auto-merge"
    - "auto-merge approved"
-7. **If approved**: Run `gh pr merge --auto --squash --delete-branch`
-8. **If declined**: Inform user PR is ready for manual review (can be self-approved and merged)
+6. **If approved**: Run `gh pr merge --auto --squash --delete-branch`
+7. **If declined**: Inform user PR is ready for manual review or bypass rules merge
 
 **What Does NOT Count as Approval:**
 
@@ -735,11 +734,27 @@ If auto-merge is enabled without explicit approval:
 2. Explain what should have happened
 3. Document the incident for process improvement
 
-#### Manual Approval Option (User Control)
+#### Bypass Rules Protocol
+
+**🚨 ADMIN PRIVILEGE USAGE**: Claude can use `gh pr merge --admin` to bypass rules ONLY with explicit user consent.
+
+**When to Use Bypass Rules:**
+
+- CI checks are failing but changes are urgent/safe
+- Branch protection requirements are blocking despite user approval
+- User explicitly requests immediate merge regardless of status
+
+**Required Consent Process:**
+
+1. **Ask explicit permission**: "Should I bypass rules and merge PR #X immediately using admin privileges?"
+2. **Wait for clear consent**: "yes, bypass rules", "merge with admin", "bypass and merge"
+3. **Execute**: `gh pr merge --admin --squash --delete-branch`
+
+#### Manual Merge Options (User Control)
 
 - **Alternative**: Create PR and wait for user to verify and manually merge
-- **Workflow**: User reviews PR, verifies CI passes, then self-approves and merges when satisfied
-- **Self-Approval**: GitHub settings allow PR authors to approve and merge their own PRs
+- **Standard Workflow**: User reviews PR, waits for CI to pass and requirements to be met, then merges
+- **GitHub UI Bypass**: User can select "Merge without waiting for requirements to be met (bypass rules)" directly in GitHub
 - **Benefits**: Full user control over timing and final approval
 
 #### Protocol Requirements
@@ -759,10 +774,11 @@ If auto-merge is enabled without explicit approval:
 
 **If PR won't merge:**
 
-- Check CI status: All checks must pass
+- Check CI status: All checks must pass for standard merge
 - Verify all automated quality gates are satisfied
 - Check branch status: Must be up to date with main
 - For auto-merge: Confirm user has provided explicit approval
+- **Alternative**: Ask user for consent to bypass rules with `--admin` flag
 
 **Auto-merge not working:**
 
