@@ -37,6 +37,23 @@ jest.mock('../../utils/timestamp', () => ({
     }
     return `Created ${Math.floor((Date.now() - todo.createdAt.getTime()) / 60000)} minutes ago`;
   }),
+  getFullTimestamp: jest.fn((todo: EnhancedTodo) => {
+    let relevantDate: Date;
+    let action: string;
+
+    if (todo.deletedAt) {
+      relevantDate = todo.deletedAt;
+      action = 'Deleted';
+    } else if (todo.updatedAt.getTime() > todo.createdAt.getTime()) {
+      relevantDate = todo.updatedAt;
+      action = todo.completed ? 'Completed' : 'Updated';
+    } else {
+      relevantDate = todo.createdAt;
+      action = 'Created';
+    }
+
+    return `${action} ${relevantDate.toLocaleDateString()} at ${relevantDate.toLocaleTimeString()}`;
+  }),
 }));
 
 const createMockTodo = (

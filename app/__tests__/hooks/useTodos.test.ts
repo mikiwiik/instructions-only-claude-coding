@@ -236,7 +236,7 @@ describe('useTodos hook', () => {
   });
 
   describe('deleteTodo', () => {
-    it('should remove todo from list when deleted', () => {
+    it('should soft delete todo (hide from filtered view but keep in allTodos)', () => {
       const { result } = renderHook(() => useTodos());
 
       act(() => {
@@ -245,14 +245,20 @@ describe('useTodos hook', () => {
       });
 
       expect(result.current.todos).toHaveLength(2);
+      expect(result.current.allTodos).toHaveLength(2);
       const todoToDeleteId = result.current.todos[1].id; // First todo added
 
       act(() => {
         result.current.deleteTodo(todoToDeleteId);
       });
 
+      // Soft delete: hidden from filtered todos but kept in allTodos
       expect(result.current.todos).toHaveLength(1);
       expect(result.current.todos[0].text).toBe('Todo to keep');
+      expect(result.current.allTodos).toHaveLength(2);
+      expect(
+        result.current.allTodos.find((t) => t.id === todoToDeleteId)?.deletedAt
+      ).toBeInstanceOf(Date);
     });
 
     it('should handle deleting non-existent todo gracefully', () => {
@@ -271,7 +277,7 @@ describe('useTodos hook', () => {
       expect(result.current.todos).toEqual(originalTodos);
     });
 
-    it('should not affect other todos when one is deleted', () => {
+    it('should not affect other todos when one is soft deleted', () => {
       const { result } = renderHook(() => useTodos());
 
       act(() => {
@@ -288,9 +294,12 @@ describe('useTodos hook', () => {
         result.current.deleteTodo(middleTodoId);
       });
 
+      // After soft delete, visible todos should be 2 (first and last)
       expect(result.current.todos).toHaveLength(2);
       expect(result.current.todos[0].text).toBe(firstTodoText);
       expect(result.current.todos[1].text).toBe(lastTodoText);
+      // All todos should still exist in allTodos (including soft deleted)
+      expect(result.current.allTodos).toHaveLength(3);
     });
 
     it('should work with both completed and incomplete todos', () => {
@@ -335,11 +344,16 @@ describe('useTodos hook', () => {
       });
 
       const storedTodos = JSON.parse(localStorage.getItem('todos') || '[]');
-      expect(storedTodos).toHaveLength(1);
-      expect(storedTodos[0].text).toBe('Todo to keep');
+      expect(storedTodos).toHaveLength(2); // Both todos still stored
+      expect(
+        storedTodos.find((t: any) => t.text === 'Todo to keep').deletedAt
+      ).toBeUndefined();
+      expect(
+        storedTodos.find((t: any) => t.text === 'Todo to delete').deletedAt
+      ).toBeDefined();
     });
 
-    it('should handle deleting all todos', () => {
+    it('should handle soft deleting all todos (kept in localStorage with deletedAt)', () => {
       const { result } = renderHook(() => useTodos());
 
       act(() => {
@@ -352,10 +366,12 @@ describe('useTodos hook', () => {
         result.current.deleteTodo(todoId);
       });
 
-      expect(result.current.todos).toHaveLength(0);
+      // Soft delete: todos are hidden from filtered view but kept in localStorage
+      expect(result.current.todos).toHaveLength(0); // Hidden from default filter
 
       const storedTodos = JSON.parse(localStorage.getItem('todos') || '[]');
-      expect(storedTodos).toHaveLength(0);
+      expect(storedTodos).toHaveLength(1); // Still stored with deletedAt field
+      expect(storedTodos[0].deletedAt).toBeDefined();
     });
   });
 

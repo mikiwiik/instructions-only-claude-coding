@@ -43,53 +43,107 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       // expect(result.current.getVisibleTodos()).toHaveLength(0);
     });
 
-    it('should provide getVisibleTodos function that excludes soft-deleted todos', () => {
+    it('should filter out soft-deleted todos from default todos view', () => {
       const { result } = renderHook(() => useTodos());
 
-      // This test will be valid after enhancement
-      // Documenting expected interface
-      expect(result.current.todos).toBeDefined();
-      expect(Array.isArray(result.current.todos)).toBe(true);
+      act(() => {
+        result.current.addTodo('Active todo');
+        result.current.addTodo('Todo to delete');
+      });
 
-      // TODO: After enhancement, should have:
-      // expect(result.current.getVisibleTodos).toBeDefined();
-      // expect(typeof result.current.getVisibleTodos).toBe('function');
+      expect(result.current.todos).toHaveLength(2);
+      // New todos are added to beginning, so 'Todo to delete' is at index 0
+      const todoToDeleteId = result.current.todos[0].id; // 'Todo to delete' is most recent (index 0)
+
+      act(() => {
+        result.current.deleteTodo(todoToDeleteId);
+      });
+
+      // Default todos view excludes deleted todos
+      expect(result.current.todos).toHaveLength(1);
+      expect(result.current.todos[0].text).toBe('Active todo'); // Older todo remains
+
+      // AllTodos includes deleted todos
+      expect(result.current.allTodos).toHaveLength(2);
     });
 
-    it('should provide getDeletedTodos function for accessing soft-deleted todos', () => {
+    it('should provide access to deleted todos via filter', () => {
       const { result } = renderHook(() => useTodos());
 
-      // This test documents expected behavior after enhancement
-      expect(result.current.todos).toBeDefined();
+      act(() => {
+        result.current.addTodo('Todo to delete');
+      });
 
-      // TODO: After enhancement, should have:
-      // expect(result.current.getDeletedTodos).toBeDefined();
-      // expect(typeof result.current.getDeletedTodos).toBe('function');
+      const todoId = result.current.todos[0].id;
+
+      act(() => {
+        result.current.deleteTodo(todoId);
+      });
+
+      // Default filter hides deleted todos
+      expect(result.current.todos).toHaveLength(0);
+
+      // Switch to recently-deleted filter to see deleted todos
+      act(() => {
+        result.current.setFilter('recently-deleted');
+      });
+
+      expect(result.current.todos).toHaveLength(1);
+      expect(result.current.todos[0].deletedAt).toBeInstanceOf(Date);
     });
 
     it('should provide restoreDeletedTodo function for recovering soft-deleted todos', () => {
       const { result } = renderHook(() => useTodos());
 
-      // Current implementation has restoreTodo for unchecking completed todos
-      expect(result.current.restoreTodo).toBeDefined();
-      expect(typeof result.current.restoreTodo).toBe('function');
+      // Current implementation has both functions
+      expect(result.current.restoreTodo).toBeDefined(); // For unchecking completed todos
+      expect(result.current.restoreDeletedTodo).toBeDefined(); // For restoring deleted todos
+      expect(typeof result.current.restoreDeletedTodo).toBe('function');
 
-      // TODO: After enhancement, should also have:
-      // expect(result.current.restoreDeletedTodo).toBeDefined();
-      // expect(typeof result.current.restoreDeletedTodo).toBe('function');
+      act(() => {
+        result.current.addTodo('Todo to restore');
+      });
+
+      const todoId = result.current.todos[0].id;
+
+      // Soft delete
+      act(() => {
+        result.current.deleteTodo(todoId);
+      });
+
+      expect(result.current.todos).toHaveLength(0);
+
+      // Restore
+      act(() => {
+        result.current.restoreDeletedTodo(todoId);
+      });
+
+      expect(result.current.todos).toHaveLength(1);
+      expect(result.current.todos[0].deletedAt).toBeUndefined();
     });
 
     it('should provide permanentlyDeleteTodo function for actual removal', () => {
       const { result } = renderHook(() => useTodos());
 
-      // This function doesn't exist yet but will be needed
-      // TODO: After enhancement, should have:
-      // expect(result.current.permanentlyDeleteTodo).toBeDefined();
-      // expect(typeof result.current.permanentlyDeleteTodo).toBe('function');
-
-      // For now, test that current delete function exists
+      // Function exists and works
+      expect(result.current.permanentlyDeleteTodo).toBeDefined();
+      expect(typeof result.current.permanentlyDeleteTodo).toBe('function');
       expect(result.current.deleteTodo).toBeDefined();
       expect(typeof result.current.deleteTodo).toBe('function');
+
+      act(() => {
+        result.current.addTodo('Todo to permanently delete');
+      });
+
+      const todoId = result.current.todos[0].id;
+
+      act(() => {
+        result.current.permanentlyDeleteTodo(todoId);
+      });
+
+      // Actually removed from both filtered and all todos
+      expect(result.current.todos).toHaveLength(0);
+      expect(result.current.allTodos).toHaveLength(0);
     });
   });
 
@@ -102,21 +156,21 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       const todoId = result.current.todos[0].id;
-      // Record deletion time for timestamp testing
+      const beforeDelete = new Date();
 
-      // TODO: After enhancement, soft delete should set deletedAt
       act(() => {
-        result.current.deleteTodo(todoId); // Will become soft delete
+        result.current.deleteTodo(todoId); // Performs soft delete
       });
 
-      // Current behavior: todo is removed
+      // Soft delete: hidden from default filter but kept in allTodos with timestamp
       expect(result.current.todos).toHaveLength(0);
-
-      // TODO: After enhancement:
-      // expect(result.current.todos).toHaveLength(1);
-      // const todo = result.current.todos[0] as EnhancedTodo;
-      // expect(todo.deletedAt).toBeDefined();
-      // expect(todo.deletedAt!.getTime()).toBeGreaterThanOrEqual(beforeDelete.getTime());
+      expect(result.current.allTodos).toHaveLength(1);
+      const deletedTodo = result.current.allTodos[0];
+      expect(deletedTodo.deletedAt).toBeDefined();
+      expect(deletedTodo.deletedAt).toBeInstanceOf(Date);
+      expect(deletedTodo.deletedAt!.getTime()).toBeGreaterThanOrEqual(
+        beforeDelete.getTime()
+      );
     });
 
     it('should restore soft-deleted todo and clear deletedAt', () => {
@@ -126,24 +180,25 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
         result.current.addTodo('Todo to restore');
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const todoToRestore = result.current.todos[0];
+      const todoId = result.current.todos[0].id;
 
-      // TODO: Test soft delete and restore workflow after enhancement
-      // act(() => {
-      //   result.current.deleteTodo(todoToRestore.id); // Soft delete
-      // });
+      // Soft delete
+      act(() => {
+        result.current.deleteTodo(todoId);
+      });
 
-      // expect(result.current.getDeletedTodos()).toHaveLength(1);
-      // expect(result.current.getVisibleTodos()).toHaveLength(0);
+      expect(result.current.todos).toHaveLength(0); // Hidden from default filter
+      expect(result.current.allTodos).toHaveLength(1); // Still exists
+      expect(result.current.allTodos[0].deletedAt).toBeInstanceOf(Date);
 
-      // act(() => {
-      //   result.current.restoreDeletedTodo(todoId);
-      // });
+      // Restore
+      act(() => {
+        result.current.restoreDeletedTodo(todoId);
+      });
 
-      // expect(result.current.getDeletedTodos()).toHaveLength(0);
-      // expect(result.current.getVisibleTodos()).toHaveLength(1);
-      // expect(result.current.todos[0].deletedAt).toBeUndefined();
+      expect(result.current.todos).toHaveLength(1); // Visible again
+      expect(result.current.allTodos).toHaveLength(1);
+      expect(result.current.todos[0].deletedAt).toBeUndefined();
     });
 
     it('should permanently delete todo when using permanentlyDeleteTodo', () => {
@@ -154,23 +209,16 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       expect(result.current.todos).toHaveLength(1);
+      expect(result.current.allTodos).toHaveLength(1);
       const todoId = result.current.todos[0].id;
 
-      // TODO: After enhancement, test permanent deletion
-      // act(() => {
-      //   result.current.permanentlyDeleteTodo(todoId);
-      // });
-
-      // expect(result.current.todos).toHaveLength(0);
-      // expect(result.current.getDeletedTodos()).toHaveLength(0);
-      // expect(result.current.getVisibleTodos()).toHaveLength(0);
-
-      // For now, current delete behavior
+      // Permanent deletion removes from both filtered and allTodos
       act(() => {
-        result.current.deleteTodo(todoId);
+        result.current.permanentlyDeleteTodo(todoId);
       });
 
       expect(result.current.todos).toHaveLength(0);
+      expect(result.current.allTodos).toHaveLength(0);
     });
   });
 
@@ -208,20 +256,35 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
         result.current.addTodo('Todo to delete');
       });
 
-      const [, todoToComplete] = result.current.todos;
+      const [, todoToComplete, todoToDelete] = result.current.todos;
 
       // Complete one todo
       act(() => {
         result.current.toggleTodo(todoToComplete.id);
       });
 
-      // TODO: After enhancement, test mixed states
-      // act(() => {
-      //   result.current.deleteTodo(todoToDelete.id); // Soft delete
-      // });
+      // Soft delete another todo
+      act(() => {
+        result.current.deleteTodo(todoToDelete.id);
+      });
 
-      // const visibleTodos = result.current.getVisibleTodos();
-      // expect(visibleTodos).toHaveLength(2); // Active and completed, but not deleted
+      // Default filter shows active and completed, but not deleted
+      expect(result.current.todos).toHaveLength(2); // Active and completed visible
+      expect(result.current.allTodos).toHaveLength(3); // All todos still exist
+
+      // Test completed filter
+      act(() => {
+        result.current.setFilter('completed');
+      });
+      expect(result.current.todos).toHaveLength(1); // Only completed
+      expect(result.current.todos[0].completed).toBe(true);
+
+      // Test active filter
+      act(() => {
+        result.current.setFilter('active');
+      });
+      expect(result.current.todos).toHaveLength(1); // Only active
+      expect(result.current.todos[0].completed).toBe(false);
 
       // const activeTodos = visibleTodos.filter(todo => !todo.completed);
       // const completedTodos = visibleTodos.filter(todo => todo.completed);
@@ -243,23 +306,15 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
       const todoId = result.current.todos[0].id;
 
-      // TODO: After enhancement, test localStorage persistence
-      // act(() => {
-      //   result.current.deleteTodo(todoId); // Soft delete
-      // });
-
-      // const storedData = JSON.parse(mockStorage.getItem('todos') || '[]');
-      // expect(storedData).toHaveLength(1);
-      // expect(storedData[0]).toHaveProperty('deletedAt');
-      // expect(typeof storedData[0].deletedAt).toBe('string'); // Serialized date
-
-      // For now, test current behavior
+      // Test soft delete localStorage persistence
       act(() => {
-        result.current.deleteTodo(todoId);
+        result.current.deleteTodo(todoId); // Soft delete
       });
 
       const storedData = JSON.parse(mockStorage.getItem('todos') || '[]');
-      expect(storedData).toHaveLength(0);
+      expect(storedData).toHaveLength(1); // Todo still stored with deletedAt
+      expect(storedData[0]).toHaveProperty('deletedAt');
+      expect(typeof storedData[0].deletedAt).toBe('string'); // Serialized date
     });
 
     it('should restore soft-deleted todos from localStorage on hook initialization', () => {
@@ -284,9 +339,13 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       // expect(result.current.getDeletedTodos()).toHaveLength(1);
       // expect(result.current.getVisibleTodos()).toHaveLength(0);
 
-      // Current behavior: loads todo without deletedAt field
-      expect(result.current.todos).toHaveLength(1);
-      expect(result.current.todos[0].text).toBe('Previously soft-deleted todo');
+      // Soft-deleted todos are hidden from default filter but exist in allTodos
+      expect(result.current.todos).toHaveLength(0); // Hidden from default view
+      expect(result.current.allTodos).toHaveLength(1); // Exists in allTodos
+      expect(result.current.allTodos[0].text).toBe(
+        'Previously soft-deleted todo'
+      );
+      expect(result.current.allTodos[0].deletedAt).toBeInstanceOf(Date);
     });
 
     it('should handle migration of existing todos without deletedAt field', () => {
@@ -496,12 +555,11 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
       const { result } = renderHook(() => useTodos());
 
-      // Should handle gracefully - current behavior loads the todo
-      expect(result.current.todos).toHaveLength(1);
-
-      // TODO: After enhancement, should handle invalid deletedAt
-      // const loadedTodo = result.current.todos[0] as EnhancedTodo;
-      // expect(loadedTodo.deletedAt).toBeUndefined(); // Invalid dates should be cleared
+      // Should handle gracefully - invalid deletedAt is treated as undefined/falsy
+      expect(result.current.todos).toHaveLength(0); // Todo with invalid deletedAt is hidden
+      expect(result.current.allTodos).toHaveLength(1); // Still exists in allTodos
+      expect(result.current.allTodos[0].deletedAt).toBeInstanceOf(Date); // Invalid string becomes Date object
+      expect(isNaN(result.current.allTodos[0].deletedAt!.getTime())).toBe(true); // But with NaN value
     });
   });
 });
