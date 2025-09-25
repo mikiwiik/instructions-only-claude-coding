@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Todo, TodoState } from '../types/todo';
+import { Todo, TodoState, TodoFilter } from '../types/todo';
 
 const STORAGE_KEY = 'todos';
 
@@ -30,11 +30,13 @@ export function useTodos() {
       const storedTodos = localStorage.getItem(STORAGE_KEY);
       if (storedTodos) {
         const parsedTodos = JSON.parse(storedTodos);
-        // Convert date strings back to Date objects
-        const todosWithDates = parsedTodos.map((todo: Todo) => ({
+        // Convert date strings back to Date objects and ensure backward compatibility
+        const todosWithDates = parsedTodos.map((todo: Partial<Todo> & { createdAt: string; updatedAt: string; deletedAt?: string }) => ({
           ...todo,
           createdAt: new Date(todo.createdAt),
           updatedAt: new Date(todo.updatedAt),
+          // Backward compatibility: existing todos don't have deletedAt
+          deletedAt: todo.deletedAt ? new Date(todo.deletedAt) : undefined,
         }));
         setState({
           todos: todosWithDates,
@@ -129,7 +131,46 @@ export function useTodos() {
 
   const deleteTodo = (id: string) => {
     setState((prev) => {
+      const updatedTodos = prev.todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            deletedAt: new Date(),
+          };
+        }
+        return todo;
+      });
+      saveTodos(updatedTodos);
+      return {
+        ...prev,
+        todos: updatedTodos,
+      };
+    });
+  };
+
+  const permanentlyDeleteTodo = (id: string) => {
+    setState((prev) => {
       const updatedTodos = prev.todos.filter((todo) => todo.id !== id);
+      saveTodos(updatedTodos);
+      return {
+        ...prev,
+        todos: updatedTodos,
+      };
+    });
+  };
+
+  const restoreDeletedTodo = (id: string) => {
+    setState((prev) => {
+      const updatedTodos = prev.todos.map((todo) => {
+        if (todo.id === id && todo.deletedAt) {
+          return {
+            ...todo,
+            deletedAt: undefined,
+            updatedAt: new Date(),
+          };
+        }
+        return todo;
+      });
       saveTodos(updatedTodos);
       return {
         ...prev,
@@ -231,16 +272,42 @@ export function useTodos() {
     });
   };
 
+  // Filter todos based on current filter
+  const getFilteredTodos = () => {
+    switch (state.filter) {
+      case 'active':
+        return state.todos.filter((todo) => !todo.completed && !todo.deletedAt);
+      case 'completed':
+        return state.todos.filter((todo) => todo.completed && !todo.deletedAt);
+      case 'recently-deleted':
+        return state.todos.filter((todo) => todo.deletedAt);
+      case 'all':
+      default:
+        return state.todos.filter((todo) => !todo.deletedAt);
+    }
+  };
+
+  const setFilter = (filter: TodoFilter) => {
+    setState((prev) => ({
+      ...prev,
+      filter,
+    }));
+  };
+
   return {
-    todos: state.todos,
+    todos: getFilteredTodos(),
+    allTodos: state.todos,
     filter: state.filter,
     addTodo,
     toggleTodo,
     restoreTodo,
     deleteTodo,
+    permanentlyDeleteTodo,
+    restoreDeletedTodo,
     editTodo,
     reorderTodos,
     moveUp,
     moveDown,
+    setFilter,
   };
 }
