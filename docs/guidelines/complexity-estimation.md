@@ -185,12 +185,14 @@ Claude Code development.
 For AI collaboration and Claude Code workflow issues, complexity assessment includes:
 
 **AI-Specific Complexity Factors:**
+
 - **Instruction clarity requirements**: How clear the AI instructions need to be
 - **Methodology documentation**: Level of agentic coding process documentation needed
 - **Cross-reference maintenance**: Documentation consistency requirements
 - **AI collaboration pattern complexity**: How novel the AI interaction pattern is
 
 **Combined Label Examples:**
+
 - **claude-workflow + complexity-minimal**: Simple CLAUDE.md updates, basic instruction clarifications
 - **claude-workflow + complexity-simple**: Standard AI workflow documentation, basic process improvements
 - **claude-workflow + complexity-moderate**: Comprehensive AI methodology documentation, multi-file process updates
