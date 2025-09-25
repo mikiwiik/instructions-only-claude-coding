@@ -59,16 +59,19 @@ The `claude-workflow` label identifies issues that specifically relate to improv
 ### 1. Instruction Improvement Issues 🔧
 
 **Characteristics:**
+
 - Focus on making AI instructions clearer and more effective
 - Improve human-AI communication patterns
 - Enhance instruction-based development practices
 
 **Real Examples from Project:**
+
 - #59: "Improve Claude instruction: Mandatory issue closure and PR completion workflow"
 - #61: "Document claude-workflow label usage and integration guidelines" (this issue)
 - Updates to task planning protocols in CLAUDE.md
 
 **Typical Patterns:**
+
 ```
 feat: improve Claude instruction for [specific workflow]
 docs: clarify AI collaboration guidelines for [specific process]
@@ -78,16 +81,19 @@ process: enhance instruction-based [specific methodology]
 ### 2. Workflow Enhancement Issues ⚙️
 
 **Characteristics:**
+
 - Optimize Claude Code integration with development processes
 - Improve AI-assisted workflow efficiency
 - Enhance agentic coding methodology
 
 **Examples:**
+
 - Claude Code agent implementations for specialized tasks
 - Task planning protocol improvements
 - Quality assurance process optimization through AI
 
 **Typical Patterns:**
+
 ```
 workflow: implement Claude Code agents for [specialized function]
 process: optimize AI task planning for [specific workflow]
@@ -97,16 +103,19 @@ enhance: improve agentic coding [specific methodology]
 ### 3. Documentation and Guidelines Issues 📚
 
 **Characteristics:**
+
 - Create or improve documentation about AI collaboration
 - Establish best practices for instruction-based development
 - Maintain knowledge about agentic coding methodology
 
 **Examples:**
+
 - Cross-reference maintenance between CLAUDE.md, README.md, and ADRs
 - Best practices documentation for AI collaboration
 - Learning documentation about effective instruction patterns
 
 **Typical Patterns:**
+
 ```
 docs: create guidelines for [AI collaboration aspect]
 guide: document best practices for [instruction-based process]
@@ -116,16 +125,19 @@ knowledge: capture learnings about [agentic coding methodology]
 ### 4. Configuration and Setup Issues 🛠️
 
 **Characteristics:**
+
 - Claude Code environment configuration
 - Tool integration and setup for AI assistance
 - Development environment optimization
 
 **Examples:**
+
 - Claude Code authentication and access setup
 - Integration with GitHub, VS Code, or other development tools
 - Environment configuration for optimal AI assistance
 
 **Typical Patterns:**
+
 ```
 setup: configure Claude Code for [specific environment]
 config: optimize [tool] integration with Claude Code
@@ -137,33 +149,42 @@ env: improve development environment for AI assistance
 ### Required Label Combinations
 
 **All claude-workflow issues MUST include:**
+
 - **Priority label**: priority-1-critical through priority-4-low
 - **Complexity label**: complexity-minimal through complexity-epic
 
 ### Common Label Patterns
 
 #### High-Priority AI Workflow Issues
+
 ```bash
 --label "claude-workflow,priority-1-critical,complexity-simple"
 ```
+
 **Use for:** Urgent AI collaboration blockers or critical instruction improvements
 
 #### Documentation and Guidelines
+
 ```bash
 --label "claude-workflow,documentation,priority-2-high,complexity-simple"
 ```
+
 **Use for:** AI collaboration documentation that needs immediate attention
 
 #### Process Improvements
+
 ```bash
 --label "claude-workflow,process-improvement,priority-2-high,complexity-moderate"
 ```
+
 **Use for:** Comprehensive workflow enhancements for AI collaboration
 
 #### Configuration and Setup
+
 ```bash
 --label "claude-workflow,enhancement,priority-3-medium,complexity-simple"
 ```
+
 **Use for:** Tool configuration and environment optimization
 
 ### Integration Guidelines
@@ -212,6 +233,7 @@ env: improve development environment for AI assistance
 ### Existing Issues with claude-workflow Label
 
 Current issues properly labeled with claude-workflow:
+
 - #59: Improve Claude instruction - Mandatory issue closure and PR completion workflow
 - #61: Document claude-workflow label usage and integration guidelines
 - #67: Document screenshot handling protocol for Claude Code
@@ -221,12 +243,14 @@ Current issues properly labeled with claude-workflow:
 ### Issues That Should Have claude-workflow Label
 
 **Methodology and Process Issues:**
+
 - Any issues about improving CLAUDE.md content
 - Task planning protocol improvements
 - AI collaboration pattern enhancements
 - Instruction-based development methodology updates
 
 **Documentation Issues:**
+
 - Cross-reference maintenance between AI-related documentation
 - Guidelines for effective AI collaboration
 - Best practices for instruction-only development
@@ -252,6 +276,7 @@ Current issues properly labeled with claude-workflow:
 ### Issue Creation Checklist
 
 For any issue that might be claude-workflow related, ask:
+
 - [ ] Does this issue involve Claude Code usage or instructions?
 - [ ] Is this about AI collaboration patterns or methodologies?
 - [ ] Does this affect instruction-based development practices?

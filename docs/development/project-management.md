@@ -145,6 +145,7 @@ The project includes specialized tracking for AI collaboration and Claude Code w
 #### When to Use claude-workflow Label
 
 **✅ Use for AI-related issues:**
+
 - Claude Code usage and instruction improvements
 - AI collaboration patterns and methodologies
 - CLAUDE.md documentation and requirements
@@ -153,6 +154,7 @@ The project includes specialized tracking for AI collaboration and Claude Code w
 - Documentation consistency across AI-assisted development
 
 **❌ Standard development issues:**
+
 - General git/CI/CD workflow (use standard labels)
 - Feature implementations (focus on functionality)
 - UI/UX improvements (unless AI interaction specific)
@@ -161,16 +163,19 @@ The project includes specialized tracking for AI collaboration and Claude Code w
 #### Combined Label Patterns
 
 **Critical AI Workflow Issues:**
+
 ```bash
 --label "claude-workflow,priority-1-critical,complexity-simple"
 ```
 
 **AI Documentation and Guidelines:**
+
 ```bash
 --label "claude-workflow,documentation,priority-2-high,complexity-simple"
 ```
 
 **AI Process Improvements:**
+
 ```bash
 --label "claude-workflow,process-improvement,priority-2-high,complexity-moderate"
 ```
