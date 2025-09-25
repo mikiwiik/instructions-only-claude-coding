@@ -104,9 +104,7 @@ describe('HomePage', () => {
     await user.type(input, 'Timestamped todo');
     await user.click(button);
 
-    // Check that a timestamp is displayed
-    expect(
-      screen.getByText(/added \d+\/\d+\/\d+ at \d+:\d+:\d+/i)
-    ).toBeInTheDocument();
+    // Check that a contextual timestamp is displayed
+    expect(screen.getByText(/created.*ago|created.*\d+/i)).toBeInTheDocument();
   });
 });
