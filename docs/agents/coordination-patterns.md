@@ -17,13 +17,14 @@ This document defines coordination patterns for parallel agent execution in Clau
 **Coordination Flow:**
 
 1. **Parallel Initialization**: All agents analyze requirement simultaneously
-2. **Frontend Specialist**: Begins component development
-3. **Testing Specialist**: Writes failing tests first (TDD red phase)
-4. **Documentation Agent**: Prepares documentation structure
-5. **Synchronization Point**: Frontend implements to pass tests (TDD green phase)
-6. **Quality Review**: All agents collaborate on refinement
-7. **Test Verification**: All tests passing and committed to version control
-8. **Integration**: Merged delivery with complete feature + tests + docs
+2. **Testing Specialist**: Writes failing tests first (TDD red phase) → **Atomic Commit**
+3. **Frontend Specialist**: Implements minimal functionality to pass tests → **Atomic Commit**
+4. **Frontend Specialist**: Refactors and enhances implementation → **Atomic Commits**
+5. **Testing Specialist**: Adds comprehensive test coverage → **Atomic Commits**
+6. **Documentation Agent**: Updates documentation and README → **Atomic Commit**
+7. **Quality Review**: All agents collaborate on final refinements → **Atomic Commits**
+8. **Test Verification**: All tests passing and committed to version control
+9. **Integration**: Final commit with "Closes #X" summarizing complete feature
 
 ### Pattern 2: Infrastructure + Feature (Parallel Development)
 
@@ -192,6 +193,7 @@ This document defines coordination patterns for parallel agent execution in Clau
 - Clear role boundaries prevent overlap and conflict
 - Regular synchronization points ensure alignment
 - Quality gates maintain standards throughout development
+- **Atomic commits** capture each agent's contributions clearly
 - Documentation captures decisions for future reference
 
 ### Parallel Efficiency

@@ -14,6 +14,8 @@
 
 ### Atomic Commit Strategy
 
+**🚨 PRINCIPLE**: Multi-step code changes are implemented as **multiple small atomic commits**, not one large commit.
+
 **Commit Message Format:**
 
 ```text
@@ -33,12 +35,22 @@ Optional footer for breaking changes or issue closure
 - `style`: Code style changes (formatting)
 - `chore`: Maintenance tasks
 
-**Example Sequence:**
+### Multi-Step Implementation Approach
+
+**Each logical change = One atomic commit:**
+
+- ✅ **Incremental Development**: Build functionality step by step
+- ✅ **Easy Review**: Each commit addresses single concern
+- ✅ **Precise Rollback**: Revert specific changes without losing others
+- ✅ **Clear History**: Logical progression through development
+
+**Example Multi-Step Feature Implementation:**
 
 ```bash
 git commit -m "test: add failing test for feature X (#33)"
 git commit -m "feat: implement basic feature X functionality (#33)"
 git commit -m "refactor: extract utility functions for feature X (#33)"
+git commit -m "test: add edge cases for feature X (#33)"
 git commit -m "docs: update README with feature X usage (#33)"
 git commit -m "feat: complete feature X implementation
 
@@ -48,6 +60,25 @@ Implements full functionality including:
 - Documentation updates
 
 Closes #33"
+```
+
+### TDD Commit Pattern
+
+**Follow Red-Green-Refactor cycle with commits:**
+
+```bash
+# Red: Write failing test
+git commit -m "test: add failing test for feature X (#issue)"
+
+# Green: Make test pass
+git commit -m "feat: implement minimal feature X functionality (#issue)"
+
+# Refactor: Improve without changing behavior
+git commit -m "refactor: optimize feature X implementation (#issue)"
+
+# Repeat cycle for additional functionality
+git commit -m "test: add edge cases for feature X (#issue)"
+git commit -m "feat: handle edge cases in feature X (#issue)"
 ```
 
 ## Pull Request Protocol
