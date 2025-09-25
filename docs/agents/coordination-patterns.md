@@ -2,7 +2,24 @@
 
 ## Multi-Agent Workflow Strategies
 
-This document defines coordination patterns for parallel agent execution in Claude Code development.
+This document defines coordination patterns for parallel agent execution in Claude Code development using custom
+project-specific agents configured in `.claude/agents/`.
+
+## Custom Agent Configuration
+
+**Project-Specific Agents** (located in `.claude/agents/`):
+
+- **frontend-specialist.yaml**: React components, TypeScript interfaces, Tailwind styling
+- **testing-specialist.yaml**: TDD methodology, React Testing Library, Jest coverage
+- **quality-assurance.yaml**: Code review, linting, security, performance analysis
+- **documentation-agent.yaml**: README updates, ADRs, technical writing
+
+Each agent has:
+
+- **Specialized System Prompts**: Domain expertise for todo application development
+- **Restricted Tool Access**: Security-appropriate tools for each role
+- **Coordination Protocols**: Defined interaction patterns with other agents
+- **Project Context**: Understanding of Next.js 14, TypeScript strict mode, Tailwind CSS
 
 ## Standard 3-Agent Coordination Patterns
 
