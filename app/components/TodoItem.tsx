@@ -176,9 +176,7 @@ export default function TodoItem({
       style={style}
       role='listitem'
       className={`flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg border fade-in ${
-        todo.deletedAt
-          ? 'bg-muted border-dashed opacity-75'
-          : 'bg-background'
+        todo.deletedAt ? 'bg-muted border-dashed opacity-75' : 'bg-background'
       }`}
     >
       <div className='flex flex-col md:flex-row items-center gap-1 md:gap-2'>
@@ -373,8 +371,8 @@ export default function TodoItem({
         title={todo.deletedAt ? 'Permanently Delete Todo' : 'Delete Todo'}
         message={
           todo.deletedAt
-            ? `Are you sure you want to permanently delete "${todo.text}"? This action cannot be undone.`
-            : `Are you sure you want to delete "${todo.text}"? You can restore it from Recently Deleted.`
+            ? `Are you sure you want to permanently delete "${todo.text.length > 100 ? todo.text.substring(0, 100) + '...' : todo.text}"? This action cannot be undone.`
+            : `Are you sure you want to delete "${todo.text.length > 100 ? todo.text.substring(0, 100) + '...' : todo.text}"? You can restore it from Recently Deleted.`
         }
         confirmLabel={todo.deletedAt ? 'Permanently Delete' : 'Delete'}
         cancelLabel='Cancel'
