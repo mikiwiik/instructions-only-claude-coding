@@ -57,6 +57,23 @@ jest.mock('../../utils/timestamp', () => ({
       return `Created ${diffMinutes} minutes ago`;
     }
   ),
+  getFullTimestamp: jest.fn(
+    (todo: {
+      deletedAt?: Date;
+      updatedAt: Date;
+      createdAt: Date;
+      completed: boolean;
+    }) => {
+      if (todo.deletedAt) {
+        return `Deleted ${todo.deletedAt.toLocaleDateString()} at ${todo.deletedAt.toLocaleTimeString()}`;
+      }
+      if (todo.updatedAt.getTime() > todo.createdAt.getTime()) {
+        const action = todo.completed ? 'Completed' : 'Updated';
+        return `${action} ${todo.updatedAt.toLocaleDateString()} at ${todo.updatedAt.toLocaleTimeString()}`;
+      }
+      return `Created ${todo.createdAt.toLocaleDateString()} at ${todo.createdAt.toLocaleTimeString()}`;
+    }
+  ),
 }));
 
 describe('Timestamp Lifecycle Integration Tests', () => {

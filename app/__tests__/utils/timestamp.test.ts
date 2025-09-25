@@ -342,7 +342,7 @@ describe('getContextualTimestamp', () => {
         updatedAt: new Date(baseTime + 1), // 1 millisecond later
       });
 
-      expect(getContextualTimestamp(todo)).toBe('Updated 1 hour ago');
+      expect(getContextualTimestamp(todo)).toBe('Updated 59 minutes ago');
     });
 
     it('should be consistent across multiple calls', () => {

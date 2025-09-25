@@ -53,7 +53,7 @@ export function formatRelativeTime(date: Date, action: string): string {
   return `${action} ${date.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
-    year: 'numeric'
+    year: 'numeric',
   })}`;
 }
 
@@ -69,8 +69,8 @@ export function getContextualTimestamp(todo: Todo): string {
     return formatRelativeTime(todo.deletedAt, 'Deleted');
   }
 
-  // Second priority: updated timestamp (if different from created)
-  if (todo.updatedAt.getTime() !== todo.createdAt.getTime()) {
+  // Second priority: updated timestamp (if newer than created)
+  if (todo.updatedAt.getTime() > todo.createdAt.getTime()) {
     if (todo.completed) {
       return formatRelativeTime(todo.updatedAt, 'Completed');
     } else {
@@ -94,7 +94,7 @@ export function getFullTimestamp(todo: Todo): string {
   if (todo.deletedAt) {
     relevantDate = todo.deletedAt;
     action = 'Deleted';
-  } else if (todo.updatedAt.getTime() !== todo.createdAt.getTime()) {
+  } else if (todo.updatedAt.getTime() > todo.createdAt.getTime()) {
     relevantDate = todo.updatedAt;
     action = todo.completed ? 'Completed' : 'Updated';
   } else {
