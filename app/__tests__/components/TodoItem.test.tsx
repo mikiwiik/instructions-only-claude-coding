@@ -109,8 +109,8 @@ describe('TodoItem', () => {
       <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
     );
 
-    // Should show formatted date and time
-    expect(screen.getByText(/added 1\/1\/2023 at/i)).toBeInTheDocument();
+    // Should show contextual timestamp with formatted date
+    expect(screen.getByText(/created jan 1, 2023/i)).toBeInTheDocument();
   });
 
   it('should have proper ARIA attributes for screen readers', () => {
@@ -719,7 +719,7 @@ describe('TodoItem', () => {
         )
       ).toBeInTheDocument();
       expect(
-        screen.getByText(/this action cannot be undone/i)
+        screen.getByText(/you can restore it from recently deleted/i)
       ).toBeInTheDocument();
     });
 

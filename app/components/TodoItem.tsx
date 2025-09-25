@@ -14,6 +14,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Todo } from '../types/todo';
+import { getContextualTimestamp, getFullTimestamp } from '../utils/timestamp';
 import ConfirmationDialog from './ConfirmationDialog';
 
 interface TodoItemProps {
@@ -22,6 +23,8 @@ interface TodoItemProps {
   onDelete: (id: string) => void;
   onEdit?: (id: string, newText: string) => void;
   onRestore?: (id: string) => void;
+  onPermanentlyDelete?: (id: string) => void;
+  onRestoreDeleted?: (id: string) => void;
   moveUp?: (id: string) => void;
   moveDown?: (id: string) => void;
   isDraggable?: boolean;
@@ -35,6 +38,8 @@ export default function TodoItem({
   onDelete,
   onEdit,
   onRestore,
+  onPermanentlyDelete,
+  onRestoreDeleted,
   moveUp,
   moveDown,
   isDraggable = false,
@@ -88,13 +93,32 @@ export default function TodoItem({
     }
   };
 
+  const handleRestoreDeleted = () => {
+    if (onRestoreDeleted && todo.deletedAt) {
+      onRestoreDeleted(todo.id);
+    }
+  };
+
+  const handlePermanentlyDelete = () => {
+    if (onPermanentlyDelete) {
+      onPermanentlyDelete(todo.id);
+    }
+    setShowDeleteConfirm(false);
+  };
+
   const handleDelete = () => {
     setShowDeleteConfirm(true);
   };
 
   const handleConfirmDelete = () => {
-    onDelete(todo.id);
-    setShowDeleteConfirm(false);
+    if (todo.deletedAt && onPermanentlyDelete) {
+      // Permanently delete already soft-deleted todos
+      handlePermanentlyDelete();
+    } else {
+      // Soft delete active todos
+      onDelete(todo.id);
+      setShowDeleteConfirm(false);
+    }
   };
 
   const handleCancelDelete = () => {
@@ -151,7 +175,11 @@ export default function TodoItem({
       ref={setNodeRef}
       style={style}
       role='listitem'
-      className='flex items-start gap-2 sm:gap-3 p-3 sm:p-4 bg-background rounded-lg border fade-in'
+      className={`flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg border fade-in ${
+        todo.deletedAt
+          ? 'bg-muted border-dashed opacity-75'
+          : 'bg-background'
+      }`}
     >
       <div className='flex flex-col md:flex-row items-center gap-1 md:gap-2'>
         {isDraggable && (
@@ -234,9 +262,11 @@ export default function TodoItem({
             >
               {todo.text}
             </p>
-            <p className='text-xs text-muted-foreground mt-1 sm:mt-2'>
-              Added {todo.createdAt.toLocaleDateString()} at{' '}
-              {todo.createdAt.toLocaleTimeString()}
+            <p
+              className='text-xs text-muted-foreground mt-1 sm:mt-2'
+              title={getFullTimestamp(todo)}
+            >
+              {getContextualTimestamp(todo)}
             </p>
           </>
         )}
@@ -277,34 +307,61 @@ export default function TodoItem({
           aria-label='Todo actions'
           className='flex items-center gap-1'
         >
-          {todo.completed && onRestore && (
-            <button
-              onClick={handleRestore}
-              className='flex-shrink-0 p-2 rounded-full hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-colors text-muted-foreground hover:text-yellow-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
-              aria-label={`Undo completion: ${todo.text}`}
-              type='button'
-            >
-              <Undo2 className='h-4 w-4' />
-            </button>
+          {todo.deletedAt ? (
+            // Actions for deleted todos
+            <>
+              {onRestoreDeleted && (
+                <button
+                  onClick={handleRestoreDeleted}
+                  className='flex-shrink-0 p-2 rounded-full hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors text-muted-foreground hover:text-green-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
+                  aria-label={`Restore todo: ${todo.text}`}
+                  type='button'
+                >
+                  <Undo2 className='h-4 w-4' />
+                </button>
+              )}
+              <button
+                onClick={handleDelete}
+                className='flex-shrink-0 p-2 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
+                aria-label={`Permanently delete todo: ${todo.text}`}
+                type='button'
+              >
+                <X className='h-4 w-4' />
+              </button>
+            </>
+          ) : (
+            // Actions for active todos
+            <>
+              {todo.completed && onRestore && (
+                <button
+                  onClick={handleRestore}
+                  className='flex-shrink-0 p-2 rounded-full hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-colors text-muted-foreground hover:text-yellow-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
+                  aria-label={`Undo completion: ${todo.text}`}
+                  type='button'
+                >
+                  <Undo2 className='h-4 w-4' />
+                </button>
+              )}
+              {!isEditing && onEdit && !todo.completed && (
+                <button
+                  onClick={handleEdit}
+                  className='flex-shrink-0 p-2 rounded-full hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-muted-foreground hover:text-blue-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
+                  aria-label={`Edit todo: ${todo.text}`}
+                  type='button'
+                >
+                  <Edit2 className='h-4 w-4' />
+                </button>
+              )}
+              <button
+                onClick={handleDelete}
+                className='flex-shrink-0 p-2 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
+                aria-label={`Delete todo: ${todo.text}`}
+                type='button'
+              >
+                <X className='h-4 w-4' />
+              </button>
+            </>
           )}
-          {!isEditing && onEdit && !todo.completed && (
-            <button
-              onClick={handleEdit}
-              className='flex-shrink-0 p-2 rounded-full hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-muted-foreground hover:text-blue-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
-              aria-label={`Edit todo: ${todo.text}`}
-              type='button'
-            >
-              <Edit2 className='h-4 w-4' />
-            </button>
-          )}
-          <button
-            onClick={handleDelete}
-            className='flex-shrink-0 p-2 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
-            aria-label={`Delete todo: ${todo.text}`}
-            type='button'
-          >
-            <X className='h-4 w-4' />
-          </button>
         </div>
       </div>
 
@@ -313,9 +370,13 @@ export default function TodoItem({
         isOpen={showDeleteConfirm}
         onClose={handleCancelDelete}
         onConfirm={handleConfirmDelete}
-        title='Delete Todo'
-        message={`Are you sure you want to delete "${todo.text}"? This action cannot be undone.`}
-        confirmLabel='Delete'
+        title={todo.deletedAt ? 'Permanently Delete Todo' : 'Delete Todo'}
+        message={
+          todo.deletedAt
+            ? `Are you sure you want to permanently delete "${todo.text}"? This action cannot be undone.`
+            : `Are you sure you want to delete "${todo.text}"? You can restore it from Recently Deleted.`
+        }
+        confirmLabel={todo.deletedAt ? 'Permanently Delete' : 'Delete'}
         cancelLabel='Cancel'
         variant='destructive'
       />
