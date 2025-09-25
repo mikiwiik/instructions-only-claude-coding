@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import TodoItem from '../../components/TodoItem';
+import { Todo } from '../../types/todo';
 
 // Enhanced Todo interface for testing
 interface EnhancedTodo {
@@ -27,7 +28,8 @@ jest.mock('../../utils/timestamp', () => ({
     return `${action} ${date.toLocaleDateString()}`;
   }),
   getContextualTimestamp: jest.fn((todo: EnhancedTodo) => {
-    if (todo.deletedAt) return `Deleted ${Math.floor((Date.now() - todo.deletedAt.getTime()) / 60000)} minutes ago`;
+    if (todo.deletedAt)
+      return `Deleted ${Math.floor((Date.now() - todo.deletedAt.getTime()) / 60000)} minutes ago`;
     if (todo.updatedAt > todo.createdAt) {
       return todo.completed
         ? `Completed ${Math.floor((Date.now() - todo.updatedAt.getTime()) / 60000)} minutes ago`
@@ -37,7 +39,9 @@ jest.mock('../../utils/timestamp', () => ({
   }),
 }));
 
-const createMockTodo = (overrides: Partial<EnhancedTodo> = {}): EnhancedTodo => ({
+const createMockTodo = (
+  overrides: Partial<EnhancedTodo> = {}
+): EnhancedTodo => ({
   id: '1',
   text: 'Test todo',
   completed: false,
@@ -165,11 +169,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       });
 
       render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-        />
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
       // TODO: After implementation
@@ -186,11 +186,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       });
 
       render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-        />
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
       // TODO: After implementation
@@ -206,11 +202,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       });
 
       render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-        />
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
       // TODO: After implementation
@@ -228,11 +220,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       });
 
       render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-        />
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
       // TODO: After implementation
@@ -245,7 +233,6 @@ describe('TodoItem - Contextual Timestamp Display', () => {
 
   describe('timestamp interactivity and accessibility', () => {
     it('should show full timestamp on hover for accessibility', async () => {
-      const user = userEvent.setup();
       const todo = createMockTodo({
         text: 'Hover test todo',
         createdAt: new Date('2024-01-15T14:30:00Z'),
@@ -253,11 +240,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       });
 
       render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-        />
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
       // TODO: After implementation, timestamp element should have title attribute
@@ -277,11 +260,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       });
 
       render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-        />
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
       // TODO: After implementation
@@ -294,7 +273,6 @@ describe('TodoItem - Contextual Timestamp Display', () => {
     });
 
     it('should update timestamp display when todo state changes', async () => {
-      const user = userEvent.setup();
       const todo = createMockTodo({
         text: 'State change test',
         completed: false,
@@ -420,11 +398,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       });
 
       render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-        />
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
       // TODO: Should show "Created X ago"
@@ -442,11 +416,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       });
 
       const { rerender } = render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-        />
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
       // TODO: Capture initial timestamp display
@@ -455,11 +425,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
 
       // Rerender with same todo (simulating React re-render)
       rerender(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-        />
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
       // TODO: Should show same timestamp
@@ -475,11 +441,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       });
 
       const { rerender } = render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-        />
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
       // TODO: Should handle very recent timestamps
@@ -516,11 +478,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       });
 
       render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-        />
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
       // TODO: Should handle future dates gracefully
@@ -536,12 +494,12 @@ describe('TodoItem - Contextual Timestamp Display', () => {
         completed: false,
         createdAt: new Date(),
         // Missing updatedAt - should not crash
-      } as any;
+      } as Partial<Todo>;
 
       expect(() => {
         render(
           <TodoItem
-            todo={incompleteTodo}
+            todo={incompleteTodo as Todo}
             onToggle={mockOnToggle}
             onDelete={mockOnDelete}
           />
@@ -582,11 +540,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       });
 
       render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-        />
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
       // TODO: Timestamp should still be visible despite long text
@@ -628,11 +582,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       });
 
       render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-        />
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
       const toggleButton = screen.getByRole('button', { name: /toggle todo/i });
@@ -648,11 +598,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       });
 
       render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-        />
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
       const deleteButton = screen.getByRole('button', { name: /delete todo/i });
@@ -668,11 +614,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       });
 
       render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-        />
+        <TodoItem todo={todo} onToggle={mockOnToggle} onDelete={mockOnDelete} />
       );
 
       // Check that responsive classes are maintained

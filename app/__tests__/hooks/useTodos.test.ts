@@ -442,7 +442,11 @@ describe('useTodos hook', () => {
       });
 
       const storedTodos = JSON.parse(localStorage.getItem('todos') || '[]').map(
-        (todo: any) => ({
+        (todo: {
+          createdAt: string;
+          updatedAt: string;
+          [key: string]: unknown;
+        }) => ({
           ...todo,
           createdAt: new Date(todo.createdAt),
           updatedAt: new Date(todo.updatedAt),

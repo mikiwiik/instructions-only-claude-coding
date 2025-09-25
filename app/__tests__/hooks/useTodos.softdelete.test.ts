@@ -8,16 +8,6 @@ Object.defineProperty(window, 'localStorage', {
   value: mockStorage,
 });
 
-// Enhanced Todo interface for testing
-interface EnhancedTodo {
-  id: string;
-  text: string;
-  completed: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt?: Date;
-}
-
 describe('useTodos Hook - Soft Delete Functionality', () => {
   beforeEach(() => {
     // Clear localStorage before each test
@@ -112,7 +102,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       const todoId = result.current.todos[0].id;
-      const beforeDelete = new Date();
+      // Record deletion time for timestamp testing
 
       // TODO: After enhancement, soft delete should set deletedAt
       act(() => {
@@ -136,11 +126,12 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
         result.current.addTodo('Todo to restore');
       });
 
-      const todoId = result.current.todos[0].id;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const todoToRestore = result.current.todos[0];
 
       // TODO: Test soft delete and restore workflow after enhancement
       // act(() => {
-      //   result.current.deleteTodo(todoId); // Soft delete
+      //   result.current.deleteTodo(todoToRestore.id); // Soft delete
       // });
 
       // expect(result.current.getDeletedTodos()).toHaveLength(1);
@@ -217,7 +208,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
         result.current.addTodo('Todo to delete');
       });
 
-      const [activeTodo, todoToComplete, todoToDelete] = result.current.todos;
+      const [, todoToComplete] = result.current.todos;
 
       // Complete one todo
       act(() => {
@@ -345,7 +336,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       const todoId = result.current.todos[0].id;
-      const beforeDelete = Date.now();
+      // Record deletion time for timestamp testing
 
       // TODO: After enhancement
       // act(() => {
@@ -372,7 +363,9 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       const originalTodo = result.current.todos[0];
-      const { createdAt, updatedAt } = originalTodo;
+      // Check original timestamps
+      originalTodo.createdAt;
+      originalTodo.updatedAt;
 
       // TODO: After enhancement
       // act(() => {
@@ -399,11 +392,12 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
         result.current.addTodo('Test restoration');
       });
 
-      const todoId = result.current.todos[0].id;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const todoToRestore = result.current.todos[0];
 
       // TODO: After enhancement
       // act(() => {
-      //   result.current.deleteTodo(todoId); // Soft delete
+      //   result.current.deleteTodo(todoToRestore.id); // Soft delete
       // });
 
       // expect(result.current.todos[0].deletedAt).toBeDefined();
@@ -423,12 +417,12 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
         result.current.addTodo('Test updatedAt on restore');
       });
 
-      const todoId = result.current.todos[0].id;
-      const originalUpdatedAt = result.current.todos[0].updatedAt;
+      const todoToRestore = result.current.todos[0];
+      const originalUpdatedAt = todoToRestore.updatedAt;
 
       // TODO: After enhancement
       // act(() => {
-      //   result.current.deleteTodo(todoId); // Soft delete
+      //   result.current.deleteTodo(todoToRestore.id); // Soft delete
       // });
 
       // // Wait a bit to ensure different timestamp

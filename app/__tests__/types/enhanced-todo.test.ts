@@ -6,7 +6,12 @@ interface EnhancedTodo extends Todo {
 }
 
 // Enhanced filter types for soft delete support
-type EnhancedTodoFilter = TodoFilter | 'deleted' | 'recently-updated' | 'recently-deleted' | 'recently-completed';
+type EnhancedTodoFilter =
+  | TodoFilter
+  | 'deleted'
+  | 'recently-updated'
+  | 'recently-deleted'
+  | 'recently-completed';
 
 // Enhanced state interface for soft delete filtering
 interface EnhancedTodoState extends Omit<TodoState, 'filter'> {
@@ -128,7 +133,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
         },
       ];
 
-      scenarios.forEach(({ name, todo, expectedState }) => {
+      scenarios.forEach(({ todo, expectedState }) => {
         const isDeleted = !!todo.deletedAt;
         const isCompleted = todo.completed;
         const isActive = !isCompleted && !isDeleted;
@@ -162,7 +167,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
         'recently-completed',
       ];
 
-      baseFilters.forEach(filter => {
+      baseFilters.forEach((filter) => {
         expect(enhancedFilters).toContain(filter);
       });
     });
@@ -175,7 +180,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
         'recently-completed',
       ];
 
-      newFilters.forEach(filter => {
+      newFilters.forEach((filter) => {
         expect(typeof filter).toBe('string');
         expect(filter.length).toBeGreaterThan(0);
       });
@@ -192,7 +197,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
         'recently-completed',
       ];
 
-      filters.forEach(filter => {
+      filters.forEach((filter) => {
         const filterString: string = filter;
         expect(typeof filterString).toBe('string');
       });
@@ -259,9 +264,11 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
       };
 
       expect(state.todos).toHaveLength(3);
-      expect(state.todos.filter(todo => !!todo.deletedAt)).toHaveLength(1);
-      expect(state.todos.filter(todo => todo.completed)).toHaveLength(1);
-      expect(state.todos.filter(todo => !todo.completed && !todo.deletedAt)).toHaveLength(1);
+      expect(state.todos.filter((todo) => !!todo.deletedAt)).toHaveLength(1);
+      expect(state.todos.filter((todo) => todo.completed)).toHaveLength(1);
+      expect(
+        state.todos.filter((todo) => !todo.completed && !todo.deletedAt)
+      ).toHaveLength(1);
     });
   });
 
@@ -285,13 +292,13 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
       ];
 
       // Migrate base todos to enhanced todos
-      const enhancedTodos: EnhancedTodo[] = baseTodos.map(todo => ({
+      const enhancedTodos: EnhancedTodo[] = baseTodos.map((todo) => ({
         ...todo,
         deletedAt: undefined, // Explicitly set for clarity
       }));
 
       expect(enhancedTodos).toHaveLength(2);
-      enhancedTodos.forEach(todo => {
+      enhancedTodos.forEach((todo) => {
         expect(todo).toHaveProperty('id');
         expect(todo).toHaveProperty('text');
         expect(todo).toHaveProperty('completed');
@@ -331,7 +338,9 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
         ...deserialized,
         createdAt: new Date(deserialized.createdAt),
         updatedAt: new Date(deserialized.updatedAt),
-        deletedAt: deserialized.deletedAt ? new Date(deserialized.deletedAt) : undefined,
+        deletedAt: deserialized.deletedAt
+          ? new Date(deserialized.deletedAt)
+          : undefined,
       };
 
       expect(reconstructed.createdAt).toBeInstanceOf(Date);
@@ -391,16 +400,16 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
 
       // Filter functions with type safety
       const getVisibleTodos = (todos: EnhancedTodo[]): EnhancedTodo[] =>
-        todos.filter(todo => !todo.deletedAt);
+        todos.filter((todo) => !todo.deletedAt);
 
       const getDeletedTodos = (todos: EnhancedTodo[]): EnhancedTodo[] =>
-        todos.filter(todo => !!todo.deletedAt);
+        todos.filter((todo) => !!todo.deletedAt);
 
       const getActiveTodos = (todos: EnhancedTodo[]): EnhancedTodo[] =>
-        todos.filter(todo => !todo.completed && !todo.deletedAt);
+        todos.filter((todo) => !todo.completed && !todo.deletedAt);
 
       const getCompletedTodos = (todos: EnhancedTodo[]): EnhancedTodo[] =>
-        todos.filter(todo => todo.completed && !todo.deletedAt);
+        todos.filter((todo) => todo.completed && !todo.deletedAt);
 
       expect(getVisibleTodos(todos)).toHaveLength(2);
       expect(getDeletedTodos(todos)).toHaveLength(1);
@@ -419,7 +428,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
         'recently-completed',
       ];
 
-      validFilters.forEach(filter => {
+      validFilters.forEach((filter) => {
         const state: EnhancedTodoState = {
           todos: [],
           filter,

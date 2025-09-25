@@ -1,4 +1,7 @@
-import { formatRelativeTime, getContextualTimestamp } from '../../utils/timestamp';
+import {
+  formatRelativeTime,
+  getContextualTimestamp,
+} from '../../utils/timestamp';
 import { Todo } from '../../types/todo';
 
 // Mock current time for consistent testing
@@ -30,7 +33,9 @@ describe('formatRelativeTime', () => {
 
     it('should handle singular minute', () => {
       const date = new Date(MOCK_NOW.getTime() - 1 * 60 * 1000); // 1 minute ago
-      expect(formatRelativeTime(date, 'Completed')).toBe('Completed 1 minute ago');
+      expect(formatRelativeTime(date, 'Completed')).toBe(
+        'Completed 1 minute ago'
+      );
     });
 
     it('should format hours correctly', () => {
@@ -110,10 +115,18 @@ describe('formatRelativeTime', () => {
     it('should handle different action types', () => {
       const date = new Date(MOCK_NOW.getTime() - 30 * 60 * 1000); // 30 minutes ago
 
-      expect(formatRelativeTime(date, 'Created')).toBe('Created 30 minutes ago');
-      expect(formatRelativeTime(date, 'Updated')).toBe('Updated 30 minutes ago');
-      expect(formatRelativeTime(date, 'Completed')).toBe('Completed 30 minutes ago');
-      expect(formatRelativeTime(date, 'Deleted')).toBe('Deleted 30 minutes ago');
+      expect(formatRelativeTime(date, 'Created')).toBe(
+        'Created 30 minutes ago'
+      );
+      expect(formatRelativeTime(date, 'Updated')).toBe(
+        'Updated 30 minutes ago'
+      );
+      expect(formatRelativeTime(date, 'Completed')).toBe(
+        'Completed 30 minutes ago'
+      );
+      expect(formatRelativeTime(date, 'Deleted')).toBe(
+        'Deleted 30 minutes ago'
+      );
     });
 
     it('should handle empty or undefined action', () => {
@@ -139,7 +152,7 @@ describe('formatRelativeTime', () => {
         new Date('2023-12-15'), // Dec
       ];
 
-      const results = dates.map(date => formatRelativeTime(date, 'Created'));
+      const results = dates.map((date) => formatRelativeTime(date, 'Created'));
 
       expect(results).toContain('Created Jan 15, 2023');
       expect(results).toContain('Created Feb 15, 2023');
@@ -178,7 +191,9 @@ describe('formatRelativeTime', () => {
 });
 
 describe('getContextualTimestamp', () => {
-  const createMockTodo = (overrides: Partial<Todo & { deletedAt?: Date }> = {}): Todo & { deletedAt?: Date } => ({
+  const createMockTodo = (
+    overrides: Partial<Todo & { deletedAt?: Date }> = {}
+  ): Todo & { deletedAt?: Date } => ({
     id: '1',
     text: 'Test todo',
     completed: false,
@@ -289,9 +304,12 @@ describe('getContextualTimestamp', () => {
       });
 
       // Remove deletedAt to test undefined case
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { deletedAt, ...todoWithoutDeletedAt } = todo;
 
-      expect(getContextualTimestamp(todoWithoutDeletedAt)).toBe('Updated 30 minutes ago');
+      expect(getContextualTimestamp(todoWithoutDeletedAt)).toBe(
+        'Updated 30 minutes ago'
+      );
     });
   });
 
@@ -353,7 +371,7 @@ describe('getContextualTimestamp', () => {
       );
 
       const start = performance.now();
-      todos.forEach(todo => getContextualTimestamp(todo));
+      todos.forEach((todo) => getContextualTimestamp(todo));
       const end = performance.now();
 
       expect(end - start).toBeLessThan(50); // Should complete in less than 50ms
@@ -372,7 +390,9 @@ describe('getContextualTimestamp', () => {
       const results = await Promise.all(promises);
 
       // All results should be identical
-      expect(results.every(result => result === 'Updated 30 minutes ago')).toBe(true);
+      expect(
+        results.every((result) => result === 'Updated 30 minutes ago')
+      ).toBe(true);
     });
   });
 });

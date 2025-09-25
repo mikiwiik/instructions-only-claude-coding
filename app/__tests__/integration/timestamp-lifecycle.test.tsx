@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderHook, act } from '@testing-library/react';
 import { useTodos } from '../../hooks/useTodos';
@@ -26,24 +26,37 @@ jest.mock('../../utils/timestamp', () => ({
     if (diffDays < 7) return `${action} ${diffDays} days ago`;
     return `${action} ${date.toLocaleDateString()}`;
   }),
-  getContextualTimestamp: jest.fn((todo: any) => {
-    const now = new Date();
+  getContextualTimestamp: jest.fn(
+    (todo: {
+      deletedAt?: Date;
+      updatedAt: Date;
+      createdAt: Date;
+      completed: boolean;
+    }) => {
+      const now = new Date();
 
-    if (todo.deletedAt) {
-      const diffMinutes = Math.floor((now.getTime() - todo.deletedAt.getTime()) / 60000);
-      return `Deleted ${diffMinutes} minutes ago`;
+      if (todo.deletedAt) {
+        const diffMinutes = Math.floor(
+          (now.getTime() - todo.deletedAt.getTime()) / 60000
+        );
+        return `Deleted ${diffMinutes} minutes ago`;
+      }
+
+      if (todo.updatedAt.getTime() > todo.createdAt.getTime()) {
+        const diffMinutes = Math.floor(
+          (now.getTime() - todo.updatedAt.getTime()) / 60000
+        );
+        return todo.completed
+          ? `Completed ${diffMinutes} minutes ago`
+          : `Updated ${diffMinutes} minutes ago`;
+      }
+
+      const diffMinutes = Math.floor(
+        (now.getTime() - todo.createdAt.getTime()) / 60000
+      );
+      return `Created ${diffMinutes} minutes ago`;
     }
-
-    if (todo.updatedAt.getTime() > todo.createdAt.getTime()) {
-      const diffMinutes = Math.floor((now.getTime() - todo.updatedAt.getTime()) / 60000);
-      return todo.completed
-        ? `Completed ${diffMinutes} minutes ago`
-        : `Updated ${diffMinutes} minutes ago`;
-    }
-
-    const diffMinutes = Math.floor((now.getTime() - todo.createdAt.getTime()) / 60000);
-    return `Created ${diffMinutes} minutes ago`;
-  }),
+  ),
 }));
 
 describe('Timestamp Lifecycle Integration Tests', () => {
@@ -54,7 +67,6 @@ describe('Timestamp Lifecycle Integration Tests', () => {
 
   describe('complete todo lifecycle with timestamps', () => {
     it('should track timestamps through full todo lifecycle: create → edit → complete → restore → delete', async () => {
-      const user = userEvent.setup();
       const { result } = renderHook(() => useTodos());
 
       // Step 1: Create todo
@@ -71,7 +83,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       const originalUpdatedAt = todo.updatedAt;
 
       // Step 2: Edit todo (should update updatedAt)
-      await new Promise(resolve => setTimeout(resolve, 10)); // Ensure different timestamp
+      await new Promise((resolve) => setTimeout(resolve, 10)); // Ensure different timestamp
 
       act(() => {
         result.current.editTodo(todo.id, 'Edited lifecycle test todo');
@@ -79,12 +91,14 @@ describe('Timestamp Lifecycle Integration Tests', () => {
 
       todo = result.current.todos[0];
       expect(todo.createdAt.getTime()).toBe(originalCreatedAt.getTime());
-      expect(todo.updatedAt.getTime()).toBeGreaterThan(originalUpdatedAt.getTime());
+      expect(todo.updatedAt.getTime()).toBeGreaterThan(
+        originalUpdatedAt.getTime()
+      );
 
       const afterEditUpdatedAt = todo.updatedAt;
 
       // Step 3: Complete todo (should update updatedAt)
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
 
       act(() => {
         result.current.toggleTodo(todo.id);
@@ -93,12 +107,14 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       todo = result.current.todos[0];
       expect(todo.completed).toBe(true);
       expect(todo.createdAt.getTime()).toBe(originalCreatedAt.getTime());
-      expect(todo.updatedAt.getTime()).toBeGreaterThan(afterEditUpdatedAt.getTime());
+      expect(todo.updatedAt.getTime()).toBeGreaterThan(
+        afterEditUpdatedAt.getTime()
+      );
 
       const afterCompleteUpdatedAt = todo.updatedAt;
 
       // Step 4: Restore todo (should update updatedAt)
-      await new Promise(resolve => setTimeout(resolve, 10));
+      await new Promise((resolve) => setTimeout(resolve, 10));
 
       act(() => {
         result.current.restoreTodo(todo.id);
@@ -107,7 +123,9 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       todo = result.current.todos[0];
       expect(todo.completed).toBe(false);
       expect(todo.createdAt.getTime()).toBe(originalCreatedAt.getTime());
-      expect(todo.updatedAt.getTime()).toBeGreaterThan(afterCompleteUpdatedAt.getTime());
+      expect(todo.updatedAt.getTime()).toBeGreaterThan(
+        afterCompleteUpdatedAt.getTime()
+      );
 
       // Step 5: Delete todo
       act(() => {
@@ -152,8 +170,12 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       expect(result2.current.todos).toHaveLength(1);
       const loadedTodo = result2.current.todos[0];
 
-      expect(loadedTodo.createdAt.getTime()).toBe(originalTodo.createdAt.getTime());
-      expect(loadedTodo.updatedAt.getTime()).toBe(originalTodo.updatedAt.getTime());
+      expect(loadedTodo.createdAt.getTime()).toBe(
+        originalTodo.createdAt.getTime()
+      );
+      expect(loadedTodo.updatedAt.getTime()).toBe(
+        originalTodo.updatedAt.getTime()
+      );
     });
   });
 
@@ -215,7 +237,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       ];
 
       for (const scenario of scenarios) {
-        const { rerender } = render(
+        render(
           <TodoItem
             key={scenario.todo.id}
             todo={scenario.todo}
@@ -314,7 +336,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       expect(endTime - startTime).toBeLessThan(500); // Should complete in less than 500ms
 
       // Verify all todos have valid timestamps
-      result.current.todos.forEach(todo => {
+      result.current.todos.forEach((todo) => {
         expect(todo.createdAt).toBeInstanceOf(Date);
         expect(todo.updatedAt).toBeInstanceOf(Date);
         expect(todo.createdAt.getTime()).toBeLessThanOrEqual(Date.now());
@@ -335,11 +357,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       const TestComponent = () => {
         renderCount();
         return (
-          <TodoItem
-            todo={todo}
-            onToggle={jest.fn()}
-            onDelete={jest.fn()}
-          />
+          <TodoItem todo={todo} onToggle={jest.fn()} onDelete={jest.fn()} />
         );
       };
 
@@ -425,11 +443,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       // Component should not crash even if timestamp utilities fail
       expect(() => {
         render(
-          <TodoItem
-            todo={todo}
-            onToggle={jest.fn()}
-            onDelete={jest.fn()}
-          />
+          <TodoItem todo={todo} onToggle={jest.fn()} onDelete={jest.fn()} />
         );
       }).not.toThrow();
 
@@ -439,8 +453,9 @@ describe('Timestamp Lifecycle Integration Tests', () => {
 
   describe('timezone and internationalization considerations', () => {
     it('should handle different timezone offsets correctly', () => {
-      const utcDate = new Date('2024-01-15T12:00:00Z');
-      const localDate = new Date('2024-01-15T12:00:00');
+      // Test timezone handling with different date formats
+      new Date('2024-01-15T12:00:00Z'); // UTC
+      new Date('2024-01-15T12:00:00'); // Local
 
       const { result } = renderHook(() => useTodos());
 
@@ -469,11 +484,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       };
 
       render(
-        <TodoItem
-          todo={todo}
-          onToggle={jest.fn()}
-          onDelete={jest.fn()}
-        />
+        <TodoItem todo={todo} onToggle={jest.fn()} onDelete={jest.fn()} />
       );
 
       // TODO: After implementation, should show consistent date format
@@ -495,11 +506,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       };
 
       render(
-        <TodoItem
-          todo={todo}
-          onToggle={jest.fn()}
-          onDelete={jest.fn()}
-        />
+        <TodoItem todo={todo} onToggle={jest.fn()} onDelete={jest.fn()} />
       );
 
       // TODO: After implementation, timestamp should have proper aria attributes
