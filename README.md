@@ -170,6 +170,17 @@ The project uses GitHub Issues with priority and complexity labels:
 
 See [project management guide](docs/development/project-management.md) for detailed workflows.
 
+### Custom Slash Commands
+
+The project includes custom slash commands for enhanced development workflow:
+
+- **`/work-on <issue-number>`** - Start working on specific GitHub issue with full workflow setup
+- **`/select-next-issue [filter]`** - Get strategic recommendations for next issue to work on
+- **`/quick-wins`** - Find high-value, low-effort development opportunities
+- **`/parallel-work <issue-number>`** - Set up coordinated parallel agent execution for complex issues
+
+These commands are defined in `.claude/commands/` and integrate with the project's development methodology.
+
 ## Features
 
 - ✅ **Add/Edit/Delete Todos**: Complete todo management functionality
