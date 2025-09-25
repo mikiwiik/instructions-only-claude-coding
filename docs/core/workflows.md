@@ -99,14 +99,15 @@ Closes #33"
 
 1. **Complete Implementation** - Code, tests, documentation
 2. **Run Quality Checks** - Ensure all tests pass, lint, typecheck
-3. **Commit for Issue Closure** - Local commit with "Closes #X"
-4. **Push to Remote** - `git push -u origin feature/XX-description`
-5. **Verify Push Success** - Confirm remote branch tracking
-6. **Ask User for Auto-merge** - NEVER assume approval
-7. **Create PR** - Always required by methodology
-8. **Wait for Merge** - CI passes + reviewer approval (if auto-merge enabled)
-9. **Verify Issue Closure** - Use `gh issue view #X` to confirm
-10. **Confirm Completion** - All requirements satisfied
+3. **Verify Test Coverage** - All tests in version control and passing
+4. **Commit for Issue Closure** - Local commit with "Closes #X"
+5. **Push to Remote** - `git push -u origin feature/XX-description`
+6. **Verify Push Success** - Confirm remote branch tracking and all tests pushed
+7. **Ask User for Auto-merge** - NEVER assume approval
+8. **Create PR** - Always required by methodology (ONLY after all tests pass and pushed)
+9. **Wait for Merge** - CI passes + reviewer approval (if auto-merge enabled)
+10. **Verify Issue Closure** - Use `gh issue view #X` to confirm
+11. **Confirm Completion** - All requirements satisfied
 
 ### Issue Closure Verification
 
@@ -123,11 +124,12 @@ Closes #33"
 - ESLint: Zero errors or warnings
 - Prettier: Consistent code formatting
 - TypeScript: Strict mode compliance
-- Tests: All tests passing
+- Tests: All tests passing and in version control
 
 ### Pre-merge Requirements
 
 - All automated CI checks passing
+- All tests passing on remote branch
 - Required reviewer approval (GitHub enforcement)
 - Branch up to date with main
 - No merge conflicts

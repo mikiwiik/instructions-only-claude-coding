@@ -67,9 +67,11 @@ app/
 ## Quality Gates
 
 - All tests must pass before code completion
+- All tests committed to version control before PR creation
 - Coverage thresholds must be maintained
 - No skipped tests without documented justification
 - Accessibility tests included for UI components
+- Tests must pass on remote branch before review
 
 ## Coordination with Other Agents
 
