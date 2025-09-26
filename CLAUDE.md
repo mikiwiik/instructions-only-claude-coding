@@ -34,8 +34,16 @@ system prompts, tool restrictions, and coordination patterns optimized for our t
 
 ### Multi-Agent Coordination
 
-- **Parallel Execution**: See [docs/agents/coordination-patterns.md](docs/agents/coordination-patterns.md)
+- **Coordination Patterns**: See [docs/agents/coordination-patterns.md](docs/agents/coordination-patterns.md) for workflows
+- **Agent Documentation**: Individual agent guides in [docs/agents/](docs/agents/) directory
 - **Complex Features**: Use 2-3 specialized agents for comprehensive implementation
+
+**Quick Reference**:
+
+- [frontend-specialist.md](docs/agents/frontend-specialist.md) - React/TypeScript/Tailwind guidance
+- [testing-specialist.md](docs/agents/testing-specialist.md) - TDD and testing patterns
+- [quality-assurance.md](docs/agents/quality-assurance.md) - Code review and standards
+- [documentation-agent.md](docs/agents/documentation-agent.md) - Documentation best practices
 
 ## Framework and Workflows
 
