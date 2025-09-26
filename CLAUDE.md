@@ -6,15 +6,44 @@ Agent-centric development instructions for instruction-only todo application dev
 
 ### Specialized Agents
 
-- **Frontend Tasks**: Use frontend-specialist → [docs/agents/frontend-specialist.md](docs/agents/frontend-specialist.md)
-- **Testing Work**: Use testing-specialist → [docs/agents/testing-specialist.md](docs/agents/testing-specialist.md)
-- **Code Review**: Use quality-assurance → [docs/agents/quality-assurance.md](docs/agents/quality-assurance.md)
-- **Documentation**: Use documentation-agent → [docs/agents/documentation-agent.md](docs/agents/documentation-agent.md)
+**Custom Project Agents** (configured in `.claude/agents/`):
+
+- **Frontend Tasks**: Use `frontend-specialist` for React components, TypeScript interfaces, Tailwind styling
+- **Testing Work**: Use `testing-specialist` for TDD, React Testing Library, Jest, comprehensive coverage
+- **Code Review**: Use `quality-assurance` for linting, type checking, security, performance analysis
+- **Documentation**: Use `documentation-agent` for README updates, ADRs, inline documentation
+
+**Usage**: Custom agents are configured in YAML files under `.claude/agents/` directory. Each agent has specialized
+system prompts, tool restrictions, and coordination patterns optimized for our todo application development.
+
+### Agent Configuration
+
+**Custom Agent Files**:
+
+- `.claude/agents/frontend-specialist.yaml` - React/TypeScript/Tailwind specialist
+- `.claude/agents/testing-specialist.yaml` - TDD/Testing specialist
+- `.claude/agents/quality-assurance.yaml` - Code review/Quality specialist
+- `.claude/agents/documentation-agent.yaml` - Documentation specialist
+
+**Agent Features**:
+
+- **Specialized Prompts**: Domain-specific expertise for todo application development
+- **Tool Restrictions**: Security-focused tool access appropriate for each role
+- **Coordination Patterns**: Defined workflows for agent collaboration
+- **Project Context**: Understanding of Next.js 14, TypeScript, Tailwind, React Testing Library
 
 ### Multi-Agent Coordination
 
-- **Parallel Execution**: See [docs/agents/coordination-patterns.md](docs/agents/coordination-patterns.md)
-- **Complex Features**: Use 2-3 specialized agents for comprehensive implementation
+- **Coordination Patterns**: See [docs/agents/coordination-patterns.md](docs/agents/coordination-patterns.md) for workflows
+- **Agent Documentation**: Individual agent guides in [docs/agents/](docs/agents/) directory
+- **Complex Features**: Use 2-4 specialized agents for comprehensive implementation
+
+**Quick Reference**:
+
+- [frontend-specialist.md](docs/agents/frontend-specialist.md) - React/TypeScript/Tailwind guidance
+- [testing-specialist.md](docs/agents/testing-specialist.md) - TDD and testing patterns
+- [quality-assurance.md](docs/agents/quality-assurance.md) - Code review and standards
+- [documentation-agent.md](docs/agents/documentation-agent.md) - Documentation best practices
 
 ## Framework and Workflows
 
