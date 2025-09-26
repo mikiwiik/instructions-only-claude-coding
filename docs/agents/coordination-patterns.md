@@ -21,15 +21,28 @@ Each agent has:
 - **Coordination Protocols**: Defined interaction patterns with other agents
 - **Project Context**: Understanding of Next.js 14, TypeScript strict mode, Tailwind CSS
 
-## Standard 3-Agent Coordination Patterns
+## Standard Multi-Agent Coordination Patterns
 
-### Pattern 1: Feature Development (Implementation + Testing + Documentation)
+### Pattern 1: Complete Feature Development (4-Agent Full Coverage)
+
+**Agents:**
+
+- **Frontend Specialist**: Core feature implementation
+- **Testing Specialist**: TDD approach and comprehensive testing
+- **Quality Assurance**: Code review, standards enforcement, security validation
+- **Documentation Agent**: README updates and ADR creation
+
+**When to Use:** Complex features requiring comprehensive quality assurance and documentation.
+
+### Pattern 2: Feature Development (3-Agent Core)
 
 **Agents:**
 
 - **Frontend Specialist**: Core feature implementation
 - **Testing Specialist**: TDD approach and comprehensive testing
 - **Documentation Agent**: README updates and ADR creation if needed
+
+**When to Use:** Standard feature development with integrated documentation.
 
 **Coordination Flow:**
 

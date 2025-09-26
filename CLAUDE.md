@@ -36,7 +36,7 @@ system prompts, tool restrictions, and coordination patterns optimized for our t
 
 - **Coordination Patterns**: See [docs/agents/coordination-patterns.md](docs/agents/coordination-patterns.md) for workflows
 - **Agent Documentation**: Individual agent guides in [docs/agents/](docs/agents/) directory
-- **Complex Features**: Use 2-3 specialized agents for comprehensive implementation
+- **Complex Features**: Use 2-4 specialized agents for comprehensive implementation
 
 **Quick Reference**:
 
