@@ -13,7 +13,7 @@ describe('TodoItem Delete Dialog Visibility', () => {
   const createLongTextTodo = (): Todo => ({
     id: '1',
     text: longText,
-    completed: false,
+    completedAt: undefined,
     createdAt: new Date(),
     updatedAt: new Date(),
   });
@@ -21,7 +21,7 @@ describe('TodoItem Delete Dialog Visibility', () => {
   const createDeletedLongTextTodo = (): Todo => ({
     id: '2',
     text: longText,
-    completed: false,
+    completedAt: undefined,
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: new Date(),
@@ -189,7 +189,7 @@ describe('TodoItem Delete Dialog Visibility', () => {
       const shortTextTodo: Todo = {
         id: '3',
         text: 'Short todo text',
-        completed: false,
+        completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -223,7 +223,7 @@ describe('TodoItem Delete Dialog Visibility', () => {
       const exactlyLongTodo: Todo = {
         id: '4',
         text: exactlyLongText,
-        completed: false,
+        completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
       };

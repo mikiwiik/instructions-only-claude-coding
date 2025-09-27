@@ -7,7 +7,7 @@ import { Todo } from '../../types/todo';
 interface EnhancedTodo {
   id: string;
   text: string;
-  completed: boolean;
+  completedAt?: Date;
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
@@ -62,6 +62,9 @@ jest.mock('../../utils/timestamp', () => ({
     if (todo.deletedAt && todo.deletedAt instanceof Date) {
       return formatRelativeTime(todo.deletedAt, 'Deleted');
     }
+    if (todo.completedAt && todo.completedAt instanceof Date) {
+      return formatRelativeTime(todo.completedAt, 'Completed');
+    }
     if (
       todo.updatedAt &&
       todo.createdAt &&
@@ -69,8 +72,7 @@ jest.mock('../../utils/timestamp', () => ({
       todo.createdAt instanceof Date &&
       todo.updatedAt.getTime() > todo.createdAt.getTime()
     ) {
-      const action = todo.completed ? 'Completed' : 'Updated';
-      return formatRelativeTime(todo.updatedAt, action);
+      return formatRelativeTime(todo.updatedAt, 'Updated');
     }
     if (todo.createdAt && todo.createdAt instanceof Date) {
       return formatRelativeTime(todo.createdAt, 'Created');
@@ -84,6 +86,9 @@ jest.mock('../../utils/timestamp', () => ({
     if (todo.deletedAt && todo.deletedAt instanceof Date) {
       relevantDate = todo.deletedAt;
       action = 'Deleted';
+    } else if (todo.completedAt && todo.completedAt instanceof Date) {
+      relevantDate = todo.completedAt;
+      action = 'Completed';
     } else if (
       todo.updatedAt &&
       todo.createdAt &&
@@ -92,7 +97,7 @@ jest.mock('../../utils/timestamp', () => ({
       todo.updatedAt.getTime() > todo.createdAt.getTime()
     ) {
       relevantDate = todo.updatedAt;
-      action = todo.completed ? 'Completed' : 'Updated';
+      action = 'Updated';
     } else if (todo.createdAt && todo.createdAt instanceof Date) {
       relevantDate = todo.createdAt;
       action = 'Created';
@@ -107,15 +112,33 @@ jest.mock('../../utils/timestamp', () => ({
 }));
 
 const createMockTodo = (
-  overrides: Partial<EnhancedTodo> = {}
-): EnhancedTodo => ({
-  id: '1',
-  text: 'Test todo',
-  completed: false,
-  createdAt: new Date(Date.now() - 60000), // 1 minute ago
-  updatedAt: new Date(Date.now() - 60000), // 1 minute ago
-  ...overrides,
-});
+  overrides: Partial<EnhancedTodo & { completed?: boolean }> = {}
+): EnhancedTodo => {
+  const base = {
+    id: '1',
+    text: 'Test todo',
+    completedAt: undefined,
+    createdAt: new Date(Date.now() - 60000), // 1 minute ago
+    updatedAt: new Date(Date.now() - 60000), // 1 minute ago
+    deletedAt: undefined,
+  };
+
+  // Handle legacy completed boolean for backward compatibility
+  if ('completed' in overrides && overrides.completed) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { completed, ...rest } = overrides;
+    return {
+      ...base,
+      ...rest,
+      completedAt: rest.updatedAt || new Date(Date.now() - 30000),
+    };
+  }
+
+  return {
+    ...base,
+    ...overrides,
+  };
+};
 
 describe('TodoItem - Contextual Timestamp Display', () => {
   const mockOnToggle = jest.fn();
@@ -355,7 +378,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       // Simulate completion
       const updatedTodo = {
         ...todo,
-        completed: true,
+        completedAt: new Date(), // Just now
         updatedAt: new Date(), // Just now
       };
 

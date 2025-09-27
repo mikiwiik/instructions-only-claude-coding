@@ -66,7 +66,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
       const baseTodo: Todo = {
         id: '3',
         text: 'Base todo',
-        completedAt: new Date('2024-01-01T11:00:00Z'),
+        completed: true,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -75,7 +75,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
 
       expect(enhancedTodo.id).toBe(baseTodo.id);
       expect(enhancedTodo.text).toBe(baseTodo.text);
-      expect(!!enhancedTodo.completedAt).toBe(!!baseTodo.completedAt);
+      expect(enhancedTodo.completed).toBe(baseTodo.completed);
       expect(enhancedTodo.deletedAt).toBeUndefined();
     });
 
@@ -101,7 +101,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
           todo: {
             id: '2',
             text: 'Completed todo',
-            completedAt: new Date('2024-01-01T11:00:00Z'),
+            completed: true,
             createdAt: new Date('2024-01-01T10:00:00Z'),
             updatedAt: new Date('2024-01-01T11:00:00Z'),
           },
@@ -124,7 +124,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
           todo: {
             id: '4',
             text: 'Completed then deleted',
-            completedAt: new Date('2024-01-01T11:00:00Z'),
+            completed: true,
             createdAt: new Date('2024-01-01T10:00:00Z'),
             updatedAt: new Date('2024-01-01T11:00:00Z'),
             deletedAt: new Date('2024-01-01T12:00:00Z'),
@@ -135,7 +135,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
 
       scenarios.forEach(({ todo, expectedState }) => {
         const isDeleted = !!todo.deletedAt;
-        const isCompleted = !!todo.completedAt;
+        const isCompleted = todo.completed;
         const isActive = !isCompleted && !isDeleted;
 
         switch (expectedState) {
@@ -244,7 +244,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
         {
           id: '2',
           text: 'Completed todo',
-          completedAt: new Date('2024-01-01T11:00:00Z'),
+          completed: true,
           createdAt: new Date('2024-01-01T10:00:00Z'),
           updatedAt: new Date('2024-01-01T11:00:00Z'),
         },
@@ -265,9 +265,9 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
 
       expect(state.todos).toHaveLength(3);
       expect(state.todos.filter((todo) => !!todo.deletedAt)).toHaveLength(1);
-      expect(state.todos.filter((todo) => !!todo.completedAt)).toHaveLength(1);
+      expect(state.todos.filter((todo) => todo.completed)).toHaveLength(1);
       expect(
-        state.todos.filter((todo) => !todo.completedAt && !todo.deletedAt)
+        state.todos.filter((todo) => !todo.completed && !todo.deletedAt)
       ).toHaveLength(1);
     });
   });
@@ -285,7 +285,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
         {
           id: '2',
           text: 'Base todo 2',
-          completedAt: new Date('2024-01-01T11:00:00Z'),
+          completed: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -301,7 +301,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
       enhancedTodos.forEach((todo) => {
         expect(todo).toHaveProperty('id');
         expect(todo).toHaveProperty('text');
-        expect(todo).toHaveProperty('completedAt');
+        expect(todo).toHaveProperty('completed');
         expect(todo).toHaveProperty('createdAt');
         expect(todo).toHaveProperty('updatedAt');
         expect(todo.deletedAt).toBeUndefined();
@@ -326,7 +326,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
       const deserialized = JSON.parse(serialized);
       expect(deserialized.id).toBe(enhancedTodo.id);
       expect(deserialized.text).toBe(enhancedTodo.text);
-      expect(!!deserialized.completedAt).toBe(!!enhancedTodo.completedAt);
+      expect(deserialized.completed).toBe(enhancedTodo.completed);
 
       // Note: Dates become strings after JSON serialization
       expect(typeof deserialized.createdAt).toBe('string');
@@ -367,7 +367,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
       expect(enhancedTodo.deletedAt).toBeUndefined();
       expect(enhancedTodo).toHaveProperty('id');
       expect(enhancedTodo).toHaveProperty('text');
-      expect(enhancedTodo).toHaveProperty('completedAt');
+      expect(enhancedTodo).toHaveProperty('completed');
     });
   });
 
@@ -384,7 +384,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
         {
           id: '2',
           text: 'Completed',
-          completedAt: new Date('2024-01-01T11:00:00Z'),
+          completed: true,
           createdAt: new Date('2024-01-01T10:00:00Z'),
           updatedAt: new Date('2024-01-01T11:00:00Z'),
         },
@@ -406,10 +406,10 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
         todos.filter((todo) => !!todo.deletedAt);
 
       const getActiveTodos = (todos: EnhancedTodo[]): EnhancedTodo[] =>
-        todos.filter((todo) => !todo.completedAt && !todo.deletedAt);
+        todos.filter((todo) => !todo.completed && !todo.deletedAt);
 
       const getCompletedTodos = (todos: EnhancedTodo[]): EnhancedTodo[] =>
-        todos.filter((todo) => !!todo.completedAt && !todo.deletedAt);
+        todos.filter((todo) => todo.completed && !todo.deletedAt);
 
       expect(getVisibleTodos(todos)).toHaveLength(2);
       expect(getDeletedTodos(todos)).toHaveLength(1);

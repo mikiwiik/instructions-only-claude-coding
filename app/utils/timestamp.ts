@@ -59,7 +59,7 @@ export function formatRelativeTime(date: Date, action: string): string {
 
 /**
  * Gets the most relevant contextual timestamp for a todo
- * Priority: deletedAt > updatedAt (if ≠ createdAt) > createdAt
+ * Priority: deletedAt > completedAt > updatedAt (if ≠ createdAt) > createdAt
  * @param todo - The todo item to get timestamp for
  * @returns Formatted contextual timestamp string
  */
@@ -69,13 +69,14 @@ export function getContextualTimestamp(todo: Todo): string {
     return formatRelativeTime(todo.deletedAt, 'Deleted');
   }
 
-  // Second priority: updated timestamp (if newer than created)
+  // Second priority: completion timestamp
+  if (todo.completedAt) {
+    return formatRelativeTime(todo.completedAt, 'Completed');
+  }
+
+  // Third priority: updated timestamp (if newer than created)
   if (todo.updatedAt.getTime() > todo.createdAt.getTime()) {
-    if (todo.completed) {
-      return formatRelativeTime(todo.updatedAt, 'Completed');
-    } else {
-      return formatRelativeTime(todo.updatedAt, 'Updated');
-    }
+    return formatRelativeTime(todo.updatedAt, 'Updated');
   }
 
   // Fallback: created timestamp
@@ -94,9 +95,12 @@ export function getFullTimestamp(todo: Todo): string {
   if (todo.deletedAt) {
     relevantDate = todo.deletedAt;
     action = 'Deleted';
+  } else if (todo.completedAt) {
+    relevantDate = todo.completedAt;
+    action = 'Completed';
   } else if (todo.updatedAt.getTime() > todo.createdAt.getTime()) {
     relevantDate = todo.updatedAt;
-    action = todo.completed ? 'Completed' : 'Updated';
+    action = 'Updated';
   } else {
     relevantDate = todo.createdAt;
     action = 'Created';
@@ -113,6 +117,10 @@ export function getFullTimestamp(todo: Todo): string {
 export function getLastActivityDate(todo: Todo): Date {
   if (todo.deletedAt) {
     return todo.deletedAt;
+  }
+
+  if (todo.completedAt) {
+    return todo.completedAt;
   }
 
   return todo.updatedAt;

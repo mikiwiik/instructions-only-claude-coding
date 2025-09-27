@@ -5,20 +5,20 @@ describe('Todo Types', () => {
     const todo: Todo = {
       id: '1',
       text: 'Test todo',
-      completed: false,
+      completedAt: undefined,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
 
     expect(todo).toHaveProperty('id');
     expect(todo).toHaveProperty('text');
-    expect(todo).toHaveProperty('completed');
+    expect(todo).toHaveProperty('completedAt');
     expect(todo).toHaveProperty('createdAt');
     expect(todo).toHaveProperty('updatedAt');
 
     expect(typeof todo.id).toBe('string');
     expect(typeof todo.text).toBe('string');
-    expect(typeof todo.completed).toBe('boolean');
+    expect(todo.completedAt).toBeUndefined();
     expect(todo.createdAt).toBeInstanceOf(Date);
     expect(todo.updatedAt).toBeInstanceOf(Date);
   });
@@ -37,7 +37,7 @@ describe('Todo Types', () => {
         {
           id: '1',
           text: 'Test todo',
-          completed: false,
+          completedAt: undefined,
           createdAt: new Date(),
           updatedAt: new Date(),
         },

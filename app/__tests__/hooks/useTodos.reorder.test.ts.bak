@@ -170,7 +170,7 @@ describe('useTodos hook - Reordering functionality', () => {
         result.current.toggleTodo(secondTodoId);
       });
 
-      expect(!!result.current.todos[0].completedAt).toBe(true);
+      expect(result.current.todos[0].completed).toBe(true);
 
       // Reorder
       act(() => {
@@ -182,7 +182,7 @@ describe('useTodos hook - Reordering functionality', () => {
         (todo) => todo.id === secondTodoId
       );
       expect(movedTodo).toBeDefined();
-      expect(!!movedTodo!.completedAt).toBe(true);
+      expect(movedTodo!.completed).toBe(true);
       expect(movedTodo!.text).toBe('Second todo');
     });
   });
