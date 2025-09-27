@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -21,6 +22,7 @@ export default function RootLayout({
         <div className='min-h-screen bg-background font-sans antialiased'>
           <main className='container mx-auto px-4 py-8'>{children}</main>
         </div>
+        <SpeedInsights />
       </body>
     </html>
   );
