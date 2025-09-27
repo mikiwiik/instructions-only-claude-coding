@@ -6,12 +6,14 @@ This document outlines the development workflow, coding standards, and quality a
 
 ### Branch-Based Development
 
-**Current Workflow**: `Branch-based with Pull Requests`
+**Current Workflow**: `Branch-based with Pull Requests and Automerge`
 
 - Development follows feature branch workflow with pull requests
 - Each feature is developed on a separate branch (`feature/issue-number-description`)
-- Pull requests are used for code review and CI validation before merge
-- Main branch maintains stable, tested code
+- Pull requests require 1 approved review and passing CI checks
+- Automerge enabled for streamlined workflow after requirements met
+- Automatic branch deletion keeps repository clean
+- Main branch maintains stable, tested code with enforced protection rules
 - See [Branch Workflow Documentation](../BRANCH_WORKFLOW.md) for detailed guidelines
 
 ## Code Quality Standards
@@ -156,9 +158,11 @@ References #18
 
 - **Branch Naming**: Use `feature/issue-number-description` format
 - **CI Validation**: All GitHub Actions checks must pass
-- **Code Review**: At least one review required (can be self-approved for learning)
+- **Code Review**: 1 required approver (enforced by branch protection)
 - **Documentation**: Update relevant documentation with changes
 - **Testing**: Include appropriate tests for new functionality
+- **Automerge**: Enabled for streamlined workflow after approval
+- **Branch Cleanup**: Automatic deletion after successful merge
 
 ### Review Checklist
 
@@ -368,10 +372,13 @@ gh issue view <issue-number> --json state
 # Create pull request
 gh pr create --title "..." --body "..."
 
+# Enable automerge (optional - streamlines workflow)
+gh pr merge <pr-number> --auto --squash
+
 # Check PR status
 gh pr view <pr-number> --json state,mergeable,statusCheckRollup
 
-# Merge pull request
+# Manual merge (if automerge not used)
 gh pr merge <pr-number> --squash --delete-branch
 
 # Verify associated issues were closed
