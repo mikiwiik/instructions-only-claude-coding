@@ -99,14 +99,14 @@ describe('TodoList', () => {
     expect(screen.getByText('Incomplete todo')).toBeInTheDocument();
     expect(screen.getByText('Another completed')).toBeInTheDocument();
 
-    // Should show correct visual states
+    // Should show correct visual states - line-through is on parent div, not text element
     const completedText1 = screen.getByText('Completed todo');
     const incompleteText = screen.getByText('Incomplete todo');
     const completedText2 = screen.getByText('Another completed');
 
-    expect(completedText1).toHaveClass('line-through');
-    expect(incompleteText).not.toHaveClass('line-through');
-    expect(completedText2).toHaveClass('line-through');
+    expect(completedText1.parentElement).toHaveClass('line-through');
+    expect(incompleteText.parentElement).not.toHaveClass('line-through');
+    expect(completedText2.parentElement).toHaveClass('line-through');
   });
 
   it('should show correct todo count in heading', () => {

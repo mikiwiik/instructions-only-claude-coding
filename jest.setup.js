@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import React from 'react';
 
 // Mock localStorage with actual storage functionality
 const localStorageMock = (() => {
@@ -41,6 +42,26 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: jest.fn(),
     dispatchEvent: jest.fn(),
   })),
+});
+
+// Mock remark plugins for markdown processing
+jest.mock('remark-gfm', () => {
+  return jest.fn(() => (tree) => tree);
+});
+
+jest.mock('remark-breaks', () => {
+  return jest.fn(() => (tree) => tree);
+});
+
+// Mock react-markdown for testing
+jest.mock('react-markdown', () => {
+  return function MockReactMarkdown({ children }) {
+    return React.createElement(
+      'div',
+      { 'data-testid': 'markdown-content' },
+      children
+    );
+  };
 });
 
 // Reset mocks before each test
