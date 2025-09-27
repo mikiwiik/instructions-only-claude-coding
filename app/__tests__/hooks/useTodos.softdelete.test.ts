@@ -268,8 +268,8 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
         result.current.deleteTodo(todoToDelete.id);
       });
 
-      // Default filter shows active and completed, but not deleted
-      expect(result.current.todos).toHaveLength(2); // Active and completed visible
+      // Default filter is 'active', so only shows active todos, not completed or deleted
+      expect(result.current.todos).toHaveLength(1); // Only active visible (completed is filtered out)
       expect(result.current.allTodos).toHaveLength(3); // All todos still exist
 
       // Test completed filter
@@ -371,7 +371,8 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
       const { result } = renderHook(() => useTodos());
 
-      expect(result.current.todos).toHaveLength(2);
+      // Default filter is 'active', so only shows incomplete todos
+      expect(result.current.todos).toHaveLength(1); // Only incomplete todo visible
 
       // TODO: After enhancement, verify migration
       // result.current.todos.forEach(todo => {
@@ -381,8 +382,11 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
       // Should maintain existing functionality
       expect(result.current.todos[0].text).toBe('Legacy todo 1');
-      expect(result.current.todos[1].text).toBe('Legacy todo 2');
-      expect(result.current.todos[1].completed).toBe(true);
+      // With 'active' filter, completed todo is filtered out
+      // Check completed todo in allTodos instead
+      const completedTodo = result.current.allTodos.find((t) => t.completed);
+      expect(completedTodo?.text).toBe('Legacy todo 2');
+      expect(completedTodo?.completed).toBe(true);
     });
   });
 

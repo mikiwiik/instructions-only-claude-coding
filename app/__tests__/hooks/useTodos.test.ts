@@ -18,7 +18,7 @@ describe('useTodos hook', () => {
     const { result } = renderHook(() => useTodos());
 
     expect(result.current.todos).toEqual([]);
-    expect(result.current.filter).toBe('all');
+    expect(result.current.filter).toBe('active');
   });
 
   it('should add a new todo', () => {
@@ -157,8 +157,12 @@ describe('useTodos hook', () => {
         result.current.toggleTodo(todoId);
       });
 
-      expect(result.current.todos[0].completed).toBe(true);
-      expect(result.current.todos[0].updatedAt).toBeInstanceOf(Date);
+      // After toggling to complete, the todo is filtered out from active view
+      // But we can check it in allTodos
+      expect(result.current.allTodos[0].completed).toBe(true);
+      expect(result.current.allTodos[0].updatedAt).toBeInstanceOf(Date);
+      // The filtered todos should now be empty since the only todo is completed
+      expect(result.current.todos).toHaveLength(0);
     });
 
     it('should toggle a todo from complete to incomplete', () => {
@@ -197,8 +201,18 @@ describe('useTodos hook', () => {
         result.current.toggleTodo(secondTodoId);
       });
 
-      expect(result.current.todos[0].completed).toBe(true);
-      expect(result.current.todos[1].completed).toBe(false);
+      // After toggling, check allTodos to see both todos
+      const toggledTodo = result.current.allTodos.find(
+        (t) => t.id === secondTodoId
+      );
+      const otherTodo = result.current.allTodos.find(
+        (t) => t.id !== secondTodoId
+      );
+      expect(toggledTodo?.completed).toBe(true);
+      expect(otherTodo?.completed).toBe(false);
+      // In the filtered view (active), only the incomplete todo should remain
+      expect(result.current.todos).toHaveLength(1);
+      expect(result.current.todos[0].completed).toBe(false);
     });
 
     it('should handle toggling non-existent todo gracefully', () => {
@@ -317,7 +331,11 @@ describe('useTodos hook', () => {
         result.current.toggleTodo(completeTodoId);
       });
 
-      expect(result.current.todos[0].completed).toBe(true);
+      // Check completed todo in allTodos since it's filtered out from active view
+      const completedTodo = result.current.allTodos.find(
+        (t) => t.id === completeTodoId
+      );
+      expect(completedTodo?.completed).toBe(true);
 
       // Delete the completed todo
       act(() => {
@@ -410,15 +428,17 @@ describe('useTodos hook', () => {
         result.current.toggleTodo(todoId);
       });
 
-      expect(result.current.todos[0].completed).toBe(true);
+      // Check completed status in allTodos since it's filtered out from active view
+      expect(result.current.allTodos[0].completed).toBe(true);
 
       // Edit the completed todo
       act(() => {
         result.current.editTodo(todoId, 'Updated completed todo');
       });
 
-      expect(result.current.todos[0].text).toBe('Updated completed todo');
-      expect(result.current.todos[0].completed).toBe(true);
+      // Check the edited todo in allTodos
+      expect(result.current.allTodos[0].text).toBe('Updated completed todo');
+      expect(result.current.allTodos[0].completed).toBe(true);
     });
 
     it('should update updatedAt timestamp when editing', () => {

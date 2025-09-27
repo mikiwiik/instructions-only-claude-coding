@@ -121,7 +121,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
         result.current.toggleTodo(todo.id);
       });
 
-      todo = result.current.todos[0];
+      todo = result.current.allTodos[0];
       expect(todo.completed).toBe(true);
       expect(todo.createdAt.getTime()).toBe(originalCreatedAt.getTime());
       expect(todo.updatedAt.getTime()).toBeGreaterThan(
@@ -323,7 +323,10 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       const toggleButton = screen.getByRole('button', { name: /toggle todo/i });
       await user.click(toggleButton);
 
-      todo = result.current.todos[0];
+      // After toggling to complete, the todo is filtered out from active view
+      // Get it from allTodos instead
+      const todoId = todo.id;
+      todo = result.current.allTodos.find((t) => t.id === todoId)!;
       rerender(<MockedTodoItem />);
 
       // TODO: Should now show "Completed X ago"

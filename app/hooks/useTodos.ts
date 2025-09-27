@@ -21,7 +21,7 @@ function generateId(): string {
 export function useTodos() {
   const [state, setState] = useState<TodoState>({
     todos: [],
-    filter: 'all',
+    filter: 'active',
   });
 
   // Load todos from localStorage on initialization
@@ -31,16 +31,24 @@ export function useTodos() {
       if (storedTodos) {
         const parsedTodos = JSON.parse(storedTodos);
         // Convert date strings back to Date objects and ensure backward compatibility
-        const todosWithDates = parsedTodos.map((todo: Partial<Todo> & { createdAt: string; updatedAt: string; deletedAt?: string }) => ({
-          ...todo,
-          createdAt: new Date(todo.createdAt),
-          updatedAt: new Date(todo.updatedAt),
-          // Backward compatibility: existing todos don't have deletedAt
-          deletedAt: todo.deletedAt ? new Date(todo.deletedAt) : undefined,
-        }));
+        const todosWithDates = parsedTodos.map(
+          (
+            todo: Partial<Todo> & {
+              createdAt: string;
+              updatedAt: string;
+              deletedAt?: string;
+            }
+          ) => ({
+            ...todo,
+            createdAt: new Date(todo.createdAt),
+            updatedAt: new Date(todo.updatedAt),
+            // Backward compatibility: existing todos don't have deletedAt
+            deletedAt: todo.deletedAt ? new Date(todo.deletedAt) : undefined,
+          })
+        );
         setState({
           todos: todosWithDates,
-          filter: 'all',
+          filter: 'active',
         });
       }
     } catch (error) {
