@@ -59,6 +59,7 @@ system prompts, tool restrictions, and coordination patterns optimized for our t
 - **TDD**: Tests first, implementation second
 - **Atomic Commits**: One logical change per commit with issue linking
 - **Feature Branches**: All work via PRs, never direct commits to main
+- **AI Attribution**: All AI-assisted work must use dedicated agent account with proper attribution
 
 ## Task Planning Protocol
 
@@ -99,6 +100,7 @@ system prompts, tool restrictions, and coordination patterns optimized for our t
 
 - **ADR Process**: [docs/adr/PROCESS.md](docs/adr/PROCESS.md)
 - **IPL Guidelines**: [docs/ipl/README.md](docs/ipl/README.md)
+- **AI Attribution Strategy**: [docs/adr/015-ai-agent-attribution-strategy.md](docs/adr/015-ai-agent-attribution-strategy.md)
 
 ## Project Structure
 
