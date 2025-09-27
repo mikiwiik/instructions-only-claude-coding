@@ -1,0 +1,21 @@
+# Repository-specific Git Configuration for AI Agent Attribution
+#
+# This configuration ensures that when working in this repository,
+# commits are automatically attributed to the AI Agent account
+# with proper co-authoring to the human collaborator.
+#
+# SETUP INSTRUCTIONS:
+# 1. Copy this file: cp .gitconfig.sample .gitconfig
+# 2. Replace placeholders with your actual information
+# 3. Activate: git config include.path ../.gitconfig
+#
+# For more information see: docs/adr/015-ai-agent-attribution-strategy.md
+
+[user]
+    name = {Your Name} AI Agent Assistant
+    email = {your-email}+agent@{domain}.com
+
+[core]
+    # Template for commit messages with AI attribution
+    # This can be used with: git commit --template .gitmessage
+    template = .gitmessage

@@ -21,20 +21,21 @@ Each ADR follows this structure:
 
 ## Index of ADRs
 
-| Number                                    | Title                                           | Status   | Date       |
-| ----------------------------------------- | ----------------------------------------------- | -------- | ---------- |
-| [001](001-nextjs-app-router.md)           | Use Next.js 14 with App Router                  | Accepted | 2025-09-20 |
-| [002](002-typescript-adoption.md)         | Choose TypeScript for type safety               | Accepted | 2025-09-20 |
-| [003](003-tailwind-css-styling.md)        | Select Tailwind CSS for styling                 | Accepted | 2025-09-20 |
-| [004](004-test-driven-development.md)     | Implement Test-Driven Development approach      | Accepted | 2025-09-20 |
-| [005](005-localstorage-persistence.md)    | Use localStorage for data persistence           | Accepted | 2025-09-20 |
-| [006](006-testing-framework-choice.md)    | Choose React Testing Library + Jest for testing | Accepted | 2025-09-20 |
-| [007](007-state-management-approach.md)   | Use custom hooks for state management           | Accepted | 2025-09-20 |
-| [008](008-github-issues-workflow.md)      | GitHub Issues for project management            | Accepted | 2025-09-20 |
-| [009](009-pre-commit-linting-strategy.md) | Pre-commit linting strategy                     | Accepted | 2025-09-20 |
-| [010](010-atomic-commit-strategy.md)      | Atomic commit strategy adoption                 | Accepted | 2025-09-20 |
-| [011](011-github-actions-ci-cd.md)        | GitHub Actions for CI/CD Pipeline               | Accepted | 2025-09-20 |
-| [012](012-todo-reordering-ux-approach.md) | Todo Reordering UX Approach                     | Accepted | 2025-09-20 |
+| Number                                      | Title                                           | Status   | Date       |
+| ------------------------------------------- | ----------------------------------------------- | -------- | ---------- |
+| [001](001-nextjs-app-router.md)             | Use Next.js 14 with App Router                  | Accepted | 2025-09-20 |
+| [002](002-typescript-adoption.md)           | Choose TypeScript for type safety               | Accepted | 2025-09-20 |
+| [003](003-tailwind-css-styling.md)          | Select Tailwind CSS for styling                 | Accepted | 2025-09-20 |
+| [004](004-test-driven-development.md)       | Implement Test-Driven Development approach      | Accepted | 2025-09-20 |
+| [005](005-localstorage-persistence.md)      | Use localStorage for data persistence           | Accepted | 2025-09-20 |
+| [006](006-testing-framework-choice.md)      | Choose React Testing Library + Jest for testing | Accepted | 2025-09-20 |
+| [007](007-state-management-approach.md)     | Use custom hooks for state management           | Accepted | 2025-09-20 |
+| [008](008-github-issues-workflow.md)        | GitHub Issues for project management            | Accepted | 2025-09-20 |
+| [009](009-pre-commit-linting-strategy.md)   | Pre-commit linting strategy                     | Accepted | 2025-09-20 |
+| [010](010-atomic-commit-strategy.md)        | Atomic commit strategy adoption                 | Accepted | 2025-09-20 |
+| [011](011-github-actions-ci-cd.md)          | GitHub Actions for CI/CD Pipeline               | Accepted | 2025-09-20 |
+| [012](012-todo-reordering-ux-approach.md)   | Todo Reordering UX Approach                     | Accepted | 2025-09-20 |
+| [015](015-ai-agent-attribution-strategy.md) | AI Agent Attribution Strategy                   | Accepted | 2025-09-27 |
 
 ## Creating New ADRs
 

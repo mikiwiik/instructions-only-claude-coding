@@ -98,6 +98,90 @@
 - **Update tests**: Modify tests if implementation changed
 - **Debug tests**: Use `npm test -- --verbose` for detailed output
 
+### AI Agent Account Switching
+
+#### Switch to AI Agent Account
+
+**When**: For AI-assisted development work
+
+**Steps:**
+
+1. **Authenticate with agent account**: `gh auth login --hostname github.com`
+2. **Select web browser authentication** when prompted
+3. **Switch to agent account in browser** before authorizing
+4. **Complete authorization** flow
+5. **Verify authentication**: `gh auth status`
+6. **Activate repository git config**: `git config include.path ../.gitconfig`
+7. **Verify git configuration**: `git config --list | grep user`
+
+#### Switch to Personal Account
+
+**When**: For personal development work or account management
+
+**Steps:**
+
+1. **Authenticate with personal account**: `gh auth login --hostname github.com`
+2. **Select web browser authentication** when prompted
+3. **Switch to personal account in browser** before authorizing
+4. **Complete authorization** flow
+5. **Verify authentication**: `gh auth status`
+6. **Reset git config** (if using manual config):
+
+   ```bash
+   git config user.name "Your Personal Name"
+   git config user.email "your-personal-email@domain.com"
+   ```
+
+#### Verify Current Account Setup
+
+**Check GitHub CLI authentication**:
+
+```bash
+gh auth status
+```
+
+**Check git configuration**:
+
+```bash
+git config user.name
+git config user.email
+```
+
+**Check repository-specific config**:
+
+```bash
+git config --list --show-origin | grep user
+```
+
+#### Common Account Switching Issues
+
+**Problem**: GitHub CLI authentication fails
+
+**Solutions:**
+
+- **Clear existing tokens**: `gh auth logout`
+- **Login fresh**: `gh auth login` and follow prompts carefully
+- **Check browser session**: Ensure correct GitHub account is active in browser
+- **Verify repository access**: Confirm agent account has proper permissions
+
+**Problem**: Wrong attribution in commits
+
+**Solutions:**
+
+- **Check git config**: Verify `git config user.name` and `git config user.email`
+- **Activate repository config**: Ensure `git config include.path ../.gitconfig`
+- **Update local config**: If needed, manually set user information
+- **Test with dry run**: Create test commit to verify attribution
+
+**Problem**: Cannot access repository with agent account
+
+**Solutions:**
+
+- **Check collaboration status**: Verify agent account was added as collaborator
+- **Accept invitation**: Login to agent account and accept repository invitation
+- **Verify permissions**: Ensure agent account has appropriate access level
+- **Contact repository owner**: If access issues persist
+
 ### Development Environment Issues
 
 #### Node/npm Issues

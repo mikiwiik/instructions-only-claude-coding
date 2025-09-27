@@ -35,6 +35,29 @@ Optional footer for breaking changes or issue closure
 - `style`: Code style changes (formatting)
 - `chore`: Maintenance tasks
 
+### AI Agent Attribution
+
+**🚨 REQUIRED**: All AI-assisted work must use proper attribution as defined in [ADR-015](../adr/015-ai-agent-attribution-strategy.md).
+
+**AI Agent Commit Format:**
+
+```text
+type(scope): description (#issue-number)
+
+Optional body explaining the change in detail
+
+🤖 Generated with AI Agent
+
+Co-Authored-By: [Human Name] <human.email@domain.com>
+```
+
+**Attribution Requirements:**
+
+- **Author**: AI Agent account (`{user}+agent@domain.com`)
+- **Footer**: `🤖 Generated with AI Agent`
+- **Co-Author**: Human collaborator with proper credit
+- **Repository Config**: Use `.gitconfig` for automatic attribution
+
 ### Multi-Step Implementation Approach
 
 **Each logical change = One atomic commit:**
