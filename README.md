@@ -106,6 +106,17 @@ npm run lint         # Run code linting
 npm run type-check   # TypeScript type checking
 ```
 
+### Performance Monitoring
+
+The application includes **Vercel Speed Insights** for real-time Core Web Vitals monitoring:
+
+- **Access Metrics**: Visit your [Vercel Dashboard](https://vercel.com/dashboard) → Project → Analytics
+- **Core Web Vitals**: Monitor LCP, FID, CLS performance metrics from real users
+- **Optimization Tracking**: Measure impact of performance improvements over time
+- **Real User Monitoring**: Actual user experience data across devices and networks
+
+Speed Insights automatically collects performance data when the app is deployed to Vercel.
+
 ## Technology Stack
 
 - **Framework**: Next.js 14 with App Router
@@ -113,6 +124,7 @@ npm run type-check   # TypeScript type checking
 - **Styling**: Tailwind CSS
 - **Testing**: Jest + React Testing Library
 - **Development**: Test-Driven Development (TDD)
+- **Analytics**: Vercel Speed Insights for Core Web Vitals monitoring
 - **Deployment**: Vercel with GitHub Actions CI/CD
 
 ## Development Status
