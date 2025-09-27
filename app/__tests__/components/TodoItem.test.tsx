@@ -42,7 +42,7 @@ describe('TodoItem', () => {
     );
 
     const todoText = screen.getByText('Incomplete todo');
-    expect(todoText).not.toHaveClass('line-through');
+    expect(todoText.parentElement).not.toHaveClass('line-through');
 
     // Should show circle icon for incomplete
     const incompleteIcon = screen.getByTestId('incomplete-icon');
@@ -56,7 +56,7 @@ describe('TodoItem', () => {
     );
 
     const todoText = screen.getByText('Completed todo');
-    expect(todoText).toHaveClass('line-through');
+    expect(todoText.parentElement).toHaveClass('line-through');
 
     // Should show check circle icon for completed
     const completedIcon = screen.getByTestId('completed-icon');
@@ -152,9 +152,10 @@ describe('TodoItem', () => {
 
     expect(screen.getByText(longText)).toBeInTheDocument();
 
-    // Should have proper text wrapping classes
+    // Should have proper text wrapping classes - check the flex-1 container
     const textElement = screen.getByText(longText);
-    expect(textElement.closest('div')).toHaveClass('min-w-0'); // Allows text wrapping
+    const flexContainer = textElement.closest('div.flex-1');
+    expect(flexContainer).toHaveClass('min-w-0'); // Allows text wrapping
   });
 
   it('should show different visual states for completed vs incomplete', () => {
@@ -176,8 +177,10 @@ describe('TodoItem', () => {
     );
 
     const incompleteText = screen.getByText('Incomplete');
-    expect(incompleteText).toHaveClass('text-foreground');
-    expect(incompleteText).not.toHaveClass('text-muted-foreground');
+    expect(incompleteText.parentElement).toHaveClass('text-foreground');
+    expect(incompleteText.parentElement).not.toHaveClass(
+      'text-muted-foreground'
+    );
 
     rerender(
       <TodoItem
@@ -188,7 +191,7 @@ describe('TodoItem', () => {
     );
 
     const completedText = screen.getByText('Completed');
-    expect(completedText).toHaveClass('text-muted-foreground');
+    expect(completedText.parentElement).toHaveClass('text-muted-foreground');
   });
 
   describe('Edit functionality', () => {
@@ -1108,9 +1111,9 @@ describe('TodoItem', () => {
         );
       });
       expect(textElement).toBeInTheDocument();
-      expect(textElement).toHaveClass('line-through');
+      expect(textElement.parentElement).toHaveClass('line-through');
       expect(textElement).toHaveClass('whitespace-pre-line');
-      expect(textElement).toHaveClass('text-muted-foreground');
+      expect(textElement.parentElement).toHaveClass('text-muted-foreground');
     });
 
     it('should handle very long multi-line text without layout issues', () => {
@@ -1128,7 +1131,7 @@ describe('TodoItem', () => {
         );
       });
       expect(textElement).toBeInTheDocument();
-      expect(textElement.closest('div')).toHaveClass('min-w-0'); // Allows text wrapping
+      expect(textElement.closest('div.flex-1')).toHaveClass('min-w-0'); // Allows text wrapping
       expect(textElement).toHaveClass('whitespace-pre-line');
     });
   });
