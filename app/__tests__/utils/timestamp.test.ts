@@ -192,15 +192,34 @@ describe('formatRelativeTime', () => {
 
 describe('getContextualTimestamp', () => {
   const createMockTodo = (
-    overrides: Partial<Todo & { deletedAt?: Date }> = {}
-  ): Todo & { deletedAt?: Date } => ({
-    id: '1',
-    text: 'Test todo',
-    completed: false,
-    createdAt: new Date(MOCK_NOW.getTime() - 24 * 60 * 60 * 1000), // 1 day ago
-    updatedAt: new Date(MOCK_NOW.getTime() - 24 * 60 * 60 * 1000), // 1 day ago (same as created)
-    ...overrides,
-  });
+    overrides: Partial<Todo & { deletedAt?: Date; completed?: boolean }> = {}
+  ): Todo & { deletedAt?: Date } => {
+    const base = {
+      id: '1',
+      text: 'Test todo',
+      completedAt: undefined,
+      createdAt: new Date(MOCK_NOW.getTime() - 24 * 60 * 60 * 1000), // 1 day ago
+      updatedAt: new Date(MOCK_NOW.getTime() - 24 * 60 * 60 * 1000), // 1 day ago (same as created)
+      deletedAt: undefined,
+    };
+
+    // Handle legacy completed boolean for backward compatibility
+    if ('completed' in overrides && overrides.completed) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { completed, ...rest } = overrides;
+      return {
+        ...base,
+        ...rest,
+        completedAt:
+          rest.updatedAt || new Date(MOCK_NOW.getTime() - 30 * 60 * 1000),
+      };
+    }
+
+    return {
+      ...base,
+      ...overrides,
+    };
+  };
 
   describe('priority logic', () => {
     it('should prioritize deletedAt over other timestamps', () => {
@@ -264,7 +283,7 @@ describe('getContextualTimestamp', () => {
       expect(getContextualTimestamp(todo)).toBe('Completed 1 hour ago');
     });
 
-    it('should show "Created" for completed todos when completion time equals creation time', () => {
+    it('should show "Completed" for completed todos even when completion time equals creation time', () => {
       const sameTime = new Date(MOCK_NOW.getTime() - 2 * 60 * 60 * 1000); // 2 hours ago
       const todo = createMockTodo({
         completed: true,
@@ -272,7 +291,7 @@ describe('getContextualTimestamp', () => {
         updatedAt: sameTime,
       });
 
-      expect(getContextualTimestamp(todo)).toBe('Created 2 hours ago');
+      expect(getContextualTimestamp(todo)).toBe('Completed 2 hours ago');
     });
   });
 
