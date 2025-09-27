@@ -378,7 +378,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       // Simulate completion
       const updatedTodo = {
         ...todo,
-        completed: true,
+        completedAt: new Date(), // Just now
         updatedAt: new Date(), // Just now
       };
 

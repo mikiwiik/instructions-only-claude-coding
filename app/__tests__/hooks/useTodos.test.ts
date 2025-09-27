@@ -1,5 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { useTodos } from '../../hooks/useTodos';
+import type { Todo } from '../../types/todo';
 
 describe('useTodos hook', () => {
   beforeEach(() => {
@@ -31,7 +32,7 @@ describe('useTodos hook', () => {
     expect(result.current.todos).toHaveLength(1);
     expect(result.current.todos[0]).toMatchObject({
       text: 'Learn React Testing',
-      completed: false,
+      completedAt: undefined,
     });
     expect(result.current.todos[0]).toHaveProperty('id');
     expect(result.current.todos[0]).toHaveProperty('createdAt');
@@ -346,10 +347,10 @@ describe('useTodos hook', () => {
       const storedTodos = JSON.parse(localStorage.getItem('todos') || '[]');
       expect(storedTodos).toHaveLength(2); // Both todos still stored
       expect(
-        storedTodos.find((t: any) => t.text === 'Todo to keep').deletedAt
+        storedTodos.find((t: Todo) => t.text === 'Todo to keep')?.deletedAt
       ).toBeUndefined();
       expect(
-        storedTodos.find((t: any) => t.text === 'Todo to delete').deletedAt
+        storedTodos.find((t: Todo) => t.text === 'Todo to delete')?.deletedAt
       ).toBeDefined();
     });
 
