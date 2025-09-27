@@ -52,35 +52,26 @@ export const markdownConfig = {
   ],
   unwrapDisallowed: true,
 
-  // Custom components for styling
+  // Custom components for styling - inherit color from parent container
   components: {
-    // Style headers to match app design
+    // Style headers to match app design - inherit color from parent
     h1: ({ children, ...props }: React.ComponentPropsWithoutRef<'h1'>) => (
-      <h1
-        className='text-lg font-bold text-gray-900 dark:text-gray-100 mb-2'
-        {...props}
-      >
+      <h1 className='text-lg font-bold mb-2 text-inherit' {...props}>
         {children}
       </h1>
     ),
     h2: ({ children, ...props }: React.ComponentPropsWithoutRef<'h2'>) => (
-      <h2
-        className='text-base font-semibold text-gray-900 dark:text-gray-100 mb-2'
-        {...props}
-      >
+      <h2 className='text-base font-semibold mb-2 text-inherit' {...props}>
         {children}
       </h2>
     ),
     h3: ({ children, ...props }: React.ComponentPropsWithoutRef<'h3'>) => (
-      <h3
-        className='text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1'
-        {...props}
-      >
+      <h3 className='text-sm font-semibold mb-1 text-inherit' {...props}>
         {children}
       </h3>
     ),
 
-    // Style lists
+    // Style lists - inherit color from parent
     ul: ({ children, ...props }: React.ComponentPropsWithoutRef<'ul'>) => (
       <ul className='list-disc list-inside ml-4 mb-2 space-y-1' {...props}>
         {children}
@@ -92,33 +83,30 @@ export const markdownConfig = {
       </ol>
     ),
     li: ({ children, ...props }: React.ComponentPropsWithoutRef<'li'>) => (
-      <li className='text-gray-900 dark:text-gray-100' {...props}>
+      <li className='text-inherit' {...props}>
         {children}
       </li>
     ),
 
-    // Style text formatting
+    // Style text formatting - inherit color from parent
     strong: ({
       children,
       ...props
     }: React.ComponentPropsWithoutRef<'strong'>) => (
-      <strong
-        className='font-semibold text-gray-900 dark:text-gray-100'
-        {...props}
-      >
+      <strong className='font-semibold text-inherit' {...props}>
         {children}
       </strong>
     ),
     em: ({ children, ...props }: React.ComponentPropsWithoutRef<'em'>) => (
-      <em className='italic text-gray-900 dark:text-gray-100' {...props}>
+      <em className='italic text-inherit' {...props}>
         {children}
       </em>
     ),
 
-    // Style code
+    // Style code - use background but inherit text color
     code: ({ children, ...props }: React.ComponentPropsWithoutRef<'code'>) => (
       <code
-        className='bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-1 py-0.5 rounded text-sm font-mono'
+        className='bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm font-mono text-inherit'
         {...props}
       >
         {children}
@@ -126,14 +114,14 @@ export const markdownConfig = {
     ),
     pre: ({ children, ...props }: React.ComponentPropsWithoutRef<'pre'>) => (
       <pre
-        className='bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-3 rounded-md overflow-x-auto text-sm font-mono mb-2'
+        className='bg-gray-100 dark:bg-gray-800 p-3 rounded-md overflow-x-auto text-sm font-mono mb-2 text-inherit'
         {...props}
       >
         {children}
       </pre>
     ),
 
-    // Style links
+    // Style links - keep blue color but consider parent state
     a: ({ children, ...props }: React.ComponentPropsWithoutRef<'a'>) => (
       <a
         className='text-blue-600 dark:text-blue-400 hover:underline'
@@ -145,29 +133,29 @@ export const markdownConfig = {
       </a>
     ),
 
-    // Style blockquotes
+    // Style blockquotes - use muted version of inherited color
     blockquote: ({
       children,
       ...props
     }: React.ComponentPropsWithoutRef<'blockquote'>) => (
       <blockquote
-        className='border-l-4 border-gray-300 dark:border-gray-600 pl-4 italic text-gray-700 dark:text-gray-300 mb-2'
+        className='border-l-4 border-gray-300 dark:border-gray-600 pl-4 italic opacity-75 mb-2'
         {...props}
       >
         {children}
       </blockquote>
     ),
 
-    // Style strikethrough
+    // Style strikethrough - inherit color and add strikethrough
     del: ({ children, ...props }: React.ComponentPropsWithoutRef<'del'>) => (
-      <del className='line-through text-gray-500 dark:text-gray-400' {...props}>
+      <del className='line-through opacity-75 text-inherit' {...props}>
         {children}
       </del>
     ),
 
-    // Style paragraphs
+    // Style paragraphs - inherit color from parent
     p: ({ children, ...props }: React.ComponentPropsWithoutRef<'p'>) => (
-      <p className='text-gray-900 dark:text-gray-100 mb-2 last:mb-0' {...props}>
+      <p className='mb-2 last:mb-0 text-inherit' {...props}>
         {children}
       </p>
     ),
