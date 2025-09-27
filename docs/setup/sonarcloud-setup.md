@@ -11,12 +11,52 @@ This guide covers project-specific SonarCloud configuration. For general SonarCl
 - **Project Key**: `mikiwiik_instructions-only-claude-coding`
 - **Organization**: `mikiwiik`
 
-### Required GitHub Secret
+## Step-by-Step Setup Guide
 
-Add this secret to your repository settings following the [SonarCloud authentication guide](https://docs.sonarsource.com/sonarcloud/advanced-setup/ci-based-analysis/github-actions-for-sonarcloud/):
+### Step 1: Create SonarCloud Account and Project
 
-- **Secret Name**: `SONAR_TOKEN`
-- **Value**: Token generated from SonarCloud project setup
+1. **Go to [SonarCloud.io](https://sonarcloud.io/)**
+2. **Sign in with GitHub** and authorize SonarCloud to access your GitHub account
+3. **Install SonarCloud GitHub App**:
+   - During setup, choose to install on selected repositories
+   - Select `mikiwiik/instructions-only-claude-coding`
+4. **Create Organization**:
+   - Organization key: `mikiwiik`
+   - Display name: Your preferred name
+5. **Import Repository**:
+   - Click "Analyze new project"
+   - Select `instructions-only-claude-coding`
+   - Project key will be: `mikiwiik_instructions-only-claude-coding`
+
+### Step 2: Generate SONAR_TOKEN
+
+1. **In your SonarCloud project dashboard**:
+   - Go to **Administration** → **Analysis Method**
+   - Select **"GitHub Actions"** as the CI method
+   - SonarCloud will display a token (starts with `sqp_`)
+   - **Copy this token** - you'll need it for the next step
+
+### Step 3: Add SONAR_TOKEN to GitHub Repository
+
+1. **Navigate to your GitHub repository**:
+   - Go to <https://github.com/mikiwiik/instructions-only-claude-coding>
+2. **Access repository secrets**:
+   - Click **Settings** tab
+   - In the left sidebar, click **Secrets and variables** → **Actions**
+3. **Add the secret**:
+   - Click **"New repository secret"**
+   - **Name**: `SONAR_TOKEN`
+   - **Secret**: Paste the token from SonarCloud (starts with `sqp_`)
+   - Click **"Add secret"**
+
+### Step 4: Verify Integration
+
+1. **Trigger a workflow**:
+   - Push a commit or create a pull request
+   - Check the **Actions** tab for workflow execution
+2. **Confirm SonarCloud analysis**:
+   - SonarCloud step should now run successfully
+   - Visit your SonarCloud project to see analysis results
 
 ### Project Structure Considerations
 
@@ -53,13 +93,35 @@ The project maintains high quality standards:
 
 SonarCloud quality gates should align with these existing standards.
 
-## Next Steps
+## Configuration Files
 
-1. Complete SonarCloud account setup using the [official guide](https://docs.sonarsource.com/sonarcloud/getting-started/github/)
-2. Add `SONAR_TOKEN` secret to GitHub repository
-3. Configure `sonar-project.properties` with project-specific paths
-4. Integrate SonarCloud analysis into existing GitHub Actions workflow
-5. Set up quality gates to complement existing coverage requirements
+The integration includes these pre-configured files:
+
+- **`sonar-project.properties`** - Project-specific SonarCloud configuration
+- **`.github/workflows/build.yml`** - GitHub Actions workflow with SonarCloud step
+- **`coverage/lcov.info`** - Jest coverage reports (generated automatically)
+
+## Troubleshooting
+
+### Common Issues
+
+#### Error: "Running this GitHub Action without SONAR_TOKEN is not recommended"
+
+- **Solution**: Follow Step 3 above to add the `SONAR_TOKEN` secret to your repository
+
+#### Error: "Project not found"
+
+- **Solution**: Verify the project key `mikiwiik_instructions-only-claude-coding` matches your SonarCloud project
+
+#### Error: "Organization not found"
+
+- **Solution**: Ensure the organization key `mikiwiik` exists in your SonarCloud account
+
+### Getting Help
+
+- **SonarCloud Documentation**: [docs.sonarsource.com/sonarcloud](https://docs.sonarsource.com/sonarcloud/)
+- **GitHub Actions Integration**: [SonarCloud GitHub Actions Guide](https://docs.sonarsource.com/sonarcloud/advanced-setup/ci-based-analysis/github-actions-for-sonarcloud/)
+- **Community Support**: [community.sonarsource.com](https://community.sonarsource.com/)
 
 ## Integration Notes
 
