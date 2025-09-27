@@ -122,7 +122,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       });
 
       todo = result.current.todos[0];
-      expect(todo.completed).toBe(true);
+      expect(!!todo.completedAt).toBe(true);
       expect(todo.createdAt.getTime()).toBe(originalCreatedAt.getTime());
       expect(todo.updatedAt.getTime()).toBeGreaterThan(
         afterEditUpdatedAt.getTime()
@@ -138,7 +138,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       });
 
       todo = result.current.todos[0];
-      expect(todo.completed).toBe(false);
+      expect(!!todo.completedAt).toBe(false);
       expect(todo.createdAt.getTime()).toBe(originalCreatedAt.getTime());
       expect(todo.updatedAt.getTime()).toBeGreaterThan(
         afterCompleteUpdatedAt.getTime()
