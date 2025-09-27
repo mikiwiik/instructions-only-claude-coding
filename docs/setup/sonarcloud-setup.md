@@ -71,11 +71,12 @@ This guide covers project-specific SonarCloud configuration. For general SonarCl
 This Next.js project has the following structure that affects SonarCloud configuration:
 
 ```text
-├── app/                 # Next.js 14 App Router pages
-├── components/          # React components
-├── hooks/              # Custom React hooks
-├── lib/                # Utility libraries
-├── __tests__/          # Jest test files
+├── app/                 # Next.js 14 App Router (all source code)
+│   ├── components/      # React components
+│   ├── hooks/          # Custom React hooks
+│   ├── utils/          # Utility functions
+│   ├── types/          # TypeScript type definitions
+│   └── __tests__/      # Jest test files
 └── coverage/           # Jest coverage output
 ```
 
@@ -106,6 +107,8 @@ SonarCloud quality gates should align with these existing standards.
 The integration includes these pre-configured files:
 
 - **`sonar-project.properties`** - Project-specific SonarCloud configuration
+  - `sonar.sources=app` - Analyzes entire Next.js App Router directory
+  - `sonar.tests=app/__tests__` - Test directory within app structure
 - **`.github/workflows/build.yml`** - GitHub Actions workflow with SonarCloud step
 - **`coverage/lcov.info`** - Jest coverage reports (generated automatically)
 
