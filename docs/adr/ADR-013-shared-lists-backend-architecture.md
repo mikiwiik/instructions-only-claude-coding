@@ -249,6 +249,7 @@ localStorage todos → SharedList creation → Share URL generation
 
 - **ADR-007**: State Management with useTodos Hook (to be updated)
 - **ADR-008**: Component Architecture and Design System (to be updated)
+- **ADR-014**: Anonymous Sharing Architecture (authentication decision)
 - **Future ADR**: User Authentication Architecture (separate scoping)
 
 ## Implementation Issues
