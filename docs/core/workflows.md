@@ -115,21 +115,25 @@ git commit -m "feat: handle edge cases in feature X (#issue)"
 
 ### Auto-merge Protocol
 
-**🚨 BLOCKING REQUIREMENT**: NEVER enable auto-merge without explicit user approval.
+**✅ STREAMLINED WORKFLOW**: Repository configured with automerge and branch protection.
 
-**Required Process:**
+**Current Configuration:**
 
-1. Create PR first (without merge flags)
-2. Ask explicit permission: "Should I enable auto-merge for PR #X?"
-3. Wait for clear approval: "yes", "enable auto-merge", "proceed with auto-merge"
-4. If approved: `gh pr merge --auto --squash --delete-branch`
-5. If declined: Leave for manual review
+- **Branch Protection**: 1 required reviewer + passing CI checks
+- **Automerge**: Enabled at repository level
+- **Branch Cleanup**: Automatic deletion after merge
 
-**Invalid Approval Responses:**
+**Standard Process:**
 
-- General statements: "looks good", "proceed", "continue"
-- Silence or assumptions
-- Indirect approval
+1. Create PR with: `gh pr create --title "..." --body "..."`
+2. Enable automerge: `gh pr merge --auto --squash`
+3. Wait for approval and CI: Automatic merge when requirements met
+4. Branch cleanup: Automatic deletion after successful merge
+
+**Manual Override (when needed):**
+
+- If automerge not desired: Skip step 2, merge manually after approval
+- If urgent merge needed: Use `--admin` flag to bypass protection (with permission)
 
 ### Bypass Rules (Admin Privileges)
 
