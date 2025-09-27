@@ -21,7 +21,7 @@ function generateId(): string {
 export function useTodos() {
   const [state, setState] = useState<TodoState>({
     todos: [],
-    filter: 'all',
+    filter: 'active',
   });
 
   // Load todos from localStorage on initialization
@@ -56,7 +56,7 @@ export function useTodos() {
         );
         setState({
           todos: todosWithDates,
-          filter: 'all',
+          filter: 'active',
         });
       }
     } catch (error) {
