@@ -46,6 +46,9 @@ next-env.d.ts
 .claude/agent-logs/
 .claude/temp/
 
+# AI Agent Configuration (keep .gitconfig.sample for sharing)
+.gitconfig
+
 # OS generated files
 .DS_Store?
 ._*
