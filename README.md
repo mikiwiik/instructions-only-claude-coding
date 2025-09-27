@@ -113,6 +113,7 @@ npm run type-check   # TypeScript type checking
 - **Styling**: Tailwind CSS
 - **Testing**: Jest + React Testing Library
 - **Development**: Test-Driven Development (TDD)
+- **Code Quality**: SonarCloud for automated analysis
 - **Deployment**: Vercel with GitHub Actions CI/CD
 
 ## Development Status
@@ -130,6 +131,7 @@ npm run type-check   # TypeScript type checking
 
 - **🚀 [Installation Guide](docs/setup/installation.md)** - Complete development environment setup
 - **📦 [Deployment Guide](docs/setup/deployment.md)** - Production deployment with Vercel
+- **🔍 [SonarCloud Setup](docs/setup/sonarcloud-setup.md)** - Code quality analysis integration
 - **⚙️ [Development Workflow](docs/development/workflow.md)** - Coding standards and practices
 - **📊 [Project Management](docs/development/project-management.md)** - Issue tracking and planning
 - **🏗️ [Architecture Overview](docs/architecture/overview.md)** - Technical architecture and decisions
