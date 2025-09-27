@@ -217,9 +217,9 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       // TODO: After implementation
       // expect(screen.getByText(/completed 30 minutes ago/i)).toBeInTheDocument();
 
-      // Current behavior: shows line-through styling for completed
+      // Current behavior: shows line-through styling for completed (on parent div)
       const todoText = screen.getByText(todo.text);
-      expect(todoText).toHaveClass('line-through');
+      expect(todoText.parentElement).toHaveClass('line-through');
     });
 
     it('should display "Deleted X ago" for soft-deleted todos with highest priority', () => {
@@ -397,7 +397,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
 
       // Current behavior: shows completed styling
       const todoText = screen.getByText(todo.text);
-      expect(todoText).toHaveClass('line-through');
+      expect(todoText.parentElement).toHaveClass('line-through');
     });
   });
 
@@ -468,7 +468,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
 
       // Current behavior: check completion styling
       const todoText = screen.getByText(completedTodo.text);
-      expect(todoText).toHaveClass('line-through');
+      expect(todoText.parentElement).toHaveClass('line-through');
     });
 
     it('should fall back to creation time when updatedAt equals createdAt', () => {

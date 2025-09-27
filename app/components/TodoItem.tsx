@@ -13,9 +13,75 @@ import {
 import { useState, useRef, useEffect } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
 import { Todo } from '../types/todo';
 import { getContextualTimestamp, getFullTimestamp } from '../utils/timestamp';
+import {
+  hasMarkdownSyntax,
+  sanitizeMarkdown,
+  markdownConfig,
+} from '../utils/markdown';
+
+// Helper function to decode HTML entities
+const decodeHtmlEntities = (text: string): string => {
+  return text
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#34;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/&#40;/gi, '(')
+    .replace(/&#41;/gi, ')')
+    .replace(/&#60;/gi, '<')
+    .replace(/&#62;/gi, '>')
+    .replace(/&amp;/gi, '&')
+    .replace(/&#(\d+);/gi, (match, dec) =>
+      String.fromCharCode(parseInt(dec, 10))
+    )
+    .replace(/&#x([0-9a-f]+);/gi, (match, hex) =>
+      String.fromCharCode(parseInt(hex, 16))
+    );
+};
+
+// Helper function to sanitize text for use in aria-labels and dialog messages
+const sanitizeForAriaLabel = (text: string): string => {
+  // First decode any URL encoding and HTML entities to catch encoded attacks
+  let decoded = text;
+  try {
+    decoded = decodeURIComponent(text);
+  } catch {
+    // If decoding fails, use original text
+    decoded = text;
+  }
+
+  // Also decode HTML entities
+  decoded = decodeHtmlEntities(decoded);
+
+  return decoded
+    .replace(/<script[^>]*>.*?<\/script>/gi, '[removed]')
+    .replace(/<iframe[^>]*>.*?<\/iframe>/gi, '[removed]')
+    .replace(/<object[^>]*>.*?<\/object>/gi, '[removed]')
+    .replace(/<embed[^>]*>.*?<\/embed>/gi, '[removed]')
+    .replace(/<form[^>]*>.*?<\/form>/gi, '[removed]')
+    .replace(/javascript:/gi, '[removed]:')
+    .replace(/data:/gi, '[removed]:')
+    .replace(/vbscript:/gi, '[removed]:')
+    .replace(/file:/gi, '[removed]:')
+    .replace(/ftp:/gi, '[removed]:')
+    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '[removed]')
+    .replace(/on\w+\s*=/gi, '[removed]=')
+    .replace(/style\s*=\s*["'][^"']*["']/gi, '[removed]')
+    .replace(/alert\s*\(/gi, '[removed](')
+    .replace(/eval\s*\(/gi, '[removed](')
+    .replace(/document\./gi, '[removed].')
+    .replace(/window\./gi, '[removed].')
+    .replace(/[<>]/g, '')
+    .trim();
+};
 import ConfirmationDialog from './ConfirmationDialog';
+import MarkdownHelpBox from './MarkdownHelpBox';
 
 interface TodoItemProps {
   todo: Todo;
@@ -200,7 +266,7 @@ export default function TodoItem({
               ? 'cursor-default opacity-75'
               : 'hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer'
           }`}
-          aria-label={`Toggle todo: ${todo.text}`}
+          aria-label={`Toggle todo: ${sanitizeForAriaLabel(todo.text)}`}
           aria-pressed={!!todo.completedAt}
           aria-disabled={!!todo.completedAt}
           type='button'
@@ -220,7 +286,7 @@ export default function TodoItem({
       </div>
       <div className='flex-1 min-w-0'>
         {isEditing ? (
-          <div className='space-y-2'>
+          <div className='space-y-3'>
             <textarea
               ref={textareaRef}
               value={editText}
@@ -229,7 +295,9 @@ export default function TodoItem({
               className='w-full text-sm sm:text-base bg-background border border-border rounded px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-ring resize-none overflow-hidden min-h-[2.5rem]'
               aria-label='Edit todo text'
               rows={1}
+              placeholder='Enter your todo text... (Markdown formatting supported)'
             />
+            <MarkdownHelpBox className='mt-2' />
             <div className='flex gap-2'>
               <button
                 onClick={handleSave}
@@ -251,15 +319,30 @@ export default function TodoItem({
           </div>
         ) : (
           <>
-            <p
-              className={`text-sm sm:text-base leading-relaxed whitespace-pre-line break-words ${
+            <div
+              className={`text-sm sm:text-base leading-relaxed break-words ${
                 todo.completedAt
                   ? 'line-through text-muted-foreground'
                   : 'text-foreground'
               }`}
             >
-              {todo.text}
-            </p>
+              {hasMarkdownSyntax(todo.text) ? (
+                <div data-testid='markdown-content'>
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm, remarkBreaks]}
+                    components={markdownConfig.components}
+                    disallowedElements={markdownConfig.disallowedElements}
+                    unwrapDisallowed={markdownConfig.unwrapDisallowed}
+                  >
+                    {sanitizeMarkdown(todo.text)}
+                  </ReactMarkdown>
+                </div>
+              ) : (
+                <p className='whitespace-pre-line'>
+                  {sanitizeMarkdown(todo.text)}
+                </p>
+              )}
+            </div>
             <p
               className='text-xs text-muted-foreground mt-1 sm:mt-2'
               title={getFullTimestamp(todo)}
@@ -281,7 +364,7 @@ export default function TodoItem({
                 onClick={handleMoveUp}
                 disabled={isFirst}
                 className='flex-shrink-0 p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground min-w-[44px] min-h-[44px] flex items-center justify-center'
-                aria-label={`Move todo up: ${todo.text}`}
+                aria-label={`Move todo up: ${sanitizeForAriaLabel(todo.text)}`}
                 type='button'
               >
                 <ChevronUp className='h-4 w-4' />
@@ -292,7 +375,7 @@ export default function TodoItem({
                 onClick={handleMoveDown}
                 disabled={isLast}
                 className='flex-shrink-0 p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground min-w-[44px] min-h-[44px] flex items-center justify-center'
-                aria-label={`Move todo down: ${todo.text}`}
+                aria-label={`Move todo down: ${sanitizeForAriaLabel(todo.text)}`}
                 type='button'
               >
                 <ChevronDown className='h-4 w-4' />
@@ -312,7 +395,7 @@ export default function TodoItem({
                 <button
                   onClick={handleRestoreDeleted}
                   className='flex-shrink-0 p-2 rounded-full hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors text-muted-foreground hover:text-green-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
-                  aria-label={`Restore todo: ${todo.text}`}
+                  aria-label={`Restore todo: ${sanitizeForAriaLabel(todo.text)}`}
                   type='button'
                 >
                   <Undo2 className='h-4 w-4' />
@@ -321,7 +404,7 @@ export default function TodoItem({
               <button
                 onClick={handleDelete}
                 className='flex-shrink-0 p-2 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
-                aria-label={`Permanently delete todo: ${todo.text}`}
+                aria-label={`Permanently delete todo: ${sanitizeForAriaLabel(todo.text)}`}
                 type='button'
               >
                 <X className='h-4 w-4' />
@@ -334,7 +417,7 @@ export default function TodoItem({
                 <button
                   onClick={handleRestore}
                   className='flex-shrink-0 p-2 rounded-full hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-colors text-muted-foreground hover:text-yellow-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
-                  aria-label={`Undo completion: ${todo.text}`}
+                  aria-label={`Undo completion: ${sanitizeForAriaLabel(todo.text)}`}
                   type='button'
                 >
                   <Undo2 className='h-4 w-4' />
@@ -344,7 +427,7 @@ export default function TodoItem({
                 <button
                   onClick={handleEdit}
                   className='flex-shrink-0 p-2 rounded-full hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-muted-foreground hover:text-blue-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
-                  aria-label={`Edit todo: ${todo.text}`}
+                  aria-label={`Edit todo: ${sanitizeForAriaLabel(todo.text)}`}
                   type='button'
                 >
                   <Edit2 className='h-4 w-4' />
@@ -353,7 +436,7 @@ export default function TodoItem({
               <button
                 onClick={handleDelete}
                 className='flex-shrink-0 p-2 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
-                aria-label={`Delete todo: ${todo.text}`}
+                aria-label={`Delete todo: ${sanitizeForAriaLabel(todo.text)}`}
                 type='button'
               >
                 <X className='h-4 w-4' />
@@ -371,8 +454,8 @@ export default function TodoItem({
         title={todo.deletedAt ? 'Permanently Delete Todo' : 'Delete Todo'}
         message={
           todo.deletedAt
-            ? `Are you sure you want to permanently delete "${todo.text.length > 100 ? todo.text.substring(0, 100) + '...' : todo.text}"? This action cannot be undone.`
-            : `Are you sure you want to delete "${todo.text.length > 100 ? todo.text.substring(0, 100) + '...' : todo.text}"? You can restore it from Recently Deleted.`
+            ? `Are you sure you want to permanently delete "${sanitizeForAriaLabel(todo.text.length > 100 ? todo.text.substring(0, 100) + '...' : todo.text)}"? This action cannot be undone.`
+            : `Are you sure you want to delete "${sanitizeForAriaLabel(todo.text.length > 100 ? todo.text.substring(0, 100) + '...' : todo.text)}"? You can restore it from Recently Deleted.`
         }
         confirmLabel={todo.deletedAt ? 'Permanently Delete' : 'Delete'}
         cancelLabel='Cancel'
