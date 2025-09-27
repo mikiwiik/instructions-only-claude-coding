@@ -109,6 +109,7 @@ The integration includes these pre-configured files:
 - **`sonar-project.properties`** - Project-specific SonarCloud configuration
   - `sonar.sources=app` - Analyzes entire Next.js App Router directory
   - `sonar.tests=app/__tests__` - Test directory within app structure
+  - `sonar.exclusions` - Excludes test directory from sources to prevent conflicts
 - **`.github/workflows/build.yml`** - GitHub Actions workflow with SonarCloud step
 - **`coverage/lcov.info`** - Jest coverage reports (generated automatically)
 
@@ -127,6 +128,10 @@ The integration includes these pre-configured files:
 #### Error: "The folder '**tests**' does not exist"
 
 - **Solution**: Verify `sonar.tests` path in `sonar-project.properties` matches your actual test directory structure
+
+#### Error: "File can't be indexed twice. Please check that inclusion/exclusion patterns produce disjoint sets"
+
+- **Solution**: Exclude test directory from sources - add `app/__tests__/**` to `sonar.exclusions`
 
 #### Error: "Project not found"
 
