@@ -170,20 +170,19 @@ describe('useTodos hook - Reordering functionality', () => {
         result.current.toggleTodo(secondTodoId);
       });
 
-      // Use allTodos to access completed todos since default filter is now "active"
-      expect(!!result.current.allTodos[0].completedAt).toBe(true);
+      expect(result.current.todos[0].completed).toBe(true);
 
-      // Reorder (works on allTodos internally)
+      // Reorder
       act(() => {
         result.current.reorderTodos(0, 1);
       });
 
       // Find the moved todo and verify its properties are preserved
-      const movedTodo = result.current.allTodos.find(
+      const movedTodo = result.current.todos.find(
         (todo) => todo.id === secondTodoId
       );
       expect(movedTodo).toBeDefined();
-      expect(!!movedTodo!.completedAt).toBe(true);
+      expect(movedTodo!.completed).toBe(true);
       expect(movedTodo!.text).toBe('Second todo');
     });
   });

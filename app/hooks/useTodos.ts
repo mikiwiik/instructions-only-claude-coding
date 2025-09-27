@@ -37,6 +37,8 @@ export function useTodos() {
               createdAt: string;
               updatedAt: string;
               deletedAt?: string;
+              completedAt?: string;
+              completed?: boolean;
             }
           ) => ({
             ...todo,
@@ -44,6 +46,12 @@ export function useTodos() {
             updatedAt: new Date(todo.updatedAt),
             // Backward compatibility: existing todos don't have deletedAt
             deletedAt: todo.deletedAt ? new Date(todo.deletedAt) : undefined,
+            // Migration: convert old completed boolean to completedAt date
+            completedAt: todo.completedAt
+              ? new Date(todo.completedAt)
+              : todo.completed
+                ? new Date(todo.updatedAt)
+                : undefined,
           })
         );
         setState({
@@ -80,7 +88,7 @@ export function useTodos() {
     const newTodo: Todo = {
       id: generateId(),
       text: trimmedText,
-      completed: false,
+      completedAt: undefined,
       createdAt: now,
       updatedAt: now,
     };
@@ -99,10 +107,11 @@ export function useTodos() {
     setState((prev) => {
       const updatedTodos = prev.todos.map((todo) => {
         if (todo.id === id) {
+          const now = new Date();
           return {
             ...todo,
-            completed: !todo.completed,
-            updatedAt: new Date(),
+            completedAt: todo.completedAt ? undefined : now,
+            updatedAt: now,
           };
         }
         return todo;
@@ -119,10 +128,10 @@ export function useTodos() {
   const restoreTodo = (id: string) => {
     setState((prev) => {
       const updatedTodos = prev.todos.map((todo) => {
-        if (todo.id === id && todo.completed) {
+        if (todo.id === id && todo.completedAt) {
           return {
             ...todo,
-            completed: false,
+            completedAt: undefined,
             updatedAt: new Date(),
           };
         }
@@ -284,9 +293,13 @@ export function useTodos() {
   const getFilteredTodos = () => {
     switch (state.filter) {
       case 'active':
-        return state.todos.filter((todo) => !todo.completed && !todo.deletedAt);
+        return state.todos.filter(
+          (todo) => !todo.completedAt && !todo.deletedAt
+        );
       case 'completed':
-        return state.todos.filter((todo) => todo.completed && !todo.deletedAt);
+        return state.todos.filter(
+          (todo) => todo.completedAt && !todo.deletedAt
+        );
       case 'recently-deleted':
         return state.todos.filter((todo) => todo.deletedAt);
       case 'all':

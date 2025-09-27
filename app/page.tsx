@@ -25,8 +25,12 @@ export default function HomePage() {
   } = useTodos();
 
   // Calculate counts for filter display
-  const activeTodosCount = allTodos.filter((todo) => !todo.completed && !todo.deletedAt).length;
-  const completedTodosCount = allTodos.filter((todo) => todo.completed && !todo.deletedAt).length;
+  const activeTodosCount = allTodos.filter(
+    (todo) => !todo.completedAt && !todo.deletedAt
+  ).length;
+  const completedTodosCount = allTodos.filter(
+    (todo) => todo.completedAt && !todo.deletedAt
+  ).length;
   const deletedTodosCount = allTodos.filter((todo) => todo.deletedAt).length;
 
   return (

@@ -17,7 +17,7 @@ jest.mock('@dnd-kit/sortable', () => ({
 const createMockTodo = (overrides: Partial<Todo> = {}): Todo => ({
   id: 'test-id',
   text: 'Test todo',
-  completed: false,
+  completedAt: undefined,
   createdAt: new Date('2025-01-01T00:00:00.000Z'),
   updatedAt: new Date('2025-01-01T00:00:00.000Z'),
   ...overrides,

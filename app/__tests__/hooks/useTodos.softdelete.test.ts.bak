@@ -268,8 +268,8 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
         result.current.deleteTodo(todoToDelete.id);
       });
 
-      // Default filter is 'active', so only shows active todos, not completed or deleted
-      expect(result.current.todos).toHaveLength(1); // Only active visible (completed is filtered out)
+      // Default filter shows active and completed, but not deleted
+      expect(result.current.todos).toHaveLength(2); // Active and completed visible
       expect(result.current.allTodos).toHaveLength(3); // All todos still exist
 
       // Test completed filter
@@ -277,17 +277,17 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
         result.current.setFilter('completed');
       });
       expect(result.current.todos).toHaveLength(1); // Only completed
-      expect(!!result.current.todos[0].completedAt).toBe(true);
+      expect(result.current.todos[0].completed).toBe(true);
 
       // Test active filter
       act(() => {
         result.current.setFilter('active');
       });
       expect(result.current.todos).toHaveLength(1); // Only active
-      expect(!!result.current.todos[0].completedAt).toBe(false);
+      expect(result.current.todos[0].completed).toBe(false);
 
-      // const activeTodos = visibleTodos.filter(todo => !todo!!.completed).completedAt);
-      // const completedTodos = visibleTodos.filter(todo => todo!!.completed).completedAt);
+      // const activeTodos = visibleTodos.filter(todo => !todo.completed);
+      // const completedTodos = visibleTodos.filter(todo => todo.completed);
       // const deletedTodos = result.current.getDeletedTodos();
 
       // expect(activeTodos).toHaveLength(1);
@@ -371,8 +371,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
       const { result } = renderHook(() => useTodos());
 
-      // Default filter is 'active', so only shows incomplete todos
-      expect(result.current.todos).toHaveLength(1); // Only incomplete todo visible
+      expect(result.current.todos).toHaveLength(2);
 
       // TODO: After enhancement, verify migration
       // result.current.todos.forEach(todo => {
@@ -382,13 +381,8 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
       // Should maintain existing functionality
       expect(result.current.todos[0].text).toBe('Legacy todo 1');
-      // With 'active' filter, completed todo is filtered out
-      // Check completed todo in allTodos instead
-      const completedTodo = result.current.allTodos.find(
-        (t) => !!t.completedAt
-      );
-      expect(completedTodo?.text).toBe('Legacy todo 2');
-      expect(!!completedTodo?.completedAt).toBe(true);
+      expect(result.current.todos[1].text).toBe('Legacy todo 2');
+      expect(result.current.todos[1].completed).toBe(true);
     });
   });
 

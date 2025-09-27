@@ -82,13 +82,13 @@ export default function TodoItem({
 
   const handleToggle = () => {
     // Only allow checking (not unchecking) via the checkbox
-    if (!todo.completed) {
+    if (!todo.completedAt) {
       onToggle(todo.id);
     }
   };
 
   const handleRestore = () => {
-    if (onRestore && todo.completed) {
+    if (onRestore && todo.completedAt) {
       onRestore(todo.id);
     }
   };
@@ -196,16 +196,16 @@ export default function TodoItem({
         <button
           onClick={handleToggle}
           className={`flex-shrink-0 p-2 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${
-            todo.completed
+            todo.completedAt
               ? 'cursor-default opacity-75'
               : 'hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer'
           }`}
           aria-label={`Toggle todo: ${todo.text}`}
-          aria-pressed={todo.completed}
-          aria-disabled={todo.completed}
+          aria-pressed={!!todo.completedAt}
+          aria-disabled={!!todo.completedAt}
           type='button'
         >
-          {todo.completed ? (
+          {todo.completedAt ? (
             <CheckCircle
               className='h-5 w-5 text-green-500'
               data-testid='completed-icon'
@@ -253,7 +253,7 @@ export default function TodoItem({
           <>
             <p
               className={`text-sm sm:text-base leading-relaxed whitespace-pre-line break-words ${
-                todo.completed
+                todo.completedAt
                   ? 'line-through text-muted-foreground'
                   : 'text-foreground'
               }`}
@@ -330,7 +330,7 @@ export default function TodoItem({
           ) : (
             // Actions for active todos
             <>
-              {todo.completed && onRestore && (
+              {todo.completedAt && onRestore && (
                 <button
                   onClick={handleRestore}
                   className='flex-shrink-0 p-2 rounded-full hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-colors text-muted-foreground hover:text-yellow-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
@@ -340,7 +340,7 @@ export default function TodoItem({
                   <Undo2 className='h-4 w-4' />
                 </button>
               )}
-              {!isEditing && onEdit && !todo.completed && (
+              {!isEditing && onEdit && !todo.completedAt && (
                 <button
                   onClick={handleEdit}
                   className='flex-shrink-0 p-2 rounded-full hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-muted-foreground hover:text-blue-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
