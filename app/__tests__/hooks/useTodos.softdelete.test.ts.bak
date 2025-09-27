@@ -277,17 +277,17 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
         result.current.setFilter('completed');
       });
       expect(result.current.todos).toHaveLength(1); // Only completed
-      expect(!!result.current.todos[0].completedAt).toBe(true);
+      expect(result.current.todos[0].completed).toBe(true);
 
       // Test active filter
       act(() => {
         result.current.setFilter('active');
       });
       expect(result.current.todos).toHaveLength(1); // Only active
-      expect(!!result.current.todos[0].completedAt).toBe(false);
+      expect(result.current.todos[0].completed).toBe(false);
 
-      // const activeTodos = visibleTodos.filter(todo => !todo!!.completed).completedAt);
-      // const completedTodos = visibleTodos.filter(todo => todo!!.completed).completedAt);
+      // const activeTodos = visibleTodos.filter(todo => !todo.completed);
+      // const completedTodos = visibleTodos.filter(todo => todo.completed);
       // const deletedTodos = result.current.getDeletedTodos();
 
       // expect(activeTodos).toHaveLength(1);
@@ -382,7 +382,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       // Should maintain existing functionality
       expect(result.current.todos[0].text).toBe('Legacy todo 1');
       expect(result.current.todos[1].text).toBe('Legacy todo 2');
-      expect(!!result.current.todos[1].completedAt).toBe(true);
+      expect(result.current.todos[1].completed).toBe(true);
     });
   });
 

@@ -6,7 +6,7 @@ import { Todo } from '../../types/todo';
 const mockTodo: Todo = {
   id: '1',
   text: 'Test todo',
-  completed: false,
+  completedAt: undefined,
   createdAt: new Date('2023-01-01'),
   updatedAt: new Date('2023-01-01'),
 };
