@@ -28,15 +28,23 @@ This guide covers project-specific SonarCloud configuration. For general SonarCl
    - Select `instructions-only-claude-coding`
    - Project key will be: `mikiwiik_instructions-only-claude-coding`
 
-### Step 2: Generate SONAR_TOKEN
+### Step 2: Configure Analysis Method
 
 1. **In your SonarCloud project dashboard**:
    - Go to **Administration** → **Analysis Method**
+   - **Disable "Automatic Analysis"** (this prevents conflicts with CI-based analysis)
+   - **Enable "CI-based Analysis"**
    - Select **"GitHub Actions"** as the CI method
    - SonarCloud will display a token (starts with `sqp_`)
    - **Copy this token** - you'll need it for the next step
 
-### Step 3: Add SONAR_TOKEN to GitHub Repository
+### Step 3: Generate SONAR_TOKEN
+
+1. **After configuring analysis method in Step 2**:
+   - SonarCloud will display your project token (starts with `sqp_`)
+   - **Copy this token** - you'll need it for the next step
+
+### Step 4: Add SONAR_TOKEN to GitHub Repository
 
 1. **Navigate to your GitHub repository**:
    - Go to <https://github.com/mikiwiik/instructions-only-claude-coding>
@@ -49,7 +57,7 @@ This guide covers project-specific SonarCloud configuration. For general SonarCl
    - **Secret**: Paste the token from SonarCloud (starts with `sqp_`)
    - Click **"Add secret"**
 
-### Step 4: Verify Integration
+### Step 5: Verify Integration
 
 1. **Trigger a workflow**:
    - Push a commit or create a pull request
@@ -108,6 +116,14 @@ The integration includes these pre-configured files:
 #### Error: "Running this GitHub Action without SONAR_TOKEN is not recommended"
 
 - **Solution**: Follow Step 3 above to add the `SONAR_TOKEN` secret to your repository
+
+#### Error: "You are running CI analysis while Automatic Analysis is enabled"
+
+- **Solution**: In SonarCloud project → Administration → Analysis Method → Disable "Automatic Analysis"
+
+#### Error: "The folder '**tests**' does not exist"
+
+- **Solution**: Verify `sonar.tests` path in `sonar-project.properties` matches your actual test directory structure
 
 #### Error: "Project not found"
 
