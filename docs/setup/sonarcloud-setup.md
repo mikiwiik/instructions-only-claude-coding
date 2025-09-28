@@ -111,6 +111,7 @@ The integration includes these pre-configured files:
   - `sonar.tests=app/__tests__` - Test directory within app structure
   - `sonar.exclusions` - Excludes test directory from sources to prevent conflicts
 - **`.github/workflows/build.yml`** - GitHub Actions workflow with SonarCloud step
+  - Uses `SonarSource/sonarqube-scan-action@v5.0.0` (latest recommended action)
 - **`coverage/lcov.info`** - Jest coverage reports (generated automatically)
 
 ## Troubleshooting
@@ -153,5 +154,6 @@ The integration includes these pre-configured files:
 - **TypeScript**: Project uses `tsconfig.json` for TypeScript configuration
 - **Testing**: Comprehensive test suite with React Testing Library and Jest
 - **Build Process**: Next.js build process already validates TypeScript and linting
+- **GitHub Action**: Uses latest `sonarqube-scan-action` (v5.0.0) for optimal performance
 
 The SonarCloud integration will enhance existing quality assurance without replacing current tools.
