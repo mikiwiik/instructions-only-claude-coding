@@ -124,6 +124,7 @@ Speed Insights automatically collects performance data when the app is deployed 
 - **Styling**: Tailwind CSS
 - **Testing**: Jest + React Testing Library
 - **Development**: Test-Driven Development (TDD)
+- **Code Quality**: SonarCloud for automated analysis
 - **Analytics**: Vercel Speed Insights for Core Web Vitals monitoring
 - **Deployment**: Vercel with GitHub Actions CI/CD
 
@@ -142,6 +143,7 @@ Speed Insights automatically collects performance data when the app is deployed 
 
 - **🚀 [Installation Guide](docs/setup/installation.md)** - Complete development environment setup
 - **📦 [Deployment Guide](docs/setup/deployment.md)** - Production deployment with Vercel
+- **🔍 [SonarCloud Setup](docs/setup/sonarcloud-setup.md)** - Code quality analysis integration
 - **⚙️ [Development Workflow](docs/development/workflow.md)** - Coding standards and practices
 - **📊 [Project Management](docs/development/project-management.md)** - Issue tracking and planning
 - **🏗️ [Architecture Overview](docs/architecture/overview.md)** - Technical architecture and decisions

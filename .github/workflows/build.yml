@@ -22,6 +22,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
@@ -64,6 +66,13 @@ jobs:
 
     - name: Build application
       run: npm run build
+
+    - name: SonarCloud Analysis
+      uses: SonarSource/sonarqube-scan-action@0303d6b62e310685c0e34d0b9cde218036885c4d
+      if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     - name: Upload coverage reports
       uses: actions/upload-artifact@v4
