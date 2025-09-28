@@ -111,7 +111,42 @@ git commit -m "feat: handle edge cases in feature X (#issue)"
 - Feature branch pushed to remote with tracking
 - All local commits present on remote branch
 - Clear PR title and description
-- Reference related GitHub issue
+- Reference related GitHub issue with closing keywords
+
+### Issue Closure via PR Description
+
+**🚨 REQUIRED**: Use GitHub closing keywords in PR descriptions to automatically close related issues when merged.
+
+**Supported Keywords:**
+
+- `Closes #123`
+- `Fixes #123`
+- `Resolves #123`
+
+**PR Description Template:**
+
+```markdown
+## Summary
+
+Brief description of changes
+
+## Context
+
+Addresses issue #XXX - [brief issue context]
+
+## Implementation
+
+- Key changes made
+- Technical decisions
+
+Closes #XXX
+```
+
+**Multiple Issues:**
+
+```markdown
+Closes #123, closes #124, fixes #125
+```
 
 ### Auto-merge Protocol
 
@@ -164,6 +199,7 @@ git commit -m "feat: handle edge cases in feature X (#issue)"
 5. **Push to Remote** - `git push -u origin feature/XX-description`
 6. **Verify Push Success** - Confirm remote branch tracking and all tests pushed
 7. **Create PR** - Always required by methodology (ONLY after all tests pass and pushed)
+   - **🚨 REQUIRED**: Include "Closes #X" in PR description for automatic issue closure
 8. **🚨 REQUIRED**: Enable automerge: `gh pr merge --auto --squash`
 9. **Wait for Merge** - CI passes + reviewer approval (automerge handles the merge)
 10. **Verify Issue Closure** - Use `gh issue view #X` to confirm
