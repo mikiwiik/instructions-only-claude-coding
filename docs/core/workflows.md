@@ -319,12 +319,39 @@ npm run build        # Production build test
 - Include: Prompt evolution, requirement refinements, lessons learned
 - Reference: See `docs/ipl/README.md` for complete guidelines
 
+### Mermaid Diagrams
+
+**Purpose:** Create visual representations to improve documentation clarity and system understanding
+
+**When to Create:**
+
+- Architecture overviews and system design documentation
+- Logic flows and decision trees for complex processes
+- Component interaction diagrams
+- Development workflow illustrations
+- Data flow and state management visualizations
+
+**Process:**
+
+- Use Mermaid syntax for GitHub-compatible diagrams
+- Include diagrams inline in markdown files using ```mermaid code blocks
+- Focus on clarity and logical flow over visual complexity
+- Update diagrams when underlying systems change
+
+**Common Diagram Types:**
+
+- **Flowcharts**: Decision logic, process flows, algorithm steps
+- **Sequence Diagrams**: Component interactions, API calls, user flows
+- **Class Diagrams**: Data models, type relationships, architecture
+- **Git Graphs**: Branch strategies, workflow illustrations
+
 ### Required Documentation Updates
 
 - **ADRs**: For architectural decisions before implementation
 - **README.md**: For new features or setup changes
 - **Inline Comments**: For complex logic (sparingly)
 - **CLAUDE.md**: For workflow or process changes
+- **Mermaid Diagrams**: For architecture, flows, and system interactions
 
 ### Documentation Consistency
 
