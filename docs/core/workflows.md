@@ -215,6 +215,35 @@ Closes #123, closes #124, fixes #125
 
 ## Quality Gates
 
+### Code Quality Standards
+
+**TypeScript Requirements:**
+
+- Strict mode compliance with no `any` types
+- 100% type coverage for all application code
+- Proper interface definitions and type exports
+
+**Linting and Formatting:**
+
+- ESLint: Zero errors or warnings (enforced via pre-commit hooks)
+- Prettier: Consistent code formatting (enforced via pre-commit hooks)
+- Import organization and unused import removal
+
+**Testing Standards:**
+
+- TDD approach: Tests written before implementation
+- 80%+ line coverage, 100% for critical paths
+- All tests passing and in version control
+- React Testing Library for component testing
+- Jest for test runner and coverage reporting
+
+**Accessibility Compliance:**
+
+- WCAG 2.1 AA standards adherence
+- Proper ARIA attributes and semantic HTML
+- Keyboard navigation support
+- Screen reader compatibility
+
 ### Pre-commit Requirements
 
 - ESLint: Zero errors or warnings
@@ -259,6 +288,36 @@ npm run build        # Production build test
 5. **Completion Verification** - Ensure all tasks finished
 
 ## Documentation Workflow
+
+### Architecture Decision Records (ADRs)
+
+**When to Create:**
+
+- Before any significant technical decision
+- When choosing between multiple implementation approaches
+- For architectural patterns and framework choices
+
+**Process:**
+
+- Create in `docs/adr/###-title.md` using sequential numbering
+- Include: Problem statement, alternatives considered, decision rationale
+- Reference: See `docs/adr/PROCESS.md` for complete guidelines
+
+### Issue Prompt Logs (IPLs)
+
+**Purpose:** Document instruction-only development methodology
+
+**When to Create:**
+
+- For issues demonstrating effective AI collaboration patterns
+- When prompt evolution leads to successful outcomes
+- For complex requirement refinements
+
+**Process:**
+
+- Create in `docs/ipl/###-issue-title.md` matching GitHub issue numbers
+- Include: Prompt evolution, requirement refinements, lessons learned
+- Reference: See `docs/ipl/README.md` for complete guidelines
 
 ### Required Documentation Updates
 
