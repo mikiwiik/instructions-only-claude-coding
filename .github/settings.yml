@@ -1,0 +1,78 @@
+# Repository settings managed by GitHub Settings App
+# https://github.com/apps/settings
+
+repository:
+  name: instructions-only-claude-coding
+  description: "🤖 Agentic coding prototype: Complete software development through pure AI instruction"
+  homepage: ""
+  private: false
+  has_issues: true
+  has_projects: true
+  has_wiki: false
+  has_downloads: false
+  default_branch: main
+  allow_squash_merge: true
+  allow_merge_commit: true
+  allow_rebase_merge: true
+  delete_branch_on_merge: true
+  enable_automated_security_fixes: true
+  enable_vulnerability_alerts: true
+
+# Branch protection rules
+branches:
+  - name: main
+    protection:
+      required_status_checks:
+        strict: true
+        contexts:
+          - "Build and Test"
+      required_pull_request_reviews:
+        required_approving_review_count: 1
+        dismiss_stale_reviews: true
+        require_code_owner_reviews: false
+      enforce_admins: false
+      restrictions: null
+      allow_force_pushes: false
+      allow_deletions: false
+
+# Labels (current repository labels)
+labels:
+  - name: priority-1-critical
+    description: "🔴 Blocking issues, security vulnerabilities, broken core functionality"
+    color: "D73A49"
+  - name: priority-2-high
+    description: "🟠 Important features, significant improvements, major bugs"
+    color: "FB8500"
+  - name: priority-3-medium
+    description: "🟡 Standard features, minor improvements, non-critical bugs"
+    color: "FFB300"
+  - name: priority-4-low
+    description: "🟢 Nice-to-have features, documentation updates, minor enhancements"
+    color: "28A745"
+  - name: complexity-minimal
+    description: "Single file changes, documentation updates, typos"
+    color: "28A745"
+  - name: complexity-simple
+    description: "Basic feature implementation, straightforward logic"
+    color: "007BFF"
+  - name: complexity-moderate
+    description: "Multi-component changes, state management, integration"
+    color: "FFC107"
+  - name: complexity-complex
+    description: "Architecture changes, multiple integrations, system design"
+    color: "FD7E14"
+  - name: complexity-epic
+    description: "Major system overhauls, breaking changes, foundational work"
+    color: "DC3545"
+  - name: category-feature
+    description: "🟦 Core application functionality and user features"
+    color: "0052CC"
+  - name: category-infrastructure
+    description: "🟧 DevOps, CI/CD, deployment, architecture"
+    color: "D04437"
+  - name: category-documentation
+    description: "🟩 Documentation, diagrams, process docs"
+    color: "00875A"
+  - name: category-dx
+    description: "🟪 Developer experience, tooling, AI workflow improvements"
+    color: "6554C0"
