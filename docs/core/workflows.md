@@ -126,9 +126,11 @@ git commit -m "feat: handle edge cases in feature X (#issue)"
 **Standard Process:**
 
 1. Create PR with: `gh pr create --title "..." --body "..."`
-2. Enable automerge: `gh pr merge --auto --squash`
+2. **🚨 REQUIRED**: Enable automerge: `gh pr merge --auto --squash`
 3. Wait for approval and CI: Automatic merge when requirements met
 4. Branch cleanup: Automatic deletion after successful merge
+
+**Note**: Step 2 is mandatory for all PRs to maintain consistent workflow and reduce manual intervention.
 
 **Manual Override (when needed):**
 
@@ -161,9 +163,9 @@ git commit -m "feat: handle edge cases in feature X (#issue)"
 4. **Commit for Issue Closure** - Local commit with "Closes #X"
 5. **Push to Remote** - `git push -u origin feature/XX-description`
 6. **Verify Push Success** - Confirm remote branch tracking and all tests pushed
-7. **Ask User for Auto-merge** - NEVER assume approval
-8. **Create PR** - Always required by methodology (ONLY after all tests pass and pushed)
-9. **Wait for Merge** - CI passes + reviewer approval (if auto-merge enabled)
+7. **Create PR** - Always required by methodology (ONLY after all tests pass and pushed)
+8. **🚨 REQUIRED**: Enable automerge: `gh pr merge --auto --squash`
+9. **Wait for Merge** - CI passes + reviewer approval (automerge handles the merge)
 10. **Verify Issue Closure** - Use `gh issue view #X` to confirm
 11. **Confirm Completion** - All requirements satisfied
 
