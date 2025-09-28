@@ -4,7 +4,9 @@ import { CheckSquare } from 'lucide-react';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 import TodoFilter from './components/TodoFilter';
+import ActivityTimeline from './components/ActivityTimeline';
 import { useTodos } from './hooks/useTodos';
+import { getActivityCount } from './utils/activity';
 
 export default function HomePage() {
   const {
@@ -32,6 +34,7 @@ export default function HomePage() {
     (todo) => todo.completedAt && !todo.deletedAt
   ).length;
   const deletedTodosCount = allTodos.filter((todo) => todo.deletedAt).length;
+  const activityCount = getActivityCount(allTodos);
 
   return (
     <div className='min-h-screen bg-background safe-area-inset'>
@@ -66,19 +69,24 @@ export default function HomePage() {
             activeTodosCount={activeTodosCount}
             completedTodosCount={completedTodosCount}
             deletedTodosCount={deletedTodosCount}
+            activityCount={activityCount}
           />
-          <TodoList
-            todos={todos}
-            onToggle={toggleTodo}
-            onDelete={deleteTodo}
-            onEdit={editTodo}
-            onRestore={restoreTodo}
-            onPermanentlyDelete={permanentlyDeleteTodo}
-            onRestoreDeleted={restoreDeletedTodo}
-            reorderTodos={reorderTodos}
-            moveUp={moveUp}
-            moveDown={moveDown}
-          />
+          {filter === 'activity' ? (
+            <ActivityTimeline todos={allTodos} />
+          ) : (
+            <TodoList
+              todos={todos}
+              onToggle={toggleTodo}
+              onDelete={deleteTodo}
+              onEdit={editTodo}
+              onRestore={restoreTodo}
+              onPermanentlyDelete={permanentlyDeleteTodo}
+              onRestoreDeleted={restoreDeletedTodo}
+              reorderTodos={reorderTodos}
+              moveUp={moveUp}
+              moveDown={moveDown}
+            />
+          )}
         </main>
 
         <footer className='text-center mt-6 sm:mt-8 text-xs sm:text-sm text-muted-foreground px-4'>
