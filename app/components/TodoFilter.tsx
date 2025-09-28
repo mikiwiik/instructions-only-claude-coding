@@ -6,6 +6,7 @@ interface TodoFilterProps {
   activeTodosCount: number;
   completedTodosCount: number;
   deletedTodosCount: number;
+  activityCount: number;
 }
 
 const filterLabels: Record<TodoFilterType, string> = {
@@ -13,6 +14,7 @@ const filterLabels: Record<TodoFilterType, string> = {
   active: 'Active',
   completed: 'Completed',
   'recently-deleted': 'Recently Deleted',
+  activity: 'Activity',
 };
 
 export default function TodoFilter({
@@ -21,16 +23,34 @@ export default function TodoFilter({
   activeTodosCount,
   completedTodosCount,
   deletedTodosCount,
+  activityCount,
 }: TodoFilterProps) {
   const filters: { key: TodoFilterType; label: string; count: number }[] = [
-    { key: 'all', label: filterLabels.all, count: activeTodosCount + completedTodosCount },
+    {
+      key: 'all',
+      label: filterLabels.all,
+      count: activeTodosCount + completedTodosCount,
+    },
     { key: 'active', label: filterLabels.active, count: activeTodosCount },
-    { key: 'completed', label: filterLabels.completed, count: completedTodosCount },
-    { key: 'recently-deleted', label: filterLabels['recently-deleted'], count: deletedTodosCount },
+    {
+      key: 'completed',
+      label: filterLabels.completed,
+      count: completedTodosCount,
+    },
+    {
+      key: 'recently-deleted',
+      label: filterLabels['recently-deleted'],
+      count: deletedTodosCount,
+    },
+    { key: 'activity', label: filterLabels.activity, count: activityCount },
   ];
 
   return (
-    <div className='flex flex-wrap gap-2 mb-4' role='tablist' aria-label='Filter todos'>
+    <div
+      className='flex flex-wrap gap-2 mb-4'
+      role='tablist'
+      aria-label='Filter todos'
+    >
       {filters.map(({ key, label, count }) => (
         <button
           key={key}
