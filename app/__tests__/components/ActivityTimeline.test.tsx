@@ -387,7 +387,7 @@ describe('ActivityTimeline', () => {
     it('should handle malformed todo data gracefully', () => {
       const malformedTodos = [
         {
-          id: null as any,
+          id: null as unknown as string,
           text: 'Malformed todo',
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -403,7 +403,7 @@ describe('ActivityTimeline', () => {
       const incompleteTodos = [
         {
           id: 'test',
-          text: undefined as any,
+          text: undefined as unknown as string,
           createdAt: new Date(),
           updatedAt: new Date(),
         },

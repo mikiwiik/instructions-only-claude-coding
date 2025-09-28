@@ -66,23 +66,7 @@ determine their current status and visibility in different views.
 
 ### Allowed Transitions
 
-```mermaid
-stateDiagram-v2
-    [*] --> Active : create
-    Active --> Completed : toggle/complete
-    Completed --> Active : toggle/reopen
-    Active --> DeletedActive : delete
-    Completed --> DeletedCompleted : delete
-    DeletedActive --> Active : restore
-    DeletedCompleted --> Completed : restore
-    DeletedActive --> [*] : permanent delete
-    DeletedCompleted --> [*] : permanent delete
-
-    note right of Active : !completedAt && !deletedAt
-    note right of Completed : completedAt && !deletedAt
-    note right of DeletedActive : !completedAt && deletedAt
-    note right of DeletedCompleted : completedAt && deletedAt
-```
+See [todo-states-diagram.md](todo-states-diagram.md) for visual state transition diagrams and comprehensive state visualization.
 
 ### Transition Actions
 
