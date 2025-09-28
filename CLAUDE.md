@@ -1,5 +1,31 @@
 # Claude Code Instructions
 
+## 🚨 Essential Guiding Principles
+
+**ALL AGENTS**: Follow defined workflows exactly - ask for clarification in ALL unclear situations before proceeding
+
+1. **🚨 INSTRUCTION-ONLY DEVELOPMENT**: 100% AI implementation via natural language - humans provide strategy, AI handles
+   all code execution
+2. **🚨 PROFESSIONAL STANDARDS**: Enterprise-quality practices maintained entirely through AI - no manual coding
+   intervention
+3. **🚨 MANDATORY TodoWrite**: Use TodoWrite for ANY non-trivial task (3+ files, new features, architecture changes) -
+   present plan before implementation
+4. **🚨 AGENT-CENTRIC WORKFLOW**: Use specialized agents (`frontend-specialist`, `testing-specialist`,
+   `quality-assurance`, `documentation-agent`) with 2-4 agents for complex features
+5. **🚨 ATOMIC COMMITS + AI ATTRIBUTION**: Multiple small commits per feature, each with `🤖 Generated with AI Agent`
+   and co-author attribution
+6. **🚨 TDD + QUALITY GATES**: Tests first, zero ESLint warnings, strict TypeScript, comprehensive coverage before
+   completion
+7. **🚨 FEATURE BRANCH + PR WORKFLOW**: All work via feature branches and PRs - NEVER direct commits to main - only
+   claim completion AFTER PR merged and verified with `gh issue view #X`
+8. **🚨 ADRs BEFORE ARCHITECTURE**: Document significant technical decisions in `docs/adr/` before implementation
+9. **🚨 DOCUMENT FOR HUMANS**: Always update README.md and relevant markdown files so humans can understand all
+   changes and project evolution
+10. **🚨 DOCUMENTATION QUALITY**: Keep all documentation comprehensive, up-to-date, and concise - eliminate outdated
+    or verbose content immediately
+
+---
+
 Agent-centric development instructions for instruction-only todo application development.
 
 ## Agent Selection Guide

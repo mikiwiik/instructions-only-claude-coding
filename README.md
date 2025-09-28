@@ -158,7 +158,7 @@ Speed Insights automatically collects performance data when the app is deployed 
 - **[docs/architecture/](docs/architecture/)** - Technical architecture and design decisions
 - **[docs/adr/](docs/adr/)** - Architecture Decision Records
 - **[docs/guidelines/](docs/guidelines/)** - Process guidelines and standards
-- **[CLAUDE.md](CLAUDE.md)** - Claude Code development guidelines
+- **[CLAUDE.md](CLAUDE.md)** - Essential 10-line framework for instruction-only development
 
 ## Contributing
 
@@ -223,7 +223,7 @@ This project demonstrates professional development practices:
 - **Project Issues**: [GitHub Issues](https://github.com/mikiwiik/instructions-only-claude-coding/issues)
 - **Architecture Decisions**: [ADR Index](docs/adr/README.md)
 - **Claude Code Documentation**: [Official Docs](https://docs.claude.com/en/docs/claude-code/)
-- **Development Guidelines**: [CLAUDE.md](CLAUDE.md)
+- **Development Guidelines**: [CLAUDE.md](CLAUDE.md) - 10 essential guiding principles for instruction-only development
 
 ---
 
