@@ -7,7 +7,21 @@ export interface Todo {
   deletedAt?: Date;
 }
 
-export type TodoFilter = 'all' | 'active' | 'completed' | 'recently-deleted';
+export type TodoFilter =
+  | 'all'
+  | 'active'
+  | 'completed'
+  | 'recently-deleted'
+  | 'activity';
+
+export interface ActivityEvent {
+  id: string;
+  todoId: string;
+  todoText: string;
+  action: 'created' | 'edited' | 'completed' | 'restored' | 'deleted';
+  timestamp: Date;
+  details?: string;
+}
 
 export interface TodoState {
   todos: Todo[];
