@@ -130,10 +130,12 @@ Speed Insights automatically collects performance data when the app is deployed 
 
 ## Development Status
 
-**Current Workflow**: Branch-based development with pull requests
+**Current Workflow**: Branch-based development with automated PR workflow
 
 - Features developed on separate branches (`feature/issue-number-description`)
-- Pull requests used for code review and CI validation
+- Pull requests require 1 approver and passing CI checks (enforced by branch protection)
+- Automerge enabled for streamlined workflow after requirements met
+- Automatic branch deletion keeps repository clean
 - Main branch maintains stable, tested code
 - Automatic deployment to production after successful CI
 
@@ -173,7 +175,8 @@ Speed Insights automatically collects performance data when the app is deployed 
 2. **Follow TDD**: Write tests first, then implementation
 3. **Maintain Quality**: Pre-commit hooks ensure code quality
 4. **Create PR**: Submit pull request for review
-5. **CI Validation**: Ensure all checks pass before merge
+5. **Enable Automerge**: Streamlined workflow with `gh pr merge --auto --squash`
+6. **CI Validation**: Automatic merge after approval and passing checks
 
 ### Issue Management
 
