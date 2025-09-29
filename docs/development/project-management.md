@@ -1,10 +1,13 @@
 # Project Management and Issue Tracking
 
-This document outlines the project management practices, issue tracking workflow, and planning methodologies used in the Todo App project.
+This document outlines the project management practices, issue tracking workflow, and planning methodologies
+used in the Todo App project.
 
 ## Project Management Overview
 
-The Todo App uses GitHub Issues for feature tracking and follows a structured development approach designed to demonstrate professional project management practices while supporting the educational objectives of Claude Code collaboration.
+The Todo App uses GitHub Issues for feature tracking and follows a structured development approach designed
+to demonstrate professional project management practices while supporting the educational objectives of Claude
+Code collaboration.
 
 ### Core Principles
 
@@ -61,7 +64,8 @@ When assigning priority labels, consider:
 
 ## Complexity-Based Effort Estimation
 
-The project uses complexity labels to enable accurate effort estimation in Claude Code development, replacing traditional time-based estimates with cognitive load assessment.
+The project uses complexity labels to enable accurate effort estimation in Claude Code development, replacing
+traditional time-based estimates with cognitive load assessment.
 
 ### Complexity Labels
 
@@ -138,9 +142,11 @@ Issues are labeled with both priority and complexity for optimal development pla
 
 ### AI Collaboration Issue Management
 
-The project includes specialized tracking for AI collaboration and Claude Code workflow improvements through the `claude-workflow` label.
+The project includes specialized tracking for AI collaboration and Claude Code workflow improvements through
+the `claude-workflow` label.
 
-**📋 Full Guidelines**: See [`docs/guidelines/claude-workflow-labels.md`](../guidelines/claude-workflow-labels.md) for comprehensive claude-workflow label usage and integration guidelines.
+**📋 Full Guidelines**: See [`docs/guidelines/claude-workflow-labels.md`](../guidelines/claude-workflow-labels.md)
+for comprehensive claude-workflow label usage and integration guidelines.
 
 #### When to Use claude-workflow Label
 
@@ -244,9 +250,17 @@ The project includes specialized tracking for AI collaboration and Claude Code w
 
 - [ ] All acceptance criteria met
 - [ ] Code follows project standards and conventions
-- [ ] Comprehensive test coverage provided
+- [ ] **♿ Accessibility requirements met** ([docs/guidelines/accessibility-requirements.md](../guidelines/accessibility-requirements.md)):
+  - [ ] WCAG 2.2 AA compliance verified
+  - [ ] Minimum 44px × 44px touch targets for interactive elements
+  - [ ] Proper ARIA labels and semantic HTML
+  - [ ] Keyboard navigation fully functional
+  - [ ] Screen reader compatibility tested
+  - [ ] Focus management implemented correctly
+  - [ ] Color contrast meets minimum ratios (4.5:1 text, 3:1 UI components)
+- [ ] Comprehensive test coverage provided (including accessibility tests)
 - [ ] Documentation updated appropriately
-- [ ] Code review completed and approved
+- [ ] Code review completed and approved (including accessibility review)
 - [ ] CI/CD pipeline passes all checks
 
 ### Review Process
@@ -290,4 +304,5 @@ The project includes specialized tracking for AI collaboration and Claude Code w
 
 ---
 
-This project management approach ensures effective resource allocation, clear communication of urgency, and structured project planning while supporting the educational mission of the Todo App project.
+This project management approach ensures effective resource allocation, clear communication of urgency, and
+structured project planning while supporting the educational mission of the Todo App project.
