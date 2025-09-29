@@ -57,6 +57,14 @@ Agent-centric development instructions for instruction-only todo application dev
 
 ## Quality Standards
 
+**Accessibility Requirements**:
+
+- **🚨 WCAG 2.2 AA Compliance**: All implementations must meet WCAG 2.2 AA standards
+- **Comprehensive Guide**: [docs/guidelines/accessibility-requirements.md](docs/guidelines/accessibility-requirements.md)
+- **Key Requirements**: 44px touch targets, proper ARIA, keyboard navigation, screen reader support
+- **Testing**: Accessibility tests required for all interactive components
+- **Definition of Done**: Accessibility checklist mandatory in [project-management.md](docs/development/project-management.md)
+
 **Issue Management**:
 
 - **Priority Labels**: priority-1-critical through priority-4-low
