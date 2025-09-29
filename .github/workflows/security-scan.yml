@@ -1,0 +1,106 @@
+name: Weekly Security Scan
+
+on:
+  schedule:
+    # Run every Monday at 00:00 UTC
+    - cron: '0 0 * * 1'
+  workflow_dispatch: # Allow manual trigger
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  security-audit:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run security audit
+      id: audit
+      run: |
+        echo "Running npm audit..."
+        npm audit --audit-level=moderate > audit-output.txt 2>&1 || echo "VULNERABILITIES_FOUND=true" >> $GITHUB_OUTPUT
+        cat audit-output.txt
+
+    - name: Generate detailed report
+      run: |
+        mkdir -p reports
+        npm audit --json > reports/audit-report.json || true
+
+        # Generate summary
+        echo "# Security Audit Report - $(date '+%Y-%m-%d')" > reports/audit-summary.md
+        echo "" >> reports/audit-summary.md
+        echo "## Summary" >> reports/audit-summary.md
+        npm audit || true >> reports/audit-summary.md
+
+        # Parse JSON for severity counts
+        if [ -f reports/audit-report.json ]; then
+          echo "" >> reports/audit-summary.md
+          echo "## Vulnerability Counts" >> reports/audit-summary.md
+          node -p "
+            const audit = JSON.parse(require('fs').readFileSync('reports/audit-report.json'));
+            const meta = audit.metadata?.vulnerabilities || {};
+            \`- Critical: \${meta.critical || 0}
+- High: \${meta.high || 0}
+- Moderate: \${meta.moderate || 0}
+- Low: \${meta.low || 0}
+- Info: \${meta.info || 0}\`
+          " >> reports/audit-summary.md || true
+        fi
+
+    - name: Upload audit report
+      uses: actions/upload-artifact@v4
+      with:
+        name: weekly-security-audit
+        path: reports/
+        retention-days: 90
+
+    - name: Create issue if vulnerabilities found
+      if: steps.audit.outputs.VULNERABILITIES_FOUND == 'true'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const auditSummary = fs.readFileSync('reports/audit-summary.md', 'utf8');
+
+          const issueTitle = `🔒 Security Vulnerabilities Detected - ${new Date().toISOString().split('T')[0]}`;
+          const issueBody = `${auditSummary}
+
+          ---
+
+          ## Action Required
+
+          This issue was automatically created by the weekly security scan.
+
+          ### Next Steps:
+          1. Review the vulnerability details above
+          2. Run \`npm audit\` locally to see full details
+          3. Update vulnerable packages: \`npm audit fix\`
+          4. For breaking changes, update manually and test
+          5. Close this issue once vulnerabilities are resolved
+
+          ### Related Workflows
+          - Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          - Audit report artifact available in workflow run
+
+          **Labels:** priority-1-critical, category-infrastructure`;
+
+          await github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: issueTitle,
+            body: issueBody,
+            labels: ['priority-1-critical', 'category-infrastructure']
+          });
