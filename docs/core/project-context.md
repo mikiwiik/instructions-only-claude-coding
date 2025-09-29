@@ -29,7 +29,7 @@ humans provide strategic direction and AI handles complete implementation of a t
 
 - **Jest** as test runner
 - **React Testing Library** for component testing
-- **TDD methodology** - tests written before implementation
+- **TDD methodology** - see [TDD Commit Pattern](workflows.md#tdd-commit-pattern) for detailed workflow
 - **Coverage reporting** with Jest built-in tools
 
 ### Development Tools
@@ -154,36 +154,19 @@ See GitHub Issues for complete feature roadmap:
 
 ## Development Methodology
 
-### Instruction-Only Development
-
-- **Human Role**: Requirements, feedback, strategic direction
-- **AI Role**: Complete implementation, testing, documentation
-- **Collaboration Pattern**: Natural language instruction → AI execution
-- **Quality Assurance**: Automated tools + AI code review
-
-### Agent Coordination
-
-- **Frontend Specialist**: UI/UX implementation and component architecture
-- **Testing Specialist**: TDD methodology and comprehensive test coverage
-- **Quality Assurance**: Standards enforcement and accessibility compliance
-- **Documentation Agent**: Technical writing and architectural documentation
+This project demonstrates instruction-only development with AI handling complete implementation. For detailed
+methodology and agent coordination patterns, see [Agentic Coding Framework](framework.md).
 
 ## Quality Standards
 
-### Code Quality Metrics
+Current project maintains:
 
 - **TypeScript Coverage**: 100% (strict mode, no `any` types)
-- **ESLint Compliance**: Zero errors/warnings
 - **Test Coverage**: 80%+ line coverage, 100% for critical paths
 - **Accessibility**: WCAG 2.1 AA compliance
 - **Performance**: Optimal React patterns and bundle size management
 
-### Development Standards
-
-- **TDD Approach**: Tests written before implementation
-- **Atomic Commits**: One logical change per commit
-- **Feature Branches**: All work via PRs, no direct main commits
-- **Documentation**: ADRs for decisions, updated README for features
-- **Review Process**: Multi-agent coordination for quality assurance
+For complete quality standards, development processes, and enforcement procedures, see
+[Quality Gates](workflows.md#quality-gates).
 
 This project context provides the foundation for specialized agent coordination and instruction-only development methodology.

@@ -6,7 +6,9 @@
 
 **🚨 MANDATORY**: All code changes must be made on feature branches and handled via Pull Requests.
 
-1. **Create Feature Branch**: `git checkout -b feature/XX-description`
+**🚨 PRINCIPLE**: One issue per feature branch - each branch addresses exactly one GitHub issue.
+
+1. **Create Feature Branch**: `git checkout -b feature/XX-description` (where XX = issue number)
 2. **Implement Changes**: Make atomic commits with clear messages
 3. **Push to Remote**: `git push -u origin feature/XX-description`
 4. **Create Pull Request**: Always required regardless of GitHub settings
@@ -60,12 +62,13 @@ Co-Authored-By: [Human Name] <human.email@domain.com>
 
 ### Multi-Step Implementation Approach
 
-**Each logical change = One atomic commit:**
+**Each logical change = One atomic commit, all commits reference the same issue:**
 
 - ✅ **Incremental Development**: Build functionality step by step
 - ✅ **Easy Review**: Each commit addresses single concern
 - ✅ **Precise Rollback**: Revert specific changes without losing others
 - ✅ **Clear History**: Logical progression through development
+- ✅ **Issue Traceability**: All commits in branch reference the same issue number
 
 **Example Multi-Step Feature Implementation:**
 
@@ -215,6 +218,35 @@ Closes #123, closes #124, fixes #125
 
 ## Quality Gates
 
+### Code Quality Standards
+
+**TypeScript Requirements:**
+
+- Strict mode compliance with no `any` types
+- 100% type coverage for all application code
+- Proper interface definitions and type exports
+
+**Linting and Formatting:**
+
+- ESLint: Zero errors or warnings (enforced via pre-commit hooks)
+- Prettier: Consistent code formatting (enforced via pre-commit hooks)
+- Import organization and unused import removal
+
+**Testing Standards:**
+
+- TDD approach: Tests written before implementation
+- 80%+ line coverage, 100% for critical paths
+- All tests passing and in version control
+- React Testing Library for component testing
+- Jest for test runner and coverage reporting
+
+**Accessibility Compliance:**
+
+- WCAG 2.1 AA standards adherence
+- Proper ARIA attributes and semantic HTML
+- Keyboard navigation support
+- Screen reader compatibility
+
 ### Pre-commit Requirements
 
 - ESLint: Zero errors or warnings
@@ -252,13 +284,66 @@ npm run build        # Production build test
 
 ### Planning Process
 
-1. **Initial Assessment** - Understand requirements and scope
-2. **Task Breakdown** - Create comprehensive TodoWrite list
-3. **User Presentation** - Present plan for approval
-4. **Implementation Tracking** - Mark tasks in_progress/completed
-5. **Completion Verification** - Ensure all tasks finished
+Follow the 5-step protocol defined in [CLAUDE.md Task Planning Protocol](../../CLAUDE.md#task-planning-protocol):
+Assessment → Task Breakdown → User Approval → Implementation Tracking → Completion Verification
 
 ## Documentation Workflow
+
+### Architecture Decision Records (ADRs)
+
+**When to Create:**
+
+- Before any significant technical decision
+- When choosing between multiple implementation approaches
+- For architectural patterns and framework choices
+
+**Process:**
+
+- Create in `docs/adr/###-title.md` using sequential numbering
+- Include: Problem statement, alternatives considered, decision rationale
+- Reference: See `docs/adr/PROCESS.md` for complete guidelines
+
+### Issue Prompt Logs (IPLs)
+
+**Purpose:** Document instruction-only development methodology
+
+**When to Create:**
+
+- For issues demonstrating effective AI collaboration patterns
+- When prompt evolution leads to successful outcomes
+- For complex requirement refinements
+
+**Process:**
+
+- Create in `docs/ipl/###-issue-title.md` matching GitHub issue numbers
+- Include: Prompt evolution, requirement refinements, lessons learned
+- Reference: See `docs/ipl/README.md` for complete guidelines
+
+### Mermaid Diagrams
+
+**Purpose:** Create visual representations to improve documentation clarity and system understanding
+
+**When to Create:**
+
+- Architecture overviews and system design documentation
+- Logic flows and decision trees for complex processes
+- Component interaction diagrams
+- Development workflow illustrations
+- Data flow and state management visualizations
+
+**Process:**
+
+- Use Mermaid syntax for GitHub-compatible diagrams
+- Include diagrams inline in markdown files using ```mermaid code blocks
+- Focus on clarity and logical flow over visual complexity
+- Update diagrams when underlying systems change
+
+**Common Diagram Types:**
+
+- **Flowcharts**: Decision logic, process flows, algorithm steps
+- **Sequence Diagrams**: Component interactions, API calls, user flows
+- **Class Diagrams**: Data models, type relationships, architecture
+- **Git Graphs**: Branch strategies, workflow illustrations
 
 ### Required Documentation Updates
 
@@ -266,6 +351,7 @@ npm run build        # Production build test
 - **README.md**: For new features or setup changes
 - **Inline Comments**: For complex logic (sparingly)
 - **CLAUDE.md**: For workflow or process changes
+- **Mermaid Diagrams**: For architecture, flows, and system interactions
 
 ### Documentation Consistency
 

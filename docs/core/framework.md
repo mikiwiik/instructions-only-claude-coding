@@ -17,9 +17,8 @@ humans provide strategic direction and AI handles complete implementation.
 
 ### AI Role: Complete Implementation Team
 
-- Handles all code implementation following TDD methodology
-- Manages testing strategies and maintains comprehensive test coverage
-- Configures and maintains CI/CD pipeline and deployment processes
+- Handles all code implementation with comprehensive testing strategies
+- Manages test coverage and maintains CI/CD pipeline and deployment processes
 - Creates and maintains all project documentation and ADRs
 - Ensures code quality, linting, type safety, and professional standards
 - **100% responsible for technical execution** via instruction interpretation
@@ -34,11 +33,8 @@ humans provide strategic direction and AI handles complete implementation.
 
 ## Quality Assurance Through AI
 
-- **Test-Driven Development**: AI writes comprehensive tests before implementation
-- **Atomic Commit Strategy**: AI maintains clean, logical commit history
-- **Documentation Generation**: AI creates and maintains all technical documentation
-- **CI/CD Management**: AI configures and maintains automated quality assurance
-- **Code Review Standards**: AI applies enterprise coding standards throughout development
+AI maintains enterprise-quality standards through systematic approaches to testing, commits, documentation, and code
+review. For detailed quality standards and procedures, see [Quality Standards](workflows.md#quality-gates).
 
 ## Agent-Centric Implementation
 
@@ -60,44 +56,28 @@ humans provide strategic direction and AI handles complete implementation.
 
 ### Task Planning Protocol
 
-All non-trivial changes must follow structured task planning:
+All non-trivial changes must follow structured task planning using TodoWrite for comprehensive task breakdown, user
+plan presentation, and incremental progress tracking. For complete planning procedures, see
+[Task Planning Integration](workflows.md#task-planning-integration).
 
-- Use TodoWrite for comprehensive task breakdown
-- Present plan to user before implementation
-- Track progress incrementally with status updates
-- Complete tasks atomically with proper verification
+### Documentation Standards
 
-### Architecture Decision Records (ADRs)
+- **Architecture Decision Records (ADRs)**: Document significant technical decisions in `docs/adr/`
+- **Issue Prompt Logs (IPLs)**: Document effective AI collaboration patterns in `docs/ipl/`
+- **Mermaid Diagrams**: Create visual representations for architecture, logic flows, and system interactions
 
-- **When**: Before any significant technical decision
-- **Where**: `docs/adr/###-title.md` using sequential numbering
-- **Content**: Problem statement, alternatives considered, decision rationale
-- **Process**: See `docs/adr/PROCESS.md` for complete guidelines
+For detailed documentation workflows and requirements, see [Documentation Workflow](workflows.md#documentation-workflow).
 
-### Issue Prompt Logs (IPLs)
+## Implementation Standards
 
-Document instruction-only development methodology:
+Core quality principles maintained through AI development:
 
-- **When**: For issues demonstrating effective AI collaboration patterns
-- **Where**: `docs/ipl/###-issue-title.md` matching GitHub issue numbers
-- **Content**: Prompt evolution, requirement refinements, lessons learned
-- **Process**: See `docs/ipl/README.md` for complete guidelines
+- **Test-First Development**: Comprehensive testing strategies with detailed workflow in [TDD Commit Pattern](workflows.md#tdd-commit-pattern)
+- **Strict TypeScript**: No `any` types, comprehensive type safety
+- **Zero-Warning Policy**: ESLint and Prettier enforcement
+- **Atomic Development**: Incremental commits with clear progression
 
-## Quality Standards
-
-### Code Quality
-
-- **TypeScript**: Strict mode, no `any` types
-- **ESLint**: Zero errors/warnings (enforced via pre-commit hooks)
-- **Prettier**: Consistent formatting (enforced via pre-commit hooks)
-- **Testing**: TDD approach with comprehensive coverage
-
-### Development Process
-
-- **Atomic Commits**: One logical change per commit with issue linking
-- **Feature Branches**: All work via PRs, never direct commits to main
-- **Quality Gates**: Lint, typecheck, test before completion
-- **Documentation**: Maintain consistency across all project documentation
+For complete quality standards, gates, and enforcement procedures, see [Quality Gates](workflows.md#quality-gates).
 
 ## Measurable AI Contribution
 
