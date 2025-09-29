@@ -6,7 +6,9 @@
 
 **🚨 MANDATORY**: All code changes must be made on feature branches and handled via Pull Requests.
 
-1. **Create Feature Branch**: `git checkout -b feature/XX-description`
+**🚨 PRINCIPLE**: One issue per feature branch - each branch addresses exactly one GitHub issue.
+
+1. **Create Feature Branch**: `git checkout -b feature/XX-description` (where XX = issue number)
 2. **Implement Changes**: Make atomic commits with clear messages
 3. **Push to Remote**: `git push -u origin feature/XX-description`
 4. **Create Pull Request**: Always required regardless of GitHub settings
@@ -60,12 +62,13 @@ Co-Authored-By: [Human Name] <human.email@domain.com>
 
 ### Multi-Step Implementation Approach
 
-**Each logical change = One atomic commit:**
+**Each logical change = One atomic commit, all commits reference the same issue:**
 
 - ✅ **Incremental Development**: Build functionality step by step
 - ✅ **Easy Review**: Each commit addresses single concern
 - ✅ **Precise Rollback**: Revert specific changes without losing others
 - ✅ **Clear History**: Logical progression through development
+- ✅ **Issue Traceability**: All commits in branch reference the same issue number
 
 **Example Multi-Step Feature Implementation:**
 
