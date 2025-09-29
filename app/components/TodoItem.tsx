@@ -265,18 +265,17 @@ export default function TodoItem({
 
   // Combine gesture handlers for touch events
   const touchHandlers = {
-    ...swipeGesture,
     onTouchStart: (e: React.TouchEvent) => {
       swipeGesture.onTouchStart(e);
       longPressGesture.onTouchStart(e);
     },
     onTouchMove: (e: React.TouchEvent) => {
       swipeGesture.onTouchMove(e);
-      longPressGesture.onTouchMove(e);
+      longPressGesture.onTouchMove();
     },
-    onTouchEnd: (e: React.TouchEvent) => {
-      swipeGesture.onTouchEnd(e);
-      longPressGesture.onTouchEnd(e);
+    onTouchEnd: () => {
+      swipeGesture.onTouchEnd();
+      longPressGesture.onTouchEnd();
     },
   };
 
