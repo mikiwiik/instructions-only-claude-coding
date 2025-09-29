@@ -34,6 +34,27 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
+    - name: Security Audit
+      run: npm audit --audit-level=moderate
+      continue-on-error: true
+
+    - name: Generate Security Audit Report
+      if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
+      run: |
+        mkdir -p reports
+        npm audit --json > reports/audit-report.json || true
+        echo "## NPM Audit Report" > reports/audit-summary.md
+        echo "" >> reports/audit-summary.md
+        npm audit >> reports/audit-summary.md || true
+
+    - name: Upload Security Audit Report
+      uses: actions/upload-artifact@v4
+      if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
+      with:
+        name: security-audit-report
+        path: reports/
+        retention-days: 30
+
     - name: Run type checking
       run: npm run type-check
 
