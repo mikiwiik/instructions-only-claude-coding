@@ -248,6 +248,8 @@ for comprehensive claude-workflow label usage and integration guidelines.
 
 ### Definition of Done
 
+**🚨 Task Completion**: Task is complete when PR is created and ready for review, NOT when merged.
+
 - [ ] All acceptance criteria met
 - [ ] Code follows project standards and conventions
 - [ ] **♿ Accessibility requirements met** ([docs/guidelines/accessibility-requirements.md](../guidelines/accessibility-requirements.md)):
@@ -260,6 +262,8 @@ for comprehensive claude-workflow label usage and integration guidelines.
   - [ ] Color contrast meets minimum ratios (4.5:1 text, 3:1 UI components)
 - [ ] Comprehensive test coverage provided (including accessibility tests)
 - [ ] Documentation updated appropriately
+- [ ] **🚨 PR created with automerge enabled and reported to user**
+- [ ] **🚨 Agent has stopped and is waiting for human approval**
 - [ ] Code review completed and approved (including accessibility review)
 - [ ] CI/CD pipeline passes all checks
 
