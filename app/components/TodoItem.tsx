@@ -23,6 +23,8 @@ import {
   sanitizeMarkdown,
   markdownConfig,
 } from '../utils/markdown';
+import { useSwipeGesture } from '../hooks/useSwipeGesture';
+import { useLongPress } from '../hooks/useLongPress';
 
 // Helper function to decode HTML entities
 const decodeHtmlEntities = (text: string): string => {
@@ -125,6 +127,31 @@ export default function TodoItem({
     transition,
     isDragging,
   } = useSortable({ id: todo.id, disabled: !isDraggable });
+
+  // Swipe gesture handlers
+  const swipeGesture = useSwipeGesture({
+    onSwipeRight: () => {
+      if (!todo.completedAt && !todo.deletedAt) {
+        onToggle(todo.id);
+      }
+    },
+    onSwipeLeft: () => {
+      if (!todo.deletedAt) {
+        handleDelete();
+      }
+    },
+  });
+
+  // Long press gesture handler
+  const longPressGesture = useLongPress({
+    onLongPress: () => {
+      if (!isEditing && onEdit && !todo.completedAt && !todo.deletedAt) {
+        handleEdit();
+      }
+    },
+    delay: 500,
+    shouldPreventDefault: false,
+  });
 
   useEffect(() => {
     if (isEditing && textareaRef.current) {
@@ -236,14 +263,32 @@ export default function TodoItem({
     opacity: isDragging ? 0.5 : 1,
   };
 
+  // Combine gesture handlers for touch events
+  const touchHandlers = {
+    ...swipeGesture,
+    onTouchStart: (e: React.TouchEvent) => {
+      swipeGesture.onTouchStart(e);
+      longPressGesture.onTouchStart(e);
+    },
+    onTouchMove: (e: React.TouchEvent) => {
+      swipeGesture.onTouchMove(e);
+      longPressGesture.onTouchMove(e);
+    },
+    onTouchEnd: (e: React.TouchEvent) => {
+      swipeGesture.onTouchEnd(e);
+      longPressGesture.onTouchEnd(e);
+    },
+  };
+
   return (
     <li
       ref={setNodeRef}
       style={style}
       role='listitem'
-      className={`flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg border fade-in ${
+      className={`flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg border fade-in transition-transform ${
         todo.deletedAt ? 'bg-muted border-dashed opacity-75' : 'bg-background'
       }`}
+      {...touchHandlers}
     >
       <div className='flex flex-col md:flex-row items-center gap-1 md:gap-2'>
         {isDraggable && (
