@@ -261,7 +261,7 @@ for comprehensive claude-workflow label usage and integration guidelines.
 - [ ] Comprehensive test coverage provided (including accessibility tests)
 - [ ] Documentation updated appropriately
 - [ ] Code review completed and approved (including accessibility review)
-- [ ] CI/CD pipeline passes all checks (including accessibility linting)
+- [ ] CI/CD pipeline passes all checks
 
 ### Review Process
 
