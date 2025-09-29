@@ -126,6 +126,7 @@ Speed Insights automatically collects performance data when the app is deployed 
 - **Development**: Test-Driven Development (TDD)
 - **Code Quality**: SonarCloud for automated analysis
 - **Analytics**: Vercel Speed Insights for Core Web Vitals monitoring
+- **Mobile**: Touch gestures with accessibility-first design (WCAG 2.2 AA compliant)
 - **Deployment**: Vercel with GitHub Actions CI/CD
 
 ## Development Status
@@ -202,6 +203,8 @@ These commands are defined in `.claude/commands/` and integrate with the project
 
 - ✅ **Add/Edit/Delete Todos**: Complete todo management functionality
 - ✅ **Toggle Completion**: Mark todos as complete/incomplete
+- ✅ **Touch Gestures**: Swipe right to complete, swipe left to delete, long press to edit
+- ✅ **Accessibility First**: WCAG 2.2 AA compliant with keyboard alternatives for all gestures
 - ✅ **Local Persistence**: Browser localStorage for data persistence
 - ✅ **Responsive Design**: Works on desktop and mobile devices
 - ✅ **Type Safety**: Full TypeScript implementation
