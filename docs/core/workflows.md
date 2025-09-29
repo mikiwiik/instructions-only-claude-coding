@@ -175,19 +175,47 @@ Closes #123, closes #124, fixes #125
 - If automerge not desired: Skip step 2, merge manually after approval
 - If urgent merge needed: Use `--admin` flag to bypass protection (with permission)
 
+### PR Approval Protocol
+
+**🚨 CRITICAL STOP POINT**: After creating PR with automerge enabled:
+
+1. ✅ Report PR URL and status to human
+2. 🛑 **STOP and WAIT for human approval/merge**
+3. ❌ **NEVER use `--admin`, `--force`, or any bypass flags without explicit user permission**
+4. ✅ Task completion = PR created and ready for review (NOT merged)
+
+**Forbidden Actions Without User Permission:**
+
+- `gh pr merge --admin`
+- `gh pr merge --force`
+- `git push --force`
+- `git push --force-with-lease`
+- Any command that bypasses branch protection or review requirements
+
+**When PR Cannot Auto-Merge:**
+
+1. Report the blocking issue to user
+2. Ask user how to proceed
+3. Wait for explicit instructions
+
 ### Bypass Rules (Admin Privileges)
+
+#### 🚨 USE ONLY WITH EXPLICIT USER PERMISSION
 
 **When to Use:**
 
 - CI checks failing but changes are safe/urgent
 - Branch protection blocking despite user approval
-- User explicitly requests immediate merge
+- User explicitly requests immediate merge with phrases like:
+  - "bypass rules and merge"
+  - "use admin flag to merge"
+  - "force merge this PR"
 
 **Required Process:**
 
-1. Ask explicit permission: "Should I bypass rules and merge immediately?"
-2. Wait for clear consent: "yes, bypass rules", "merge with admin"
-3. Execute: `gh pr merge --admin --squash --delete-branch`
+1. **DO NOT** proceed unless user explicitly requests bypass
+2. Confirm user intent if unclear
+3. Only then execute: `gh pr merge --admin --squash --delete-branch`
 
 ## Issue Completion Workflow
 
