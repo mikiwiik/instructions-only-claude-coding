@@ -23,6 +23,8 @@
    changes and project evolution
 10. **🚨 DOCUMENTATION QUALITY**: Keep all documentation comprehensive, up-to-date, and concise - eliminate outdated
     or verbose content immediately
+11. **🚨 PINNED DEPENDENCIES**: All dependencies must use exact versions without range operators (`^`, `~`) for maximum
+    security control, reproducible builds, and clear audit trails - updates via Dependabot PRs only
 
 ---
 
