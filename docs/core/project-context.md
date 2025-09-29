@@ -163,7 +163,7 @@ Current project maintains:
 
 - **TypeScript Coverage**: 100% (strict mode, no `any` types)
 - **Test Coverage**: 80%+ line coverage, 100% for critical paths
-- **Accessibility**: WCAG 2.1 AA compliance
+- **Accessibility**: WCAG 2.2 AA compliance (see [docs/guidelines/accessibility-requirements.md](../guidelines/accessibility-requirements.md))
 - **Performance**: Optimal React patterns and bundle size management
 
 For complete quality standards, development processes, and enforcement procedures, see

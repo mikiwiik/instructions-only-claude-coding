@@ -242,10 +242,11 @@ Closes #123, closes #124, fixes #125
 
 **Accessibility Compliance:**
 
-- WCAG 2.1 AA standards adherence
+- WCAG 2.2 AA standards adherence
 - Proper ARIA attributes and semantic HTML
 - Keyboard navigation support
 - Screen reader compatibility
+- See [docs/guidelines/accessibility-requirements.md](../guidelines/accessibility-requirements.md) for complete requirements
 
 ### Pre-commit Requirements
 
