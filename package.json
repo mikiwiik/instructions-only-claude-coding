@@ -17,7 +17,10 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "type-check": "tsc --noEmit",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "audit:check": "npm audit --audit-level=moderate",
+    "audit:report": "npm audit --json > reports/audit-report.json",
+    "audit:production": "npm audit --production --audit-level=moderate"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -25,7 +28,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@vercel/speed-insights": "^1.2.0",
     "lucide-react": "^0.390.0",
-    "next": "14.0.0",
+    "next": "14.2.33",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^10.1.0",
@@ -48,7 +51,7 @@
     "@typescript-eslint/parser": "^6.21.0",
     "autoprefixer": "^10.4.0",
     "eslint": "^8.50.0",
-    "eslint-config-next": "14.0.0",
+    "eslint-config-next": "14.2.33",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-react": "^7.33.0",
     "eslint-plugin-react-hooks": "^4.6.0",
