@@ -17,9 +17,8 @@ humans provide strategic direction and AI handles complete implementation.
 
 ### AI Role: Complete Implementation Team
 
-- Handles all code implementation following TDD methodology
-- Manages testing strategies and maintains comprehensive test coverage
-- Configures and maintains CI/CD pipeline and deployment processes
+- Handles all code implementation with comprehensive testing strategies
+- Manages test coverage and maintains CI/CD pipeline and deployment processes
 - Creates and maintains all project documentation and ADRs
 - Ensures code quality, linting, type safety, and professional standards
 - **100% responsible for technical execution** via instruction interpretation
@@ -73,7 +72,7 @@ For detailed documentation workflows and requirements, see [Documentation Workfl
 
 Core quality principles maintained through AI development:
 
-- **TDD Methodology**: Tests written before implementation
+- **Test-First Development**: Comprehensive testing strategies with detailed workflow in [TDD Commit Pattern](workflows.md#tdd-commit-pattern)
 - **Strict TypeScript**: No `any` types, comprehensive type safety
 - **Zero-Warning Policy**: ESLint and Prettier enforcement
 - **Atomic Development**: Incremental commits with clear progression

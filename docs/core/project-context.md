@@ -29,7 +29,7 @@ humans provide strategic direction and AI handles complete implementation of a t
 
 - **Jest** as test runner
 - **React Testing Library** for component testing
-- **TDD methodology** - tests written before implementation
+- **TDD methodology** - see [TDD Commit Pattern](workflows.md#tdd-commit-pattern) for detailed workflow
 - **Coverage reporting** with Jest built-in tools
 
 ### Development Tools

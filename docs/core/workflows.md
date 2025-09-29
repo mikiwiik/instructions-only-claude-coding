@@ -284,11 +284,8 @@ npm run build        # Production build test
 
 ### Planning Process
 
-1. **Initial Assessment** - Understand requirements and scope
-2. **Task Breakdown** - Create comprehensive TodoWrite list
-3. **User Presentation** - Present plan for approval
-4. **Implementation Tracking** - Mark tasks in_progress/completed
-5. **Completion Verification** - Ensure all tasks finished
+Follow the 5-step protocol defined in [CLAUDE.md Task Planning Protocol](../../CLAUDE.md#task-planning-protocol):
+Assessment → Task Breakdown → User Approval → Implementation Tracking → Completion Verification
 
 ## Documentation Workflow
 
