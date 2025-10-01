@@ -15,6 +15,7 @@ import {
 } from '@dnd-kit/sortable';
 import { Todo } from '../types/todo';
 import TodoItem from './TodoItem';
+import GestureHint from './GestureHint';
 
 interface TodoListProps {
   todos: Todo[];
@@ -103,26 +104,29 @@ export default function TodoList({
   );
 
   return (
-    <div className='space-y-2'>
-      <h3 className='text-base sm:text-lg font-medium text-card-foreground mb-3 sm:mb-4'>
-        Your Todos ({todos.length})
-      </h3>
-      {isReorderingEnabled ? (
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext
-            items={todos.map((todo) => todo.id)}
-            strategy={verticalListSortingStrategy}
+    <>
+      <div className='space-y-2'>
+        <h3 className='text-base sm:text-lg font-medium text-card-foreground mb-3 sm:mb-4'>
+          Your Todos ({todos.length})
+        </h3>
+        {isReorderingEnabled ? (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
           >
-            {todosList}
-          </SortableContext>
-        </DndContext>
-      ) : (
-        todosList
-      )}
-    </div>
+            <SortableContext
+              items={todos.map((todo) => todo.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {todosList}
+            </SortableContext>
+          </DndContext>
+        ) : (
+          todosList
+        )}
+      </div>
+      <GestureHint />
+    </>
   );
 }
