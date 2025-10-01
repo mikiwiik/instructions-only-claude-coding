@@ -58,7 +58,7 @@ export default function HomePage() {
         </header>
 
         <main
-          className='bg-card border rounded-lg p-4 sm:p-5 md:p-6 shadow-sm fade-in'
+          className='bg-card border rounded-lg p-2 sm:p-5 md:p-6 shadow-sm fade-in'
           role='main'
           aria-label='Todo application'
         >
