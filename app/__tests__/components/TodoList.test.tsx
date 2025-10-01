@@ -150,7 +150,7 @@ describe('TodoList', () => {
     );
 
     const list = screen.getByRole('list');
-    expect(list).toHaveClass('space-y-1', 'sm:space-y-3'); // Responsive spacing between items (4px mobile, 12px desktop)
+    expect(list).toHaveClass('space-y-0', 'sm:space-y-3'); // Edge-to-edge on mobile (borders separate), 12px desktop
   });
 
   it('should handle empty todos array gracefully', () => {

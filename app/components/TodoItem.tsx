@@ -284,7 +284,9 @@ export default function TodoItem({
       ref={setNodeRef}
       style={style}
       role='listitem'
-      className={`flex items-start gap-2 sm:gap-3 p-2 sm:p-4 rounded-none sm:rounded-lg border fade-in transition-transform ${
+      className={`flex items-start gap-2 sm:gap-3 p-2 sm:p-4 rounded-none sm:rounded-lg ${
+        isFirst ? 'border-t-0' : 'border-t'
+      } border-x-0 sm:border sm:border-t border-b-0 sm:border-b fade-in transition-transform ${
         todo.deletedAt ? 'bg-muted border-dashed opacity-75' : 'bg-background'
       }`}
       {...touchHandlers}
