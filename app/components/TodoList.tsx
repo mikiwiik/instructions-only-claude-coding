@@ -82,7 +82,7 @@ export default function TodoList({
   }
 
   const todosList = (
-    <ul className='space-y-2 sm:space-y-3' role='list'>
+    <ul className='space-y-1 sm:space-y-3' role='list'>
       {todos.map((todo, index) => (
         <TodoItem
           key={todo.id}
