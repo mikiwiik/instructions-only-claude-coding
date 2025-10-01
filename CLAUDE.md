@@ -25,6 +25,8 @@
     or verbose content immediately
 11. **🚨 PINNED DEPENDENCIES**: All dependencies must use exact versions without range operators (`^`, `~`) for maximum
     security control, reproducible builds, and clear audit trails - updates via Dependabot PRs only
+12. **🚨 PR APPROVAL PROTOCOL**: After creating PR, STOP and report to user - NEVER use `--admin`, `--force`, or bypass
+    flags without explicit permission - task completion means PR ready for review, NOT merged
 
 ---
 
