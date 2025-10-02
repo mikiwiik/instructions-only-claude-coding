@@ -38,7 +38,7 @@ export default function HomePage() {
 
   return (
     <div className='min-h-screen bg-background safe-area-inset'>
-      <div className='max-w-sm sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto px-4 py-6 sm:px-6 sm:py-8'>
+      <div className='max-w-sm sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto px-0 sm:px-6 py-6 sm:py-8'>
         <header className='text-center mb-6 sm:mb-8'>
           <div className='flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4'>
             <CheckSquare
@@ -49,7 +49,7 @@ export default function HomePage() {
               Todo App
             </h1>
           </div>
-          <p className='text-muted-foreground text-sm sm:text-base md:text-lg px-4 text-balance'>
+          <p className='text-muted-foreground text-sm sm:text-base md:text-lg px-2 sm:px-0 text-balance'>
             A Next.js Todo application built with Test-Driven Development
           </p>
           <p className='text-muted-foreground text-xs sm:text-sm mt-1 sm:mt-2'>
@@ -89,7 +89,7 @@ export default function HomePage() {
           )}
         </main>
 
-        <footer className='text-center mt-6 sm:mt-8 text-xs sm:text-sm text-muted-foreground px-4'>
+        <footer className='text-center mt-6 sm:mt-8 text-xs sm:text-sm text-muted-foreground px-2 sm:px-0'>
           <p>
             Built with ❤️ using{' '}
             <a
