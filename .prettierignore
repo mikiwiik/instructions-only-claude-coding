@@ -1,3 +1,0 @@
-# Ignore markdown files with complex inline SVG diagrams
-# SVG formatting should be preserved for GitHub rendering
-docs/design/component-layout-reference.md

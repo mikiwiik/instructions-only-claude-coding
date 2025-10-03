@@ -1,0 +1,66 @@
+<svg width="400" height="700" xmlns="http://www.w3.org/2000/svg">
+  <!-- Screen boundary -->
+  <rect x="10" y="10" width="380" height="680" fill="#f8f9fa" stroke="#dee2e6" stroke-width="2"/>
+  <text x="200" y="30" text-anchor="middle" font-family="monospace" font-size="11" fill="#666">iPhone 14 (393px width)</text>
+
+  <!-- Page Container (entire screen area) -->
+  <rect x="20" y="50" width="360" height="620" fill="none" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="30" y="70" font-family="monospace" font-size="12" font-weight="bold" fill="#ff6b6b">Page Container</text>
+  <text x="30" y="85" font-family="monospace" font-size="10" fill="#666">px-0 (edge-to-edge)</text>
+
+  <!-- Header -->
+  <rect x="30" y="95" width="340" height="60" fill="#e3f2fd" stroke="#2196f3" stroke-width="2"/>
+  <text x="200" y="120" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold" fill="#1976d2">Header</text>
+  <text x="200" y="140" text-anchor="middle" font-family="monospace" font-size="10" fill="#666">Logo + Title + Subtitle</text>
+
+  <!-- Card Container (main content area) -->
+  <rect x="20" y="170" width="360" height="420" fill="none" stroke="#9c27b0" stroke-width="3"/>
+  <text x="30" y="190" font-family="monospace" font-size="12" font-weight="bold" fill="#9c27b0">Card Container</text>
+  <text x="30" y="205" font-family="monospace" font-size="10" fill="#666">p-0, border-x-0 (edge-to-edge)</text>
+
+  <!-- TodoForm -->
+  <rect x="30" y="215" width="340" height="50" fill="#fff3cd" stroke="#ffc107" stroke-width="2"/>
+  <text x="200" y="235" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#f57f17">TodoForm</text>
+  <text x="200" y="250" text-anchor="middle" font-family="monospace" font-size="9" fill="#666">Input + Button</text>
+
+  <!-- TodoFilter -->
+  <rect x="30" y="275" width="340" height="35" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+  <text x="200" y="295" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#2e7d32">TodoFilter</text>
+  <text x="200" y="305" text-anchor="middle" font-family="monospace" font-size="9" fill="#666">Filter Buttons</text>
+
+  <!-- TodoList Container -->
+  <rect x="30" y="320" width="340" height="260" fill="none" stroke="#ff9800" stroke-width="2" stroke-dasharray="3,3"/>
+  <text x="35" y="335" font-family="monospace" font-size="11" font-weight="bold" fill="#ff9800">TodoList</text>
+  <text x="35" y="347" font-family="monospace" font-size="9" fill="#666">space-y-0 (no gaps)</text>
+
+  <!-- TodoItem 1 -->
+  <rect x="40" y="355" width="320" height="50" fill="#f3e5f5" stroke="#673ab7" stroke-width="2"/>
+  <text x="200" y="375" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#512da8">TodoItem</text>
+  <text x="200" y="390" text-anchor="middle" font-family="monospace" font-size="8" fill="#666">p-2, border-t, no sides</text>
+
+  <!-- TodoItem 2 -->
+  <rect x="40" y="405" width="320" height="50" fill="#f3e5f5" stroke="#673ab7" stroke-width="2"/>
+  <text x="200" y="425" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#512da8">TodoItem</text>
+  <text x="200" y="440" text-anchor="middle" font-family="monospace" font-size="8" fill="#666">[☐] Text [Actions]</text>
+
+  <!-- TodoItem 3 -->
+  <rect x="40" y="455" width="320" height="50" fill="#f3e5f5" stroke="#673ab7" stroke-width="2"/>
+  <text x="200" y="475" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#512da8">TodoItem</text>
+
+  <!-- TodoItem 4 -->
+  <rect x="40" y="505" width="320" height="50" fill="#f3e5f5" stroke="#673ab7" stroke-width="2"/>
+  <text x="200" y="525" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#512da8">TodoItem</text>
+
+  <!-- Footer -->
+  <rect x="30" y="600" width="340" height="40" fill="#fce4ec" stroke="#e91e63" stroke-width="2"/>
+  <text x="200" y="622" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#c2185b">Footer</text>
+
+  <!-- GestureHint (fixed at bottom of screen) -->
+  <rect x="30" y="650" width="340" height="30" fill="#fff9c4" stroke="#f57f17" stroke-width="2"/>
+  <text x="200" y="668" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#f57f17">GestureHint (fixed bottom)</text>
+
+  <!-- MarkdownHelpDrawer (overlay - shown when editing) -->
+  <rect x="50" y="540" width="300" height="60" fill="rgba(255,255,255,0.95)" stroke="#00bcd4" stroke-width="3" rx="8"/>
+  <text x="200" y="565" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#00838f">MarkdownHelpDrawer (Overlay)</text>
+  <text x="200" y="585" text-anchor="middle" font-family="monospace" font-size="9" fill="#666">Fixed bottom, 45vh height, when editing</text>
+</svg>

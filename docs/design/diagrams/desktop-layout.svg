@@ -1,0 +1,64 @@
+<svg width="500" height="700" xmlns="http://www.w3.org/2000/svg">
+  <!-- Screen boundary -->
+  <rect x="10" y="10" width="480" height="680" fill="#f8f9fa" stroke="#dee2e6" stroke-width="2"/>
+  <text x="250" y="30" text-anchor="middle" font-family="monospace" font-size="11" fill="#666">Desktop (≥640px width)</text>
+
+  <!-- Page Container (with padding) -->
+  <rect x="20" y="50" width="460" height="620" fill="none" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="5,5"/>
+  <text x="30" y="70" font-family="monospace" font-size="12" font-weight="bold" fill="#ff6b6b">Page Container</text>
+  <text x="30" y="85" font-family="monospace" font-size="10" fill="#666">px-6 (24px padding)</text>
+
+  <!-- Header (with more padding) -->
+  <rect x="50" y="95" width="400" height="70" fill="#e3f2fd" stroke="#2196f3" stroke-width="2"/>
+  <text x="250" y="125" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold" fill="#1976d2">Header</text>
+  <text x="250" y="145" text-anchor="middle" font-family="monospace" font-size="10" fill="#666">Logo + Title + Subtitle (larger)</text>
+
+  <!-- Card Container (rounded, with padding) -->
+  <rect x="50" y="180" width="400" height="420" fill="#ffffff" stroke="#9c27b0" stroke-width="3" rx="8"/>
+  <text x="60" y="200" font-family="monospace" font-size="12" font-weight="bold" fill="#9c27b0">Card Container</text>
+  <text x="60" y="215" font-family="monospace" font-size="10" fill="#666">p-5, border, rounded</text>
+
+  <!-- TodoForm -->
+  <rect x="70" y="225" width="360" height="55" fill="#fff3cd" stroke="#ffc107" stroke-width="2"/>
+  <text x="250" y="248" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#f57f17">TodoForm</text>
+  <text x="250" y="265" text-anchor="middle" font-family="monospace" font-size="9" fill="#666">Input + Button (side-by-side)</text>
+
+  <!-- TodoFilter -->
+  <rect x="70" y="290" width="360" height="35" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+  <text x="250" y="310" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#2e7d32">TodoFilter</text>
+  <text x="250" y="320" text-anchor="middle" font-family="monospace" font-size="9" fill="#666">Filter Buttons</text>
+
+  <!-- TodoList Container -->
+  <rect x="70" y="335" width="360" height="255" fill="none" stroke="#ff9800" stroke-width="2" stroke-dasharray="3,3"/>
+  <text x="75" y="350" font-family="monospace" font-size="11" font-weight="bold" fill="#ff9800">TodoList</text>
+  <text x="75" y="362" font-family="monospace" font-size="9" fill="#666">space-y-3 (12px gaps)</text>
+
+  <!-- TodoItem 1 (with drag handle) -->
+  <rect x="80" y="370" width="340" height="55" fill="#f3e5f5" stroke="#673ab7" stroke-width="2" rx="8"/>
+  <text x="250" y="393" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#512da8">TodoItem</text>
+  <text x="250" y="410" text-anchor="middle" font-family="monospace" font-size="8" fill="#666">p-4, rounded, Drag+Checkbox+Text+Reorder+Actions</text>
+
+  <!-- Gap between items -->
+  <text x="250" y="440" text-anchor="middle" font-family="monospace" font-size="9" fill="#ff9800">↕ 12px gap</text>
+
+  <!-- TodoItem 2 -->
+  <rect x="80" y="445" width="340" height="55" fill="#f3e5f5" stroke="#673ab7" stroke-width="2" rx="8"/>
+  <text x="250" y="468" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#512da8">TodoItem</text>
+  <text x="250" y="485" text-anchor="middle" font-family="monospace" font-size="8" fill="#666">Drag + Checkbox + Content + Actions</text>
+
+  <!-- Gap -->
+  <text x="250" y="515" text-anchor="middle" font-family="monospace" font-size="9" fill="#ff9800">↕ 12px gap</text>
+
+  <!-- TodoItem 3 -->
+  <rect x="80" y="520" width="340" height="55" fill="#f3e5f5" stroke="#673ab7" stroke-width="2" rx="8"/>
+  <text x="250" y="543" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#512da8">TodoItem</text>
+
+  <!-- Footer -->
+  <rect x="50" y="610" width="400" height="40" fill="#fce4ec" stroke="#e91e63" stroke-width="2"/>
+  <text x="250" y="632" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#c2185b">Footer</text>
+
+  <!-- MarkdownHelpBox (inline - shown when editing a TodoItem) -->
+  <rect x="90" y="455" width="330" height="45" fill="#e0f7fa" stroke="#00bcd4" stroke-width="2" rx="4"/>
+  <text x="255" y="473" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#00838f">MarkdownHelpBox (Inline)</text>
+  <text x="255" y="490" text-anchor="middle" font-family="monospace" font-size="8" fill="#666">Collapsible, expands within TodoItem when editing</text>
+</svg>
