@@ -75,7 +75,7 @@
       "prettier --write"
     ],
     "*.md": [
-      "markdownlint --fix --ignore docs/design/component-layout-reference.md"
+      "markdownlint --fix"
     ]
   }
 }
