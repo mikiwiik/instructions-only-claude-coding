@@ -16,8 +16,9 @@
    and co-author attribution
 6. **🚨 TDD + QUALITY GATES**: Tests first, zero ESLint warnings, strict TypeScript, comprehensive coverage before
    completion
-7. **🚨 FEATURE BRANCH + PR WORKFLOW**: All work via feature branches and PRs with MANDATORY automerge - NEVER
-   direct commits to main - only claim completion AFTER PR merged and verified with `gh issue view #X`
+7. **🚨 FEATURE BRANCH + PR WORKFLOW**: All work via feature branches and PRs with MANDATORY automerge using `--rebase`
+   to preserve atomic commits - NEVER direct commits to main - only claim completion AFTER PR merged and verified with
+   `gh issue view #X`
 8. **🚨 ADRs BEFORE ARCHITECTURE**: Document significant technical decisions in `docs/adr/` before implementation
 9. **🚨 DOCUMENT FOR HUMANS**: Always update README.md and relevant markdown files so humans can understand all
    changes and project evolution
