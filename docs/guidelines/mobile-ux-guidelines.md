@@ -450,8 +450,10 @@ min-w-[48px] min-h-[48px]  (More comfortable, AAA recommended)
 
 ## Related Documentation
 
-- **Component Layout Reference**: [Visual diagrams](../design/component-layout-reference.md) of all UI components
-- **UI Layout Hierarchy**: [Spacing documentation](../design/ui-layout-hierarchy.md) with component breakdowns
+- **Component Layout Reference**: [Visual diagrams and spacing mechanics](../design/component-layout-reference.md)
+  for all UI components
+- **UI Layout Hierarchy**: [Technical spacing documentation](../design/ui-layout-hierarchy.md) with component
+  breakdowns
 - **ADR-016**: Mobile Help Overlay Pattern (bottom drawer decision)
 - **Accessibility Requirements**: WCAG 2.2 AA compliance guidelines
 - **Responsive Design Checklist**: Comprehensive testing procedures
