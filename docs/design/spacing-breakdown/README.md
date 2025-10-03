@@ -339,6 +339,7 @@ When creating annotated screenshots (for future reference):
 
 ## Related Documentation
 
+- [Component Layout Reference](../component-layout-reference.md) - Visual diagrams of all UI components
 - [UI Layout Hierarchy](../ui-layout-hierarchy.md) - Component diagrams and spacing reference
 - [Mobile UX Guidelines](../../guidelines/mobile-ux-guidelines.md) - Responsive spacing strategy
 - [Accessibility Requirements](../../guidelines/accessibility-requirements.md) - Touch target sizing
