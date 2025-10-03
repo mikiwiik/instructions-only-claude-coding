@@ -76,12 +76,11 @@ in conversations. Use these names when discussing layout changes: "Page Containe
     font-weight="bold" fill="#f57f17">GestureHint (fixed bottom)</text>
 
   <!-- MarkdownHelpDrawer (overlay - shown when editing) -->
-
-<rect x="50" y="540" width="300" height="60" fill="rgba(255,255,255,0.95)"
+  <rect x="50" y="540" width="300" height="60" fill="rgba(255,255,255,0.95)"
     stroke="#00bcd4" stroke-width="3" rx="8"/>
-<text x="200" y="565" text-anchor="middle" font-family="monospace" font-size="11"
+  <text x="200" y="565" text-anchor="middle" font-family="monospace" font-size="11"
     font-weight="bold" fill="#00838f">MarkdownHelpDrawer (Overlay)</text>
-<text x="200" y="585" text-anchor="middle" font-family="monospace" font-size="9"
+  <text x="200" y="585" text-anchor="middle" font-family="monospace" font-size="9"
     fill="#666">Fixed bottom, 45vh height, when editing</text>
 </svg>
 
@@ -130,8 +129,7 @@ in conversations. Use these names when discussing layout changes: "Page Containe
     fill="#666">p-4, rounded, Drag+Checkbox+Text+Reorder+Actions</text>
 
   <!-- Gap between items -->
-
-<text x="250" y="440" text-anchor="middle" font-family="monospace" font-size="9" fill="#ff9800">↕ 12px gap</text>
+  <text x="250" y="440" text-anchor="middle" font-family="monospace" font-size="9" fill="#ff9800">↕ 12px gap</text>
 
   <!-- TodoItem 2 -->
   <rect x="80" y="445" width="340" height="55" fill="#f3e5f5" stroke="#673ab7" stroke-width="2" rx="8"/>
@@ -141,8 +139,7 @@ in conversations. Use these names when discussing layout changes: "Page Containe
     fill="#666">Drag + Checkbox + Content + Actions</text>
 
   <!-- Gap -->
-
-<text x="250" y="515" text-anchor="middle" font-family="monospace" font-size="9" fill="#ff9800">↕ 12px gap</text>
+  <text x="250" y="515" text-anchor="middle" font-family="monospace" font-size="9" fill="#ff9800">↕ 12px gap</text>
 
   <!-- TodoItem 3 -->
   <rect x="80" y="520" width="340" height="55" fill="#f3e5f5" stroke="#673ab7" stroke-width="2" rx="8"/>
