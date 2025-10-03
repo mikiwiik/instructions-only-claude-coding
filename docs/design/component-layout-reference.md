@@ -11,14 +11,6 @@ This document provides visual diagrams showing all main UI components and their 
 in conversations. Use these names when discussing layout changes: "Page Container", "Card Container",
 "TodoItem", etc.
 
-## Mobile Layout (< 640px)
-
-![Mobile Layout Diagram](diagrams/mobile-layout.svg)
-
-## Desktop Layout (≥ 640px)
-
-![Desktop Layout Diagram](diagrams/desktop-layout.svg)
-
 ## Component Reference
 
 ### Structural Components
@@ -46,6 +38,14 @@ in conversations. Use these names when discussing layout changes: "Page Containe
 | **GestureHint**        | Fixed banner showing swipe/long-press hints | `app/components/GestureHint.tsx`        | Mobile only           |
 | **MarkdownHelpDrawer** | Bottom overlay for markdown reference       | `app/components/MarkdownHelpDrawer.tsx` | Mobile (during edit)  |
 | **MarkdownHelpBox**    | Inline collapsible markdown reference       | `app/components/MarkdownHelpBox.tsx`    | Desktop (during edit) |
+
+## Mobile Layout (< 640px)
+
+![Mobile Layout Diagram](diagrams/mobile-layout.svg)
+
+## Desktop Layout (≥ 640px)
+
+![Desktop Layout Diagram](diagrams/desktop-layout.svg)
 
 ## Key Layout Differences
 
