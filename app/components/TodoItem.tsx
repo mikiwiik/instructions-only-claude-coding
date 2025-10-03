@@ -300,14 +300,14 @@ export default function TodoItem({
             role='button'
             tabIndex={0}
             aria-label='Drag to reorder todo'
-            className='flex-shrink-0 p-2 rounded cursor-grab hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring transition-colors text-muted-foreground hover:text-foreground active:cursor-grabbing min-w-[44px] min-h-[44px] flex items-center justify-center'
+            className='flex-shrink-0 p-1.5 sm:p-2 rounded cursor-grab hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring transition-colors text-muted-foreground hover:text-foreground active:cursor-grabbing min-w-[44px] min-h-[44px] flex items-center justify-center'
           >
             <GripVertical className='h-4 w-4' />
           </div>
         )}
         <button
           onClick={handleToggle}
-          className={`flex-shrink-0 p-2 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${
+          className={`flex-shrink-0 p-1.5 sm:p-2 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${
             todo.completedAt
               ? 'cursor-default opacity-75'
               : 'hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer'
@@ -344,10 +344,10 @@ export default function TodoItem({
               placeholder='Enter your todo text... (Markdown formatting supported)'
             />
             <MarkdownHelpBox className='mt-2' />
-            <div className='flex gap-2'>
+            <div className='flex gap-1 sm:gap-2'>
               <button
                 onClick={handleSave}
-                className='flex-shrink-0 p-2 rounded hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors text-muted-foreground hover:text-green-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
+                className='flex-shrink-0 p-1.5 sm:p-2 rounded hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors text-muted-foreground hover:text-green-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
                 aria-label='Save edit'
                 type='button'
               >
@@ -355,7 +355,7 @@ export default function TodoItem({
               </button>
               <button
                 onClick={handleCancel}
-                className='flex-shrink-0 p-2 rounded hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
+                className='flex-shrink-0 p-1.5 sm:p-2 rounded hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
                 aria-label='Cancel edit'
                 type='button'
               >
@@ -403,13 +403,13 @@ export default function TodoItem({
           <div
             role='group'
             aria-label='Reorder todo'
-            className='flex items-center gap-1'
+            className='flex items-center gap-0.5 sm:gap-1'
           >
             {moveUp && (
               <button
                 onClick={handleMoveUp}
                 disabled={isFirst}
-                className='flex-shrink-0 p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground min-w-[44px] min-h-[44px] flex items-center justify-center'
+                className='flex-shrink-0 p-1.5 sm:p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground min-w-[44px] min-h-[44px] flex items-center justify-center'
                 aria-label={`Move todo up: ${sanitizeForAriaLabel(todo.text)}`}
                 type='button'
               >
@@ -420,7 +420,7 @@ export default function TodoItem({
               <button
                 onClick={handleMoveDown}
                 disabled={isLast}
-                className='flex-shrink-0 p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground min-w-[44px] min-h-[44px] flex items-center justify-center'
+                className='flex-shrink-0 p-1.5 sm:p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground min-w-[44px] min-h-[44px] flex items-center justify-center'
                 aria-label={`Move todo down: ${sanitizeForAriaLabel(todo.text)}`}
                 type='button'
               >
@@ -432,7 +432,7 @@ export default function TodoItem({
         <div
           role='group'
           aria-label='Todo actions'
-          className='flex items-center gap-1'
+          className='flex items-center gap-0.5 sm:gap-1'
         >
           {todo.deletedAt ? (
             // Actions for deleted todos
@@ -440,7 +440,7 @@ export default function TodoItem({
               {onRestoreDeleted && (
                 <button
                   onClick={handleRestoreDeleted}
-                  className='flex-shrink-0 p-2 rounded-full hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors text-muted-foreground hover:text-green-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
+                  className='flex-shrink-0 p-1.5 sm:p-2 rounded-full hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors text-muted-foreground hover:text-green-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
                   aria-label={`Restore todo: ${sanitizeForAriaLabel(todo.text)}`}
                   type='button'
                 >
@@ -449,7 +449,7 @@ export default function TodoItem({
               )}
               <button
                 onClick={handleDelete}
-                className='flex-shrink-0 p-2 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
+                className='flex-shrink-0 p-1.5 sm:p-2 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
                 aria-label={`Permanently delete todo: ${sanitizeForAriaLabel(todo.text)}`}
                 type='button'
               >
@@ -462,7 +462,7 @@ export default function TodoItem({
               {todo.completedAt && onRestore && (
                 <button
                   onClick={handleRestore}
-                  className='flex-shrink-0 p-2 rounded-full hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-colors text-muted-foreground hover:text-yellow-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
+                  className='flex-shrink-0 p-1.5 sm:p-2 rounded-full hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-colors text-muted-foreground hover:text-yellow-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
                   aria-label={`Undo completion: ${sanitizeForAriaLabel(todo.text)}`}
                   type='button'
                 >
@@ -472,7 +472,7 @@ export default function TodoItem({
               {!isEditing && onEdit && !todo.completedAt && (
                 <button
                   onClick={handleEdit}
-                  className='flex-shrink-0 p-2 rounded-full hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-muted-foreground hover:text-blue-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
+                  className='flex-shrink-0 p-1.5 sm:p-2 rounded-full hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-muted-foreground hover:text-blue-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
                   aria-label={`Edit todo: ${sanitizeForAriaLabel(todo.text)}`}
                   type='button'
                 >
@@ -481,7 +481,7 @@ export default function TodoItem({
               )}
               <button
                 onClick={handleDelete}
-                className='flex-shrink-0 p-2 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
+                className='flex-shrink-0 p-1.5 sm:p-2 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
                 aria-label={`Delete todo: ${sanitizeForAriaLabel(todo.text)}`}
                 type='button'
               >
