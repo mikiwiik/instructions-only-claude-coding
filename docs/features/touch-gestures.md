@@ -106,9 +106,20 @@ Potential improvements tracked in GitHub issues:
 - Haptic feedback on gesture completion (where supported)
 - Customizable gesture settings/preferences
 
+## Mobile UX Patterns
+
+The todo app uses consistent mobile-optimized patterns:
+
+- **Gesture Hints**: Fixed bottom banner for simple notifications
+- **Markdown Help**: Bottom drawer modal for reference content (< 640px viewports)
+  - Full-width display (45% viewport height)
+  - Preserves textarea and action button visibility
+  - See [ADR-016: Mobile Help Overlay Pattern](../adr/016-mobile-help-overlay-pattern.md)
+
 ## References
 
 - [WCAG 2.2 SC 2.5.7: Dragging Movements](https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements.html)
 - [WCAG 2.2 SC 2.5.8: Target Size (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html)
 - [Accessibility Requirements](../guidelines/accessibility-requirements.md)
 - [ADR-012: Todo Reordering UX Approach](../adr/012-todo-reordering-ux-approach.md)
+- [ADR-016: Mobile Help Overlay Pattern](../adr/016-mobile-help-overlay-pattern.md)
