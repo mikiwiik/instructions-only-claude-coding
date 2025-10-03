@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
 import { markdownExamples } from '../utils/markdown';
+import { MarkdownHelpDrawer } from './MarkdownHelpDrawer';
 
 interface MarkdownHelpBoxProps {
   className?: string;
@@ -11,10 +12,51 @@ interface MarkdownHelpBoxProps {
 /**
  * Collapsible help component showing markdown syntax examples
  * Provides users with quick reference for markdown formatting
+ * On mobile (< 640px): Opens bottom drawer modal
+ * On desktop (>= 640px): Inline collapsible component
  */
 export function MarkdownHelpBox({ className = '' }: MarkdownHelpBoxProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
+  // Detect mobile viewport
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Mobile: Show drawer, Desktop: Show inline collapsible
+  if (isMobile) {
+    return (
+      <>
+        <button
+          onClick={() => setIsExpanded(true)}
+          className='w-full border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 p-3 flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors'
+          type='button'
+          aria-label='Open markdown formatting help'
+        >
+          <div className='flex items-center gap-2'>
+            <HelpCircle className='h-4 w-4 text-gray-500 dark:text-gray-400' />
+            <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>
+              Markdown Formatting Help
+            </span>
+          </div>
+          <ChevronUp className='h-4 w-4 text-gray-500 dark:text-gray-400' />
+        </button>
+        <MarkdownHelpDrawer
+          isOpen={isExpanded}
+          onClose={() => setIsExpanded(false)}
+        />
+      </>
+    );
+  }
+
+  // Desktop: Inline collapsible
   return (
     <div
       className={`border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 ${className}`}
