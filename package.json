@@ -71,10 +71,11 @@
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{json,css,scss,md}": [
+    "*.{json,css,scss}": [
       "prettier --write"
     ],
     "*.md": [
+      "bash -c 'for file in \"$@\"; do [[ \"$file\" != \"docs/design/component-layout-reference.md\" ]] && prettier --write \"$file\" || true; done' _",
       "markdownlint --fix --ignore docs/design/component-layout-reference.md"
     ]
   }
