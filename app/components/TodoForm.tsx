@@ -61,7 +61,7 @@ export default function TodoForm({ onAddTodo }: TodoFormProps) {
             onChange={(e) => setText(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder='What needs to be done?'
-            className='w-full px-3 sm:px-4 py-3 border border-input bg-background rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground resize-none overflow-hidden min-h-[3rem] text-sm sm:text-base'
+            className='w-full px-3 sm:px-4 py-3 border border-input bg-background rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground resize-none overflow-hidden min-h-[3rem] text-base'
             aria-label='Add new todo'
             rows={1}
           />
