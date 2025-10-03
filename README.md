@@ -98,7 +98,8 @@ Claude Code supports two authentication methods for API access:
 2. Navigate to Claude Code section on main page
 3. Click "Create API key"
 4. Add to your shell profile: `export ANTHROPIC_API_KEY="your_api_key_here"` to `~/.zprofile` (or `~/.bashrc` for bash)
-5. Restart your terminal or run `source ~/.zprofile`
+5. Run `/logout` in Claude Code to switch to API key authentication
+6. Restart your terminal or run `source ~/.zprofile`
 
 #### OAuth Authentication
 
