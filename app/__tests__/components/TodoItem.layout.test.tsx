@@ -62,7 +62,12 @@ describe('TodoItem - Layout', () => {
       expect(reorderGroup).toBeInTheDocument();
       expect(reorderGroup).toContainElement(moveUpButton);
       expect(reorderGroup).toContainElement(moveDownButton);
-      expect(reorderGroup).toHaveClass('flex', 'items-center', 'gap-1');
+      expect(reorderGroup).toHaveClass(
+        'flex',
+        'items-center',
+        'gap-0.5',
+        'sm:gap-1'
+      );
     });
 
     it('should group action buttons together', () => {
@@ -77,7 +82,12 @@ describe('TodoItem - Layout', () => {
       expect(actionsGroup).toBeInTheDocument();
       expect(actionsGroup).toContainElement(editButton);
       expect(actionsGroup).toContainElement(deleteButton);
-      expect(actionsGroup).toHaveClass('flex', 'items-center', 'gap-1');
+      expect(actionsGroup).toHaveClass(
+        'flex',
+        'items-center',
+        'gap-0.5',
+        'sm:gap-1'
+      );
     });
 
     it('should maintain proper spacing between button groups', () => {

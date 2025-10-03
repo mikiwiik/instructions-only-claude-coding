@@ -140,7 +140,7 @@ graph TB
 
 **Mobile (default)**:
 
-- Horizontal padding: `px-4` = 16px
+- Horizontal padding: `px-0` = 0px (edge-to-edge layout)
 - Vertical padding: `py-6` = 24px
 
 **Desktop (≥ 640px - sm)**:
@@ -148,7 +148,7 @@ graph TB
 - Horizontal padding: `px-6` = 24px
 - Vertical padding: `py-8` = 32px
 
-**Purpose**: Provides breathing room from screen edges
+**Purpose**: Edge-to-edge on mobile for maximum content area; contained on desktop
 
 ### 2. Header (`app/page.tsx:42`)
 
@@ -162,11 +162,11 @@ graph TB
 
 ### 3. Main Card Container (`app/page.tsx:61`)
 
-**Mobile**: `p-4` = 16px all sides
-**Small**: `p-5` = 20px all sides
+**Mobile**: `p-0` = 0px all sides, `border-x-0` (no horizontal borders - edge-to-edge)
+**Small**: `p-5` = 20px all sides, `border-x` (full borders)
 **Medium**: `p-6` = 24px all sides
 
-**Purpose**: Contains all interactive components
+**Purpose**: Edge-to-edge on mobile; contained card on desktop
 
 ### 4. TodoForm (`app/components/TodoForm.tsx:51`)
 
@@ -185,12 +185,12 @@ graph TB
 ### 5. TodoFilter (`app/components/TodoFilter.tsx:50`)
 
 **Container**: `mb-4` = 16px bottom margin
-**Buttons**: `px-3 py-2` = 12px horizontal, 8px vertical
+**Buttons**: `px-2 sm:px-3 py-2` = 8px → 12px horizontal, 8px vertical
 **Gap**: `gap-2` = 8px between buttons
 
 ### 6. TodoList (`app/components/TodoList.tsx:85`)
 
-**Mobile**: `space-y-2` = 8px vertical gap between items
+**Mobile**: `space-y-0` = 0px vertical gap (borders separate items)
 **Desktop**: `space-y-3` = 12px vertical gap between items
 
 **Empty State** (`TodoList.tsx:69`):
@@ -199,13 +199,15 @@ graph TB
 
 ### 7. TodoItem (`app/components/TodoItem.tsx:287`)
 
-**Mobile**: `p-3` = 12px all sides
-**Desktop**: `p-4` = 16px all sides
+**Mobile**: `p-2` = 8px all sides, `rounded-none` (flat), `border-t` only (except first), `border-x-0` (no sides)
+**Desktop**: `p-4` = 16px all sides, `rounded-lg`, full `border`
 
 **Internal Gaps**:
 
 - Main gap: `gap-2 sm:gap-3` = 8px → 12px
-- Button group gap: `gap-1` = 4px
+- Button group gap: `gap-0.5 sm:gap-1` = 2px → 4px
+
+**Button Padding**: `p-1.5 sm:p-2` = 6px → 8px
 
 **Touch Targets**: All interactive elements maintain 44×44px minimum (WCAG 2.2 AA)
 
@@ -225,21 +227,21 @@ graph TB
 
 ## Spacing Scale Reference
 
-| Tailwind Class | Pixel Value | Common Usage                           |
-| -------------- | ----------- | -------------------------------------- |
-| `p-0`          | 0px         | Remove padding                         |
-| `p-1`          | 4px         | Minimal padding                        |
-| `p-2`          | 8px         | Tight spacing (mobile list gaps)       |
-| `p-3`          | 12px        | Mobile item padding                    |
-| `p-4`          | 16px        | Desktop item padding, mobile container |
-| `p-5`          | 20px        | Desktop small container                |
-| `p-6`          | 24px        | Desktop medium container               |
-| `p-8`          | 32px        | Large spacing                          |
-| `gap-1`        | 4px         | Minimal gap between related elements   |
-| `gap-2`        | 8px         | Standard gap (filters, item internal)  |
-| `gap-3`        | 12px        | Larger gap (desktop items)             |
-| `space-y-2`    | 8px         | Mobile list vertical spacing           |
-| `space-y-3`    | 12px        | Desktop list vertical spacing          |
+| Tailwind Class | Pixel Value | Common Usage                          |
+| -------------- | ----------- | ------------------------------------- |
+| `p-0`          | 0px         | Edge-to-edge (page/card mobile)       |
+| `p-1.5`        | 6px         | Compact button padding (mobile)       |
+| `p-2`          | 8px         | Mobile item padding                   |
+| `p-4`          | 16px        | Desktop item padding                  |
+| `p-5`          | 20px        | Desktop small container               |
+| `p-6`          | 24px        | Desktop medium container              |
+| `p-8`          | 32px        | Large spacing                         |
+| `gap-0.5`      | 2px         | Tight button group gap (mobile)       |
+| `gap-1`        | 4px         | Desktop button group gap              |
+| `gap-2`        | 8px         | Standard gap (filters, item internal) |
+| `gap-3`        | 12px        | Larger gap (desktop items)            |
+| `space-y-0`    | 0px         | Mobile list (borders separate items)  |
+| `space-y-3`    | 12px        | Desktop list vertical spacing         |
 
 ## Distance from Screen Edges
 
@@ -247,10 +249,10 @@ graph TB
 
 **Horizontal**:
 
-- Screen edge → Page padding: **16px** (`px-4`)
-- Page padding → Card border: **0px** (card spans width)
-- Card border → Card padding: **16px** (`p-4`)
-- **Total from edge to content**: 32px
+- Screen edge → Page padding: **0px** (`px-0` - edge-to-edge)
+- Page padding → Card border: **0px** (card spans full width)
+- Card border → Card padding: **0px** (`p-0` - edge-to-edge)
+- **Total from edge to content**: 0px (true edge-to-edge layout)
 
 **Vertical**:
 
@@ -281,35 +283,37 @@ graph TB
 
 **What it affects**:
 
-- `TodoList.tsx:85` - `space-y-2 sm:space-y-3`
+- `TodoList.tsx:85` - `space-y-0 sm:space-y-3`
 - Changes gap between TodoItem components
-- Mobile: 8px, Desktop: 12px
+- Mobile: 0px (borders separate items), Desktop: 12px
 
 **Does NOT affect**:
 
 - Padding inside TodoItem (that's "item padding")
 - Spacing above/below TodoList (that's TodoFilter margin or card padding)
+- Border-top on items (that's the visual separator on mobile)
 
 ### Scenario 2: Adjusting "horizontal spacing in items"
 
 **What it affects**:
 
-- `TodoItem.tsx:287` - `p-3 sm:p-4`
+- `TodoItem.tsx:287` - `p-2 sm:p-4`
 - Changes padding inside each todo item
-- Mobile: 12px, Desktop: 16px
+- Mobile: 8px, Desktop: 16px
 
 **Does NOT affect**:
 
 - Gap between checkbox and text (that's `gap-2 sm:gap-3`)
-- Distance from screen edge (that's page + card padding)
+- Distance from screen edge (that's 0px on mobile - edge-to-edge)
 
 ### Scenario 3: Adjusting "spacing from screen edges"
 
 **What it affects**:
 
-- `page.tsx:41` - `px-4 sm:px-6` (page horizontal)
-- `page.tsx:61` - `p-4 sm:p-5 md:p-6` (card padding)
-- Affects the "Total from edge to content" calculation
+- `page.tsx:41` - `px-0 sm:px-6` (page horizontal - edge-to-edge on mobile)
+- `page.tsx:61` - `p-0 sm:p-5 md:p-6` (card padding - edge-to-edge on mobile)
+- Mobile: True edge-to-edge (0px from screen edge)
+- Desktop: Contained layout with padding
 
 ## Visual Boundary Reference
 
@@ -329,8 +333,8 @@ When discussing layout changes, reference:
 - **File:line** (e.g., "TodoItem.tsx:287")
 - **This diagram** for visual context
 
-**Example**: "We need to reduce the vertical whitespace in the TodoList - that's the
-`space-y-2 sm:space-y-3` at TodoList.tsx:85, currently 8px mobile / 12px desktop"
+**Example**: "We need to add vertical whitespace in the TodoList on mobile - that's the
+`space-y-0 sm:space-y-3` at TodoList.tsx:85, currently 0px mobile (borders separate) / 12px desktop"
 
 ## Related Documentation
 

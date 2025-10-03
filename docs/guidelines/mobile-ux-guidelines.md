@@ -1,343 +1,461 @@
 # Mobile UX Guidelines
 
-**Status**: Living Document
-**Last Updated**: 2025-10-03
-**Related**:
-[UI Layout Hierarchy](../design/ui-layout-hierarchy.md),
-[Accessibility Requirements](./accessibility-requirements.md)
+Comprehensive mobile user experience guidelines for the Todo App, based on real-world testing and
+optimization on iPhone 14 and similar devices.
 
-## Overview
+## Core Principles
 
-This document defines mobile-first UX principles and spacing guidelines for the Todo application.
-All implementations should prioritize mobile experiences while progressively enhancing for larger
-screens.
+1. **Mobile-First Design**: Optimize for mobile screens first, enhance for larger screens
+2. **Maximum Screen Utilization**: Every pixel counts on mobile devices
+3. **WCAG 2.2 AA Compliance**: Accessibility is non-negotiable
+4. **Native-Like Feel**: Match platform conventions and user expectations
 
-## Mobile-First Philosophy
+---
 
-### Core Principles
+## iOS Safari Zoom Prevention
 
-1. **Mobile as Default**: Base styles target mobile devices (< 640px)
-2. **Progressive Enhancement**: Use `sm:`, `md:`, `lg:` prefixes to enhance larger screens
-3. **Touch-First Interaction**: All touch targets meet WCAG 2.2 AA (44×44px minimum)
-4. **Content Prioritization**: Maximize visible content on small screens
+### The Problem
 
-### Target Devices
+iOS Safari automatically zooms when users focus on input fields with font-size < 16px. This causes:
 
-**Primary**: iPhone 14 (393×852px)
-**Secondary**: iPhone SE (375×667px), Android equivalents
-**Tablet**: iPad Mini (744×1133px) and up
+- Disorienting zoom behavior when tapping input fields
+- Persistent zoom that doesn't reset after input
+- Action buttons pushed partially off-screen
+- Poor user experience requiring manual zoom-out
 
-## Responsive Breakpoints
+### The Solution
 
-### Breakpoint System
-
-```text
-Mobile:  0px - 639px    (default, no prefix)
-Small:   640px+         (sm: prefix)
-Medium:  768px+         (md: prefix)
-Large:   1024px+        (lg: prefix)
-```
-
-### Usage Pattern
+**1. Viewport Configuration** (Required)
 
 ```tsx
-// ✅ Correct: Mobile first, then enhance
-className = 'p-3 sm:p-4 md:p-6';
-
-// ❌ Incorrect: Desktop first
-className = 'p-6 sm:p-4 md:p-3';
+// app/layout.tsx
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1, // Prevents zoom persistence
+};
 ```
 
-## Spacing Strategy
+**2. Minimum Font Size** (Required)
 
-### Mobile Spacing Values
+All input fields and textareas MUST use at least 16px font size:
 
-**Principle**: Use tighter spacing on mobile to maximize visible content without compromising readability or touch targets.
+```tsx
+// ✅ CORRECT - Prevents zoom trigger
+<textarea className="text-base" /> // 16px on all screens
 
-| Component      | Mobile                   | Desktop                     | Rationale                      |
-| -------------- | ------------------------ | --------------------------- | ------------------------------ |
-| Page padding   | `px-4 py-6` (16px, 24px) | `px-6 py-8` (24px, 32px)    | Breathing room from edges      |
-| Card padding   | `p-4` (16px)             | `p-5` (20px) - `p-6` (24px) | Container spacing              |
-| Item padding   | `p-3` (12px)             | `p-4` (16px)                | Individual todo spacing        |
-| List gap       | `space-y-2` (8px)        | `space-y-3` (12px)          | Vertical spacing between items |
-| Form margin    | `mb-4` (16px)            | `mb-6` (24px)               | Section separation             |
-| Button padding | `px-4 py-3` (16px, 12px) | `px-6 py-3` (24px, 12px)    | Touch target + text spacing    |
-| Internal gaps  | `gap-2` (8px)            | `gap-3` (12px)              | Between related elements       |
-| Minimal gaps   | `gap-1` (4px)            | `gap-1` (4px)               | Tight grouping (button groups) |
-
-### Spacing Scale Reference
-
-**Tailwind → Pixel Conversion**:
-
-```text
-0   → 0px      1   → 4px      2   → 8px
-3   → 12px     4   → 16px     5   → 20px
-6   → 24px     8   → 32px     10  → 40px
-12  → 48px     16  → 64px     20  → 80px
+// ❌ WRONG - Triggers iOS Safari zoom
+<textarea className="text-sm sm:text-base" /> // 14px on mobile
 ```
 
-### Component-Specific Guidelines
+### Guidelines
+
+- **Always** use `text-base` (16px) or larger for all input fields
+- **Never** use `text-sm` (14px) or smaller on mobile input fields
+- **Test** on actual iOS devices (Safari zoom behavior doesn't occur in Chrome iOS)
+- **Document** any exceptions with clear rationale in code comments
+
+**Related**: Issue #163, PR #166 (Commits 10-11)
+
+---
+
+## Mobile Spacing Strategy
+
+### Edge-to-Edge Layout Principle
+
+On mobile devices (< 640px), maximize usable content area by removing unnecessary padding and using
+borders for visual separation.
+
+### Responsive Padding Patterns
 
 #### Page Container
 
 ```tsx
-// File: app/page.tsx:41
-<div className="px-4 py-6 sm:px-6 sm:py-8">
+// Remove outer padding on mobile, add on desktop
+<div className="px-0 sm:px-6 py-6 sm:py-8">
 ```
 
-- **Mobile**: 16px horizontal, 24px vertical
-- **Desktop**: 24px horizontal, 32px vertical
-- **Purpose**: Outer boundary, prevents content from touching edges
-
-#### Main Card
+#### Card/Section Components
 
 ```tsx
-// File: app/page.tsx:61
-<main className="p-4 sm:p-5 md:p-6">
+// Edge-to-edge on mobile, contained on desktop
+<main className="p-0 sm:p-5 md:p-6 border-x-0 sm:border-x">
 ```
 
-- **Mobile**: 16px all sides
-- **Small**: 20px all sides
-- **Medium**: 24px all sides
-- **Purpose**: Contains all interactive components
-
-#### TodoItem
+#### List Items
 
 ```tsx
-// File: app/components/TodoItem.tsx:287
-<li className="p-3 sm:p-4">
+// Compact on mobile, spacious on desktop
+<li className="p-2 sm:p-4">
 ```
 
-- **Mobile**: 12px all sides
-- **Desktop**: 16px all sides
-- **Purpose**: Individual todo padding
-
-#### TodoList Gaps
+#### List Spacing
 
 ```tsx
-// File: app/components/TodoList.tsx:85
-<ul className="space-y-2 sm:space-y-3">
+// No spacing on mobile (borders separate), spacing on desktop
+<ul className="space-y-0 sm:space-y-3">
 ```
 
-- **Mobile**: 8px between items
-- **Desktop**: 12px between items
-- **Purpose**: Vertical rhythm
+### Border vs Spacing Strategy
 
-## Touch Targets
+#### Mobile (< 640px)
 
-### WCAG 2.2 AA Compliance
+- Use `space-y-0` (no vertical spacing between items)
+- Use `border-t` on items (except first) for visual separation
+- Use `border-x-0` (no horizontal borders)
+- Result: Clean edge-to-edge iOS-native feel
 
-**Minimum Size**: 44×44px for all interactive elements
+#### Desktop (≥ 640px)
 
-### Implementation
+- Use `space-y-3` (12px spacing between items)
+- Use full borders (`border`) with rounded corners
+- Add horizontal padding for contained look
+- Result: Traditional card-based layout
 
-All buttons and interactive elements use:
+### Example: TodoItem Component
 
 ```tsx
-className = 'min-w-[44px] min-h-[44px] flex items-center justify-center p-2';
+<li
+  className={`
+    p-2 sm:p-4
+    rounded-none sm:rounded-lg
+    ${isFirst ? 'border-t-0' : 'border-t'}
+    border-x-0 sm:border
+    border-b-0 sm:border-b
+  `}
+>
 ```
 
-- `p-2` provides 8px padding around icon
-- Icon size: typically 16px (h-4 w-4)
-- Total touch area: 8px + 16px + 8px = 32px minimum
-- `min-w/min-h` ensures 44px even with small content
+### Guidelines
 
-### Examples
+- **Measure** actual viewport usage (should be 90-100% on mobile)
+- **Test** on physical devices (393px iPhone 14, 375px iPhone SE)
+- **Maintain** consistent patterns across components
+- **Document** deviations from edge-to-edge with clear rationale
 
-**Checkbox Button** (`TodoItem.tsx:308`):
+**Related**: Issue #163, PR #166 (Commits 8-9)
+
+---
+
+## Button Density and Touch Targets
+
+### WCAG 2.2 AA Touch Target Requirements
+
+**Non-Negotiable Rule**: All interactive elements MUST be at least **44×44 pixels**.
+
+### Mobile Button Compaction Strategy
+
+Reduce visual density while maintaining accessibility by adjusting padding and gaps, NOT minimum
+sizes.
+
+#### Button Padding
 
 ```tsx
-<button className='p-2 min-w-[44px] min-h-[44px]'>
-  <Circle className='h-5 w-5' />
-</button>
+// Reduce padding on mobile, normal on desktop
+<button className="min-w-[44px] min-h-[44px] p-1.5 sm:p-2">
 ```
 
-**Action Buttons** (`TodoItem.tsx:348`):
+- Mobile: `p-1.5` = 6px padding
+- Desktop: `p-2` = 8px padding
+- Total touch target: 44×44px (maintained via min-w/min-h)
+
+#### Button Group Gaps
 
 ```tsx
-<button className='p-2 min-w-[44px] min-h-[44px]'>
-  <Check className='h-4 w-4' />
-</button>
-```
-
-**Drag Handle** (`TodoItem.tsx:301`):
-
-```tsx
-<div className='p-2 min-w-[44px] min-h-[44px]'>
-  <GripVertical className='h-4 w-4' />
+// Tight spacing on mobile, comfortable on desktop
+<div className='flex gap-0.5 sm:gap-1'>
+  <button>Edit</button>
+  <button>Delete</button>
 </div>
 ```
 
-## Visual Hierarchy
+- Mobile: `gap-0.5` = 2px between buttons
+- Desktop: `gap-1` = 4px between buttons
+- Larger gaps: `gap-1 sm:gap-2` (4px → 8px)
 
-### Distance from Screen Edge
-
-#### Mobile (393px width)
-
-**Horizontal Path to Content**:
-
-```text
-Screen Edge (0px)
-├─ Page Padding: 16px (px-4)
-├─ Card Border: ~1px
-├─ Card Padding: 16px (p-4)
-└─ Content Start: ~33px from edge
-```
-
-**Vertical Path to Main Content**:
-
-```text
-Screen Top (0px)
-├─ Page Padding: 24px (py-6)
-├─ Header: ~60px height
-├─ Header Margin: 24px (mb-6)
-├─ Card Border: ~1px
-└─ Card Content: ~109px from top
-```
-
-#### Desktop (≥640px width)
-
-**Horizontal Path to Content**:
-
-```text
-Screen Edge (0px)
-├─ Page Padding: 24px (px-6)
-├─ Card Border: ~1px
-├─ Card Padding: 20px (p-5)
-└─ Content Start: ~45px from edge
-```
-
-**Vertical Path to Main Content**:
-
-```text
-Screen Top (0px)
-├─ Page Padding: 32px (py-8)
-├─ Header: ~80px height
-├─ Header Margin: 32px (mb-8)
-├─ Card Border: ~1px
-└─ Card Content: ~145px from top
-```
-
-## Component Spacing Map
-
-### Visual Reference
-
-See [UI Layout Hierarchy](../design/ui-layout-hierarchy.md) for detailed diagrams.
-
-**Quick Lookup**:
-
-| Component         | File:Line           | Mobile Spacing | Desktop Spacing        |
-| ----------------- | ------------------- | -------------- | ---------------------- |
-| Page Container    | `page.tsx:41`       | `px-4 py-6`    | `px-6 py-8`            |
-| Main Card         | `page.tsx:61`       | `p-4`          | `p-5` (sm), `p-6` (md) |
-| Header Margin     | `page.tsx:42`       | `mb-6`         | `mb-8`                 |
-| TodoForm Margin   | `TodoForm.tsx:51`   | `mb-4`         | `mb-6`                 |
-| TodoForm Textarea | `TodoForm.tsx:64`   | `px-3 py-3`    | `px-4 py-3`            |
-| TodoForm Button   | `TodoForm.tsx:72`   | `px-4 py-3`    | `px-6 py-3`            |
-| TodoFilter Margin | `TodoFilter.tsx:50` | `mb-4`         | `mb-4`                 |
-| TodoFilter Gap    | `TodoFilter.tsx:50` | `gap-2`        | `gap-2`                |
-| TodoFilter Button | `TodoFilter.tsx:58` | `px-3 py-2`    | `px-3 py-2`            |
-| TodoList Gap      | `TodoList.tsx:85`   | `space-y-2`    | `space-y-3`            |
-| TodoItem Padding  | `TodoItem.tsx:287`  | `p-3`          | `p-4`                  |
-| TodoItem Gap      | `TodoItem.tsx:287`  | `gap-2`        | `gap-3`                |
-| Footer Margin     | `page.tsx:92`       | `mt-6`         | `mt-8`                 |
-
-## Mobile-Specific Patterns
-
-### 1. Bottom Sheet Modal (Markdown Help)
-
-**Context**: Full-width overlay on mobile for better readability
+### Full Button Example
 
 ```tsx
-// Mobile: Full-screen bottom sheet (45% height)
-<div className="sm:hidden fixed inset-x-0 bottom-0 h-[45vh]">
-
-// Desktop: Inline collapsible
-<div className="hidden sm:block">
+<button
+  className='
+    flex-shrink-0
+    min-w-[44px] min-h-[44px]
+    p-1.5 sm:p-2
+    flex items-center justify-center
+    rounded-full
+    hover:bg-muted
+    focus:outline-none focus:ring-2 focus:ring-ring
+    transition-colors
+  '
+>
+  <Icon className='h-4 w-4' />
+</button>
 ```
 
-**Rationale**: Mobile screens need dedicated space for help content without obscuring the edit area.
+### Guidelines
 
-See: [ADR-016](../adr/016-mobile-help-overlay-pattern.md) (pending in PR #166)
+- **Never** reduce `min-w-[44px] min-h-[44px]` below 44px
+- **Always** maintain 44×44px touch targets on mobile
+- **Adjust** padding and gaps for density, not minimum sizes
+- **Test** with accessibility tools (axe DevTools, Lighthouse)
+- **Verify** touch targets with browser dev tools
 
-### 2. Reduced Border Radius
+**Related**: Issue #163, PR #166 (Commit 12)
 
-**Context**: Flat borders on mobile for more content area
+---
+
+## Responsive Component Patterns
+
+### Bottom Drawer Pattern (Mobile Overlays)
+
+Use bottom drawer modals for secondary content on mobile instead of inline expansion.
+
+#### When to Use
+
+- Help/reference content that would consume vertical space
+- Content that needs more room than available inline
+- Temporary overlays that don't require full-screen attention
+
+#### Implementation
 
 ```tsx
-// Mobile: No rounded corners on list edge
-<li className="rounded-lg border">
+// Responsive rendering
+const [isMobile, setIsMobile] = useState(false);
 
-// Could be: rounded-none sm:rounded-lg for truly flat mobile
+useEffect(() => {
+  const checkMobile = () => setIsMobile(window.innerWidth < 640);
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+  return () => window.removeEventListener('resize', checkMobile);
+}, []);
+
+return isMobile ? (
+  <BottomDrawer isOpen={isOpen} onClose={onClose}>
+    {content}
+  </BottomDrawer>
+) : (
+  <InlineContent>{content}</InlineContent>
+);
 ```
 
-### 3. Responsive Text Sizing
+#### Bottom Drawer Specifications
+
+- Height: 40-50% of viewport height (`h-[45vh]`)
+- Width: 100% viewport width
+- Position: Fixed at bottom, slides up
+- Animation: 0.3s cubic-bezier slide-up
+- Backdrop: Semi-transparent overlay
+- Dismissal: Escape key, backdrop click, close button
+- Focus trap: Enabled while open
+- Body scroll: Locked while open
+
+### Guidelines
+
+- **Breakpoint**: 640px (sm) for mobile vs desktop rendering
+- **Portal**: Use React portals for overlays (`createPortal`)
+- **Accessibility**: Include focus trap and ARIA attributes
+- **Animation**: Keep animations under 300ms for responsiveness
+- **Testing**: Verify on actual mobile devices
+
+**Related**: ADR-016, Issue #163, PR #166 (Commits 1-3)
+
+---
+
+## Typography for Mobile
+
+### Font Size Guidelines
+
+#### Input Fields (Critical for iOS)
+
+- Minimum: `text-base` (16px) on all screens
+- Rationale: Prevents iOS Safari auto-zoom
+
+#### Body Text
+
+- Mobile: `text-sm` (14px) minimum
+- Tablet/Desktop: `text-base` (16px) preferred
+- Example: `text-sm sm:text-base`
+
+#### Headings
 
 ```tsx
-className = 'text-sm sm:text-base'; // Body text
-className = 'text-xs sm:text-sm'; // Secondary text
-className = 'text-2xl sm:text-3xl'; // Headings
+// Responsive heading sizes
+<h1 className="text-2xl sm:text-3xl md:text-4xl">
+<h2 className="text-xl sm:text-2xl md:text-3xl">
+<h3 className="text-base sm:text-lg md:text-xl">
 ```
 
-## Best Practices
+#### Helper Text
 
-### DO ✅
+```tsx
+// Small but readable
+<p className="text-xs sm:text-sm">
+```
 
-- Start with mobile styles (no prefix)
-- Use `sm:`, `md:`, `lg:` to enhance
-- Test on actual device (iPhone 14, 393px)
-- Maintain 44×44px touch targets
-- Use tighter spacing on mobile
-- Progressively add spacing on desktop
+### Readability Guidelines
 
-### DON'T ❌
+- **Line Height**: 1.4+ for body text (`leading-relaxed`)
+- **Line Length**: 45-75 characters optimal (use `max-w-prose`)
+- **Text Wrapping**: `break-words` for long strings
+- **Whitespace**: `text-balance` for headings to prevent orphans
 
-- Start with desktop styles
-- Use max-width media queries
-- Make touch targets smaller than 44px
-- Copy desktop spacing to mobile
-- Add spacing that reduces visible content unnecessarily
+---
 
 ## Testing Checklist
 
-When implementing mobile layouts:
+### iOS Safari Zoom
 
-- [ ] Test on iPhone 14 (393px) or equivalent
-- [ ] All touch targets ≥ 44×44px
-- [ ] Content doesn't touch screen edges
-- [ ] Adequate spacing between interactive elements
-- [ ] No horizontal scrolling
-- [ ] Text remains readable (min 16px for body)
-- [ ] Responsive breakpoints work as expected
+- [ ] All input fields use 16px+ font size
+- [ ] Viewport meta tag includes `maximumScale: 1`
+- [ ] Test on actual iOS device (simulator doesn't replicate zoom behavior)
+- [ ] Verify no zoom occurs when focusing any input
 
-## Communication Guide
+### Screen Utilization
 
-When discussing spacing changes, use this format:
+- [ ] Measure viewport usage (should be 90-100% on mobile)
+- [ ] iPhone 14 (393px): Verify edge-to-edge layout
+- [ ] iPhone SE (375px): Verify no horizontal scroll
+- [ ] Count visible todos (should be 7+ on iPhone 14)
 
-**Format**: `[Component] → [Property] → [Current] → [Proposed]`
+### Touch Targets
 
-**Examples**:
+- [ ] All buttons measure 44×44px minimum
+- [ ] Use browser dev tools to verify touch target overlay
+- [ ] Run Lighthouse accessibility audit (should pass)
+- [ ] Test with accessibility tools (axe DevTools)
 
-✅ "TodoList → space-y → 8px mobile/12px desktop → 4px mobile/8px desktop"
-✅ "TodoItem padding (TodoItem.tsx:287) → p-3 sm:p-4 → p-2 sm:p-3"
-✅ "Vertical gap between todos → space-y-2 sm:space-y-3 → space-y-1 sm:space-y-2"
+### Visual Quality
 
-**Reference**:
+- [ ] No horizontal scroll on any mobile device
+- [ ] Borders align cleanly at viewport edges
+- [ ] Button spacing feels balanced
+- [ ] Typography is readable at all sizes
 
-- Component names from [UI Layout Hierarchy](../design/ui-layout-hierarchy.md)
-- File:line references for precision
-- Pixel values for clarity
+---
+
+## Common Pitfalls
+
+### ❌ Anti-Patterns to Avoid
+
+#### 1. Small Font Sizes on Inputs
+
+```tsx
+// ❌ WRONG - Triggers iOS zoom
+<input className="text-sm" />
+
+// ✅ CORRECT
+<input className="text-base" />
+```
+
+#### 2. Reducing Touch Targets
+
+```tsx
+// ❌ WRONG - Too small for reliable tapping
+<button className="min-w-[32px] min-h-[32px]">
+
+// ✅ CORRECT - WCAG compliant
+<button className="min-w-[44px] min-h-[44px]">
+```
+
+#### 3. Inconsistent Spacing Patterns
+
+```tsx
+// ❌ WRONG - Random padding values
+<div className="px-3">
+  <div className="px-2">
+    <div className="px-4">
+
+// ✅ CORRECT - Consistent responsive pattern
+<div className="px-0 sm:px-6">
+  <div className="p-2 sm:p-4">
+```
+
+#### 4. Forgetting Responsive Variants
+
+```tsx
+// ❌ WRONG - Mobile-only or desktop-only
+<button className="p-1.5">
+
+// ✅ CORRECT - Responsive
+<button className="p-1.5 sm:p-2">
+```
+
+---
+
+## Measurement and Verification
+
+### Viewport Width Calculation
+
+#### Example: iPhone 14 (393px width)
+
+```text
+Total viewport:           393px (100%)
+- Outer padding (px-4):   -32px (16px × 2)
+= Usable content width:   361px (92%)
+```
+
+#### After optimization (px-0)
+
+```text
+Total viewport:           393px (100%)
+- Outer padding (px-0):     0px
+= Usable content width:   393px (100%)
+```
+
+**Improvement**: +32px (8% more usable space)
+
+### Touch Target Verification
+
+Use browser dev tools to overlay touch target sizes:
+
+1. Open Chrome DevTools
+2. Toggle device toolbar (Cmd+Shift+M)
+3. Enable "Show rulers" and "Show media queries"
+4. Inspect element → Computed → Verify width/height ≥ 44px
+
+---
+
+## Design Tokens Reference
+
+### Spacing Scale
+
+```text
+gap-0.5 = 2px   (tight mobile button groups)
+gap-1   = 4px   (normal mobile button groups)
+gap-2   = 8px   (desktop button groups)
+gap-3   = 12px  (list item spacing desktop)
+
+p-1.5   = 6px   (compact mobile button padding)
+p-2     = 8px   (normal mobile/desktop item padding)
+p-4     = 16px  (spacious desktop item padding)
+p-5     = 20px  (desktop container padding)
+```
+
+### Breakpoints
+
+```text
+sm:  640px  (tablet/desktop transition)
+md:  768px  (larger tablets)
+lg:  1024px (desktop)
+```
+
+### Touch Target Sizes
+
+```text
+min-w-[44px] min-h-[44px]  (WCAG 2.2 AA minimum)
+min-w-[48px] min-h-[48px]  (More comfortable, AAA recommended)
+```
+
+---
 
 ## Related Documentation
 
-- [UI Layout Hierarchy](../design/ui-layout-hierarchy.md) - Visual diagrams and spacing breakdown
-- [Accessibility Requirements](./accessibility-requirements.md) - WCAG 2.2 AA compliance (44×44px touch targets)
-- [Issue #163](https://github.com/user/repo/issues/163) - Mobile UX improvements context
-- [PR #166](https://github.com/user/repo/pulls/166) - Mobile UX implementation
+- **ADR-016**: Mobile Help Overlay Pattern (bottom drawer decision)
+- **Accessibility Requirements**: WCAG 2.2 AA compliance guidelines
+- **Responsive Design Checklist**: Comprehensive testing procedures
+- **Touch Gestures Documentation**: Swipe and long-press patterns
 
-## Changelog
+---
 
-| Date       | Change                       | Rationale                                       |
-| ---------- | ---------------------------- | ----------------------------------------------- |
-| 2025-10-03 | Initial mobile UX guidelines | Issue #169 - Document spacing for better comms  |
-| 2025-09-XX | Mobile spacing optimizations | PR #166 - Reduce padding for more visible items |
+_These guidelines are based on real-world optimization for iPhone 14 and similar devices, documented
+in Issue #163 and PR #166._

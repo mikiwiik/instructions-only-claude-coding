@@ -128,6 +128,36 @@
       transform: translateX(0);
     }
   }
+
+  /* Bottom drawer slide-up animation */
+  .animate-slide-up {
+    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Backdrop fade animation */
+  .animate-fade-in {
+    animation: backdropFade 0.2s ease-out;
+  }
+
+  @keyframes backdropFade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }
 
 @layer utilities {

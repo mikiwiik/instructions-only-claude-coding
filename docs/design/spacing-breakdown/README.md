@@ -20,11 +20,11 @@ The application uses **nested spacing layers** that combine to create the final 
 
 ```text
 Screen Edge
-  ↓ Page Padding (px-4/px-6)
+  ↓ Page Padding (px-0 mobile / px-6 desktop - edge-to-edge on mobile)
 Container Boundary
-  ↓ Card Padding (p-4/p-5/p-6)
+  ↓ Card Padding (p-0 mobile / p-5 desktop - edge-to-edge on mobile)
 Component Boundary
-  ↓ Item Padding (p-3/p-4)
+  ↓ Item Padding (p-2 mobile / p-4 desktop)
 Content
 ```
 
@@ -94,22 +94,22 @@ Content
 └─────────────────────────────────────────────────────────────────┘
 
 Legend:
-▒▒▒ = Page padding (px-4 = 16px horizontal)
-░░░ = Card padding (p-4 = 16px all sides)
-▓▓▓ = TodoItem padding (p-3 = 12px all sides)
+▒▒▒ = Page padding (px-0 = 0px horizontal - edge-to-edge)
+░░░ = Card padding (p-0 = 0px all sides - edge-to-edge)
+▓▓▓ = TodoItem padding (p-2 = 8px all sides)
 ```
 
 ### Spacing Measurements
 
 | Visual Gap             | Created By    | Tailwind    | Pixels | File:Line           |
 | ---------------------- | ------------- | ----------- | ------ | ------------------- |
-| Screen edge → Header   | Page padding  | `px-4`      | 16px   | `page.tsx:41`       |
+| Screen edge → Header   | Page padding  | `px-0`      | 0px    | `page.tsx:41`       |
 | Header → Card          | Header margin | `mb-6`      | 24px   | `page.tsx:42`       |
-| Card border → Form     | Card padding  | `p-4`       | 16px   | `page.tsx:61`       |
+| Card border → Form     | Card padding  | `p-0`       | 0px    | `page.tsx:61`       |
 | Form → Filter          | Form margin   | `mb-4`      | 16px   | `TodoForm.tsx:51`   |
 | Filter → List          | Filter margin | `mb-4`      | 16px   | `TodoFilter.tsx:50` |
-| Todo item → Todo item  | List gap      | `space-y-2` | 8px    | `TodoList.tsx:85`   |
-| Item border → Checkbox | Item padding  | `p-3`       | 12px   | `TodoItem.tsx:287`  |
+| Todo item → Todo item  | List gap      | `space-y-0` | 0px    | `TodoList.tsx:85`   |
+| Item border → Checkbox | Item padding  | `p-2`       | 8px    | `TodoItem.tsx:287`  |
 | Checkbox → Text        | Internal gap  | `gap-2`     | 8px    | `TodoItem.tsx:287`  |
 | Text → Edit button     | Internal gap  | `gap-2`     | 8px    | `TodoItem.tsx:287`  |
 | Card → Footer          | Card margin   | `mt-6`      | 24px   | `page.tsx:92`       |
@@ -205,11 +205,11 @@ Legend:
 
 ### TodoItem Internal Spacing
 
-#### Mobile (p-3 = 12px, gap-2 = 8px)
+#### Mobile (p-2 = 8px, gap-2 = 8px)
 
 ```text
 ┌────────────────────────────────────────────────────────┐
-│ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ 12px padding (p-3) ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓│
+│ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓ 8px padding (p-2) ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓│
 │ ▓                                                      ▓│
 │ ▓  [Checkbox]  ←8px→  Content Area  ←8px→  [Actions]  ▓│
 │ ▓    44×44px   (gap-2)   (flex-1)   (gap-2)  44×44px  ▓│
@@ -270,42 +270,44 @@ Legend:
 **What it IS**:
 
 - The gap between TodoItem components
-- Controlled by: `TodoList.tsx:85` → `space-y-2 sm:space-y-3`
-- Mobile: 8px, Desktop: 12px
+- Controlled by: `TodoList.tsx:85` → `space-y-0 sm:space-y-3`
+- Mobile: 0px (borders separate items), Desktop: 12px
 
 **What it is NOT**:
 
-- Padding inside TodoItem (that's `p-3/p-4`)
+- Padding inside TodoItem (that's `p-2/p-4`)
 - Margin around TodoList container (that's TodoFilter's `mb-4`)
 - Space between item content and buttons (that's `gap-2/gap-3`)
+- Border-top on items (that's the visual separator on mobile)
 
 ### "Horizontal spacing in items"
 
 **What it IS**:
 
 - Padding inside TodoItem creating space from border to content
-- Controlled by: `TodoItem.tsx:287` → `p-3 sm:p-4`
-- Mobile: 12px, Desktop: 16px
+- Controlled by: `TodoItem.tsx:287` → `p-2 sm:p-4`
+- Mobile: 8px, Desktop: 16px
 
 **What it is NOT**:
 
 - Gap between checkbox and text (that's `gap-2/gap-3`)
-- Page padding (that's `px-4/px-6`)
-- Card padding (that's `p-4/p-5/p-6`)
+- Page padding (that's `px-0/px-6` - edge-to-edge on mobile)
+- Card padding (that's `p-0/p-5/p-6` - edge-to-edge on mobile)
 
 ### "Distance from screen edge"
 
 **What it IS**:
 
-- **Layer 1**: Page padding (`px-4 sm:px-6`) = 16px/24px
-- **Layer 2**: Card padding (`p-4 sm:p-5`) = 16px/20px
-- **Total**: 32px (mobile) / 44px (desktop) from edge to content
+- **Layer 1**: Page padding (`px-0 sm:px-6`) = 0px/24px
+- **Layer 2**: Card padding (`p-0 sm:p-5`) = 0px/20px
+- **Total**: 0px (mobile - edge-to-edge) / 44px (desktop) from edge to content
 
 **What it is NOT**:
 
 - Just page padding alone
 - Just card padding alone
 - The gap between items
+- Mobile uses edge-to-edge layout (0px from screen edge)
 
 ## Screenshot Annotations Guide
 
@@ -352,4 +354,4 @@ Reference these diagrams when:
 - Debugging spacing issues
 
 **Example**: "The 'vertical whitespace' you're referring to is the purple gap in the diagram -
-that's the `space-y-2 sm:space-y-3` at TodoList.tsx:85"
+that's the `space-y-0 sm:space-y-3` at TodoList.tsx:85 (0px on mobile, borders separate items)"
