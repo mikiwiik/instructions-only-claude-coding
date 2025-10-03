@@ -338,9 +338,10 @@ When discussing layout changes, reference:
 
 ## Related Documentation
 
-- [Component Layout Reference](./component-layout-reference.md) - Visual diagrams of all UI components
+- [Component Layout Reference](./component-layout-reference.md) - Consolidated visual diagrams and spacing
+  mechanics for all UI components
 - [Mobile UX Guidelines](../guidelines/mobile-ux-guidelines.md) - Spacing strategy and best practices
-- [Accessibility Requirements](../guidelines/accessibility-requirements.md) - Touch target requirements (44×44px minimum)
-- [Spacing Breakdown](./spacing-breakdown/) - Annotated visual references
+- [Accessibility Requirements](../guidelines/accessibility-requirements.md) - Touch target requirements
+  (44×44px minimum)
 - [Issue #163](https://github.com/user/repo/issues/163) - Mobile UX improvements context
 - [PR #166](https://github.com/user/repo/pulls/166) - Mobile UX implementation
