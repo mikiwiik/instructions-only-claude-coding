@@ -1,13 +1,20 @@
 # Shared Lists Security Assessment
 
 **Document Version**: 1.0
+
 **Date**: 2025-09-27
-**Related ADR**: [ADR-013: Shared Lists Backend Architecture](../adr/ADR-013-shared-lists-backend-architecture.md)
-**Related Issue**: [#85 - Scope backend persistence and multi-device sync architecture](https://github.com/mikiwiik/instructions-only-claude-coding/issues/85)
+
+**Related ADR**:
+[ADR-013: Shared Lists Backend Architecture](../adr/ADR-013-shared-lists-backend-architecture.md)
+
+**Related Issue**:
+[#85 - Scope backend persistence and multi-device sync architecture](https://github.com/mikiwiik/instructions-only-claude-coding/issues/85)
 
 ## Executive Summary
 
-This security assessment evaluates the proposed anonymous sharing architecture for todo lists, identifying potential threats, security measures, and compliance considerations for a system designed without user authentication.
+This security assessment evaluates the proposed anonymous sharing architecture for todo lists, identifying
+potential threats, security measures, and compliance considerations for a system designed without user
+authentication.
 
 ## Security Model Overview
 
@@ -20,7 +27,7 @@ This security assessment evaluates the proposed anonymous sharing architecture f
 
 ### Trust Boundaries
 
-```
+```text
 Internet ←→ Vercel Edge ←→ API Routes ←→ Vercel KV ←→ Real-time SSE
    │              │            │            │            │
    └── HTTPS ──────┴─ Auth ─────┴─ Valid. ───┴─ Encrypt ──┘
@@ -48,21 +55,21 @@ Internet ←→ Vercel Edge ←→ API Routes ←→ Vercel KV ←→ Real-time 
 
 #### HIGH PRIORITY Threats
 
-**T1: Share URL Enumeration**
+### T1: Share URL Enumeration
 
 - **Risk Level**: HIGH
 - **Description**: Attackers attempt to guess valid share URLs
 - **Impact**: Unauthorized access to private todo lists
 - **Likelihood**: HIGH (predictable URLs are easily guessed)
 
-**T2: Share URL Leakage**
+### T2: Share URL Leakage
 
 - **Risk Level**: HIGH
 - **Description**: Share URLs accidentally exposed in logs, referrers, or messages
 - **Impact**: Unintended access to shared lists
 - **Likelihood**: MEDIUM (user error, system logging)
 
-**T3: Data Manipulation**
+### T3: Data Manipulation
 
 - **Risk Level**: HIGH
 - **Description**: Unauthorized modification or deletion of todo items
@@ -71,21 +78,21 @@ Internet ←→ Vercel Edge ←→ API Routes ←→ Vercel KV ←→ Real-time 
 
 #### MEDIUM PRIORITY Threats
 
-**T4: Denial of Service (DoS)**
+### T4: Denial of Service (DoS)
 
 - **Risk Level**: MEDIUM
 - **Description**: Resource exhaustion through excessive API calls or large data uploads
 - **Impact**: Service unavailability for legitimate users
 - **Likelihood**: MEDIUM (common attack vector)
 
-**T5: Real-time Connection Hijacking**
+### T5: Real-time Connection Hijacking
 
 - **Risk Level**: MEDIUM
 - **Description**: Interception or manipulation of SSE connections
 - **Impact**: Data corruption, false information injection
 - **Likelihood**: LOW (requires HTTPS compromise)
 
-**T6: Cross-Site Scripting (XSS)**
+### T6: Cross-Site Scripting (XSS)
 
 - **Risk Level**: MEDIUM
 - **Description**: Malicious script injection through todo text content
@@ -94,14 +101,14 @@ Internet ←→ Vercel Edge ←→ API Routes ←→ Vercel KV ←→ Real-time 
 
 #### LOW PRIORITY Threats
 
-**T7: Information Disclosure**
+### T7: Information Disclosure
 
 - **Risk Level**: LOW
 - **Description**: Metadata leakage about lists, participants, or usage patterns
 - **Impact**: Privacy concerns, user tracking
 - **Likelihood**: LOW (minimal metadata collected)
 
-**T8: Social Engineering**
+### T8: Social Engineering
 
 - **Risk Level**: LOW
 - **Description**: Tricking users into sharing URLs or access tokens
@@ -112,7 +119,7 @@ Internet ←→ Vercel Edge ←→ API Routes ←→ Vercel KV ←→ Real-time 
 
 ### Access Control (AC)
 
-**AC-1: Cryptographically Secure Share IDs**
+### AC-1: Cryptographically Secure Share IDs
 
 ```typescript
 // Minimum 32-character random IDs
@@ -124,12 +131,12 @@ const shareId = crypto.randomUUID() + '-' + crypto.randomUUID();
 - **Implementation**: Use crypto.randomUUID() for unpredictable IDs
 - **Verification**: Entropy analysis of generated IDs
 
-**AC-2: Optional Access Tokens**
+### AC-2: Optional Access Tokens
 
 ```typescript
 interface ShareUrl {
-  listId: string;        // Required: list identifier
-  accessToken?: string;  // Optional: additional security
+  listId: string; // Required: list identifier
+  accessToken?: string; // Optional: additional security
   permission: 'view' | 'edit';
 }
 ```
@@ -138,13 +145,13 @@ interface ShareUrl {
 - **Implementation**: Optional JWT-like tokens for sensitive lists
 - **Verification**: Token validation on all API endpoints
 
-**AC-3: Time-based Expiration**
+### AC-3: Time-based Expiration
 
 ```typescript
 interface ShareSettings {
-  expiresAt?: Date;      // Optional expiration
-  maxUses?: number;      // Usage limits
-  isActive: boolean;     // Manual revocation
+  expiresAt?: Date; // Optional expiration
+  maxUses?: number; // Usage limits
+  isActive: boolean; // Manual revocation
 }
 ```
 
@@ -154,13 +161,13 @@ interface ShareSettings {
 
 ### Input Validation (IV)
 
-**IV-1: Content Sanitization**
+### IV-1: Content Sanitization
 
 ```typescript
 // Sanitize todo text to prevent XSS
 const sanitizedText = DOMPurify.sanitize(userInput, {
   ALLOWED_TAGS: [],
-  ALLOWED_ATTR: []
+  ALLOWED_ATTR: [],
 });
 ```
 
@@ -168,14 +175,14 @@ const sanitizedText = DOMPurify.sanitize(userInput, {
 - **Implementation**: DOMPurify for client-side, server-side validation
 - **Verification**: XSS payload testing
 
-**IV-2: API Input Validation**
+### IV-2: API Input Validation
 
 ```typescript
 // Validate all API inputs
 const todoSchema = z.object({
   text: z.string().min(1).max(500),
   listId: z.string().uuid(),
-  participantId: z.string().uuid()
+  participantId: z.string().uuid(),
 });
 ```
 
@@ -185,14 +192,14 @@ const todoSchema = z.object({
 
 ### Rate Limiting (RL)
 
-**RL-1: API Rate Limiting**
+### RL-1: API Rate Limiting
 
 ```typescript
 // Vercel KV-based rate limiting
 const rateLimit = {
-  createShare: '10/hour',      // Share creation
+  createShare: '10/hour', // Share creation
   syncOperations: '300/minute', // Todo operations
-  subscribe: '5/minute'        // SSE connections
+  subscribe: '5/minute', // SSE connections
 };
 ```
 
@@ -200,14 +207,14 @@ const rateLimit = {
 - **Implementation**: Sliding window with Vercel KV
 - **Verification**: Load testing and abuse simulation
 
-**RL-2: Resource Limits**
+### RL-2: Resource Limits
 
 ```typescript
 const limits = {
   maxTodosPerList: 1000,
   maxTextLength: 500,
   maxParticipants: 50,
-  maxListsPerIP: 10
+  maxListsPerIP: 10,
 };
 ```
 
@@ -217,21 +224,21 @@ const limits = {
 
 ### Data Protection (DP)
 
-**DP-1: Transport Security**
+### DP-1: Transport Security
 
 - **HTTPS Only**: All communications encrypted in transit
 - **HSTS Headers**: Prevent protocol downgrade attacks
 - **Secure Headers**: CSP, X-Frame-Options, etc.
 - **Addresses**: T5 (Connection Hijacking)
 
-**DP-2: Data Minimization**
+### DP-2: Data Minimization
 
 ```typescript
 // Minimal data collection
 interface ParticipantData {
-  id: string;           // Anonymous UUID only
-  color: string;        // UI color assignment
-  lastSeenAt: Date;     // Activity tracking
+  id: string; // Anonymous UUID only
+  color: string; // UI color assignment
+  lastSeenAt: Date; // Activity tracking
   // NO: email, name, IP, user agent, etc.
 }
 ```
@@ -240,14 +247,14 @@ interface ParticipantData {
 - **Implementation**: Store only essential data for functionality
 - **Verification**: Data audit and privacy review
 
-**DP-3: Automatic Data Cleanup**
+### DP-3: Automatic Data Cleanup
 
 ```typescript
 // Cleanup inactive lists
 const cleanupPolicy = {
   inactiveAfter: 30 * 24 * 60 * 60 * 1000, // 30 days
-  maxRetention: 90 * 24 * 60 * 60 * 1000,  // 90 days
-  participantTimeout: 24 * 60 * 60 * 1000   // 24 hours
+  maxRetention: 90 * 24 * 60 * 60 * 1000, // 90 days
+  participantTimeout: 24 * 60 * 60 * 1000, // 24 hours
 };
 ```
 
@@ -257,7 +264,7 @@ const cleanupPolicy = {
 
 ### Monitoring and Logging (ML)
 
-**ML-1: Security Event Logging**
+### ML-1: Security Event Logging
 
 ```typescript
 // Log security-relevant events
@@ -265,7 +272,7 @@ const securityEvents = [
   'share_url_access_denied',
   'rate_limit_exceeded',
   'invalid_token_attempt',
-  'xss_attempt_blocked'
+  'xss_attempt_blocked',
 ];
 ```
 
@@ -273,7 +280,7 @@ const securityEvents = [
 - **Implementation**: Structured logging to Vercel Analytics
 - **Verification**: Log analysis and alert testing
 
-**ML-2: Anomaly Detection**
+### ML-2: Anomaly Detection
 
 - **Pattern Recognition**: Unusual access patterns, bulk operations
 - **Threshold Alerts**: Excessive failures, resource usage spikes
@@ -284,7 +291,7 @@ const securityEvents = [
 
 ### Data Protection Regulations
 
-**GDPR Compliance**
+### GDPR Compliance
 
 - **Lawful Basis**: Legitimate interest (todo list functionality)
 - **Data Minimization**: Only essential data collected
@@ -292,7 +299,7 @@ const securityEvents = [
 - **Data Portability**: Export functionality planned
 - **No Cross-border Transfers**: Vercel edge deployment only
 
-**Privacy by Design**
+### Privacy by Design
 
 - **No Personal Data**: Anonymous-only model
 - **No Tracking**: No persistent user identification
@@ -301,7 +308,7 @@ const securityEvents = [
 
 ### Security Standards
 
-**OWASP Top 10 Coverage**
+#### OWASP Top 10 Coverage
 
 1. **Injection**: Input validation and sanitization
 2. **Broken Authentication**: No authentication to break
@@ -316,16 +323,16 @@ const securityEvents = [
 
 ## Risk Assessment Matrix
 
-| Threat | Likelihood | Impact | Risk Level | Mitigation Status |
-|--------|------------|--------|------------|-------------------|
-| T1: URL Enumeration | High | High | **CRITICAL** | ✅ Secure IDs, Optional tokens |
-| T2: URL Leakage | Medium | High | **HIGH** | ✅ Expiration, Access tokens |
-| T3: Data Manipulation | Medium | High | **HIGH** | ✅ Input validation, Rate limiting |
-| T4: Denial of Service | Medium | Medium | **MEDIUM** | ✅ Rate limiting, Resource limits |
-| T5: Connection Hijacking | Low | Medium | **LOW** | ✅ HTTPS, Secure headers |
-| T6: Cross-Site Scripting | Medium | Medium | **MEDIUM** | ✅ Content sanitization |
-| T7: Information Disclosure | Low | Low | **LOW** | ✅ Data minimization |
-| T8: Social Engineering | Medium | Low | **LOW** | 📋 User education needed |
+| Threat                     | Likelihood | Impact | Risk Level   | Mitigation Status                  |
+| -------------------------- | ---------- | ------ | ------------ | ---------------------------------- |
+| T1: URL Enumeration        | High       | High   | **CRITICAL** | ✅ Secure IDs, Optional tokens     |
+| T2: URL Leakage            | Medium     | High   | **HIGH**     | ✅ Expiration, Access tokens       |
+| T3: Data Manipulation      | Medium     | High   | **HIGH**     | ✅ Input validation, Rate limiting |
+| T4: Denial of Service      | Medium     | Medium | **MEDIUM**   | ✅ Rate limiting, Resource limits  |
+| T5: Connection Hijacking   | Low        | Medium | **LOW**      | ✅ HTTPS, Secure headers           |
+| T6: Cross-Site Scripting   | Medium     | Medium | **MEDIUM**   | ✅ Content sanitization            |
+| T7: Information Disclosure | Low        | Low    | **LOW**      | ✅ Data minimization               |
+| T8: Social Engineering     | Medium     | Low    | **LOW**      | 📋 User education needed           |
 
 ## Implementation Recommendations
 
@@ -372,7 +379,9 @@ const securityEvents = [
 
 ## Conclusion
 
-The anonymous sharing architecture provides a reasonable security posture for personal todo list sharing while maintaining simplicity and educational value. The primary risks (URL enumeration and leakage) are adequately addressed through secure ID generation and optional access tokens.
+The anonymous sharing architecture provides a reasonable security posture for personal todo list sharing while
+maintaining simplicity and educational value. The primary risks (URL enumeration and leakage) are adequately
+addressed through secure ID generation and optional access tokens.
 
 **Security Recommendation**: **APPROVE** with implementation of identified security controls.
 
