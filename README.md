@@ -138,14 +138,10 @@ checks, and testing scripts.
 
 ## Development Status
 
-**Current Workflow**: Branch-based development with automated PR workflow
+**Current Workflow**: Branch-based development with automated PR workflow. All features developed on separate branches
+with required approvals, automated merging, and continuous deployment.
 
-- Features developed on separate branches (`feature/issue-number-description`)
-- Pull requests require 1 approver and passing CI checks (enforced by branch protection)
-- Automerge enabled for streamlined workflow after requirements met
-- Automatic branch deletion keeps repository clean
-- Main branch maintains stable, tested code
-- Automatic deployment to production after successful CI
+See [Development Workflow](docs/development/workflow.md) for complete branch strategy, PR requirements, and CI/CD details.
 
 ## Documentation
 
