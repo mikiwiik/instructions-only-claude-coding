@@ -222,7 +222,8 @@ After completing installation:
 
 1. **Review Architecture**: Check [`docs/architecture/overview.md`](../architecture/overview.md) for project structure
 2. **Development Workflow**: Read [`docs/development/workflow.md`](../development/workflow.md) for coding standards
-3. **Project Management**: See [`docs/development/project-management.md`](../development/project-management.md) for issue workflow
+3. **Project Management**: See [`docs/development/project-management.md`](../development/project-management.md) for issue
+   workflow
 4. **Contributing**: Review [README.md](../../README.md) for contribution guidelines
 
 ## Support
