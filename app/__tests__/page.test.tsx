@@ -8,29 +8,32 @@ describe('HomePage', () => {
     localStorage.clear();
   });
 
-  it('renders the Todo App title', () => {
+  it('renders the TODO title', () => {
     render(<HomePage />);
 
-    const heading = screen.getByRole('heading', { name: /todo app/i });
+    const heading = screen.getByRole('heading', { name: /^TODO$/i });
     expect(heading).toBeInTheDocument();
   });
 
-  it('displays the app description', () => {
+  it('includes agent implementation attribution', () => {
     render(<HomePage />);
 
-    const description = screen.getByText(
-      /next\.js todo application built with test-driven development/i
-    );
-    expect(description).toBeInTheDocument();
-  });
-
-  it('includes Claude Code attribution', () => {
-    render(<HomePage />);
+    expect(
+      screen.getByText(/100% agent implemented - 100% human instructed/i)
+    ).toBeInTheDocument();
 
     const claudeLink = screen.getByRole('link', { name: /claude code/i });
     expect(claudeLink).toBeInTheDocument();
     expect(claudeLink).toHaveAttribute('href', 'https://claude.ai/code');
     expect(claudeLink).toHaveAttribute('target', '_blank');
+
+    const githubLink = screen.getByRole('link', { name: /view on github/i });
+    expect(githubLink).toBeInTheDocument();
+    expect(githubLink).toHaveAttribute(
+      'href',
+      'https://github.com/mikiwiik/instructions-only-claude-coding/'
+    );
+    expect(githubLink).toHaveAttribute('target', '_blank');
   });
 
   it('displays the check square icon', () => {
