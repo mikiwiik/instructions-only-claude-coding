@@ -92,44 +92,10 @@ This project serves as a **template and reference** for:
 
 - Node.js 22.x or higher
 - npm 10.x or higher
-- Claude Code Pro subscription ([setup guide](docs/setup/installation.md))
+- Claude Code Pro subscription
 
-### Authentication Setup
-
-Claude Code supports two authentication methods for API access:
-
-#### API Key Authentication (Recommended for Long Sessions)
-
-- Prevents OAuth token expiration during extended development sessions
-- No interruptions from 401 authentication errors
-- Ideal for continuous workflow
-
-**Configuration Steps:**
-
-1. Visit [Anthropic Console](https://console.anthropic.com/)
-2. Navigate to Claude Code section on main page
-3. Click "Create API key"
-4. Add `export ANTHROPIC_API_KEY="your_api_key_here"` to `~/.zprofile` (or `~/.bashrc` for bash), replacing
-   `your_api_key_here` with your actual API key
-5. Run `/logout` in Claude Code to switch to API key authentication
-6. Restart your terminal or run `source ~/.zprofile`
-
-#### OAuth Authentication
-
-- Quick setup for shorter sessions
-- May require re-authentication every few hours
-- Can cause 401 errors during long coding sessions
-
-#### Troubleshooting 401 Authentication Errors
-
-If you encounter 401 authentication errors during development:
-
-1. Switch to API key authentication (recommended for long sessions)
-2. Or re-authenticate with OAuth in Claude Code settings
-3. Verify your API key/token has necessary permissions
-4. Check token expiration in Anthropic Console
-
-For detailed authentication documentation, see [Claude Code Authentication Guide](https://docs.claude.com/en/docs/claude-code/).
+**Complete setup instructions**: See [Installation Guide](docs/setup/installation.md) for Claude Code authentication,
+troubleshooting, and development environment setup.
 
 ### Installation
 
