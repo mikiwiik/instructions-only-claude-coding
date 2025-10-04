@@ -164,7 +164,7 @@ Closes #123, closes #124, fixes #125
 **Standard Process:**
 
 1. Create PR with: `gh pr create --title "..." --body "..."`
-2. **🚨 REQUIRED**: Enable automerge: `gh pr merge --auto --squash`
+2. **🚨 REQUIRED**: Enable automerge: `gh pr merge --auto --rebase`
 3. Wait for approval and CI: Automatic merge when requirements met
 4. Branch cleanup: Automatic deletion after successful merge
 
@@ -215,7 +215,30 @@ Closes #123, closes #124, fixes #125
 
 1. **DO NOT** proceed unless user explicitly requests bypass
 2. Confirm user intent if unclear
-3. Only then execute: `gh pr merge --admin --squash --delete-branch`
+3. Only then execute: `gh pr merge --admin --rebase --delete-branch`
+
+### Merge Strategy Guidelines
+
+**🚨 DEFAULT STRATEGY: Rebase** - Preserves atomic commits and maintains linear history (per ADR-010)
+
+| Strategy                 | When to Use                                        | Result                                              | Command                       |
+| ------------------------ | -------------------------------------------------- | --------------------------------------------------- | ----------------------------- |
+| **`--rebase`** (default) | Multi-commit features, preserving atomic history   | Individual commits replayed on main, linear history | `gh pr merge --auto --rebase` |
+| **`--squash`**           | Trivial single-commit changes (typos, doc updates) | All commits combined into one                       | `gh pr merge --auto --squash` |
+| **`--merge`**            | When merge commit context needed                   | Preserves commits + adds merge commit               | `gh pr merge --auto --merge`  |
+
+**Why Rebase is Default:**
+
+- ✅ **Preserves atomic commits**: Full commit history visible in main branch
+- ✅ **Linear history**: Clean, easy-to-follow git log without merge commits
+- ✅ **Bisect-friendly**: Can pinpoint exact commit that introduced issues
+- ✅ **AI attribution**: Each commit retains individual co-author attribution
+- ✅ **Aligns with ADR-010**: Philosophy matches implementation
+
+**When to Override:**
+
+- Use `--squash` only for trivial changes (typo fixes, minor doc updates)
+- Use `--merge` when you need explicit merge commit context (rare)
 
 ## Issue Completion Workflow
 
@@ -231,7 +254,7 @@ Closes #123, closes #124, fixes #125
 6. **Verify Push Success** - Confirm remote branch tracking and all tests pushed
 7. **Create PR** - Always required by methodology (ONLY after all tests pass and pushed)
    - **🚨 REQUIRED**: Include "Closes #X" in PR description for automatic issue closure
-8. **🚨 REQUIRED**: Enable automerge: `gh pr merge --auto --squash`
+8. **🚨 REQUIRED**: Enable automerge: `gh pr merge --auto --rebase`
 9. **Wait for Merge** - CI passes + reviewer approval (automerge handles the merge)
 10. **Verify Issue Closure** - Use `gh issue view #X` to confirm
 11. **Confirm Completion** - All requirements satisfied
