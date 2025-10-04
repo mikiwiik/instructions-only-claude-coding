@@ -65,8 +65,7 @@ Request:
   "initialTodos": [
     {
       "text": "Milk",
-      "completed": false,
-      "priority": "medium"
+      "completed": false
     }
   ]
 }
@@ -91,7 +90,6 @@ Response: 201 Created
       "id": "8a9b0c1d-2e3f-4a5b-6c7d-8e9f0a1b2c3d",
       "text": "Milk",
       "completed": false,
-      "priority": "medium",
       "createdAt": "2025-01-04T10:00:00.000Z",
       "updatedAt": "2025-01-04T10:00:00.000Z",
       "syncVersion": 1,
@@ -504,6 +502,7 @@ if (count > rateLimit.maxRequests) {
   ```
 
 - **Event Types**: Explicit change types enable semantic announcements
+
   ```typescript
   // Enables: "John marked 'Buy milk' as complete"
   SyncResponse.serverChanges includes lastEditedBy
@@ -512,6 +511,7 @@ if (count > rateLimit.maxRequests) {
 #### Structured Error Responses
 
 - **Accessible Error Messages**: Conflict responses provide semantic data
+
   ```typescript
   // 409 Conflict response supports:
   // "Cannot save. Sarah updated this item while you were editing."
@@ -526,6 +526,7 @@ if (count > rateLimit.maxRequests) {
 #### Participant Activity Data
 
 - **Presence Indicators**: Activity data supports accessible presence indicators
+
   ```typescript
   // Enables: "Sarah is currently active" (not just green dot)
   PUT /api/v1/lists/{id}/presence
