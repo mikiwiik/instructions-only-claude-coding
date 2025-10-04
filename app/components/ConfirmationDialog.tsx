@@ -182,20 +182,28 @@ export default function ConfirmationDialog({
 
   const variantStyles = getVariantStyles();
 
+  const handleBackdropKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleBackdropClick(event as unknown as React.MouseEvent);
+    }
+  };
+
   return (
     <div
       ref={backdropRef}
       className='fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm fade-in'
       onClick={handleBackdropClick}
-      role='dialog'
-      aria-modal='true'
-      aria-labelledby='dialog-title'
-      aria-describedby='dialog-description'
+      onKeyDown={handleBackdropKeyDown}
+      role='presentation'
     >
       <div
         ref={dialogRef}
         className='relative w-full max-w-md bg-background rounded-lg shadow-lg border fade-in safe-area-inset'
-        role='document'
+        role='dialog'
+        aria-modal='true'
+        aria-labelledby='dialog-title'
+        aria-describedby='dialog-description'
       >
         {/* Close button */}
         <button
