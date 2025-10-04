@@ -82,6 +82,43 @@ This project serves as a **template and reference** for:
 - npm 10.x or higher
 - Claude Code Pro subscription ([setup guide](docs/setup/installation.md))
 
+### Authentication Setup
+
+Claude Code supports two authentication methods for API access:
+
+#### API Key Authentication (Recommended for Long Sessions)
+
+- Prevents OAuth token expiration during extended development sessions
+- No interruptions from 401 authentication errors
+- Ideal for continuous workflow
+
+**Configuration Steps:**
+
+1. Visit [Anthropic Console](https://console.anthropic.com/)
+2. Navigate to Claude Code section on main page
+3. Click "Create API key"
+4. Add `export ANTHROPIC_API_KEY="your_api_key_here"` to `~/.zprofile` (or `~/.bashrc` for bash), replacing
+   `your_api_key_here` with your actual API key
+5. Run `/logout` in Claude Code to switch to API key authentication
+6. Restart your terminal or run `source ~/.zprofile`
+
+#### OAuth Authentication
+
+- Quick setup for shorter sessions
+- May require re-authentication every few hours
+- Can cause 401 errors during long coding sessions
+
+#### Troubleshooting 401 Authentication Errors
+
+If you encounter 401 authentication errors during development:
+
+1. Switch to API key authentication (recommended for long sessions)
+2. Or re-authenticate with OAuth in Claude Code settings
+3. Verify your API key/token has necessary permissions
+4. Check token expiration in Anthropic Console
+
+For detailed authentication documentation, see [Claude Code Authentication Guide](https://docs.claude.com/en/docs/claude-code/).
+
 ### Installation
 
 ```bash
@@ -207,6 +244,7 @@ The project includes custom slash commands for enhanced development workflow:
 - **`/select-next-issue [filter]`** - Get strategic recommendations for next issue to work on
 - **`/quick-wins`** - Find high-value, low-effort development opportunities
 - **`/parallel-work <issue-number>`** - Set up coordinated parallel agent execution for complex issues
+- **`/create-pr`** - Create pull request with automerge following the agreed workflow (docs/core/workflows.md)
 
 These commands are defined in `.claude/commands/` and integrate with the project's development methodology.
 

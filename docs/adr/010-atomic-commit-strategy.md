@@ -53,6 +53,30 @@ Optional footer for breaking changes or issue closure
 - **Code Review**: Each commit can be reviewed individually for focused feedback
 - **Documentation**: Separate commits for documentation updates related to the feature
 
+### Merge Strategy
+
+**🚨 DEFAULT: Rebase Merge** - To preserve the atomic commit strategy when merging PRs to main:
+
+- **Use `--rebase` by default**: Replays all commits from the feature branch onto main, preserving individual commits
+  and maintaining linear history
+- **Avoid `--squash`**: Squashing destroys the atomic commit history we carefully crafted, defeating the purpose of
+  this ADR
+- **Use `--squash` only for trivial changes**: Single-commit PRs like typo fixes or minor doc updates where atomic
+  history provides no value
+
+**Rationale:**
+
+The rebase merge strategy directly supports the atomic commit philosophy:
+
+- ✅ All individual commits remain visible in main branch history
+- ✅ Each commit's AI attribution and co-authorship is preserved
+- ✅ Git bisect can pinpoint the exact commit that introduced an issue
+- ✅ Code review benefits carry over to the main branch
+- ✅ Development progression remains traceable in production history
+
+Using squash merge by default would contradict the core principles of this ADR by collapsing carefully structured
+atomic commits into a single monolithic change.
+
 ## Consequences
 
 ### Positive
