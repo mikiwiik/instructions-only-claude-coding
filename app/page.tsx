@@ -95,6 +95,16 @@ export default function HomePage() {
               Claude Code
             </a>
           </p>
+          <p className='mt-2'>
+            <a
+              href='https://github.com/mikiwiik/instructions-only-claude-coding/'
+              className='text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              View on GitHub
+            </a>
+          </p>
         </footer>
       </div>
     </div>
