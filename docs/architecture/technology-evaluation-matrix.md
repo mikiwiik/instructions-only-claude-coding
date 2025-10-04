@@ -1,27 +1,34 @@
 # Technology Evaluation Matrix: Backend Persistence Solutions
 
 **Document Version**: 1.0
+
 **Date**: 2025-09-27
-**Related ADR**: [ADR-013: Shared Lists Backend Architecture](../adr/ADR-013-shared-lists-backend-architecture.md)
-**Related Issue**: [#85 - Scope backend persistence and multi-device sync architecture](https://github.com/mikiwiik/instructions-only-claude-coding/issues/85)
+
+**Related ADR**:
+[ADR-013: Shared Lists Backend Architecture](../adr/ADR-013-shared-lists-backend-architecture.md)
+
+**Related Issue**:
+[#85 - Scope backend persistence and multi-device sync architecture](https://github.com/mikiwiik/instructions-only-claude-coding/issues/85)
 
 ## Evaluation Overview
 
-This document provides a comprehensive comparison of backend technology options for implementing shared todo lists with multi-device synchronization. Each option is evaluated across multiple criteria relevant to the project's educational goals and technical requirements.
+This document provides a comprehensive comparison of backend technology options for implementing shared todo lists
+with multi-device synchronization. Each option is evaluated across multiple criteria relevant to the project's
+educational goals and technical requirements.
 
 ## Evaluation Criteria
 
 ### Primary Criteria (Weighted)
 
-| Criterion | Weight | Description |
-|-----------|--------|-------------|
-| **Educational Value** | 25% | How much does this technology teach about modern web development? |
-| **Development Velocity** | 20% | How quickly can features be implemented and deployed? |
-| **Cost Effectiveness** | 15% | Total cost of ownership including development and operations |
-| **Integration Ease** | 15% | How well does it integrate with existing Next.js codebase? |
-| **Scalability** | 10% | Ability to handle growth in users and data |
-| **Maintenance Burden** | 10% | Ongoing effort required to maintain and update |
-| **Learning Curve** | 5% | Time needed to become productive with the technology |
+| Criterion                | Weight | Description                                                       |
+| ------------------------ | ------ | ----------------------------------------------------------------- |
+| **Educational Value**    | 25%    | How much does this technology teach about modern web development? |
+| **Development Velocity** | 20%    | How quickly can features be implemented and deployed?             |
+| **Cost Effectiveness**   | 15%    | Total cost of ownership including development and operations      |
+| **Integration Ease**     | 15%    | How well does it integrate with existing Next.js codebase?        |
+| **Scalability**          | 10%    | Ability to handle growth in users and data                        |
+| **Maintenance Burden**   | 10%    | Ongoing effort required to maintain and update                    |
+| **Learning Curve**       | 5%     | Time needed to become productive with the technology              |
 
 ### Secondary Criteria
 
@@ -45,9 +52,9 @@ This document provides a comprehensive comparison of backend technology options 
 
 #### Detailed Evaluation
 
-**✅ Strengths**
+### Vercel Stack Strengths
 
-```
+```text
 Educational Value (9/10):
 - Demonstrates serverless architecture patterns
 - Shows modern edge computing concepts
@@ -77,9 +84,9 @@ Integration Ease (10/10):
 - Single vendor for entire stack
 ```
 
-**⚠️ Limitations**
+### Vercel Stack Limitations
 
-```
+```text
 Vendor Lock-in (High):
 - Tightly coupled to Vercel ecosystem
 - KV data format specific to Vercel
@@ -100,7 +107,10 @@ Scalability Ceiling:
 
 ```typescript
 // API Route: /api/shared/[listId]/sync.ts
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { listId } = req.query;
   const { operations } = req.body;
 
@@ -118,11 +128,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 // Real-time subscription
-export default async function subscribe(req: NextApiRequest, res: NextApiResponse) {
+export default async function subscribe(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
     'Cache-Control': 'no-cache',
-    'Connection': 'keep-alive'
+    Connection: 'keep-alive',
   });
 
   // Stream updates to client
@@ -149,9 +162,9 @@ export default async function subscribe(req: NextApiRequest, res: NextApiRespons
 
 #### Detailed Evaluation
 
-**✅ Strengths**
+### Supabase Strengths
 
-```
+```text
 Educational Value (8/10):
 - Teaches PostgreSQL and relational database concepts
 - Demonstrates Row Level Security (RLS)
@@ -174,9 +187,9 @@ Developer Experience (8/10):
 - Strong community support
 ```
 
-**⚠️ Limitations**
+### Supabase Limitations
 
-```
+```text
 Integration Complexity (6/10):
 - Additional service to configure
 - Separate authentication system
@@ -200,33 +213,40 @@ Learning Curve (6/10):
 
 ```typescript
 // Supabase client setup
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
 
 // Real-time subscription
 useEffect(() => {
   const subscription = supabase
     .channel(`list:${listId}`)
-    .on('postgres_changes', {
-      event: '*',
-      schema: 'public',
-      table: 'todos',
-      filter: `list_id=eq.${listId}`
-    }, (payload) => {
-      handleRealTimeUpdate(payload);
-    })
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'todos',
+        filter: `list_id=eq.${listId}`,
+      },
+      (payload) => {
+        handleRealTimeUpdate(payload);
+      }
+    )
     .subscribe();
 
   return () => subscription.unsubscribe();
 }, [listId]);
 
 // Database operations
-const { data, error } = await supabase
-  .from('todos')
-  .insert([{
+const { data, error } = await supabase.from('todos').insert([
+  {
     text: todoText,
     list_id: listId,
-    created_at: new Date().toISOString()
-  }]);
+    created_at: new Date().toISOString(),
+  },
+]);
 ```
 
 #### Score: 78/100
@@ -245,9 +265,9 @@ const { data, error } = await supabase
 
 #### Detailed Evaluation
 
-**✅ Strengths**
+### Firebase Strengths
 
-```
+```text
 Real-time Performance (9/10):
 - Excellent WebSocket performance
 - Optimistic updates built-in
@@ -270,9 +290,9 @@ Ecosystem Maturity (9/10):
 - Google infrastructure reliability
 ```
 
-**⚠️ Limitations**
+### Firebase Limitations
 
-```
+```text
 Vendor Lock-in (3/10):
 - Extremely tight Google coupling
 - Proprietary APIs and data formats
@@ -305,9 +325,9 @@ useEffect(() => {
   const unsubscribe = onSnapshot(
     collection(db, 'lists', listId, 'todos'),
     (snapshot) => {
-      const todos = snapshot.docs.map(doc => ({
+      const todos = snapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }));
       setTodos(todos);
     }
@@ -323,7 +343,7 @@ const addTodo = async (text: string) => {
     text,
     completed: false,
     createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp()
+    updatedAt: serverTimestamp(),
   });
 };
 ```
@@ -344,9 +364,9 @@ const addTodo = async (text: string) => {
 
 #### Detailed Evaluation
 
-**✅ Strengths**
+### Custom Backend Strengths
 
-```
+```text
 Educational Value (10/10):
 - Full-stack development experience
 - Database design and optimization
@@ -369,9 +389,9 @@ Transferable Skills (9/10):
 - Common deployment scenarios
 ```
 
-**⚠️ Limitations**
+### Custom Backend Limitations
 
-```
+```text
 Development Time (3/10):
 - Significant setup overhead
 - Security implementation complexity
@@ -404,14 +424,14 @@ const io = new Server(server);
 
 // Database connection
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
+  connectionString: process.env.DATABASE_URL,
 });
 
 // WebSocket real-time updates
 io.to(`list:${listId}`).emit('todo-updated', {
   todoId,
   operation: 'create',
-  data: newTodo
+  data: newTodo,
 });
 
 // API endpoint
@@ -445,9 +465,9 @@ app.post('/api/lists/:listId/todos', async (req, res) => {
 
 #### Detailed Evaluation
 
-**✅ Strengths**
+### tRPC Stack Strengths
 
-```
+```text
 Type Safety (10/10):
 - End-to-end TypeScript type safety
 - Compile-time API validation
@@ -470,9 +490,9 @@ Database Innovation (8/10):
 - Production-safe migrations
 ```
 
-**⚠️ Limitations**
+### tRPC Stack Limitations
 
-```
+```text
 Learning Curve (5/10):
 - tRPC concepts and patterns
 - PlanetScale branching workflow
@@ -504,24 +524,26 @@ export const todoRouter = router({
     .input(z.object({ listId: z.string() }))
     .query(async ({ input }) => {
       return await db.todo.findMany({
-        where: { listId: input.listId }
+        where: { listId: input.listId },
       });
     }),
 
   create: procedure
-    .input(z.object({
-      listId: z.string(),
-      text: z.string()
-    }))
+    .input(
+      z.object({
+        listId: z.string(),
+        text: z.string(),
+      })
+    )
     .mutation(async ({ input }) => {
       return await db.todo.create({
         data: {
           listId: input.listId,
           text: input.text,
-          createdAt: new Date()
-        }
+          createdAt: new Date(),
+        },
       });
-    })
+    }),
 });
 
 // Client usage (fully type-safe)
@@ -535,16 +557,16 @@ const createTodo = trpc.todo.create.useMutation();
 
 ## Comparison Matrix
 
-| Criteria | Weight | Vercel Stack | Supabase | Firebase | Custom Node.js | PlanetScale+tRPC |
-|----------|--------|--------------|----------|----------|----------------|------------------|
-| **Educational Value** | 25% | 9 | 8 | 6 | 10 | 8 |
-| **Development Velocity** | 20% | 9 | 7 | 8 | 3 | 6 |
-| **Cost Effectiveness** | 15% | 10 | 7 | 5 | 6 | 6 |
-| **Integration Ease** | 15% | 10 | 6 | 5 | 4 | 7 |
-| **Scalability** | 10% | 7 | 9 | 9 | 8 | 8 |
-| **Maintenance Burden** | 10% | 9 | 7 | 6 | 3 | 6 |
-| **Learning Curve** | 5% | 8 | 6 | 4 | 5 | 5 |
-| **Weighted Score** | | **92** | **78** | **72** | **65** | **74** |
+| Criteria                 | Weight | Vercel Stack | Supabase | Firebase | Custom Node.js | PlanetScale+tRPC |
+| ------------------------ | ------ | ------------ | -------- | -------- | -------------- | ---------------- |
+| **Educational Value**    | 25%    | 9            | 8        | 6        | 10             | 8                |
+| **Development Velocity** | 20%    | 9            | 7        | 8        | 3              | 6                |
+| **Cost Effectiveness**   | 15%    | 10           | 7        | 5        | 6              | 6                |
+| **Integration Ease**     | 15%    | 10           | 6        | 5        | 4              | 7                |
+| **Scalability**          | 10%    | 7            | 9        | 9        | 8              | 8                |
+| **Maintenance Burden**   | 10%    | 9            | 7        | 6        | 3              | 6                |
+| **Learning Curve**       | 5%     | 8            | 6        | 4        | 5              | 5                |
+| **Weighted Score**       |        | **92**       | **78**   | **72**   | **65**         | **74**           |
 
 ## Decision Rationale
 
@@ -617,7 +639,8 @@ The Vercel stack provides the best balance of:
 
 ### Immediate Action: Proceed with Vercel Stack
 
-**Rationale**: The evaluation clearly demonstrates that the Vercel-native approach provides the optimal combination of educational value, development velocity, and cost effectiveness for this project's goals.
+**Rationale**: The evaluation clearly demonstrates that the Vercel-native approach provides the optimal combination
+of educational value, development velocity, and cost effectiveness for this project's goals.
 
 ### Future Evaluation Triggers
 
@@ -639,4 +662,5 @@ If migration becomes necessary:
 
 ---
 
-**This evaluation matrix provides the foundation for the architectural decision while maintaining flexibility for future evolution as requirements change.**
+**This evaluation matrix provides the foundation for the architectural decision while maintaining flexibility for
+future evolution as requirements change.**
