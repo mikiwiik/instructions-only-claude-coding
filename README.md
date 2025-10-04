@@ -4,6 +4,18 @@
 
 **🌐 Live Demo**: [Todo App on Vercel](https://instructions-only-claude-coding.vercel.app/)
 
+## What is this TODO App?
+
+A modern, accessible todo application with advanced features for managing your todos:
+
+- **Todo Management**: Add, edit, delete, and toggle completion status for todos
+- **Touch Gestures**: Swipe right to complete, swipe left to delete, long press to edit todos
+- **Keyboard Support**: Full keyboard navigation and accessibility (WCAG 2.2 AA compliant)
+- **Local Persistence**: Automatic saving of todos to browser storage
+- **Responsive Design**: Optimized for mobile and desktop devices
+
+Built with Next.js 14, TypeScript, and Tailwind CSS, demonstrating modern web development best practices.
+
 ## Project Purpose
 
 **This project demonstrates groundbreaking agentic coding methodology** - building complete, production-ready software
@@ -80,44 +92,10 @@ This project serves as a **template and reference** for:
 
 - Node.js 22.x or higher
 - npm 10.x or higher
-- Claude Code Pro subscription ([setup guide](docs/setup/installation.md))
+- Claude Code Pro subscription
 
-### Authentication Setup
-
-Claude Code supports two authentication methods for API access:
-
-#### API Key Authentication (Recommended for Long Sessions)
-
-- Prevents OAuth token expiration during extended development sessions
-- No interruptions from 401 authentication errors
-- Ideal for continuous workflow
-
-**Configuration Steps:**
-
-1. Visit [Anthropic Console](https://console.anthropic.com/)
-2. Navigate to Claude Code section on main page
-3. Click "Create API key"
-4. Add `export ANTHROPIC_API_KEY="your_api_key_here"` to `~/.zprofile` (or `~/.bashrc` for bash), replacing
-   `your_api_key_here` with your actual API key
-5. Run `/logout` in Claude Code to switch to API key authentication
-6. Restart your terminal or run `source ~/.zprofile`
-
-#### OAuth Authentication
-
-- Quick setup for shorter sessions
-- May require re-authentication every few hours
-- Can cause 401 errors during long coding sessions
-
-#### Troubleshooting 401 Authentication Errors
-
-If you encounter 401 authentication errors during development:
-
-1. Switch to API key authentication (recommended for long sessions)
-2. Or re-authenticate with OAuth in Claude Code settings
-3. Verify your API key/token has necessary permissions
-4. Check token expiration in Anthropic Console
-
-For detailed authentication documentation, see [Claude Code Authentication Guide](https://docs.claude.com/en/docs/claude-code/).
+**Complete setup instructions**: See [Installation Guide](docs/setup/installation.md) for Claude Code authentication,
+troubleshooting, and development environment setup.
 
 ### Installation
 
@@ -133,26 +111,8 @@ npm run dev
 
 Visit `http://localhost:3000` to see the application.
 
-### Available Commands
-
-```bash
-npm run dev          # Start development server
-npm run build        # Create production build
-npm run test         # Run test suite
-npm run lint         # Run code linting
-npm run type-check   # TypeScript type checking
-```
-
-### Performance Monitoring
-
-The application includes **Vercel Speed Insights** for real-time Core Web Vitals monitoring:
-
-- **Access Metrics**: Visit your [Vercel Dashboard](https://vercel.com/dashboard) → Project → Analytics
-- **Core Web Vitals**: Monitor LCP, FID, CLS performance metrics from real users
-- **Optimization Tracking**: Measure impact of performance improvements over time
-- **Real User Monitoring**: Actual user experience data across devices and networks
-
-Speed Insights automatically collects performance data when the app is deployed to Vercel.
+**Development Commands**: See [Development Workflow](docs/development/workflow.md) for all available npm commands, quality
+checks, and testing scripts.
 
 ## Technology Stack
 
@@ -162,7 +122,6 @@ Speed Insights automatically collects performance data when the app is deployed 
 - **Testing**: Jest + React Testing Library
 - **Development**: Test-Driven Development (TDD)
 - **Code Quality**: SonarCloud for automated analysis
-- **Analytics**: Vercel Speed Insights for Core Web Vitals monitoring
 - **Mobile**: Touch gestures with accessibility-first design (WCAG 2.2 AA compliant)
 - **Deployment**: Vercel with GitHub Actions CI/CD
 
@@ -179,14 +138,10 @@ Speed Insights automatically collects performance data when the app is deployed 
 
 ## Development Status
 
-**Current Workflow**: Branch-based development with automated PR workflow
+**Current Workflow**: Branch-based development with automated PR workflow. All features developed on separate branches
+with required approvals, automated merging, and continuous deployment.
 
-- Features developed on separate branches (`feature/issue-number-description`)
-- Pull requests require 1 approver and passing CI checks (enforced by branch protection)
-- Automerge enabled for streamlined workflow after requirements met
-- Automatic branch deletion keeps repository clean
-- Main branch maintains stable, tested code
-- Automatic deployment to production after successful CI
+See [Development Workflow](docs/development/workflow.md) for complete branch strategy, PR requirements, and CI/CD details.
 
 ## Documentation
 
@@ -211,42 +166,15 @@ Speed Insights automatically collects performance data when the app is deployed 
 
 ## Contributing
 
-### Getting Started
+**Quick Start**: Review [installation guide](docs/setup/installation.md), understand the
+[development workflow](docs/development/workflow.md), browse [GitHub issues](https://github.com/mikiwiik/instructions-only-claude-coding/issues),
+and follow TDD with branch-based development.
 
-1. **Review Documentation**: Start with the [installation guide](docs/setup/installation.md)
-2. **Understand Workflow**: Read the [development workflow](docs/development/workflow.md)
-3. **Check Issues**: Browse [GitHub issues](https://github.com/mikiwiik/instructions-only-claude-coding/issues) for tasks
-4. **Follow Standards**: Adhere to project [coding standards](docs/development/workflow.md)
+**Issue Management**: Priority labels (🔴 critical → 🟢 low) and complexity labels (🟢 minimal → 🔴 epic) guide
+development planning. See [project management guide](docs/development/project-management.md).
 
-### Development Process
-
-1. **Create Branch**: `feature/issue-number-description`
-2. **Follow TDD**: Write tests first, then implementation
-3. **Maintain Quality**: Pre-commit hooks ensure code quality
-4. **Create PR**: Submit pull request for review
-5. **Enable Automerge**: Streamlined workflow with `gh pr merge --auto --squash`
-6. **CI Validation**: Automatic merge after approval and passing checks
-
-### Issue Management
-
-The project uses GitHub Issues with priority and complexity labels:
-
-- **Priority**: `priority-1-critical` 🔴 to `priority-4-low` 🟢
-- **Complexity**: `complexity-minimal` 🟢 to `complexity-epic` 🔴
-
-See [project management guide](docs/development/project-management.md) for detailed workflows.
-
-### Custom Slash Commands
-
-The project includes custom slash commands for enhanced development workflow:
-
-- **`/work-on <issue-number>`** - Start working on specific GitHub issue with full workflow setup
-- **`/select-next-issue [filter]`** - Get strategic recommendations for next issue to work on
-- **`/quick-wins`** - Find high-value, low-effort development opportunities
-- **`/parallel-work <issue-number>`** - Set up coordinated parallel agent execution for complex issues
-- **`/create-pr`** - Create pull request with automerge following the agreed workflow (docs/core/workflows.md)
-
-These commands are defined in `.claude/commands/` and integrate with the project's development methodology.
+**Custom Slash Commands**: The project includes custom slash commands (`/work-on`, `/select-next-issue`, `/quick-wins`,
+`/create-pr`) for enhanced workflow. Commands are defined in `.claude/commands/`.
 
 ## Features
 
