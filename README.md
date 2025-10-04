@@ -233,6 +233,7 @@ The project includes custom slash commands for enhanced development workflow:
 - **`/select-next-issue [filter]`** - Get strategic recommendations for next issue to work on
 - **`/quick-wins`** - Find high-value, low-effort development opportunities
 - **`/parallel-work <issue-number>`** - Set up coordinated parallel agent execution for complex issues
+- **`/create-pr`** - Create pull request with automerge following the agreed workflow (docs/core/workflows.md)
 
 These commands are defined in `.claude/commands/` and integrate with the project's development methodology.
 
