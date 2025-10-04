@@ -1,7 +1,7 @@
 <svg width="400" height="700" xmlns="http://www.w3.org/2000/svg">
   <!-- Screen boundary -->
   <rect x="10" y="10" width="380" height="680" fill="#f8f9fa" stroke="#dee2e6" stroke-width="2"/>
-  <text x="200" y="30" text-anchor="middle" font-family="monospace" font-size="11" fill="#666">iPhone 14 (393px width)</text>
+  <text x="200" y="30" text-anchor="middle" font-family="monospace" font-size="11" fill="#666">Mobile (&lt; 640px)</text>
 
   <!-- Page Container (entire screen area) -->
   <rect x="20" y="50" width="360" height="620" fill="none" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="5,5"/>

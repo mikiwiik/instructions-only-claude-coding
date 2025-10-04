@@ -421,7 +421,7 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 ## Distance Calculations
 
-### Mobile (393px iPhone 14)
+### Mobile (< 640px)
 
 **Horizontal**:
 
