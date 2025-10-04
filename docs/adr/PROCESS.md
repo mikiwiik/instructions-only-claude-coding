@@ -68,6 +68,32 @@ Create an ADR whenever making decisions about:
 - **Naming**: `###-kebab-case-title.md` (e.g., `009-api-client-library.md`)
 - **Numbering**: Sequential, starting from 001
 
+### Naming Convention
+
+ADRs follow a strict naming pattern with distinct filename and header formats:
+
+**Filename format**: `###-kebab-case-title.md`
+
+- Sequential three-digit number (e.g., `001`, `015`, `023`)
+- Kebab-case title describing the decision
+- Examples:
+  - `001-nextjs-app-router.md`
+  - `015-ai-agent-attribution-strategy.md`
+  - `023-component-isolation-testing.md`
+
+**Header format**: `# ADR-###: Title`
+
+- "ADR-" prefix followed by the number
+- Colon separator
+- Descriptive title in sentence case
+- Examples:
+  - `# ADR-001: Use Next.js 14 with App Router`
+  - `# ADR-015: AI Agent Attribution Strategy`
+  - `# ADR-023: Component Isolation Testing Strategy`
+
+**Important**: Notice the distinction - filenames use simple numbers (`015-`), while headers include the "ADR-" prefix
+(`ADR-015:`). This maintains consistency across the codebase.
+
 ## Example Scenarios Requiring ADRs
 
 ### Adding New Features
