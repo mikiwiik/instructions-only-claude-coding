@@ -8,24 +8,19 @@ describe('HomePage', () => {
     localStorage.clear();
   });
 
-  it('renders the Todo App title', () => {
+  it('renders the TODO title', () => {
     render(<HomePage />);
 
-    const heading = screen.getByRole('heading', { name: /todo app/i });
+    const heading = screen.getByRole('heading', { name: /^TODO$/i });
     expect(heading).toBeInTheDocument();
   });
 
-  it('displays the app description', () => {
+  it('includes agent implementation attribution', () => {
     render(<HomePage />);
 
-    const description = screen.getByText(
-      /next\.js todo application built with test-driven development/i
-    );
-    expect(description).toBeInTheDocument();
-  });
-
-  it('includes Claude Code attribution', () => {
-    render(<HomePage />);
+    expect(
+      screen.getByText(/100% agent implemented - 100% human instructed/i)
+    ).toBeInTheDocument();
 
     const claudeLink = screen.getByRole('link', { name: /claude code/i });
     expect(claudeLink).toBeInTheDocument();
