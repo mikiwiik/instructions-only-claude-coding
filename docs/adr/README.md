@@ -11,22 +11,7 @@ and their rationale.
 
 ## Naming Convention
 
-ADRs follow a specific naming convention to ensure consistency:
-
-**Filename format**: `###-kebab-case-title.md`
-
-- Sequential three-digit number (e.g., `001`, `015`, `023`)
-- Kebab-case title describing the decision
-- Examples: `001-nextjs-app-router.md`, `015-ai-agent-attribution-strategy.md`
-
-**Header format**: `# ADR-###: Title`
-
-- "ADR-" prefix followed by the number
-- Colon separator
-- Descriptive title in sentence case
-- Examples: `# ADR-001: Use Next.js 14 with App Router`, `# ADR-015: AI Agent Attribution Strategy`
-
-**Key distinction**: Filenames use simple numbers (`001-`), while headers include the "ADR-" prefix (`ADR-001:`).
+See [PROCESS.md](PROCESS.md#naming-convention) for detailed naming convention guidelines.
 
 ## ADR Format
 
