@@ -35,11 +35,6 @@ export interface TodoState {
 // ==================== SHARED LIST TYPES ====================
 
 /**
- * Priority levels for todo items
- */
-export type Priority = 'low' | 'medium' | 'high';
-
-/**
  * Extended todo item for shared lists
  * Includes synchronization and authorship metadata
  */
@@ -52,8 +47,6 @@ export interface SharedTodo extends Todo {
   lastModifiedBy: string;
   /** Version number for conflict resolution (increments on each update) */
   syncVersion: number;
-  /** Optional priority level */
-  priority?: Priority;
 }
 
 /**
@@ -189,11 +182,6 @@ const UUID_REGEX =
 const UUIDSchema = z.string().regex(UUID_REGEX, 'Invalid UUID format');
 
 /**
- * Priority enum schema
- */
-export const PrioritySchema = z.enum(['low', 'medium', 'high']);
-
-/**
  * Base Todo schema
  */
 export const TodoSchema = z.object({
@@ -225,7 +213,6 @@ export const SharedTodoSchema = z.object({
   authorId: UUIDSchema,
   lastModifiedBy: UUIDSchema,
   syncVersion: z.number().int().positive(),
-  priority: PrioritySchema.optional(),
 });
 
 /**

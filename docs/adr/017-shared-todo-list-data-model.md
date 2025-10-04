@@ -34,7 +34,6 @@ export interface Todo {
   id: string; // UUID v4
   text: string;
   completed: boolean;
-  priority: Priority; // 'low' | 'medium' | 'high'
   createdAt: Date;
   updatedAt: Date;
 }
