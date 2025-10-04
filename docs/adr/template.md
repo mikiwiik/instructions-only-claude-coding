@@ -1,8 +1,8 @@
-# ADR-XXX: [Decision Title]
+# ADR-###: [Decision Title]
 
 ## Status
 
-[Proposed | Accepted | Deprecated | Superseded by ADR-XXX]
+[Proposed | Accepted | Deprecated | Superseded by ADR-###]
 
 ## Context
 
