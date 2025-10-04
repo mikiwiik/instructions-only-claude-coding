@@ -548,9 +548,6 @@ When discussing layout changes, use these component names and terminology for cl
   practices
 - [Accessibility Requirements](../guidelines/accessibility-requirements.md) - Touch target requirements
   (44×44px minimum)
-- [Issue #163](https://github.com/user/repo/issues/163) - Mobile UX improvements context
-- [PR #166](https://github.com/user/repo/pulls/166) - Mobile UX implementation
-- [Issue #169](https://github.com/user/repo/issues/169) - Layout documentation improvements
 
 ---
 
