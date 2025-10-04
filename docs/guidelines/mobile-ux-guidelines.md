@@ -415,36 +415,8 @@ Use browser dev tools to overlay touch target sizes:
 
 ---
 
-## Design Tokens Reference
-
-### Spacing Scale
-
-```text
-gap-0.5 = 2px   (tight mobile button groups)
-gap-1   = 4px   (normal mobile button groups)
-gap-2   = 8px   (desktop button groups)
-gap-3   = 12px  (list item spacing desktop)
-
-p-1.5   = 6px   (compact mobile button padding)
-p-2     = 8px   (normal mobile/desktop item padding)
-p-4     = 16px  (spacious desktop item padding)
-p-5     = 20px  (desktop container padding)
-```
-
-### Breakpoints
-
-```text
-sm:  640px  (tablet/desktop transition)
-md:  768px  (larger tablets)
-lg:  1024px (desktop)
-```
-
-### Touch Target Sizes
-
-```text
-min-w-[44px] min-h-[44px]  (WCAG 2.2 AA minimum)
-min-w-[48px] min-h-[48px]  (More comfortable, AAA recommended)
-```
+> **Note**: For complete spacing scale, breakpoints, and design token reference, see
+> [Layout and Spacing Reference](../design/layout-and-spacing-reference.md).
 
 ---
 
