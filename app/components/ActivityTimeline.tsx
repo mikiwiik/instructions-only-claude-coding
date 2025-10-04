@@ -34,20 +34,14 @@ export default function ActivityTimeline({ todos }: ActivityTimelineProps) {
     >
       {Object.entries(groupedActivities).map(([timeGroup, timeActivities]) => (
         <div key={timeGroup} className='space-y-2 sm:space-y-3'>
-          <h3
-            className='text-base sm:text-lg font-semibold text-foreground border-b border-border pb-1 sm:pb-2'
-            role='heading'
-            aria-level={3}
-          >
+          <h3 className='text-base sm:text-lg font-semibold text-foreground border-b border-border pb-1 sm:pb-2'>
             {timeGroup}
           </h3>
-          <ul className='space-y-1 sm:space-y-2' role='list'>
+          <ul className='space-y-1 sm:space-y-2'>
             {timeActivities.map((activity) => (
               <li
                 key={activity.id}
-                className='flex items-start space-x-2 sm:space-x-3 p-2 sm:p-3 rounded-md bg-muted/50 hover:bg-muted transition-colors focus-within:bg-muted focus-within:ring-2 focus-within:ring-ring'
-                role='listitem'
-                tabIndex={0}
+                className='flex items-start space-x-2 sm:space-x-3 p-2 sm:p-3 rounded-md bg-muted/50 hover:bg-muted transition-colors'
                 aria-label={`${activity.action} "${activity.todoText}" ${formatRelativeTime(activity.timestamp)}`}
               >
                 <div className='flex-shrink-0 mt-0.5'>
