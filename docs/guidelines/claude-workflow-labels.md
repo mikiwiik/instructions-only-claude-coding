@@ -1,12 +1,15 @@
 # Claude-Workflow Label Usage Guidelines
 
-This document provides comprehensive guidelines for using the `claude-workflow` label in the Todo App project for issues related to Claude Code usage, AI collaboration, and instruction-based development methodology.
+This document provides comprehensive guidelines for using the `claude-workflow` label in the Todo App project for
+issues related to Claude Code usage, AI collaboration, and instruction-based development methodology.
 
 ## Label Definition
 
-> **claude-workflow** 🟣: Issues related to Claude Code usage, instructions, AI collaboration patterns, and agentic coding methodology improvements.
+> **claude-workflow** 🟣: Issues related to Claude Code usage, instructions, AI collaboration patterns, and agentic coding
+> methodology improvements.
 
-The `claude-workflow` label identifies issues that specifically relate to improving how humans and AI collaborate in this instruction-only development project, rather than general software development tasks.
+The `claude-workflow` label identifies issues that specifically relate to improving how humans and AI collaborate in
+this instruction-only development project, rather than general software development tasks.
 
 ## When to Use claude-workflow Label
 
@@ -72,7 +75,7 @@ The `claude-workflow` label identifies issues that specifically relate to improv
 
 **Typical Patterns:**
 
-```
+```text
 feat: improve Claude instruction for [specific workflow]
 docs: clarify AI collaboration guidelines for [specific process]
 process: enhance instruction-based [specific methodology]
@@ -94,7 +97,7 @@ process: enhance instruction-based [specific methodology]
 
 **Typical Patterns:**
 
-```
+```text
 workflow: implement Claude Code agents for [specialized function]
 process: optimize AI task planning for [specific workflow]
 enhance: improve agentic coding [specific methodology]
@@ -116,7 +119,7 @@ enhance: improve agentic coding [specific methodology]
 
 **Typical Patterns:**
 
-```
+```text
 docs: create guidelines for [AI collaboration aspect]
 guide: document best practices for [instruction-based process]
 knowledge: capture learnings about [agentic coding methodology]
@@ -138,7 +141,7 @@ knowledge: capture learnings about [agentic coding methodology]
 
 **Typical Patterns:**
 
-```
+```text
 setup: configure Claude Code for [specific environment]
 config: optimize [tool] integration with Claude Code
 env: improve development environment for AI assistance
@@ -206,18 +209,23 @@ env: improve development environment for AI assistance
 
 ```markdown
 ## AI Collaboration Context
+
 [Explain how this relates to Claude Code usage or agentic coding]
 
 ## Current State
+
 [Describe current AI instruction or workflow state]
 
 ## Proposed Improvement
+
 [Detail the specific improvement to AI collaboration]
 
 ## Expected Benefits
+
 [Explain how this enhances instruction-based development]
 
 ## Implementation Notes
+
 [Any specific considerations for AI-assisted implementation]
 ```
 
@@ -300,4 +308,5 @@ If yes to any, add the claude-workflow label.
 
 ---
 
-This documentation ensures consistent and effective use of the claude-workflow label to improve AI collaboration and instruction-based development methodology in the Todo App project.
+This documentation ensures consistent and effective use of the claude-workflow label to improve AI collaboration and
+instruction-based development methodology in the Todo App project.
