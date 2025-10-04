@@ -334,15 +334,10 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 **File**: `app/page.tsx`
 
-**Mobile (default)**:
-
-- Horizontal padding: `px-0` = 0px (edge-to-edge layout)
-- Vertical padding: `py-6` = 24px
-
-**Desktop (≥ 640px - sm)**:
-
-- Horizontal padding: `px-6` = 24px
-- Vertical padding: `py-8` = 32px
+| Property           | Mobile (default)          | Desktop (≥640px) |
+| ------------------ | ------------------------- | ---------------- |
+| Horizontal padding | `px-0` (0px edge-to-edge) | `px-6` (24px)    |
+| Vertical padding   | `py-6` (24px)             | `py-8` (32px)    |
 
 **Purpose**: Edge-to-edge on mobile for maximum content area; contained on desktop
 
@@ -350,21 +345,20 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 **File**: `app/page.tsx`
 
-**Mobile**: `mb-6` = 24px bottom margin
-**Desktop**: `mb-8` = 32px bottom margin
-
-**Internal Spacing**:
-
-- Logo + title wrapper: `mb-3 sm:mb-4` = 12px → 16px
-- Icon + title gap: `gap-2 sm:gap-3` = 8px → 12px
+| Property             | Mobile (default) | Desktop (≥640px) |
+| -------------------- | ---------------- | ---------------- |
+| Bottom margin        | `mb-6` (24px)    | `mb-8` (32px)    |
+| Logo + title wrapper | `mb-3` (12px)    | `mb-4` (16px)    |
+| Icon + title gap     | `gap-2` (8px)    | `gap-3` (12px)   |
 
 ### 3. Main Card Container
 
 **File**: `app/page.tsx`
 
-**Mobile**: `p-0` = 0px all sides, `border-x-0` (no horizontal borders - edge-to-edge)
-**Small**: `p-5` = 20px all sides, `border-x` (full borders)
-**Medium**: `p-6` = 24px all sides
+| Property | Mobile (default)                     | Small (≥640px)            | Medium (≥768px) |
+| -------- | ------------------------------------ | ------------------------- | --------------- |
+| Padding  | `p-0` (0px, edge-to-edge)            | `p-5` (20px)              | `p-6` (24px)    |
+| Borders  | `border-x-0` (no horizontal borders) | `border-x` (full borders) | (same)          |
 
 **Purpose**: Edge-to-edge on mobile; contained card on desktop
 
@@ -372,61 +366,46 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 **File**: `app/components/TodoForm.tsx`
 
-**Container Margins**:
-
-- Mobile: `mb-4` = 16px bottom margin
-- Desktop: `mb-6` = 24px bottom margin
-
-**Textarea Padding**:
-
-- Mobile: `px-3 py-3` = 12px horizontal, 12px vertical
-- Desktop: `px-4 py-3` = 16px horizontal, 12px vertical
-
-**Button Padding**:
-
-- `px-4 sm:px-6 py-3` = 16px → 24px horizontal, 12px vertical
+| Property             | Mobile (default) | Desktop (≥640px) |
+| -------------------- | ---------------- | ---------------- |
+| Container margin     | `mb-4` (16px)    | `mb-6` (24px)    |
+| Textarea padding (H) | `px-3` (12px)    | `px-4` (16px)    |
+| Textarea padding (V) | `py-3` (12px)    | (same)           |
+| Button padding (H)   | `px-4` (16px)    | `px-6` (24px)    |
+| Button padding (V)   | `py-3` (12px)    | (same)           |
 
 ### 5. TodoFilter
 
 **File**: `app/components/TodoFilter.tsx`
 
-**Container**: `mb-4` = 16px bottom margin
-**Buttons**: `px-2 sm:px-3 py-2` = 8px → 12px horizontal, 8px vertical
-**Gap**: `gap-2` = 8px between buttons
+| Property           | Mobile (default) | Desktop (≥640px) |
+| ------------------ | ---------------- | ---------------- |
+| Container margin   | `mb-4` (16px)    | (same)           |
+| Button padding (H) | `px-2` (8px)     | `px-3` (12px)    |
+| Button padding (V) | `py-2` (8px)     | (same)           |
+| Button gap         | `gap-2` (8px)    | (same)           |
 
 ### 6. TodoList
 
 **File**: `app/components/TodoList.tsx`
 
-**Vertical Spacing**:
-
-- Mobile: `space-y-0` = 0px vertical gap (borders separate items)
-- Desktop: `space-y-3` = 12px vertical gap between items
-
-**Empty State**:
-
-- Padding: `py-8 sm:py-12` = 32px → 48px
+| Property         | Mobile (default)                          | Desktop (≥640px)   |
+| ---------------- | ----------------------------------------- | ------------------ |
+| Vertical spacing | `space-y-0` (0px, borders separate items) | `space-y-3` (12px) |
+| Empty state      | `py-8` (32px)                             | `py-12` (48px)     |
 
 ### 7. TodoItem
 
 **File**: `app/components/TodoItem.tsx`
 
-**Padding**:
-
-- Mobile: `p-2` = 8px all sides
-- Desktop: `p-4` = 16px all sides
-
-**Borders**:
-
-- Mobile: `rounded-none`, `border-t` only (except first), `border-x-0` (no sides)
-- Desktop: `rounded-lg`, full `border`
-
-**Internal Gaps**:
-
-- Main gap: `gap-2 sm:gap-3` = 8px → 12px
-- Button group gap: `gap-0.5 sm:gap-1` = 2px → 4px
-
-**Button Padding**: `p-1.5 sm:p-2` = 6px → 8px
+| Property         | Mobile (default)                             | Desktop (≥640px)        |
+| ---------------- | -------------------------------------------- | ----------------------- |
+| Padding          | `p-2` (8px all sides)                        | `p-4` (16px)            |
+| Corner radius    | `rounded-none` (flat)                        | `rounded-lg`            |
+| Borders          | `border-t` only (except first), `border-x-0` | Full `border` all sides |
+| Main gap         | `gap-2` (8px)                                | `gap-3` (12px)          |
+| Button group gap | `gap-0.5` (2px)                              | `gap-1` (4px)           |
+| Button padding   | `p-1.5` (6px)                                | `p-2` (8px)             |
 
 **Touch Targets**: All interactive elements maintain 44×44px minimum (WCAG 2.2 AA)
 
@@ -434,8 +413,9 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 **File**: `app/page.tsx`
 
-**Mobile**: `mt-6` = 24px top margin
-**Desktop**: `mt-8` = 32px top margin
+| Property   | Mobile (default) | Desktop (≥640px) |
+| ---------- | ---------------- | ---------------- |
+| Top margin | `mt-6` (24px)    | `mt-8` (32px)    |
 
 ---
 
