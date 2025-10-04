@@ -199,7 +199,8 @@ For AI collaboration and Claude Code workflow issues, complexity assessment incl
 - **claude-workflow + complexity-complex**: Major agentic coding workflow overhauls, AI agent implementations
 - **claude-workflow + complexity-epic**: Complete AI collaboration methodology redesigns, fundamental process changes
 
-**📋 Full Guidelines**: See [`claude-workflow-labels.md`](claude-workflow-labels.md) for comprehensive AI collaboration issue management.
+**📋 Full Guidelines**: See [`claude-workflow-labels.md`](claude-workflow-labels.md) for comprehensive AI collaboration
+issue management.
 
 ### Related Documentation
 
