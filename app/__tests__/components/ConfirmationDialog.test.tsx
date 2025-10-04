@@ -150,11 +150,13 @@ describe('ConfirmationDialog', () => {
 
     it('should call onClose when backdrop is clicked', async () => {
       const user = userEvent.setup();
-      render(<ConfirmationDialog {...defaultProps} />);
+      const { container } = render(<ConfirmationDialog {...defaultProps} />);
 
-      // Click on the backdrop (the dialog element itself since it's the backdrop)
-      const dialog = screen.getByRole('dialog');
-      await user.click(dialog);
+      // Click on the backdrop (presentation layer, not the dialog content)
+      const backdrop = container.querySelector('[role="presentation"]');
+      expect(backdrop).toBeInTheDocument();
+
+      await user.click(backdrop!);
 
       expect(mockOnClose).toHaveBeenCalledTimes(1);
     });

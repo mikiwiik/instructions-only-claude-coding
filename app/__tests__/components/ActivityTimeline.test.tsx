@@ -166,13 +166,14 @@ describe('ActivityTimeline', () => {
       );
     });
 
-    it('should have proper tabIndex for keyboard navigation', () => {
+    it('should render list items without redundant tabIndex (non-interactive)', () => {
       const todos = [createMockTodo('1'), createMockTodo('2')];
       render(<ActivityTimeline todos={todos} />);
 
       const activities = screen.getAllByRole('listitem');
       activities.forEach((activity) => {
-        expect(activity).toHaveAttribute('tabIndex', '0');
+        // Non-interactive list items should not have tabIndex
+        expect(activity).not.toHaveAttribute('tabIndex');
       });
     });
 
@@ -194,7 +195,7 @@ describe('ActivityTimeline', () => {
       render(<ActivityTimeline todos={todos} />);
 
       const heading = screen.getByRole('heading', { level: 3 });
-      expect(heading).toHaveAttribute('aria-level', '3');
+      // h3 elements have implicit level 3, no need for explicit aria-level
       expect(heading).toHaveTextContent('Today');
     });
   });
@@ -251,25 +252,22 @@ describe('ActivityTimeline', () => {
   });
 
   describe('Focus states', () => {
-    it('should have proper focus styling', () => {
+    it('should have proper hover styling', () => {
       const todos = [createMockTodo('1')];
       render(<ActivityTimeline todos={todos} />);
 
       const activity = screen.getByRole('listitem');
-      expect(activity).toHaveClass(
-        'focus-within:bg-muted',
-        'focus-within:ring-2',
-        'focus-within:ring-ring'
-      );
+      // Non-interactive items use hover instead of focus styles
+      expect(activity).toHaveClass('hover:bg-muted', 'transition-colors');
     });
 
-    it('should be focusable with keyboard', () => {
+    it('should not be focusable (non-interactive)', () => {
       const todos = [createMockTodo('1')];
       render(<ActivityTimeline todos={todos} />);
 
       const activity = screen.getByRole('listitem');
-      activity.focus();
-      expect(activity).toHaveFocus();
+      // Non-interactive elements should not receive focus
+      expect(activity).not.toHaveAttribute('tabIndex');
     });
   });
 
