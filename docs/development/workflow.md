@@ -199,6 +199,107 @@ npm run test:watch   # Run tests in watch mode
 npm run test:coverage # Run tests with coverage report
 ```
 
+### Testing TypeScript Types and Schemas
+
+When adding new TypeScript interfaces, types, Zod schemas, or validation utilities (especially for data models like shared
+list types), comprehensive testing is required to maintain 90%+ code coverage.
+
+#### Testing Requirements for Type Definitions
+
+**Required Test Coverage:**
+
+1. **Interface Structure Tests**: Verify all properties exist with correct types
+2. **Zod Schema Validation Tests**:
+   - Valid data passes validation
+   - Invalid data throws appropriate errors
+   - Edge cases (empty strings, exceeding limits, invalid formats)
+3. **Type Guard Tests**: Test positive and negative cases for runtime type checking
+4. **Validation Utility Tests**: Test both throwing and safe validation functions
+5. **API Request/Response Types**: Verify structure and optional properties
+
+**Example Test Structure** (from `app/__tests__/types/todo.test.ts`):
+
+```typescript
+describe('Shared List Interfaces', () => {
+  describe('SharedTodo', () => {
+    it('should define a SharedTodo interface with correct properties', () => {
+      const sharedTodo: SharedTodo = {
+        // Valid object implementation
+      };
+      expect(sharedTodo).toHaveProperty('listId');
+      // Verify all required properties
+    });
+  });
+});
+
+describe('Zod Validation Schemas', () => {
+  describe('SharedTodoSchema', () => {
+    it('should validate a valid SharedTodo object', () => {
+      const validData = {
+        /* ... */
+      };
+      expect(() => SharedTodoSchema.parse(validData)).not.toThrow();
+    });
+
+    it('should reject invalid data with appropriate error', () => {
+      const invalidData = {
+        /* ... */
+      };
+      expect(() => SharedTodoSchema.parse(invalidData)).toThrow(
+        'Expected error message'
+      );
+    });
+  });
+});
+
+describe('Type Guards', () => {
+  describe('isSharedTodo', () => {
+    it('should return true for SharedTodo objects', () => {
+      const sharedTodo: SharedTodo = {
+        /* ... */
+      };
+      expect(isSharedTodo(sharedTodo)).toBe(true);
+    });
+
+    it('should return false for regular Todo objects', () => {
+      const todo: Todo = {
+        /* ... */
+      };
+      expect(isSharedTodo(todo)).toBe(false);
+    });
+  });
+});
+```
+
+#### Coverage Requirements
+
+**Minimum Coverage Thresholds:**
+
+- **Types/Interfaces**: 100% - All type definitions must have structural tests
+- **Zod Schemas**: 100% - All validation paths (valid/invalid) must be tested
+- **Type Guards**: 100% - All conditional branches must be covered
+- **Validation Utilities**: 100% - All function paths must be tested
+
+**Coverage Verification:**
+
+```bash
+# Generate coverage report
+npm run test:coverage
+
+# Check coverage summary
+# Types file should show 100% coverage
+# Overall project should maintain 90%+ coverage
+```
+
+#### Best Practices
+
+1. **Test Valid Cases First**: Ensure valid data passes all validations
+2. **Test All Invalid Cases**: Cover each validation rule with failing tests
+3. **Use Descriptive Test Names**: Clearly state what is being tested and expected outcome
+4. **Test Edge Cases**: Empty strings, maximum lengths, boundary values, invalid formats
+5. **Group Related Tests**: Use nested `describe` blocks for organization
+6. **Verify Error Messages**: Test that validation errors contain expected messages
+
 ## Development Commands
 
 ### Quality Assurance Commands
