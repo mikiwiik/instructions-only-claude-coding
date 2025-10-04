@@ -9,6 +9,25 @@ Architecture Decision Records (ADRs) are short text documents that capture impor
 decisions made during the project development. They help maintain a clear history of technical choices
 and their rationale.
 
+## Naming Convention
+
+ADRs follow a specific naming convention to ensure consistency:
+
+**Filename format**: `###-kebab-case-title.md`
+
+- Sequential three-digit number (e.g., `001`, `015`, `023`)
+- Kebab-case title describing the decision
+- Examples: `001-nextjs-app-router.md`, `015-ai-agent-attribution-strategy.md`
+
+**Header format**: `# ADR-###: Title`
+
+- "ADR-" prefix followed by the number
+- Colon separator
+- Descriptive title in sentence case
+- Examples: `# ADR-001: Use Next.js 14 with App Router`, `# ADR-015: AI Agent Attribution Strategy`
+
+**Key distinction**: Filenames use simple numbers (`001-`), while headers include the "ADR-" prefix (`ADR-001:`).
+
 ## ADR Format
 
 Each ADR follows this structure:
@@ -21,21 +40,24 @@ Each ADR follows this structure:
 
 ## Index of ADRs
 
-| Number                                      | Title                                           | Status   | Date       |
-| ------------------------------------------- | ----------------------------------------------- | -------- | ---------- |
-| [001](001-nextjs-app-router.md)             | Use Next.js 14 with App Router                  | Accepted | 2025-09-20 |
-| [002](002-typescript-adoption.md)           | Choose TypeScript for type safety               | Accepted | 2025-09-20 |
-| [003](003-tailwind-css-styling.md)          | Select Tailwind CSS for styling                 | Accepted | 2025-09-20 |
-| [004](004-test-driven-development.md)       | Implement Test-Driven Development approach      | Accepted | 2025-09-20 |
-| [005](005-localstorage-persistence.md)      | Use localStorage for data persistence           | Accepted | 2025-09-20 |
-| [006](006-testing-framework-choice.md)      | Choose React Testing Library + Jest for testing | Accepted | 2025-09-20 |
-| [007](007-state-management-approach.md)     | Use custom hooks for state management           | Accepted | 2025-09-20 |
-| [008](008-github-issues-workflow.md)        | GitHub Issues for project management            | Accepted | 2025-09-20 |
-| [009](009-pre-commit-linting-strategy.md)   | Pre-commit linting strategy                     | Accepted | 2025-09-20 |
-| [010](010-atomic-commit-strategy.md)        | Atomic commit strategy adoption                 | Accepted | 2025-09-20 |
-| [011](011-github-actions-ci-cd.md)          | GitHub Actions for CI/CD Pipeline               | Accepted | 2025-09-20 |
-| [012](012-todo-reordering-ux-approach.md)   | Todo Reordering UX Approach                     | Accepted | 2025-09-20 |
-| [015](015-ai-agent-attribution-strategy.md) | AI Agent Attribution Strategy                   | Accepted | 2025-09-27 |
+| Number                                          | Title                                                   | Status   | Date       |
+| ----------------------------------------------- | ------------------------------------------------------- | -------- | ---------- |
+| [001](001-nextjs-app-router.md)                 | Use Next.js 14 with App Router                          | Accepted | 2025-09-20 |
+| [002](002-typescript-adoption.md)               | Choose TypeScript for type safety                       | Accepted | 2025-09-20 |
+| [003](003-tailwind-css-styling.md)              | Select Tailwind CSS for styling                         | Accepted | 2025-09-20 |
+| [004](004-test-driven-development.md)           | Implement Test-Driven Development approach              | Accepted | 2025-09-20 |
+| [005](005-localstorage-persistence.md)          | Use localStorage for data persistence                   | Accepted | 2025-09-20 |
+| [006](006-testing-framework-choice.md)          | Choose React Testing Library + Jest for testing         | Accepted | 2025-09-20 |
+| [007](007-state-management-approach.md)         | Use custom hooks for state management                   | Accepted | 2025-09-20 |
+| [008](008-github-issues-workflow.md)            | GitHub Issues for project management                    | Accepted | 2025-09-20 |
+| [009](009-pre-commit-linting-strategy.md)       | Pre-commit linting strategy                             | Accepted | 2025-09-20 |
+| [010](010-atomic-commit-strategy.md)            | Atomic commit strategy adoption                         | Accepted | 2025-09-20 |
+| [011](011-github-actions-ci-cd.md)              | GitHub Actions for CI/CD Pipeline                       | Accepted | 2025-09-20 |
+| [012](012-todo-reordering-ux-approach.md)       | Todo Reordering UX Approach                             | Accepted | 2025-09-20 |
+| [013](013-shared-lists-backend-architecture.md) | Shared Lists Backend Architecture and Multi-Device Sync | Approved | 2025-09-27 |
+| [014](014-anonymous-sharing-architecture.md)    | Anonymous Sharing Architecture (No User Authentication) | Approved | 2025-09-27 |
+| [015](015-ai-agent-attribution-strategy.md)     | AI Agent Attribution Strategy                           | Accepted | 2025-09-27 |
+| [016](016-mobile-help-overlay-pattern.md)       | Mobile Help Overlay Pattern                             | Accepted | 2025-10-01 |
 
 ## Creating New ADRs
 
