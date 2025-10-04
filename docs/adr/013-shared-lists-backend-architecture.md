@@ -7,11 +7,14 @@
 
 ## Summary
 
-Define the backend architecture for implementing shared todo lists with real-time synchronization across multiple devices, while avoiding user authentication complexity and maintaining the educational value of the codebase.
+Define the backend architecture for implementing shared todo lists with real-time synchronization across multiple
+devices, while avoiding user authentication complexity and maintaining the educational value of the codebase.
 
 ## Context
 
-The Todo App currently uses localStorage for data persistence, limiting users to single-device usage. To enable sharing and multi-device access, we need to implement backend persistence with real-time synchronization while maintaining the project's focus on simplicity and educational value.
+The Todo App currently uses localStorage for data persistence, limiting users to single-device usage. To enable
+sharing and multi-device access, we need to implement backend persistence with real-time synchronization while
+maintaining the project's focus on simplicity and educational value.
 
 ### Current State
 
@@ -43,13 +46,13 @@ We will implement a **Vercel-native serverless architecture** using:
 
 ### Technology Stack Selection
 
-| Component | Choice | Alternatives Considered | Rationale |
-|-----------|--------|------------------------|-----------|
-| **Backend** | Next.js API Routes | Supabase, Firebase, Custom Node.js | Keeps everything in Next.js stack, serverless scaling |
-| **Database** | Vercel KV (Redis) | PostgreSQL, MongoDB, Supabase | Zero config, edge replication, perfect for real-time |
-| **Real-time** | Server-Sent Events | WebSockets, Pusher, Polling | Simple, reliable, no external dependencies |
-| **Authentication** | Anonymous sharing | NextAuth, Clerk, Auth0, Supabase Auth | Avoids complexity, maintains educational focus |
-| **Hosting** | Vercel | Railway, AWS, Google Cloud | Integrated ecosystem, free tier, educational use |
+| Component          | Choice             | Alternatives Considered               | Rationale                                             |
+| ------------------ | ------------------ | ------------------------------------- | ----------------------------------------------------- |
+| **Backend**        | Next.js API Routes | Supabase, Firebase, Custom Node.js    | Keeps everything in Next.js stack, serverless scaling |
+| **Database**       | Vercel KV (Redis)  | PostgreSQL, MongoDB, Supabase         | Zero config, edge replication, perfect for real-time  |
+| **Real-time**      | Server-Sent Events | WebSockets, Pusher, Polling           | Simple, reliable, no external dependencies            |
+| **Authentication** | Anonymous sharing  | NextAuth, Clerk, Auth0, Supabase Auth | Avoids complexity, maintains educational focus        |
+| **Hosting**        | Vercel             | Railway, AWS, Google Cloud            | Integrated ecosystem, free tier, educational use      |
 
 ### Data Architecture
 
@@ -57,27 +60,27 @@ We will implement a **Vercel-native serverless architecture** using:
 
 ```typescript
 interface SharedList {
-  id: string;              // UUID for sharing
-  name: string;            // Display name
-  todos: SharedTodo[];     // Todo items
+  id: string; // UUID for sharing
+  name: string; // Display name
+  todos: SharedTodo[]; // Todo items
   createdAt: Date;
   updatedAt: Date;
   lastSyncAt: Date;
   participantIds: string[]; // Anonymous participants
-  accessToken?: string;     // Optional security
+  accessToken?: string; // Optional security
 }
 
 interface SharedTodo extends Todo {
-  listId: string;           // Reference to SharedList
-  authorId?: string;        // Anonymous participant ID
-  lastModifiedBy?: string;  // Last editor
-  syncVersion: number;      // Conflict resolution
+  listId: string; // Reference to SharedList
+  authorId?: string; // Anonymous participant ID
+  lastModifiedBy?: string; // Last editor
+  syncVersion: number; // Conflict resolution
 }
 ```
 
 #### API Design
 
-```
+```text
 /api/shared/
 ├── create              # POST - Create shared list
 ├── [listId]/
@@ -259,8 +262,10 @@ localStorage todos → SharedList creation → Share URL generation
 - [#122 - Implement real-time synchronization for shared todo lists](https://github.com/mikiwiik/instructions-only-claude-coding/issues/122)
 - [#123 - Implement share URL generation and access control](https://github.com/mikiwiik/instructions-only-claude-coding/issues/123)
 - [#124 - Implement collaborative UI/UX features for shared lists](https://github.com/mikiwiik/instructions-only-claude-coding/issues/124)
-- [#125 - Extend useTodos hook for shared list state management](https://github.com/mikiwiik/instructions-only-claude-coding/issues/125)
+- [#125 - Extend useTodos hook for shared list state management]
+  (<https://github.com/mikiwiik/instructions-only-claude-coding/issues/125>)
 
 ---
 
-**This ADR establishes the foundational architecture for shared todo lists while maintaining the project's educational focus and avoiding authentication complexity.**
+**This ADR establishes the foundational architecture for shared todo lists while maintaining the project's
+educational focus and avoiding authentication complexity.**

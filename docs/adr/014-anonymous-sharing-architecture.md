@@ -7,15 +7,19 @@
 
 ## Summary
 
-Implement todo list sharing without user authentication, using an anonymous sharing model based on share URLs and optional access tokens instead of traditional user account systems.
+Implement todo list sharing without user authentication, using an anonymous sharing model based on share URLs and
+optional access tokens instead of traditional user account systems.
 
 ## Context
 
-The original scope for issue #85 included comprehensive user identity and authentication systems. However, during architectural planning, we identified that user authentication introduces significant complexity that may not align with the project's educational goals and rapid development timeline.
+The original scope for issue #85 included comprehensive user identity and authentication systems. However, during
+architectural planning, we identified that user authentication introduces significant complexity that may not align
+with the project's educational goals and rapid development timeline.
 
 ## Problem Statement
 
-How should we implement todo list sharing to enable multi-device access and collaboration while maintaining the project's educational focus and avoiding the complexity overhead of user authentication systems?
+How should we implement todo list sharing to enable multi-device access and collaboration while maintaining the
+project's educational focus and avoiding the complexity overhead of user authentication systems?
 
 ### Authentication Requirements Originally Considered
 
@@ -80,7 +84,8 @@ We will implement anonymous sharing without user authentication using the follow
 
 ### Educational Value Consideration
 
-This project serves as an educational example of modern web development practices. The anonymous sharing approach provides valuable learning opportunities while avoiding authentication complexity:
+This project serves as an educational example of modern web development practices. The anonymous sharing approach
+provides valuable learning opportunities while avoiding authentication complexity:
 
 **Learning Opportunities Preserved:**
 
@@ -102,7 +107,7 @@ This project serves as an educational example of modern web development practice
 
 #### 1. **Simplified Architecture**
 
-```
+```text
 Before (with auth):    User → Auth → Session → Data → Sync
 After (anonymous):     Share URL → Data → Sync
 ```
@@ -152,10 +157,10 @@ After (anonymous):     Share URL → Data → Sync
 ```typescript
 // URL-based access control
 interface ShareAccess {
-  listId: string;           // Public identifier
-  accessToken?: string;     // Optional privacy protection
+  listId: string; // Public identifier
+  accessToken?: string; // Optional privacy protection
   permission: 'view' | 'edit'; // Permission level
-  expiresAt?: Date;         // Optional expiration
+  expiresAt?: Date; // Optional expiration
 }
 
 // Security through obscurity + optional tokens
@@ -182,10 +187,10 @@ const shareUrl = `https://app.com/shared/${listId}?token=${accessToken}`;
 
 ```typescript
 interface AnonymousParticipant {
-  id: string;              // Generated UUID per session
-  color: string;           // UI identifier
-  lastSeenAt: Date;        // Activity tracking
-  isActive: boolean;       // Current session status
+  id: string; // Generated UUID per session
+  color: string; // UI identifier
+  lastSeenAt: Date; // Activity tracking
+  isActive: boolean; // Current session status
   // NO: email, name, persistent identity
 }
 ```
@@ -194,11 +199,11 @@ interface AnonymousParticipant {
 
 ```typescript
 interface SecureShareUrl {
-  listId: string;          // Cryptographically secure random ID
-  accessToken?: string;    // Optional additional security
-  permission: Permission;  // Read/write access level
-  expiresAt?: Date;        // Optional time-based expiration
-  maxUses?: number;        // Optional usage limits
+  listId: string; // Cryptographically secure random ID
+  accessToken?: string; // Optional additional security
+  permission: Permission; // Read/write access level
+  expiresAt?: Date; // Optional time-based expiration
+  maxUses?: number; // Optional usage limits
 }
 ```
 
@@ -207,9 +212,9 @@ interface SecureShareUrl {
 ```typescript
 // Only store essential collaboration data
 interface MinimalListData {
-  id: string;              // List identifier
-  todos: Todo[];           // Actual content
-  lastSyncAt: Date;        // Sync coordination
+  id: string; // List identifier
+  todos: Todo[]; // Actual content
+  lastSyncAt: Date; // Sync coordination
   participantCount: number; // Current active users
   // NO: user emails, names, IP addresses, tracking data
 }
@@ -310,14 +315,14 @@ interface User {
   id: string;
   email: string;
   // Existing anonymous lists can be "claimed"
-  claimedLists: string[];  // List of listIds user has claimed
+  claimedLists: string[]; // List of listIds user has claimed
 }
 
 // Backward compatibility maintained
 interface SharedList {
   // ... existing fields
-  ownerId?: string;        // Optional: claimed by authenticated user
-  isAnonymous: boolean;    // Track legacy anonymous lists
+  ownerId?: string; // Optional: claimed by authenticated user
+  isAnonymous: boolean; // Track legacy anonymous lists
 }
 ```
 
@@ -375,6 +380,7 @@ These risks are **ACCEPTED** as reasonable trade-offs for the educational and de
 ## Consequences
 
 ### Positive
+
 - **Simplicity**: Maintains educational focus with minimal complexity
 - **Cost-Effective**: Stays within free tiers for educational use
 - **Scalable**: Serverless architecture scales automatically
@@ -382,12 +388,14 @@ These risks are **ACCEPTED** as reasonable trade-offs for the educational and de
 - **User Experience**: Seamless sharing without signup friction
 
 ### Negative
+
 - **Limited Features**: Cannot implement advanced user-based features
 - **Security Constraints**: Anonymous model has inherent security limitations
 - **URL Management**: Users responsible for managing share URLs
 - **No Persistent Identity**: Cannot provide personalized experience across lists
 
 ### Neutral
+
 - **Learning Opportunity**: Demonstrates collaborative system design without auth complexity
 - **Migration Path**: Clear upgrade path to authenticated system later
 - **Risk Acceptance**: Trade-offs acceptable for educational and MVP goals
@@ -400,6 +408,7 @@ These risks are **ACCEPTED** as reasonable trade-offs for the educational and de
 ## Implementation
 
 This decision is implemented through:
+
 - [#120 - Design shared todo list data model and API schema](https://github.com/mikiwiik/instructions-only-claude-coding/issues/120)
 - [#121 - Setup Vercel backend infrastructure for shared todo lists](https://github.com/mikiwiik/instructions-only-claude-coding/issues/121)
 - [#122 - Implement real-time synchronization for shared todo lists](https://github.com/mikiwiik/instructions-only-claude-coding/issues/122)
@@ -407,4 +416,5 @@ This decision is implemented through:
 
 ---
 
-**This ADR should be referenced when authentication-related questions arise during implementation to maintain consistency with the chosen anonymous sharing approach.**
+**This ADR should be referenced when authentication-related questions arise during implementation to maintain
+consistency with the chosen anonymous sharing approach.**
