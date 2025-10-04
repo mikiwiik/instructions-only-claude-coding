@@ -157,8 +157,6 @@ Content
 │ ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ 0px (px-0) ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ Page
 │ ▒┌──────────────────────────────────────────────────────────┐▒│ Padding
 │ ▒│ HEADER                                                   │▒│ EDGE-TO-EDGE
-│ ▒│ [CheckSquare Icon] Todo App                             │▒│
-│ ▒│ A Next.js Todo application...                           │▒│
 │ ▒└──────────────────────────────────────────────────────────┘▒│
 │ ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│
 │ ▒                     24px (mb-6)                            ▒│ Header
@@ -205,7 +203,6 @@ Content
 │ ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ Margin
 │ ▒┌──────────────────────────────────────────────────────────┐▒│
 │ ▒│ FOOTER                                                   │▒│
-│ ▒│ Built with ❤️ using Claude Code                          │▒│
 │ ▒└──────────────────────────────────────────────────────────┘▒│
 │ ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│
 │ ════════════════════════════════════════════════════════════════│
@@ -227,9 +224,7 @@ Legend:
 │ ════════════════════════════════════════════════════════════════════│
 │ ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ 24px (px-6) ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ Page
 │ ▒┌──────────────────────────────────────────────────────────────┐▒│ Padding
-│ ▒│ HEADER (larger text, more spacing)                          │▒│ (contained)
-│ ▒│ [CheckSquare Icon] Todo App                                 │▒│
-│ ▒│ A Next.js Todo application built with TDD                   │▒│
+│ ▒│ HEADER                                                       │▒│ (contained)
 │ ▒└──────────────────────────────────────────────────────────────┘▒│
 │ ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│
 │ ▒                       32px (mb-8)                              ▒│ Header
@@ -276,7 +271,6 @@ Legend:
 │ ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ Margin
 │ ▒┌──────────────────────────────────────────────────────────────┐▒│
 │ ▒│ FOOTER                                                       │▒│
-│ ▒│ Built with ❤️ using Claude Code                              │▒│
 │ ▒└──────────────────────────────────────────────────────────────┘▒│
 │ ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│
 │ ════════════════════════════════════════════════════════════════════│
@@ -345,11 +339,10 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 **File**: `app/page.tsx`
 
-| Property             | Mobile (default) | Desktop (≥640px) |
-| -------------------- | ---------------- | ---------------- |
-| Bottom margin        | `mb-6` (24px)    | `mb-8` (32px)    |
-| Logo + title wrapper | `mb-3` (12px)    | `mb-4` (16px)    |
-| Icon + title gap     | `gap-2` (8px)    | `gap-3` (12px)   |
+| Property         | Mobile (default) | Desktop (≥640px) |
+| ---------------- | ---------------- | ---------------- |
+| Bottom margin    | `mb-6` (24px)    | `mb-8` (32px)    |
+| Icon + title gap | `gap-2` (8px)    | `gap-3` (12px)   |
 
 ### 3. Main Card Container
 
@@ -413,9 +406,12 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 **File**: `app/page.tsx`
 
-| Property   | Mobile (default) | Desktop (≥640px) |
-| ---------- | ---------------- | ---------------- |
-| Top margin | `mt-6` (24px)    | `mt-8` (32px)    |
+| Property         | Mobile (default) | Desktop (≥640px) |
+| ---------------- | ---------------- | ---------------- |
+| Top margin       | `mt-6` (24px)    | `mt-8` (32px)    |
+| Internal spacing | `mt-2` (8px)     | (same)           |
+
+**Structure**: Two-paragraph layout (attribution + repository link)
 
 ---
 
