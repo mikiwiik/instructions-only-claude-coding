@@ -4,6 +4,18 @@
 
 **🌐 Live Demo**: [Todo App on Vercel](https://instructions-only-claude-coding.vercel.app/)
 
+## What is this TODO App?
+
+A modern, accessible todo application with advanced features for managing your todos:
+
+- **Todo Management**: Add, edit, delete, and toggle completion status for todos
+- **Touch Gestures**: Swipe right to complete, swipe left to delete, long press to edit todos
+- **Keyboard Support**: Full keyboard navigation and accessibility (WCAG 2.2 AA compliant)
+- **Local Persistence**: Automatic saving of todos to browser storage
+- **Responsive Design**: Optimized for mobile and desktop devices
+
+Built with Next.js 14, TypeScript, and Tailwind CSS, demonstrating modern web development best practices.
+
 ## Project Purpose
 
 **This project demonstrates groundbreaking agentic coding methodology** - building complete, production-ready software
