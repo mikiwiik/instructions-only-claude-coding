@@ -26,6 +26,14 @@ describe('HomePage', () => {
     expect(claudeLink).toBeInTheDocument();
     expect(claudeLink).toHaveAttribute('href', 'https://claude.ai/code');
     expect(claudeLink).toHaveAttribute('target', '_blank');
+
+    const githubLink = screen.getByRole('link', { name: /view on github/i });
+    expect(githubLink).toBeInTheDocument();
+    expect(githubLink).toHaveAttribute(
+      'href',
+      'https://github.com/mikiwiik/instructions-only-claude-coding/'
+    );
+    expect(githubLink).toHaveAttribute('target', '_blank');
   });
 
   it('displays the check square icon', () => {
