@@ -166,42 +166,15 @@ See [Development Workflow](docs/development/workflow.md) for complete branch str
 
 ## Contributing
 
-### Getting Started
+**Quick Start**: Review [installation guide](docs/setup/installation.md), understand the
+[development workflow](docs/development/workflow.md), browse [GitHub issues](https://github.com/mikiwiik/instructions-only-claude-coding/issues),
+and follow TDD with branch-based development.
 
-1. **Review Documentation**: Start with the [installation guide](docs/setup/installation.md)
-2. **Understand Workflow**: Read the [development workflow](docs/development/workflow.md)
-3. **Check Issues**: Browse [GitHub issues](https://github.com/mikiwiik/instructions-only-claude-coding/issues) for tasks
-4. **Follow Standards**: Adhere to project [coding standards](docs/development/workflow.md)
+**Issue Management**: Priority labels (🔴 critical → 🟢 low) and complexity labels (🟢 minimal → 🔴 epic) guide
+development planning. See [project management guide](docs/development/project-management.md).
 
-### Development Process
-
-1. **Create Branch**: `feature/issue-number-description`
-2. **Follow TDD**: Write tests first, then implementation
-3. **Maintain Quality**: Pre-commit hooks ensure code quality
-4. **Create PR**: Submit pull request for review
-5. **Enable Automerge**: Streamlined workflow with `gh pr merge --auto --squash`
-6. **CI Validation**: Automatic merge after approval and passing checks
-
-### Issue Management
-
-The project uses GitHub Issues with priority and complexity labels:
-
-- **Priority**: `priority-1-critical` 🔴 to `priority-4-low` 🟢
-- **Complexity**: `complexity-minimal` 🟢 to `complexity-epic` 🔴
-
-See [project management guide](docs/development/project-management.md) for detailed workflows.
-
-### Custom Slash Commands
-
-The project includes custom slash commands for enhanced development workflow:
-
-- **`/work-on <issue-number>`** - Start working on specific GitHub issue with full workflow setup
-- **`/select-next-issue [filter]`** - Get strategic recommendations for next issue to work on
-- **`/quick-wins`** - Find high-value, low-effort development opportunities
-- **`/parallel-work <issue-number>`** - Set up coordinated parallel agent execution for complex issues
-- **`/create-pr`** - Create pull request with automerge following the agreed workflow (docs/core/workflows.md)
-
-These commands are defined in `.claude/commands/` and integrate with the project's development methodology.
+**Custom Slash Commands**: The project includes custom slash commands (`/work-on`, `/select-next-issue`, `/quick-wins`,
+`/create-pr`) for enhanced workflow. Commands are defined in `.claude/commands/`.
 
 ## Features
 
