@@ -100,7 +100,8 @@ For AI collaboration and Claude Code workflow issues, combine priority labels wi
 - **priority-3-medium + claude-workflow**: Standard AI methodology enhancements
 - **priority-4-low + claude-workflow**: AI workflow nice-to-have improvements
 
-**📋 Full Guidelines**: See [`claude-workflow-labels.md`](claude-workflow-labels.md) for comprehensive AI collaboration issue management.
+**📋 Full Guidelines**: See [`claude-workflow-labels.md`](claude-workflow-labels.md) for comprehensive AI collaboration
+issue management.
 
 ### Related Documentation
 

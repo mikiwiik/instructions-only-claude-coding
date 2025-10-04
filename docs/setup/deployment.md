@@ -10,7 +10,8 @@ The Todo App is automatically deployed to Vercel and updated on every push to th
 
 ## Vercel Deployment Setup
 
-This project is configured for automatic deployment to Vercel with GitHub integration. Follow these steps to set up deployment for this or similar projects.
+This project is configured for automatic deployment to Vercel with GitHub integration. Follow these steps to set up
+deployment for this or similar projects.
 
 ### Prerequisites
 
@@ -253,4 +254,5 @@ Ensure your `package.json` includes:
 
 ---
 
-This deployment guide ensures reliable, automated production deployments with comprehensive monitoring and troubleshooting capabilities.
+This deployment guide ensures reliable, automated production deployments with comprehensive monitoring and
+troubleshooting capabilities.
