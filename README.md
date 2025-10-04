@@ -166,6 +166,17 @@ Speed Insights automatically collects performance data when the app is deployed 
 - **Mobile**: Touch gestures with accessibility-first design (WCAG 2.2 AA compliant)
 - **Deployment**: Vercel with GitHub Actions CI/CD
 
+## Design & UX
+
+**Targeted Platforms**: Mobile-first responsive design optimized for mobile breakpoints (< 640px) and desktop
+(≥ 640px), with edge-to-edge layouts on mobile and contained layouts on desktop.
+
+**Design Documentation**:
+
+- **[Layout & Spacing Reference](docs/design/layout-and-spacing-reference.md)** - Complete visual and technical spacing reference
+- **[Mobile UX Guidelines](docs/guidelines/mobile-ux-guidelines.md)** - Mobile-first design strategy and touch interactions
+- **[Accessibility Requirements](docs/guidelines/accessibility-requirements.md)** - WCAG 2.2 AA compliance guidelines
+
 ## Development Status
 
 **Current Workflow**: Branch-based development with automated PR workflow
