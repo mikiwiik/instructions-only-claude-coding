@@ -2,7 +2,9 @@
 
 ## Purpose
 
-This document establishes systematic requirements for maintaining documentation consistency across CLAUDE.md, README.md, ADRs, and other project documentation. It ensures that major changes are properly reflected across all relevant documentation files.
+This document establishes systematic requirements for maintaining documentation consistency across CLAUDE.md,
+README.md, ADRs, and other project documentation. It ensures that major changes are properly reflected across all
+relevant documentation files.
 
 ## Documentation File Purposes
 
@@ -133,30 +135,35 @@ For major changes, include this checklist in implementation issues:
 ## Documentation Updates Required
 
 ### ADR Requirements
+
 - [ ] Create new ADR documenting decision rationale
 - [ ] Include alternatives considered and decision criteria
 - [ ] Document implementation approach and consequences
 - [ ] Update ADR index with new entry
 
 ### CLAUDE.md Updates
+
 - [ ] Update development guidelines to reflect changes
 - [ ] Modify workflow descriptions as needed
 - [ ] Update code quality or process standards
 - [ ] Ensure Claude Code instructions remain current
 
 ### README.md Updates
+
 - [ ] Update project overview if scope/purpose changed
 - [ ] Modify setup instructions if process changed
 - [ ] Update contributor guidelines for new workflows
 - [ ] Verify project status and feature descriptions
 
 ### Cross-Reference Maintenance
+
 - [ ] Add appropriate links between documentation files
 - [ ] Ensure ADR references are included where relevant
 - [ ] Update any outdated cross-references
 - [ ] Verify all links are functional
 
 ### Consistency Verification
+
 - [ ] Review all updated documentation for consistency
 - [ ] Ensure terminology is used consistently across files
 - [ ] Verify process descriptions match across documents
@@ -275,4 +282,5 @@ For major changes, include this checklist in implementation issues:
 
 ---
 
-This documentation standards guide ensures that the project maintains high-quality, consistent documentation that serves all stakeholders effectively while supporting the learning objectives of the Todo App project.
+This documentation standards guide ensures that the project maintains high-quality, consistent documentation that
+serves all stakeholders effectively while supporting the learning objectives of the Todo App project.
