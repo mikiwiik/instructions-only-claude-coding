@@ -217,21 +217,6 @@ Legend:
 ▓▓▓ = TodoItem padding (p-2 = 8px all sides)
 ```
 
-#### Spacing Measurements
-
-| Visual Gap             | Created By    | Tailwind    | Pixels | Component      |
-| ---------------------- | ------------- | ----------- | ------ | -------------- |
-| Screen edge → Header   | Page padding  | `px-0`      | 0px    | Page Container |
-| Header → Card          | Header margin | `mb-6`      | 24px   | Header         |
-| Card border → Form     | Card padding  | `p-0`       | 0px    | Card Container |
-| Form → Filter          | Form margin   | `mb-4`      | 16px   | TodoForm       |
-| Filter → List          | Filter margin | `mb-4`      | 16px   | TodoFilter     |
-| Todo item → Todo item  | List gap      | `space-y-0` | 0px    | TodoList       |
-| Item border → Checkbox | Item padding  | `p-2`       | 8px    | TodoItem       |
-| Checkbox → Text        | Internal gap  | `gap-2`     | 8px    | TodoItem       |
-| Text → Edit button     | Internal gap  | `gap-2`     | 8px    | TodoItem       |
-| Card → Footer          | Card margin   | `mt-6`      | 24px   | Card Container |
-
 ### Desktop Layout (≥ 640px)
 
 #### Full Page Breakdown
@@ -303,21 +288,22 @@ Legend:
 ▓▓▓ = TodoItem padding (p-4 = 16px all sides)
 ```
 
-#### Spacing Measurements
+### Spacing Measurements
 
-| Visual Gap                | Created By    | Tailwind    | Pixels | Component      |
-| ------------------------- | ------------- | ----------- | ------ | -------------- |
-| Screen edge → Header      | Page padding  | `px-6`      | 24px   | Page Container |
-| Header → Card             | Header margin | `mb-8`      | 32px   | Header         |
-| Card border → Form        | Card padding  | `p-5`       | 20px   | Card Container |
-| Form → Filter             | Form margin   | `mb-6`      | 24px   | TodoForm       |
-| Filter → List             | Filter margin | `mb-4`      | 16px   | TodoFilter     |
-| Todo item → Todo item     | List gap      | `space-y-3` | 12px   | TodoList       |
-| Item border → Drag handle | Item padding  | `p-4`       | 16px   | TodoItem       |
-| Drag → Checkbox           | Internal gap  | `gap-3`     | 12px   | TodoItem       |
-| Checkbox → Text           | Internal gap  | `gap-3`     | 12px   | TodoItem       |
-| Text → Actions            | Internal gap  | `gap-3`     | 12px   | TodoItem       |
-| Card → Footer             | Card margin   | `mt-8`      | 32px   | Card Container |
+Responsive spacing values showing how layouts differ between mobile and desktop:
+
+| Visual Gap               | Created By    | Mobile Tailwind | Mobile px | Desktop Tailwind | Desktop px | Component      |
+| ------------------------ | ------------- | --------------- | --------- | ---------------- | ---------- | -------------- |
+| Screen edge → Header     | Page padding  | `px-0`          | 0px       | `px-6`           | 24px       | Page Container |
+| Header → Card            | Header margin | `mb-6`          | 24px      | `mb-8`           | 32px       | Header         |
+| Card border → Form       | Card padding  | `p-0`           | 0px       | `p-5`            | 20px       | Card Container |
+| Form → Filter            | Form margin   | `mb-4`          | 16px      | `mb-6`           | 24px       | TodoForm       |
+| Filter → List            | Filter margin | `mb-4`          | 16px      | `mb-4`           | 16px       | TodoFilter     |
+| Todo item → Todo item    | List gap      | `space-y-0`     | 0px       | `space-y-3`      | 12px       | TodoList       |
+| Item border → Content    | Item padding  | `p-2`           | 8px       | `p-4`            | 16px       | TodoItem       |
+| Content internal spacing | Internal gap  | `gap-2`         | 8px       | `gap-3`          | 12px       | TodoItem       |
+| Text → Actions           | Internal gap  | `gap-2`         | 8px       | `gap-3`          | 12px       | TodoItem       |
+| Card → Footer            | Card margin   | `mt-6`          | 24px      | `mt-8`           | 32px       | Card Container |
 
 ### Key Layout Differences
 
