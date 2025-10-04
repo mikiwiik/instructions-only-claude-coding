@@ -4,7 +4,9 @@ This document provides a comprehensive overview of the Todo App's technical arch
 
 ## Project Overview
 
-The Todo App is a Next.js-based web application built as a learning platform for Claude Code development workflows and modern web development practices. It demonstrates AI-assisted coding, Test-Driven Development (TDD), and collaborative development patterns.
+The Todo App is a Next.js-based web application built as a learning platform for Claude Code development workflows
+and modern web development practices. It demonstrates AI-assisted coding, Test-Driven Development (TDD), and
+collaborative development patterns.
 
 ## Technology Stack
 
@@ -125,21 +127,8 @@ interface TodoOperations {
 
 ## Architectural Decision Records
 
-The project documents all major architectural decisions using ADRs (Architecture Decision Records) stored in `docs/adr/`. Key decisions include:
-
-### Current ADRs
-
-1. **[ADR-001: Next.js 14 + App Router](../adr/001-nextjs-app-router.md)** - Web framework choice
-2. **[ADR-002: TypeScript Adoption](../adr/002-typescript-adoption.md)** - Type safety approach
-3. **[ADR-003: Tailwind CSS Styling](../adr/003-tailwind-css-styling.md)** - Styling methodology
-4. **[ADR-004: Test-Driven Development](../adr/004-test-driven-development.md)** - Development methodology
-5. **[ADR-005: localStorage Persistence](../adr/005-localstorage-persistence.md)** - Data persistence strategy
-6. **[ADR-006: Testing Framework Choice](../adr/006-testing-framework-choice.md)** - Testing approach
-7. **[ADR-007: State Management Approach](../adr/007-state-management-approach.md)** - State management strategy
-8. **[ADR-008: GitHub Issues Workflow](../adr/008-github-issues-workflow.md)** - Project management approach
-9. **[ADR-009: Pre-commit Linting Strategy](../adr/009-pre-commit-linting-strategy.md)** - Code quality automation
-10. **[ADR-010: Atomic Commit Strategy](../adr/010-atomic-commit-strategy.md)** - Version control approach
-11. **[ADR-011: GitHub Actions CI/CD](../adr/011-github-actions-ci-cd.md)** - CI/CD platform choice
+The project documents all major architectural decisions using ADRs (Architecture Decision Records). For a
+complete and up-to-date list of all ADRs, see [Architecture Decision Records](../adr/README.md).
 
 ## Design Patterns and Principles
 
@@ -301,4 +290,5 @@ The project documents all major architectural decisions using ADRs (Architecture
 
 ---
 
-This architecture overview provides the foundation for understanding the Todo App's technical design and serves as a reference for future development and architectural decisions.
+This architecture overview provides the foundation for understanding the Todo App's technical design and serves as a
+reference for future development and architectural decisions.
