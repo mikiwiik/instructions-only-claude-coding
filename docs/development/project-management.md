@@ -260,6 +260,7 @@ for comprehensive claude-workflow label usage and integration guidelines.
   - [ ] Screen reader compatibility tested
   - [ ] Focus management implemented correctly
   - [ ] Color contrast meets minimum ratios (4.5:1 text, 3:1 UI components)
+  - [ ] Zero eslint-plugin-jsx-a11y violations
 - [ ] Comprehensive test coverage provided (including accessibility tests)
 - [ ] Documentation updated appropriately
 - [ ] **🚨 PR created with automerge enabled and reported to user**
