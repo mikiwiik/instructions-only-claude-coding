@@ -111,26 +111,8 @@ npm run dev
 
 Visit `http://localhost:3000` to see the application.
 
-### Available Commands
-
-```bash
-npm run dev          # Start development server
-npm run build        # Create production build
-npm run test         # Run test suite
-npm run lint         # Run code linting
-npm run type-check   # TypeScript type checking
-```
-
-### Performance Monitoring
-
-The application includes **Vercel Speed Insights** for real-time Core Web Vitals monitoring:
-
-- **Access Metrics**: Visit your [Vercel Dashboard](https://vercel.com/dashboard) → Project → Analytics
-- **Core Web Vitals**: Monitor LCP, FID, CLS performance metrics from real users
-- **Optimization Tracking**: Measure impact of performance improvements over time
-- **Real User Monitoring**: Actual user experience data across devices and networks
-
-Speed Insights automatically collects performance data when the app is deployed to Vercel.
+**Development Commands**: See [Development Workflow](docs/development/workflow.md) for all available npm commands, quality
+checks, and testing scripts.
 
 ## Technology Stack
 
@@ -140,7 +122,6 @@ Speed Insights automatically collects performance data when the app is deployed 
 - **Testing**: Jest + React Testing Library
 - **Development**: Test-Driven Development (TDD)
 - **Code Quality**: SonarCloud for automated analysis
-- **Analytics**: Vercel Speed Insights for Core Web Vitals monitoring
 - **Mobile**: Touch gestures with accessibility-first design (WCAG 2.2 AA compliant)
 - **Deployment**: Vercel with GitHub Actions CI/CD
 
