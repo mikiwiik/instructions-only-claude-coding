@@ -3,9 +3,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { KVStore } from '@/app/lib/kv-store';
-import type { SyncOperation } from '@/app/types/sync';
-import type { Todo } from '@/app/types/todo';
+import { KVStore } from '@/lib/kv-store';
+import type { SyncOperation } from '@/types/sync';
+import type { Todo } from '@/types/todo';
 
 export async function POST(
   request: NextRequest,
