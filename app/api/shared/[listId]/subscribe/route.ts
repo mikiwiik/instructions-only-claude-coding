@@ -3,7 +3,7 @@
  */
 
 import { NextRequest } from 'next/server';
-import { KVStore } from '@/app/lib/kv-store';
+import { KVStore } from '@/lib/kv-store';
 
 export const runtime = 'edge';
 

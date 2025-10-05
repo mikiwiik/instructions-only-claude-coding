@@ -2,8 +2,7 @@
  * Vercel KV store wrapper for shared todo lists
  */
 
-import { kv } from '@vercel/kv';
-import type { Todo } from '../types/todo';
+import type { Todo } from '@/types/todo';
 
 export interface SharedTodoList {
   id: string;
@@ -12,19 +11,20 @@ export interface SharedTodoList {
   subscribers: string[];
 }
 
+/**
+ * Simple in-memory store for development
+ * TODO: Replace with actual Vercel KV when deployed
+ */
+const store = new Map<string, SharedTodoList>();
+
 export class KVStore {
   private static getListKey(listId: string): string {
     return `shared:list:${listId}`;
   }
 
-  private static getSubscribersKey(listId: string): string {
-    return `shared:subscribers:${listId}`;
-  }
-
   static async getList(listId: string): Promise<SharedTodoList | null> {
     const key = this.getListKey(listId);
-    const data = await kv.get<SharedTodoList>(key);
-    return data;
+    return store.get(key) || null;
   }
 
   static async setList(
@@ -39,7 +39,7 @@ export class KVStore {
       lastModified: Date.now(),
       subscribers: [userId],
     };
-    await kv.set(key, list);
+    store.set(key, list);
   }
 
   static async updateTodos(listId: string, todos: Todo[]): Promise<void> {
@@ -56,7 +56,7 @@ export class KVStore {
       lastModified: Date.now(),
     };
 
-    await kv.set(key, updated);
+    store.set(key, updated);
   }
 
   static async addSubscriber(listId: string, userId: string): Promise<void> {
@@ -69,7 +69,7 @@ export class KVStore {
 
     if (!list.subscribers.includes(userId)) {
       list.subscribers.push(userId);
-      await kv.set(key, list);
+      store.set(key, list);
     }
   }
 
@@ -82,11 +82,11 @@ export class KVStore {
     }
 
     list.subscribers = list.subscribers.filter((id) => id !== userId);
-    await kv.set(key, list);
+    store.set(key, list);
   }
 
   static async deleteList(listId: string): Promise<void> {
     const key = this.getListKey(listId);
-    await kv.del(key);
+    store.delete(key);
   }
 }

@@ -57,8 +57,8 @@ export function useSharedTodos({
       const newTodo: Todo = {
         id: crypto.randomUUID(),
         text,
-        completed: false,
-        createdAt: Date.now(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
 
       await optimisticUpdate('create', (todos) => [...todos, newTodo], newTodo);
@@ -95,7 +95,9 @@ export function useSharedTodos({
     async (id: string) => {
       const todo = todos.find((t) => t.id === id);
       if (todo) {
-        await updateTodo(id, { completed: !todo.completed });
+        await updateTodo(id, {
+          completedAt: todo.completedAt ? undefined : new Date(),
+        });
       }
     },
     [todos, updateTodo]
