@@ -12,7 +12,7 @@ const mockToggleTodo = jest.fn();
 const mockDeleteTodo = jest.fn();
 
 const mockReturnValue = {
-  todos: [],
+  todos: [] as Todo[],
   addTodo: mockAddTodo,
   toggleTodo: mockToggleTodo,
   deleteTodo: mockDeleteTodo,
@@ -23,7 +23,12 @@ const mockReturnValue = {
     status: 'synced' as const,
     pendingCount: 0,
     lastSyncTime: Date.now(),
-    errors: [],
+    errors: [] as Array<{
+      todoId: string;
+      operation: string;
+      error: string;
+      timestamp: number;
+    }>,
   },
   isConnected: true,
   queueStatus: {
@@ -35,7 +40,7 @@ const mockReturnValue = {
 const mockUseSharedTodos = jest.fn(() => mockReturnValue);
 
 jest.mock('@/hooks/useSharedTodos', () => ({
-  useSharedTodos: (args: unknown) => mockUseSharedTodos(args),
+  useSharedTodos: () => mockUseSharedTodos(),
 }));
 
 describe('SharedTodoList', () => {
@@ -69,10 +74,6 @@ describe('SharedTodoList', () => {
     mockUseSharedTodos.mockReturnValueOnce({
       ...mockReturnValue,
       isConnected: false,
-      syncState: {
-        ...mockReturnValue.syncState,
-        connectionState: 'disconnected',
-      },
     });
 
     render(<SharedTodoList listId='list-1' userId='user-1' />);
@@ -163,10 +164,6 @@ describe('SharedTodoList', () => {
       mockUseSharedTodos.mockReturnValueOnce({
         ...mockReturnValue,
         isConnected: false,
-        syncState: {
-          ...mockReturnValue.syncState,
-          connectionState: 'disconnected',
-        },
       });
 
       render(<SharedTodoList listId='list-1' userId='user-1' />);
@@ -214,10 +211,6 @@ describe('SharedTodoList', () => {
         ...mockReturnValue,
         todos: mockTodos,
         isConnected: false,
-        syncState: {
-          ...mockReturnValue.syncState,
-          connectionState: 'disconnected',
-        },
       });
 
       render(<SharedTodoList listId='list-1' userId='user-1' />);
