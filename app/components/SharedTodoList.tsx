@@ -105,14 +105,16 @@ export function SharedTodoList({
           >
             <input
               type='checkbox'
-              checked={todo.completed}
+              checked={!!todo.completedAt}
               onChange={() => toggleTodo(todo.id)}
               className='h-5 w-5 cursor-pointer rounded border-gray-300 text-blue-500 focus:ring-2 focus:ring-blue-500'
-              aria-label={`Mark "${todo.text}" as ${todo.completed ? 'incomplete' : 'complete'}`}
+              aria-label={`Mark "${todo.text}" as ${todo.completedAt ? 'incomplete' : 'complete'}`}
             />
             <span
               className={`flex-1 ${
-                todo.completed ? 'text-gray-400 line-through' : 'text-gray-700'
+                todo.completedAt
+                  ? 'text-gray-400 line-through'
+                  : 'text-gray-700'
               }`}
             >
               {todo.text}
