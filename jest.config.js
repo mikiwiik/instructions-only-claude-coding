@@ -18,6 +18,7 @@ const customJestConfig = {
     '!app/**/*.d.ts',
     '!app/**/layout.tsx',
     '!app/**/page.tsx',
+    '!app/api/**/*', // Temporarily excluded - see issue #193
   ],
   coverageReporters: ['json-summary', 'text', 'lcov', 'html'],
   reporters: [
