@@ -261,7 +261,16 @@ for comprehensive claude-workflow label usage and integration guidelines.
   - [ ] Focus management implemented correctly
   - [ ] Color contrast meets minimum ratios (4.5:1 text, 3:1 UI components)
   - [ ] Zero eslint-plugin-jsx-a11y violations
-- [ ] Comprehensive test coverage provided (including accessibility tests)
+- [ ] **🔄 Real-Time Synchronization requirements (when applicable)**:
+  - [ ] SSE connection properly managed (connection, reconnection, cleanup)
+  - [ ] Optimistic updates implemented with rollback capability
+  - [ ] Conflict resolution working as expected (last-write-wins)
+  - [ ] Multi-tab synchronization verified
+  - [ ] Offline behavior tested (queue and sync on reconnection)
+  - [ ] Connection resilience tested (auto-reconnect with backoff)
+  - [ ] Error handling comprehensive (network failures, conflicts)
+  - [ ] Sync status indicators in UI (connection state, pending operations)
+- [ ] Comprehensive test coverage provided (including accessibility and sync tests)
 - [ ] Documentation updated appropriately
 - [ ] **🚨 PR created with automerge enabled and reported to user**
 - [ ] **🚨 Agent has stopped and is waiting for human approval**
