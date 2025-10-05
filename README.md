@@ -123,6 +123,7 @@ checks, and testing scripts.
 - **Development**: Test-Driven Development (TDD)
 - **Code Quality**: SonarCloud for automated analysis
 - **Mobile**: Touch gestures with accessibility-first design (WCAG 2.2 AA compliant)
+- **Real-Time**: Server-Sent Events (SSE) for live synchronization
 - **Deployment**: Vercel with GitHub Actions CI/CD
 
 ## Design & UX
@@ -181,12 +182,26 @@ development planning. See [project management guide](docs/development/project-ma
 - ✅ **Add/Edit/Delete Todos**: Complete todo management functionality
 - ✅ **Toggle Completion**: Mark todos as complete/incomplete
 - ✅ **Touch Gestures**: Swipe right to complete, swipe left to delete, long press to edit
+- ✅ **Real-Time Sync**: Live updates across browser tabs and devices with SSE
 - ✅ **Accessibility First**: WCAG 2.2 AA compliant with keyboard alternatives for all gestures
 - ✅ **Local Persistence**: Browser localStorage for data persistence
 - ✅ **Responsive Design**: Works on desktop and mobile devices
 - ✅ **Type Safety**: Full TypeScript implementation
 - ✅ **Test Coverage**: Comprehensive test suite
 - ✅ **CI/CD Pipeline**: Automated testing and deployment
+
+### Real-Time Synchronization
+
+The application features Server-Sent Events (SSE) based real-time synchronization:
+
+- **Multi-Tab Sync**: Changes instantly propagate across all open browser tabs
+- **Optimistic Updates**: Immediate UI feedback with automatic rollback on errors
+- **Conflict Resolution**: Last-write-wins strategy with server timestamps
+- **Connection Resilience**: Automatic reconnection with exponential backoff
+- **Offline Support**: Queued updates sync when connection is restored
+
+See [ADR-018: Real-Time Sync Architecture](docs/adr/ADR-018-realtime-sync-architecture.md) and
+[ADR-019: Conflict Resolution](docs/adr/ADR-019-conflict-resolution.md) for technical details.
 
 ## Project Management
 
