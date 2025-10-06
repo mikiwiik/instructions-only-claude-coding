@@ -37,8 +37,10 @@ collaborative development patterns.
 ```text
 instructions-only-claude-coding/
 ├── app/                    # Next.js app directory (App Router)
+│   ├── api/               # API routes (Edge Runtime)
 │   ├── components/         # React components
 │   ├── hooks/             # Custom React hooks
+│   ├── lib/               # Utility libraries
 │   ├── types/             # TypeScript type definitions
 │   └── __tests__/         # Component and hook tests
 ├── docs/                  # Project documentation
@@ -80,6 +82,15 @@ The Todo App follows a component-based architecture with clear separation of con
 - **Integration Tests**: User workflow testing for complete features
 - **Test Coverage**: Comprehensive coverage of business logic
 
+#### Real-Time Synchronization
+
+- **SSE Connection**: Server-Sent Events for real-time updates across clients
+- **Optimistic Updates**: Immediate UI feedback with automatic rollback on errors
+- **Sync Queue**: Retry logic with exponential backoff for reliability
+- **Conflict Resolution**: Last-write-wins strategy using server timestamps
+
+For detailed architecture, see [Real-Time Sync Architecture Diagram](realtime-sync-diagram.md).
+
 ### Data Architecture
 
 #### Data Model
@@ -107,7 +118,7 @@ interface TodoOperations {
 
 - **Storage**: Browser localStorage for client-side persistence
 - **Serialization**: JSON serialization with date handling
-- **Synchronization**: Real-time updates across browser tabs
+- **Synchronization**: Real-time updates across browser tabs and devices via Server-Sent Events (SSE)
 
 ### Development Architecture
 
@@ -229,16 +240,18 @@ complete and up-to-date list of all ADRs, see [Architecture Decision Records](..
 
 ### Current Architecture Limitations
 
-- **Client-side Storage**: Limited to browser localStorage
-- **No Backend**: All logic runs in browser
-- **No Real-time Sync**: No synchronization between devices
+- **Client-side Storage**: Limited to browser localStorage for local todos
+- **Polling-Based Sync**: Development uses polling instead of Redis Pub/Sub for shared todos
+- **In-Memory KV Store**: Production should use persistent storage (Redis, Vercel KV)
 
 ### Future Scalability Options
 
-- **Backend Integration**: Add API layer for server-side persistence
-- **Database**: Transition from localStorage to proper database
-- **Real-time Features**: WebSocket integration for live updates
-- **User Management**: Authentication and user-specific data
+- **Redis Pub/Sub**: Replace polling with real-time Pub/Sub for SSE broadcasts
+- **Persistent KV Store**: Transition from in-memory to Redis or Vercel KV
+- **User Authentication**: Add auth layer for secure shared list access
+- **Operational Transforms**: Advanced conflict resolution beyond last-write-wins
+- **Presence Indicators**: Show active users in shared lists
+- **Database Migration**: Full database backend for complex queries and analytics
 
 ## Security Considerations
 
