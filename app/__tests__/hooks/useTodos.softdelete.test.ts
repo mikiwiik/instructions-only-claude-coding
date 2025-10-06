@@ -429,8 +429,8 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
       const originalTodo = result.current.todos[0];
       // Check original timestamps
-      originalTodo.createdAt;
-      originalTodo.updatedAt;
+      expect(originalTodo.createdAt).toBeDefined();
+      expect(originalTodo.updatedAt).toBeDefined();
 
       // TODO: After enhancement
       // act(() => {

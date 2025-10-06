@@ -5,8 +5,9 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   eslint: {
-    // Enable ESLint during builds
-    ignoreDuringBuilds: false,
+    // Disable Next.js built-in ESLint during builds (use npm run lint instead)
+    // Next.js 14 doesn't fully support ESLint v9 - upgrade to Next.js 15 for full support
+    ignoreDuringBuilds: true,
   },
 };
 
