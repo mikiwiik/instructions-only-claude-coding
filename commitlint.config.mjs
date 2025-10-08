@@ -13,7 +13,7 @@
  * @see https://commitlint.js.org/
  */
 
-module.exports = {
+export default {
   extends: ['@commitlint/config-conventional'],
 
   rules: {
