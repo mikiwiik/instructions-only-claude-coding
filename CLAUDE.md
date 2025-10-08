@@ -75,13 +75,17 @@ Agent-centric development instructions for instruction-only todo application dev
 - **Priority Labels**: priority-1-critical through priority-4-low
 - **Complexity Labels**: complexity-minimal through complexity-epic
 - **Category Labels**: category-feature, category-infrastructure, category-documentation, category-dx
+- **Lifecycle Stages**: Icebox → Backlog → Active → Done (GitHub Projects)
 - **Label Guide**: [docs/reference/labels-and-priorities.md](docs/reference/labels-and-priorities.md)
+- **Project Management**: [docs/development/project-management.md](docs/development/project-management.md)
+- **GitHub Projects Setup**: [docs/development/github-projects-setup.md](docs/development/github-projects-setup.md)
 
 ## Reference Documentation
 
 - **ADR Process**: [docs/adr/PROCESS.md](docs/adr/PROCESS.md)
 - **Troubleshooting**: [docs/reference/troubleshooting.md](docs/reference/troubleshooting.md)
 - **AI Attribution Strategy**: [docs/adr/015-ai-agent-attribution-strategy.md](docs/adr/015-ai-agent-attribution-strategy.md)
+- **GitHub Projects Adoption**: [docs/adr/020-github-projects-adoption.md](docs/adr/020-github-projects-adoption.md)
 
 ## Project Structure
 
