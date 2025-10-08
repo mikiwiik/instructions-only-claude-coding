@@ -104,9 +104,24 @@ jobs:
     - name: Build application
       run: npm run build
 
+    - name: Skip SonarCloud for Dependabot
+      if: |
+        matrix.os == 'ubuntu-latest' &&
+        matrix.node-version == '22.x' &&
+        github.actor == 'dependabot[bot]'
+      run: |
+        echo "ℹ️  Skipping SonarCloud analysis for Dependabot PR"
+        echo "📋 Reason: Dependabot PRs don't have access to SONAR_TOKEN secret"
+        echo "✅ SonarCloud will run on main branch after merge"
+        echo ""
+        echo "All other quality checks (lint, test, type-check) still run on this PR"
+
     - name: SonarCloud Analysis
       uses: SonarSource/sonarqube-scan-action@0303d6b62e310685c0e34d0b9cde218036885c4d
-      if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
+      if: |
+        matrix.os == 'ubuntu-latest' &&
+        matrix.node-version == '22.x' &&
+        github.actor != 'dependabot[bot]'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
