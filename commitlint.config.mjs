@@ -7,7 +7,7 @@
  * Referenced by:
  * - docs/core/workflows.md (Commit Message Format section)
  * - .husky/commit-msg (local validation)
- * - .github/workflows/build.yml (CI validation)
+ * - .github/workflows/build.yml (CI validation - requires .mjs extension)
  *
  * @see https://www.conventionalcommits.org/
  * @see https://commitlint.js.org/
