@@ -29,13 +29,71 @@ Optional footer for breaking changes or issue closure
 
 **Commit Types:**
 
+See `commitlint.config.js` for the authoritative list of allowed types. Common types include:
+
 - `feat`: New features
 - `fix`: Bug fixes
-- `test`: Adding or updating tests
 - `docs`: Documentation updates
+- `test`: Adding or updating tests
 - `refactor`: Code refactoring without behavior changes
 - `style`: Code style changes (formatting)
+- `ci`: CI/CD pipeline changes
+- `build`: Build system and dependencies
 - `chore`: Maintenance tasks
+- `security`: Security fixes and patches
+- `perf`: Performance improvements
+
+**Reference**: See `commitlint.config.js` for complete rules, validation logic, and detailed type descriptions.
+
+### Commit Message Validation
+
+**🚨 ENFORCED**: Commit messages are validated automatically via commitlint.
+
+**Local Validation** (commit-msg hook):
+- Runs on every `git commit`
+- Immediate feedback before push
+- Validates format against `commitlint.config.js`
+
+**CI Validation** (GitHub Actions):
+- Runs on all pull requests
+- Validates all commits in PR
+- Blocks merge if non-compliant commits found
+
+**Configuration**: See `commitlint.config.js` (root directory) for complete rules and allowed commit types.
+
+**Common Validation Errors**:
+
+```bash
+# ❌ Missing type
+Update README
+
+# ✅ Correct
+docs: update README
+
+# ❌ Uppercase subject
+feat: Add new feature
+
+# ✅ Correct
+feat: add new feature
+
+# ❌ Invalid type
+updated: fix typo
+
+# ✅ Correct
+fix: fix typo
+
+# ❌ Period at end
+docs: update README.
+
+# ✅ Correct
+docs: update README
+```
+
+**Bypassing Validation** (emergency only):
+```bash
+git commit --no-verify -m "emergency fix"
+```
+⚠️ CI will still validate - use only for local emergencies, fix before pushing.
 
 ### AI Agent Attribution
 
