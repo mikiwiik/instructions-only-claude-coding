@@ -25,7 +25,7 @@ jobs:
       - name: Validate PR commits
         uses: wagoid/commitlint-github-action@v6
         with:
-          configFile: commitlint.config.js
+          configFile: commitlint.config.mjs
 
   build:
     runs-on: ${{ matrix.os }}

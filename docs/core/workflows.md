@@ -29,7 +29,7 @@ Optional footer for breaking changes or issue closure
 
 **Commit Types:**
 
-See `commitlint.config.js` for the authoritative list of allowed types. Common types include:
+See `commitlint.config.mjs` for the authoritative list of allowed types. Common types include:
 
 - `feat`: New features
 - `fix`: Bug fixes
@@ -43,7 +43,7 @@ See `commitlint.config.js` for the authoritative list of allowed types. Common t
 - `security`: Security fixes and patches
 - `perf`: Performance improvements
 
-**Reference**: See `commitlint.config.js` for complete rules, validation logic, and detailed type descriptions.
+**Reference**: See `commitlint.config.mjs` for complete rules, validation logic, and detailed type descriptions.
 
 ### Commit Message Validation
 
@@ -52,14 +52,14 @@ See `commitlint.config.js` for the authoritative list of allowed types. Common t
 **Local Validation** (commit-msg hook):
 - Runs on every `git commit`
 - Immediate feedback before push
-- Validates format against `commitlint.config.js`
+- Validates format against `commitlint.config.mjs`
 
 **CI Validation** (GitHub Actions):
 - Runs on all pull requests
 - Validates all commits in PR
 - Blocks merge if non-compliant commits found
 
-**Configuration**: See `commitlint.config.js` (root directory) for complete rules and allowed commit types.
+**Configuration**: See `commitlint.config.mjs` (root directory) for complete rules and allowed commit types.
 
 **Common Validation Errors**:
 
