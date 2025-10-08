@@ -1,0 +1,60 @@
+# Dependabot configuration for automated dependency updates
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+
+    # Weekly updates on Monday mornings (UTC)
+    # Balances security responsiveness with manageable PR volume
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+
+    # Versioning strategy for pinned dependencies
+    # Updates exact versions (e.g., "1.2.3" -> "1.3.0")
+    # Aligns with project's pinned dependency policy (CLAUDE.md #11)
+    versioning-strategy: increase
+
+    # Limit open PRs to prevent review queue overflow
+    # Security updates bypass this limit (always immediate)
+    open-pull-requests-limit: 5
+
+    # Group minor and patch updates to reduce PR volume
+    # Major updates remain separate for careful review
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+
+      development-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+
+    # Commit message configuration (conventional commits)
+    # Aligns with project commit message conventions
+    commit-message:
+      prefix: "build(deps)"
+      prefix-development: "build(deps-dev)"
+      include: "scope"
+
+    # Labels for dependency PRs
+    # Enables easy filtering and tracking
+    labels:
+      - "dependencies"
+      - "category-infrastructure"
+
+    # Assignees for dependency PRs (optional)
+    # assignees:
+    #   - "username"
+
+    # Reviewers for dependency PRs (optional)
+    # reviewers:
+    #   - "username"
