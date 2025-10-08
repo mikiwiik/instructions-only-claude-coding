@@ -11,6 +11,22 @@ permissions:
   pull-requests: write
 
 jobs:
+  commitlint:
+    name: Commit Lint
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history to validate all PR commits
+
+      - name: Validate PR commits
+        uses: wagoid/commitlint-github-action@v6
+        with:
+          configFile: commitlint.config.js
+
   build:
     runs-on: ${{ matrix.os }}
 
