@@ -3,6 +3,83 @@
 This document outlines the project management practices, issue tracking workflow, and planning methodologies
 used in the Todo App project.
 
+## Kanban-Style Continuous Delivery Workflow
+
+The Todo App follows a **kanban-style workflow** with continuous, on-demand releases. There are no formal sprints or
+scheduled releases—work flows continuously from backlog to production.
+
+### Core Workflow Principles
+
+- **Continuous Flow**: Issues move through Todo → In Progress → Review → Testing → Done
+- **Work-in-Progress Limits**: Typically 1-2 issues actively being worked on at any time
+- **On-Demand Releases**: Features are pushed to production immediately upon completion
+- **Priority-Driven**: Next work is selected based on priority labels and complexity assessment
+- **Just-in-Time Planning**: Issue selection and planning happens as current work completes
+
+### Work-in-Progress (WIP) Management
+
+**Typical WIP**: 1-2 issues at a time
+
+**Benefits of Limited WIP**:
+
+- **Focused effort**: Deep work on current tasks without context switching
+- **Faster completion**: Issues move to Done faster with concentrated attention
+- **Reduced complexity**: Simpler coordination and fewer merge conflicts
+- **Clear priorities**: What's being worked on is always visible and intentional
+
+**Exception scenarios**:
+
+- Blocked issue: Start next priority while waiting for unblock
+- Multi-agent work: Parallel implementation by specialized agents (frontend + testing)
+- Quick fixes: Critical bugs may interrupt current work
+
+### Issue Selection Process
+
+**When current work completes**:
+
+1. **Review completed work**: Ensure PR is merged and deployed
+2. **Evaluate priorities**: Use `/select-next-issue` command or manual review
+3. **Select next issue**: Choose based on:
+   - Priority level (critical → high → medium → low)
+   - Complexity (prefer quick wins: high priority + simple/minimal complexity)
+   - Dependencies (blocking issues take precedence)
+   - Context switching costs (related work may be more efficient)
+4. **Start implementation**: Move issue to "In Progress" and begin work
+
+### Release Strategy
+
+**Continuous Deployment**:
+
+- **No release schedule**: Features deploy when ready
+- **Immediate value**: Users get improvements as soon as they're completed
+- **Small batches**: Individual features deployed independently
+- **Rapid feedback**: Quick iteration based on real usage
+- **Rollback ready**: Small changes are easier to revert if needed
+
+**Deployment triggers**:
+
+- PR merged to main branch
+- All CI/CD checks passing
+- Automated deployment to production (Vercel)
+
+### Backlog Management
+
+- **Priority Ordering**: Issues ordered by priority label (critical at top)
+- **Complexity Assessment**: All issues labeled with complexity for informed selection
+- **Continuous Grooming**: Priorities and complexity updated as understanding evolves
+- **Dependency Tracking**: Blocking issues identified and prioritized appropriately
+- **Quick Wins**: High-priority + simple-complexity issues highlighted for momentum
+
+### Planning and Coordination
+
+**No formal sprint planning**, but regular activities include:
+
+- **Daily prioritization**: Quick review of what to work on next
+- **Backlog grooming**: Update issue priorities and complexity as needed
+- **Dependency management**: Identify and sequence blocking issues
+- **Capacity awareness**: Consider complexity when selecting next work
+- **Retrospective improvements**: Continuous process optimization based on experience
+
 ## Project Management Overview
 
 The Todo App uses GitHub Issues for feature tracking and follows a structured development approach designed
@@ -17,138 +94,61 @@ Code collaboration.
 - **Quality Assurance**: Pre-commit hooks ensure code quality with automatic linting and formatting
 - **AI-Assisted Development**: Claude Code assistance integrated throughout development workflow
 
-## Priority System
+## Priority and Complexity System
 
-The project uses a standardized priority labeling system for effective issue management and resource allocation.
+**📋 Full Documentation**: See [`docs/reference/labels-and-priorities.md`](../reference/labels-and-priorities.md) for
+comprehensive details on:
 
-### Priority Labels
+- **Priority Labels**: priority-1-critical through priority-4-low
+- **Complexity Labels**: complexity-minimal through complexity-epic
+- **Category Labels**: category-feature, category-infrastructure, category-documentation, category-dx
+- **Assessment Guidelines**: Detailed criteria for assigning each label
+- **Planning Matrix**: Strategic combinations (quick wins, major features, learning opportunities)
 
-- **priority-1-critical** 🔴: Blocking issues, security vulnerabilities, broken core functionality
-- **priority-2-high** 🟠: Important features, significant improvements, major bugs
-- **priority-3-medium** 🟡: Standard features, minor improvements, non-critical bugs
-- **priority-4-low** 🟢: Nice-to-have features, documentation updates, minor enhancements
+### Quick Reference
 
-### Priority-Based Development Workflow
+**Priority Labels** 🔴🟠🟡🟢:
 
-Development efforts are prioritized based on issue labels:
+- **Critical**: Blocking issues, security, broken core functionality
+- **High**: Important features, significant improvements, major bugs
+- **Medium**: Standard features, minor improvements, non-critical bugs
+- **Low**: Nice-to-have features, documentation, minor enhancements
 
-1. **Critical Priority** 🔴: Immediate attention, stop other work
-   - Security vulnerabilities requiring immediate patches
-   - Blocking bugs that prevent core functionality
-   - Infrastructure issues affecting development workflow
+**Complexity Labels** 🟢🔵🟡🟠🔴:
 
-2. **High Priority** 🟠: Primary development focus for current sprint
-   - Major features that significantly enhance user experience
-   - Important architectural improvements
-   - Critical bug fixes for released features
+- **Minimal**: Single file changes (15-30 minutes)
+- **Simple**: Basic features, straightforward logic (1-3 hours)
+- **Moderate**: Multi-component changes, state management (3-8 hours)
+- **Complex**: Architecture changes, system design (1-3 days)
+- **Epic**: Major overhauls, breaking changes (1+ weeks)
 
-3. **Medium Priority** 🟡: Standard workflow, next sprint scheduling
-   - Standard feature development
-   - Performance improvements
-   - Non-critical bug fixes and enhancements
+**Category Labels**:
 
-4. **Low Priority** 🟢: Backlog items, learning opportunities
-   - Nice-to-have features for future consideration
-   - Documentation improvements and updates
-   - Learning experiments and exploration tasks
+- **Feature**: Core application functionality and user features
+- **Infrastructure**: DevOps, CI/CD, testing infrastructure
+- **Documentation**: ADRs, guides, technical writing
+- **DX**: Developer experience, Claude Code workflows, tooling
 
-### Priority Assessment Criteria
+### Strategic Issue Selection
 
-When assigning priority labels, consider:
+**Quick Wins** (High Priority + Low Complexity):
 
-- **User Impact**: How many users are affected by this issue?
-- **Business Value**: What value does this provide to the project goals?
-- **Technical Risk**: What are the risks of not addressing this issue?
-- **Dependencies**: Does this block other work or features?
-- **Effort vs. Value**: What is the return on investment for this work?
+- Immediate implementation for maximum impact
+- Perfect for filling small time gaps
+- Build momentum with visible progress
 
-## Complexity-Based Effort Estimation
+**Major Features** (High Priority + High Complexity):
 
-The project uses complexity labels to enable accurate effort estimation in Claude Code development, replacing
-traditional time-based estimates with cognitive load assessment.
-
-### Complexity Labels
-
-- **complexity-minimal** 🟢: Single file changes, quick fixes, documentation updates
-- **complexity-simple** 🔵: Basic features, straightforward logic, standard patterns
-- **complexity-moderate** 🟡: Multi-component changes, state management, integration work
-- **complexity-complex** 🟠: Architecture changes, system design, comprehensive testing
-- **complexity-epic** 🔴: Major overhauls, breaking changes, foundational work
-
-### Complexity Assessment Guidelines
-
-#### Minimal Complexity 🟢
-
-- **Scope**: Single file modifications
-- **Examples**: Documentation updates, simple bug fixes, configuration changes
-- **Typical Tasks**: Text changes, comment additions, single line fixes
-- **Considerations**: No architectural impact, minimal testing required
-
-#### Simple Complexity 🔵
-
-- **Scope**: Basic feature additions with straightforward logic
-- **Examples**: New UI components, simple data transformations, basic validations
-- **Typical Tasks**: Single component features, standard patterns
-- **Considerations**: Well-understood requirements, minimal dependencies
-
-#### Moderate Complexity 🟡
-
-- **Scope**: Multi-component changes requiring coordination
-- **Examples**: State management updates, feature integration, cross-component functionality
-- **Typical Tasks**: Complex UI interactions, data flow modifications
-- **Considerations**: Multiple file changes, integration testing required
-
-#### Complex Complexity 🟠
-
-- **Scope**: Architectural changes affecting system design
-- **Examples**: New technology adoption, major refactoring, performance optimization
-- **Typical Tasks**: Framework changes, design pattern implementation
-- **Considerations**: Significant testing, documentation, and review requirements
-
-#### Epic Complexity 🔴
-
-- **Scope**: Major overhauls requiring fundamental changes
-- **Examples**: Complete rewrites, breaking changes, foundational infrastructure
-- **Typical Tasks**: System-wide changes, major version updates
-- **Considerations**: Extensive planning, phased implementation, comprehensive testing
-
-## Combined Planning Approach
-
-Issues are labeled with both priority and complexity for optimal development planning and resource allocation.
-
-### Planning Matrix
-
-- **High Priority + Low Complexity** 🟠🟢: Quick wins and urgent fixes
-  - Immediate implementation for maximum impact
-  - Perfect for filling small time gaps
-  - Build momentum with visible progress
-
-- **High Priority + High Complexity** 🟠🔴: Major features requiring careful planning
-  - Requires detailed planning and architecture consideration
-  - May need breaking into smaller issues
-  - Allocate dedicated focused time
-
-- **Low Priority + Low Complexity** 🟢🟢: Good filler work and maintenance tasks
-  - Excellent for learning and experimentation
-  - Can be completed when waiting for other work
-  - Good for new contributors or skill development
-
-- **Low Priority + High Complexity** 🟢🔴: Learning opportunities and future preparation
-  - Research and exploration tasks
-  - Technology evaluation and prototyping
-  - Long-term strategic improvements
+- Requires detailed planning and architecture consideration
+- May need breaking into smaller issues
+- Allocate dedicated focused time
 
 ## Claude-Workflow Label Integration
 
-### AI Collaboration Issue Management
-
-The project includes specialized tracking for AI collaboration and Claude Code workflow improvements through
-the `claude-workflow` label.
-
 **📋 Full Guidelines**: See [`docs/guidelines/claude-workflow-labels.md`](../guidelines/claude-workflow-labels.md)
-for comprehensive claude-workflow label usage and integration guidelines.
+for comprehensive usage and integration guidelines.
 
-#### When to Use claude-workflow Label
+### When to Use claude-workflow Label
 
 **✅ Use for AI-related issues:**
 
@@ -157,52 +157,23 @@ for comprehensive claude-workflow label usage and integration guidelines.
 - CLAUDE.md documentation and requirements
 - Task planning protocols for agentic coding
 - Issue creation and labeling processes for AI development
-- Documentation consistency across AI-assisted development
 
 **❌ Standard development issues:**
 
 - General git/CI/CD workflow (use standard labels)
 - Feature implementations (focus on functionality)
 - UI/UX improvements (unless AI interaction specific)
-- Infrastructure changes (unless Claude Code related)
-
-#### Combined Label Patterns
-
-**Critical AI Workflow Issues:**
-
-```bash
---label "claude-workflow,priority-1-critical,complexity-simple"
-```
-
-**AI Documentation and Guidelines:**
-
-```bash
---label "claude-workflow,documentation,priority-2-high,complexity-simple"
-```
-
-**AI Process Improvements:**
-
-```bash
---label "claude-workflow,process-improvement,priority-2-high,complexity-moderate"
-```
-
-#### Integration Benefits
-
-- **Clear AI Focus**: Easy identification of AI collaboration improvements
-- **Methodology Tracking**: Monitor agentic coding workflow evolution
-- **Knowledge Management**: Organize learnings about instruction-based development
-- **Process Optimization**: Track and improve human-AI collaboration patterns
 
 ## Issue Management Workflow
 
-### Issue Creation
+### Issue Creation Requirements
 
-1. **Issue Template**: Use appropriate GitHub issue template
-2. **Title Format**: Clear, descriptive title following naming conventions
-3. **Priority Label**: Assign appropriate priority level
-4. **Complexity Label**: Estimate complexity based on assessment guidelines
-5. **Claude-Workflow Label**: Add if issue relates to AI collaboration or Claude Code usage
-6. **Additional Labels**: Add relevant labels (enhancement, bug, documentation, etc.)
+**🚨 MANDATORY**: All issues must include:
+
+- [ ] **Priority label** (priority-1-critical through priority-4-low)
+- [ ] **Complexity label** (complexity-minimal through complexity-epic)
+- [ ] **Category label** (exactly one category)
+- [ ] **Assessment rationale** in issue description
 
 ### Issue Description Requirements
 
@@ -227,85 +198,6 @@ for comprehensive claude-workflow label usage and integration guidelines.
 - **Automatic Closure**: Use closing keywords (Closes, Fixes, Resolves)
 - **Cross-References**: Link related issues and pull requests
 - **Progress Updates**: Regular status updates on complex issues
-
-## Development Workflow
-
-### Kanban-Style Continuous Delivery
-
-The project follows a **kanban-style workflow** with continuous, on-demand releases. There are no formal sprints or
-scheduled releases—work flows continuously from backlog to production.
-
-**Core Workflow Principles**:
-
-- **Continuous Flow**: Issues move through Todo → In Progress → Review → Testing → Done
-- **Work-in-Progress Limits**: Typically 1-2 issues actively being worked on at any time
-- **On-Demand Releases**: Features are pushed to production immediately upon completion
-- **Priority-Driven**: Next work is selected based on priority labels and complexity assessment
-- **Just-in-Time Planning**: Issue selection and planning happens as current work completes
-
-### Issue Selection Process
-
-**When current work completes**:
-
-1. **Review completed work**: Ensure PR is merged and deployed
-2. **Evaluate priorities**: Use `/select-next-issue` command or manual review
-3. **Select next issue**: Choose based on:
-   - Priority level (critical → high → medium → low)
-   - Complexity (prefer quick wins: high priority + simple/minimal complexity)
-   - Dependencies (blocking issues take precedence)
-   - Context switching costs (related work may be more efficient)
-4. **Start implementation**: Move issue to "In Progress" and begin work
-
-### Backlog Management
-
-- **Priority Ordering**: Issues ordered by priority label (critical at top)
-- **Complexity Assessment**: All issues labeled with complexity for informed selection
-- **Continuous Grooming**: Priorities and complexity updated as understanding evolves
-- **Dependency Tracking**: Blocking issues identified and prioritized appropriately
-- **Quick Wins**: High-priority + simple-complexity issues highlighted for momentum
-
-### Work-in-Progress (WIP) Management
-
-**Typical WIP**: 1-2 issues at a time
-
-**Benefits of Limited WIP**:
-
-- **Focused effort**: Deep work on current tasks without context switching
-- **Faster completion**: Issues move to Done faster with concentrated attention
-- **Reduced complexity**: Simpler coordination and fewer merge conflicts
-- **Clear priorities**: What's being worked on is always visible and intentional
-
-**Exception scenarios**:
-
-- Blocked issue: Start next priority while waiting for unblock
-- Multi-agent work: Parallel implementation by specialized agents (frontend + testing)
-- Quick fixes: Critical bugs may interrupt current work
-
-### Release Strategy
-
-**Continuous Deployment**:
-
-- **No release schedule**: Features deploy when ready
-- **Immediate value**: Users get improvements as soon as they're completed
-- **Small batches**: Individual features deployed independently
-- **Rapid feedback**: Quick iteration based on real usage
-- **Rollback ready**: Small changes are easier to revert if needed
-
-**Deployment triggers**:
-
-- PR merged to main branch
-- All CI/CD checks passing
-- Automated deployment to production (Vercel)
-
-### Planning and Coordination
-
-**No formal sprint planning**, but regular activities include:
-
-- **Daily prioritization**: Quick review of what to work on next
-- **Backlog grooming**: Update issue priorities and complexity as needed
-- **Dependency management**: Identify and sequence blocking issues
-- **Capacity awareness**: Consider complexity when selecting next work
-- **Retrospective improvements**: Continuous process optimization based on experience
 
 ## Quality Assurance Integration
 
@@ -373,6 +265,8 @@ priority/complexity label system while maintaining labels as the primary source 
 
 **📋 Decision Documentation**: See [ADR-020: GitHub Projects Adoption](../adr/020-github-projects-adoption.md) for
 full rationale and trade-offs.
+
+**🔧 Setup Guide**: See [GitHub Projects Setup Guide](github-projects-setup.md) for detailed configuration instructions.
 
 ### Custom Fields
 
