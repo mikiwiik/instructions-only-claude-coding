@@ -7,237 +7,239 @@ This guide provides step-by-step instructions for setting up GitHub Projects for
 **📖 Usage**: See [Project Management Documentation](project-management.md#github-projects-integration) for daily
 workflow and best practices.
 
+## Overview
+
+This setup combines **automated CLI steps** (project/field creation) with **manual web UI configuration**
+(views/automation) due to GitHub Projects v2 API limitations.
+
+**What can be automated**: Project creation, custom fields, bulk issue addition
+
+**What requires web UI**: Views, filters, sorting, automation workflows
+
+> **Note**: GitHub Projects v2 GraphQL API and `gh` CLI do not currently support programmatic view creation
+> or automation workflow configuration. These features are only available via the web interface.
+
 ## Prerequisites
 
 - Repository admin access to create projects
-- GitHub account with project scope permissions
+- GitHub CLI with project scope permissions
 
-## Phase 1: Project Creation
+### Authenticate GitHub CLI
 
-### Step 1: Create New Project
+```bash
+# Add project scope to GitHub CLI
+gh auth refresh --hostname github.com --scopes project
+```
 
-1. Navigate to repository: <https://github.com/mikiwiik/instructions-only-claude-coding>
-2. Click **Projects** tab
-3. Click **New project**
-4. Choose **Board** template (we'll customize views later)
-5. Name: `Todo App Project Management`
-6. Description: `Kanban-style project management with visual workflow, quick wins identification, and idea capture`
-7. Click **Create**
+## Part 1: Automated Setup (CLI)
 
-## Phase 2: Custom Fields Configuration
+### Step 1: Create Project
 
-### Step 2: Add Priority Field
+```bash
+# Create new project (save the project number from output)
+gh project create \
+  --owner @me \
+  --title "Todo App Project Management" \
+  --format json | tee project-output.json
 
-1. In project, click **+ New field** (top-right)
-2. Field name: `Priority`
-3. Field type: **Single select**
-4. Options (in order):
-   - `Critical` (🔴 red)
-   - `High` (🟠 orange)
-   - `Medium` (🟡 yellow)
-   - `Low` (🟢 green)
-5. Click **Save**
+# Extract project number for subsequent commands
+PROJECT_NUMBER=$(cat project-output.json | jq -r '.number')
+echo "Project number: $PROJECT_NUMBER"
+```
 
-### Step 3: Add Complexity Field
+### Step 2: Create Custom Fields
 
-1. Click **+ New field**
-2. Field name: `Complexity`
-3. Field type: **Single select**
-4. Options (in order):
-   - `Minimal` (🟢 green)
-   - `Simple` (🔵 blue)
-   - `Moderate` (🟡 yellow)
-   - `Complex` (🟠 orange)
-   - `Epic` (🔴 red)
-5. Click **Save**
+```bash
+# Create Priority field
+gh project field-create $PROJECT_NUMBER \
+  --owner @me \
+  --name "Priority" \
+  --data-type "SINGLE_SELECT" \
+  --single-select-options "Critical,High,Medium,Low"
 
-### Step 4: Add Category Field
+# Create Complexity field
+gh project field-create $PROJECT_NUMBER \
+  --owner @me \
+  --name "Complexity" \
+  --data-type "SINGLE_SELECT" \
+  --single-select-options "Minimal,Simple,Moderate,Complex,Epic"
 
-1. Click **+ New field**
-2. Field name: `Category`
-3. Field type: **Single select**
-4. Options:
-   - `Feature` (🟦 blue)
-   - `Infrastructure` (🟧 orange)
-   - `Documentation` (🟩 green)
-   - `DX` (🟪 purple)
-5. Click **Save**
+# Create Category field
+gh project field-create $PROJECT_NUMBER \
+  --owner @me \
+  --name "Category" \
+  --data-type "SINGLE_SELECT" \
+  --single-select-options "Feature,Infrastructure,Documentation,DX"
 
-### Step 5: Rename Status Field
+# Create Lifecycle field
+gh project field-create $PROJECT_NUMBER \
+  --owner @me \
+  --name "Lifecycle" \
+  --data-type "SINGLE_SELECT" \
+  --single-select-options "Icebox,Backlog,Active,Done"
+```
 
-1. Find existing **Status** field (from Board template)
-2. Click field menu → **Edit field**
-3. Ensure options are:
-   - `Todo`
-   - `In Progress`
-   - `Review`
-   - `Testing`
-   - `Done`
-   - `Blocked` (add if missing)
-4. Click **Save**
+**Note**: The default "Status" field is created automatically with the project.
 
-### Step 6: Add Lifecycle Field
+### Step 3: Configure Default Status Field
 
-1. Click **+ New field**
-2. Field name: `Lifecycle`
-3. Field type: **Single select**
-4. Options (in order):
-   - `Icebox` (🧊 light blue)
-   - `Backlog` (📋 gray)
-   - `Active` (⚡ yellow/green)
-   - `Done` (✅ green)
-5. Click **Save**
+The Status field is created automatically but may need option customization:
 
-## Phase 3: View Configuration
+1. Navigate to project: `gh project view $PROJECT_NUMBER --web`
+2. Click Status field → Edit field
+3. Ensure options: `Todo`, `In Progress`, `Review`, `Testing`, `Done`, `Blocked`
+4. Add any missing options
 
-### Step 7: Configure Board View (Rename Default)
+### Step 4: Bulk Add Existing Issues
 
-1. Find default view (likely named "Board" or similar)
-2. Click view menu → **Rename**
-3. Name: `Board - Workflow`
-4. Click **Settings** (gear icon)
-5. **Layout**: Board
-6. **Columns**: Group by `Status`
-7. **Column grouping**: Group by `Priority` (creates priority swimlanes)
-8. **Filter**: Add filter: `Lifecycle:Active OR Lifecycle:Backlog`
-9. **Sort**: (Status handles primary sort)
-10. Click **Save**
+```bash
+# Add all open issues to project
+gh issue list \
+  --repo mikiwiik/instructions-only-claude-coding \
+  --limit 1000 \
+  --json url \
+  --jq '.[] | .url' | \
+  xargs -I {} gh project item-add $PROJECT_NUMBER --owner @me --url {}
+```
 
-### Step 8: Create Backlog View
+### Step 5: Link Project to Repository
+
+```bash
+# Link project to repository for better integration
+gh project link $PROJECT_NUMBER \
+  --owner @me \
+  --repo mikiwiik/instructions-only-claude-coding
+```
+
+## Part 2: Manual Configuration (Web UI)
+
+The following steps **cannot be automated** with CLI or API and require web UI configuration.
+
+### Step 6: Create Project Views
+
+**Why manual?** GitHub Projects v2 API does not support view creation or configuration.
+
+Navigate to project: `gh project view $PROJECT_NUMBER --web`
+
+#### View 1: Board - Workflow (Modify Default)
+
+1. Find default "Board" view
+2. Click view menu → Settings (gear icon)
+3. Configure:
+   - **Layout**: Board
+   - **Group by**: Status
+   - **Column grouping**: Priority (swimlanes)
+   - **Filter**: `Lifecycle:Active OR Lifecycle:Backlog`
+4. Click Save
+
+#### View 2: Backlog - Next Issue
 
 1. Click **+ New view**
 2. Name: `Backlog - Next Issue`
-3. **Layout**: Table
-4. **Columns**: (reorder to show these first)
-   - Title
-   - Priority
-   - Complexity
-   - Category
-   - Status
-   - Lifecycle
-   - Labels (optional)
-5. **Sort**:
-   - Primary: `Priority` (Critical → Low)
-   - Secondary: `Complexity` (Minimal → Epic)
-6. **Filter**: `Lifecycle:Active OR Lifecycle:Backlog`
-7. Click **Save**
+3. Configure:
+   - **Layout**: Table
+   - **Columns**: Title, Priority, Complexity, Category, Status, Lifecycle
+   - **Sort**: Priority (Critical → Low), then Complexity (Minimal → Epic)
+   - **Filter**: `Lifecycle:Active OR Lifecycle:Backlog`
+4. Click Save
 
-### Step 9: Create Quick Wins View
+#### View 3: Quick Wins - High Priority + Simple
 
 1. Click **+ New view**
 2. Name: `Quick Wins - High Priority + Simple`
-3. **Layout**: Board
-4. **Columns**: Group by `Status`
-5. **Filter**: Add three filters (AND logic):
-   - `Priority:High`
-   - `Complexity:Simple OR Complexity:Minimal`
-   - `Lifecycle:Active`
-6. Click **Save**
+3. Configure:
+   - **Layout**: Board
+   - **Group by**: Status
+   - **Filter**: `Priority:High AND (Complexity:Simple OR Complexity:Minimal) AND Lifecycle:Active`
+4. Click Save
 
-### Step 10: Create Agent Workload View
+#### View 4: Agent Workload - Current Work
 
 1. Click **+ New view**
 2. Name: `Agent Workload - Current Work`
-3. **Layout**: Board
-4. **Columns**: Group by `Status`
-5. **Group by**: If available, group by `Agent` field (optional - may need to create Agent field first)
-6. **Filter**: `Lifecycle:Active`
-7. Click **Save**
+3. Configure:
+   - **Layout**: Board
+   - **Group by**: Status
+   - **Filter**: `Lifecycle:Active`
+4. Click Save
 
-**Note**: If you want the Agent field:
+**Optional Agent Field**: If you want agent-specific grouping:
 
-- Create new field: `Agent` (Single select)
-- Options: `Frontend`, `Testing`, `QA`, `Documentation`, `Multiple`, `None`
-- Then configure this view to group by Agent
+- Create Agent field:
+  `gh project field-create $PROJECT_NUMBER --owner @me --name "Agent" --data-type "SINGLE_SELECT"
+--single-select-options "Frontend,Testing,QA,Documentation,Multiple,None"`
+- Then change "Group by" to Agent in View 4 settings
 
-### Step 11: Create Icebox View
+#### View 5: Icebox - Raw Ideas
 
 1. Click **+ New view**
 2. Name: `Icebox - Raw Ideas`
-3. **Layout**: Table or Board (your preference)
-4. **Filter**: `Lifecycle:Icebox`
-5. **Columns** (if Table): Title, Priority (optional), Complexity (optional), Category (optional)
-6. Click **Save**
+3. Configure:
+   - **Layout**: Table or Board (your preference)
+   - **Filter**: `Lifecycle:Icebox`
+   - **Columns** (if Table): Title, Priority (optional), Complexity (optional)
+4. Click Save
 
-## Phase 4: Automation Configuration
+### Step 7: Configure Automation Workflows
 
-### Step 12: Set Up Auto-Add Workflow
+**Why manual?** GitHub Projects v2 automation workflows are only configurable via web UI.
 
-1. Click project menu (three dots) → **Workflows**
-2. Find **Item added to project** workflow
-3. Enable **Auto-add to project**
-4. **Filter**: `repo:mikiwiik/instructions-only-claude-coding is:issue is:open`
-5. This automatically adds all new and existing open issues to project
-6. Click **Save**
+In project settings (three dots menu → Workflows):
 
-### Step 13: Set Up Auto-Archive Workflow
+#### Auto-Add Workflow
 
-1. In **Workflows** settings
-2. Find **Item closed** workflow
-3. Enable **Auto-archive items**
-4. **When**: `Item closed`
-5. **Set**: `Status = Done`, `Lifecycle = Done`
-6. Click **Save**
+1. Find **Item added to project** workflow
+2. Enable **Auto-add to project**
+3. Filter: `repo:mikiwiik/instructions-only-claude-coding is:issue is:open`
+4. This automatically adds all new and existing open issues
+5. Click Save
 
-### Step 14: Set Up PR Merge Workflow (if available)
+#### Auto-Archive Workflow
 
-1. In **Workflows** settings
-2. Find **Pull request merged** workflow (if available)
-3. Enable **Set field values**
-4. **When**: `Pull request merged and linked issue`
-5. **Set**: `Status = Done`
-6. Click **Save**
+1. Find **Item closed** workflow
+2. Enable **Auto-archive items**
+3. When: `Item closed`
+4. Set: `Status = Done`, `Lifecycle = Done`
+5. Click Save
 
-**Note**: Some automation may require project beta features. Enable what's available.
+#### PR Merge Workflow (if available)
 
-## Phase 5: Initial Population
+1. Find **Pull request merged** workflow
+2. Enable **Set field values**
+3. When: `Pull request merged and linked issue`
+4. Set: `Status = Done`
+5. Click Save
 
-### Step 15: Bulk Add Existing Issues
+**Note**: Some automation may require GitHub Projects beta features.
 
-If auto-add didn't trigger for existing issues:
+## Part 3: Initial Population and Triage
 
-1. Navigate to Issues tab
-2. Select all open issues (or use filter)
-3. Click **Projects** → Select your project
-4. This adds issues in bulk
-
-**CLI Alternative**:
-
-```bash
-# Get project number first
-gh project list --owner @me
-
-# Add all open issues
-gh issue list --limit 1000 --json number,url --jq '.[] | .url' | \
-  xargs -I {} gh project item-add PROJECT_NUMBER --owner mikiwiik --url {}
-```
-
-### Step 16: Triage Issues to Lifecycle Stages
+### Step 8: Triage Issues to Lifecycle Stages
 
 Go through each issue and set Lifecycle field based on readiness:
 
-**Icebox** 🧊 - Move here if:
+**Icebox** 🧊 - For issues that are:
 
-- Rough idea without clear requirements
-- Needs research or exploration
+- Rough ideas without clear requirements
+- Need research or exploration
 - "Nice to have someday" without immediate plan
 - Unclear scope or approach
 
-**Backlog** 📋 - Move here if:
+**Backlog** 📋 - For issues that are:
 
 - Well-defined with clear requirements
-- Has proper priority and complexity labels
+- Have proper priority and complexity labels
 - Ready for implementation, but not immediate
-- Dependency or sequencing considerations
+- Have dependency or sequencing considerations
 
-**Active** ⚡ - Move here if:
+**Active** ⚡ - For issues that are:
 
 - Currently being worked on (1-2 issues max)
 - Next up based on priority
 - High priority and ready to start
-- Blocks other work
+- Block other work
 
-**Done** ✅:
+**Done** ✅ - For issues that are:
 
 - Only for closed/completed issues
 - Usually auto-set by automation
@@ -251,56 +253,61 @@ Go through each issue and set Lifecycle field based on readiness:
 - [ ] Move unclear/exploratory issues to Icebox
 - [ ] Ensure Backlog issues have proper labels
 
-### Step 17: Populate Custom Fields from Labels
+### Step 9: Populate Custom Fields from Labels
 
-For each issue with Lifecycle `Active` or `Backlog`:
+For each issue with Lifecycle `Active` or `Backlog`, set custom fields based on labels:
 
-1. **Priority field**: Set based on issue's `priority-*` label
-   - `priority-1-critical` → `Critical`
-   - `priority-2-high` → `High`
-   - `priority-3-medium` → `Medium`
-   - `priority-4-low` → `Low`
+**Priority field** (from `priority-*` labels):
 
-2. **Complexity field**: Set based on issue's `complexity-*` label
-   - `complexity-minimal` → `Minimal`
-   - `complexity-simple` → `Simple`
-   - `complexity-moderate` → `Moderate`
-   - `complexity-complex` → `Complex`
-   - `complexity-epic` → `Epic`
+- `priority-1-critical` → `Critical`
+- `priority-2-high` → `High`
+- `priority-3-medium` → `Medium`
+- `priority-4-low` → `Low`
 
-3. **Category field**: Set based on issue's `category-*` label
-   - `category-feature` → `Feature`
-   - `category-infrastructure` → `Infrastructure`
-   - `category-documentation` → `Documentation`
-   - `category-dx` → `DX`
+**Complexity field** (from `complexity-*` labels):
 
-4. **Status field**: Set based on current work state
-   - Not started → `Todo`
-   - Currently working → `In Progress`
-   - Awaiting review → `Review`
-   - In testing → `Testing`
-   - Blocked → `Blocked`
+- `complexity-minimal` → `Minimal`
+- `complexity-simple` → `Simple`
+- `complexity-moderate` → `Moderate`
+- `complexity-complex` → `Complex`
+- `complexity-epic` → `Epic`
+
+**Category field** (from `category-*` labels):
+
+- `category-feature` → `Feature`
+- `category-infrastructure` → `Infrastructure`
+- `category-documentation` → `Documentation`
+- `category-dx` → `DX`
+
+**Status field** (based on current work state):
+
+- Not started → `Todo`
+- Currently working → `In Progress`
+- Awaiting review → `Review`
+- In testing → `Testing`
+- Blocked → `Blocked`
 
 **Note**: Icebox issues can skip Priority/Complexity if not yet defined.
 
-## Phase 6: Verification
+## Verification
 
-### Step 18: Test Views
+### Test Views
 
 Navigate through each view and verify:
 
 - [ ] **Board - Workflow**: Shows Active/Backlog issues grouped by Priority
 - [ ] **Backlog - Next Issue**: Table sorted by Priority → Complexity
 - [ ] **Quick Wins**: Filtered to high-priority + simple-complexity issues only
-- [ ] **Agent Workload**: Shows Active issues (grouped by Agent if field exists)
+- [ ] **Agent Workload**: Shows Active issues
 - [ ] **Icebox**: Shows only Icebox issues
 
-### Step 19: Test Automation
+### Test Automation
 
 Create a test issue to verify automation:
 
 ```bash
 gh issue create \
+  --repo mikiwiik/instructions-only-claude-coding \
   --title "Test: GitHub Projects Automation" \
   --body "Testing auto-add to project and field population" \
   --label "priority-4-low,complexity-minimal,category-infrastructure"
@@ -312,14 +319,6 @@ Verify:
 - [ ] Appears in Backlog view
 - [ ] Can manually set Lifecycle, Priority, Complexity, Category fields
 - [ ] Closing issue sets Status and Lifecycle to Done
-
-### Step 20: Document Project URL
-
-Get project URL to reference in documentation:
-
-1. Navigate to project
-2. Copy URL from browser (format: `https://github.com/users/mikiwiik/projects/N`)
-3. Add to `CLAUDE.md` and documentation as needed
 
 ## Daily Workflow Quick Reference
 
@@ -346,16 +345,35 @@ Get project URL to reference in documentation:
 2. Promote ready ideas to Backlog with proper labels
 3. Close or archive stale Icebox items
 
+## CLI Reference
+
+```bash
+# List projects
+gh project list --owner @me
+
+# View project items
+gh project item-list $PROJECT_NUMBER --owner @me
+
+# Add issue to project (usually automated)
+gh project item-add $PROJECT_NUMBER --owner @me --url ISSUE_URL
+
+# Close issue (triggers automation)
+gh issue close ISSUE_NUMBER --repo mikiwiik/instructions-only-claude-coding
+
+# View project in browser
+gh project view $PROJECT_NUMBER --owner @me --web
+```
+
 ## Troubleshooting
 
 **Issues not auto-adding**:
 
 - Check Workflows → Auto-add filter matches repository
-- Manually add: Click issue → Projects → Select project
+- Manually add: `gh project item-add $PROJECT_NUMBER --owner @me --url ISSUE_URL`
 
 **Fields not populating from labels**:
 
-- This is manual for now; set fields based on labels
+- This is manual for now; set fields based on labels in web UI
 - Future: Could create GitHub Action to sync label → field
 
 **Views not filtering correctly**:
@@ -368,32 +386,11 @@ Get project URL to reference in documentation:
 - Verify workflows are enabled in project settings
 - Some features may require GitHub Projects beta enrollment
 
-## CLI Reference
-
-```bash
-# List projects
-gh project list --owner @me
-
-# View project items
-gh project item-list PROJECT_NUMBER
-
-# Add issue to project
-gh project item-add PROJECT_NUMBER --owner mikiwiik --url ISSUE_URL
-
-# Close issue (triggers automation)
-gh issue close ISSUE_NUMBER
-
-# View project in browser
-gh project view PROJECT_NUMBER --web
-```
-
 ## Next Steps
 
 After setup:
 
-1. Use project daily for 2-3 months
+1. Use project daily for 2-3 months (pilot period)
 2. Evaluate effectiveness vs. overhead
 3. Document lessons learned
-4. Decide on full adoption or rollback
-
-See [ADR-020](../adr/020-github-projects-adoption.md) for success criteria and evaluation plan.
+4. Decide on full adoption or rollback per [ADR-020](../adr/020-github-projects-adoption.md)
