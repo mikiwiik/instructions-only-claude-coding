@@ -9,9 +9,9 @@ the development workflow while maintaining code quality through CI validation.
 
 ### 1. Automatic PR Approval
 
-- When you create a PR, the `auto-approve.yml` workflow runs
-- If the PR author is the repository owner (`mikiwiik`), it automatically approves the PR
-- This satisfies the "1 approval required" branch protection rule
+- Manual approval is required for standard PRs to satisfy branch protection rules
+- Dependabot PRs automatically enable auto-merge via the `dependabot-auto-merge.yml` workflow
+- All PRs must have 1 approval before merge (configured in branch protection)
 
 ### 2. GitHub Auto-Merge
 
@@ -39,11 +39,22 @@ git push -u origin feature/XX-description
 # 4. Create PR
 gh pr create --title "Feature: Description" --body "Closes #XX"
 
-# 5. Enable auto-merge
-gh pr merge --auto --squash
+# 5. Enable auto-merge with rebase
+gh pr merge --auto --rebase
 
 # PR will merge automatically when CI passes!
 ```
+
+### 4. Dependabot Auto-Merge
+
+Dependabot PRs are fully automated:
+
+- When Dependabot creates a PR, the `dependabot-auto-merge.yml` workflow runs
+- Auto-merge with rebase is automatically enabled
+- PR merges when CI passes and approval is obtained
+- No manual intervention required
+
+This preserves atomic commits from Dependabot while ensuring all changes pass CI before merge.
 
 ## Benefits
 
@@ -63,7 +74,7 @@ gh pr merge --auto --squash
 
 ### Workflow Files
 
-- `.github/workflows/auto-approve.yml` - Automatically approves PRs from repository owner
+- `.github/workflows/dependabot-auto-merge.yml` - Automatically enables auto-merge for Dependabot PRs
 - `.github/workflows/build.yml` - CI workflow that must pass before merge
 
 ## Troubleshooting
@@ -86,12 +97,13 @@ gh pr merge --auto --squash
 If auto-merge fails, you can always merge manually:
 
 ```bash
-gh pr merge --squash
+gh pr merge --rebase
 ```
 
 ## Security Considerations
 
-- Auto-approval only works for repository owner
-- All code still goes through CI validation
-- Branch protection prevents direct pushes
+- Dependabot auto-merge only enables merge automation, approval still required
+- All code still goes through CI validation before merge
+- Branch protection prevents direct pushes to main
 - Force pushes and deletions are blocked
+- Dependabot PRs use rebase strategy to preserve atomic commits
