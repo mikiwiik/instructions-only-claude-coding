@@ -3,6 +3,21 @@
 This document outlines the project management practices, issue tracking workflow, and planning methodologies
 used in the Todo App project.
 
+## Overview: Human and Agent Collaboration
+
+**Primary Users**: The GitHub Projects views and boards are designed primarily for **human project management** -
+providing visual workflow management, prioritization, and planning capabilities.
+
+**Agent Role**: Claude Code agents (like `mikiwiik-agent`) interact with the project by:
+
+- **Reading** issue states, labels, and metadata to understand work priorities
+- **Updating** project fields (Status, Lifecycle) as work progresses
+- **Creating/Closing** issues and updating linked project items automatically
+- **Following** the workflow defined here while working on implementation tasks
+
+**Key Distinction**: Humans use the visual boards for planning and oversight; agents use the CLI and API to read
+priorities and update state as they execute the work defined in issues.
+
 ## Kanban-Style Continuous Delivery Workflow
 
 The Todo App follows a **kanban-style workflow** with continuous, on-demand releases. There are no formal sprints or

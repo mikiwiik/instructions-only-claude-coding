@@ -27,9 +27,27 @@ This setup combines **automated CLI steps** (project/field creation) with **manu
 ### Authenticate GitHub CLI
 
 ```bash
-# Add project scope to GitHub CLI
+# Add project scope to GitHub CLI (for mikiwiik-agent)
 gh auth refresh --hostname github.com --scopes project
 ```
+
+### Agent Permissions
+
+**Important**: When Claude Code (running as `mikiwiik-agent`) executes these commands, the `mikiwiik-agent` user must
+have the following permissions:
+
+- **Project Write Access**: Ability to create and modify project items, fields, and settings
+- **Repository Write Access**: Ability to add issues to projects and update issue metadata
+- **Organization Member**: Must be a member of the organization (if project is organization-level)
+
+**To grant permissions**:
+
+1. Navigate to project settings
+2. Add `mikiwiik-agent` as a collaborator with **Write** or **Admin** access
+3. Verify permissions: `gh project list --owner mikiwiik` (should list projects)
+
+**Note**: All commands use `--owner mikiwiik` to ensure the project and data are owned by `mikiwiik`, not
+`mikiwiik-agent`. The agent acts as a collaborator with write permissions.
 
 ## Part 1: Automated Setup (CLI)
 
@@ -38,7 +56,7 @@ gh auth refresh --hostname github.com --scopes project
 ```bash
 # Create new project (save the project number from output)
 gh project create \
-  --owner @me \
+  --owner mikiwiik \
   --title "Todo App Project Management" \
   --format json | tee project-output.json
 
@@ -52,28 +70,28 @@ echo "Project number: $PROJECT_NUMBER"
 ```bash
 # Create Priority field
 gh project field-create $PROJECT_NUMBER \
-  --owner @me \
+  --owner mikiwiik \
   --name "Priority" \
   --data-type "SINGLE_SELECT" \
   --single-select-options "Critical,High,Medium,Low"
 
 # Create Complexity field
 gh project field-create $PROJECT_NUMBER \
-  --owner @me \
+  --owner mikiwiik \
   --name "Complexity" \
   --data-type "SINGLE_SELECT" \
   --single-select-options "Minimal,Simple,Moderate,Complex,Epic"
 
 # Create Category field
 gh project field-create $PROJECT_NUMBER \
-  --owner @me \
+  --owner mikiwiik \
   --name "Category" \
   --data-type "SINGLE_SELECT" \
   --single-select-options "Feature,Infrastructure,Documentation,DX"
 
 # Create Lifecycle field
 gh project field-create $PROJECT_NUMBER \
-  --owner @me \
+  --owner mikiwiik \
   --name "Lifecycle" \
   --data-type "SINGLE_SELECT" \
   --single-select-options "Icebox,Backlog,Active,Done"
@@ -99,7 +117,7 @@ gh issue list \
   --limit 1000 \
   --json url \
   --jq '.[] | .url' | \
-  xargs -I {} gh project item-add $PROJECT_NUMBER --owner @me --url {}
+  xargs -I {} gh project item-add $PROJECT_NUMBER --owner mikiwiik --url {}
 ```
 
 ### Step 5: Link Project to Repository
@@ -107,7 +125,7 @@ gh issue list \
 ```bash
 # Link project to repository for better integration
 gh project link $PROJECT_NUMBER \
-  --owner @me \
+  --owner mikiwiik \
   --repo mikiwiik/instructions-only-claude-coding
 ```
 
@@ -166,7 +184,7 @@ Navigate to project: `gh project view $PROJECT_NUMBER --web`
 **Optional Agent Field**: If you want agent-specific grouping:
 
 - Create Agent field:
-  `gh project field-create $PROJECT_NUMBER --owner @me --name "Agent" --data-type "SINGLE_SELECT"
+  `gh project field-create $PROJECT_NUMBER --owner mikiwiik --name "Agent" --data-type "SINGLE_SELECT"
 --single-select-options "Frontend,Testing,QA,Documentation,Multiple,None"`
 - Then change "Group by" to Agent in View 4 settings
 
@@ -349,19 +367,19 @@ Verify:
 
 ```bash
 # List projects
-gh project list --owner @me
+gh project list --owner mikiwiik
 
 # View project items
-gh project item-list $PROJECT_NUMBER --owner @me
+gh project item-list $PROJECT_NUMBER --owner mikiwiik
 
 # Add issue to project (usually automated)
-gh project item-add $PROJECT_NUMBER --owner @me --url ISSUE_URL
+gh project item-add $PROJECT_NUMBER --owner mikiwiik --url ISSUE_URL
 
 # Close issue (triggers automation)
 gh issue close ISSUE_NUMBER --repo mikiwiik/instructions-only-claude-coding
 
 # View project in browser
-gh project view $PROJECT_NUMBER --owner @me --web
+gh project view $PROJECT_NUMBER --owner mikiwiik --web
 ```
 
 ## Troubleshooting
@@ -369,7 +387,7 @@ gh project view $PROJECT_NUMBER --owner @me --web
 **Issues not auto-adding**:
 
 - Check Workflows → Auto-add filter matches repository
-- Manually add: `gh project item-add $PROJECT_NUMBER --owner @me --url ISSUE_URL`
+- Manually add: `gh project item-add $PROJECT_NUMBER --owner mikiwiik --url ISSUE_URL`
 
 **Fields not populating from labels**:
 
