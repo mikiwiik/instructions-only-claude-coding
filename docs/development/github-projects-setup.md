@@ -31,23 +31,71 @@ This setup combines **automated CLI steps** (project/field creation) with **manu
 gh auth refresh --hostname github.com --scopes project
 ```
 
-### Agent Permissions
+### Role-Based Access Control
 
-**Important**: When Claude Code (running as `mikiwiik-agent`) executes these commands, the `mikiwiik-agent` user must
-have the following permissions:
+GitHub Projects supports three roles with different permission levels:
 
-- **Project Write Access**: Ability to create and modify project items, fields, and settings
-- **Repository Write Access**: Ability to add issues to projects and update issue metadata
-- **Organization Member**: Must be a member of the organization (if project is organization-level)
+| Role      | View | Edit Items/Fields | Manage Collaborators | Use Case                 |
+| --------- | ---- | ----------------- | -------------------- | ------------------------ |
+| **Read**  | ✅   | ❌                | ❌                   | Observers                |
+| **Write** | ✅   | ✅                | ❌                   | **Agents** (recommended) |
+| **Admin** | ✅   | ✅                | ✅                   | **Humans** (owners)      |
 
-**To grant permissions**:
+### Recommended Role Assignments
 
-1. Navigate to project settings
-2. Add `mikiwiik-agent` as a collaborator with **Write** or **Admin** access
-3. Verify permissions: `gh project list --owner mikiwiik` (should list projects)
+**Human Users** (`mikiwiik`):
 
-**Note**: All commands use `--owner mikiwiik` to ensure the project and data are owned by `mikiwiik`, not
-`mikiwiik-agent`. The agent acts as a collaborator with write permissions.
+- **Role**: Admin
+- **Capabilities**: Create project, configure views, manage collaborators, plan priorities
+- **Rationale**: Full control for project ownership and strategic management
+
+**Agent Users** (`mikiwiik-agent`):
+
+- **Role**: Write
+- **Capabilities**: Read issue states, update project fields, create/close issues
+- **Rationale**: Sufficient for execution tasks without access to permission management
+- **Principle**: Least privilege - agent can execute work but can't modify access control
+
+### Setting Up Agent Permissions
+
+#### Step 1: Verify Repository Access
+
+Ensure `mikiwiik-agent` has repository write access (for issue operations):
+
+```bash
+# Check current collaborators
+gh api /repos/mikiwiik/instructions-only-claude-coding/collaborators --jq '.[].login'
+```
+
+#### Step 2: Grant Project Access
+
+After creating the project (Step 1 below), grant Write access to `mikiwiik-agent`:
+
+1. Navigate to project settings: `gh project view $PROJECT_NUMBER --owner mikiwiik --web`
+2. Go to **Settings** → **Manage access**
+3. Click **Invite collaborators**
+4. Add `mikiwiik-agent` with **Write** role
+5. Save changes
+
+#### Step 3: Verify Agent Permissions
+
+```bash
+# Agent should be able to list projects (as collaborator)
+gh project list --owner mikiwiik
+
+# Agent should be able to view project items
+gh project item-list $PROJECT_NUMBER --owner mikiwiik
+```
+
+### Understanding `--owner` Flag
+
+**Important**: The `--owner mikiwiik` flag means "manage projects owned by mikiwiik" - it does NOT change who
+executes the command. When `mikiwiik-agent` runs these commands:
+
+- `--owner mikiwiik` = "manage mikiwiik's projects"
+- Agent operates as a **collaborator with Write role**
+- Project ownership remains with `mikiwiik`
+- Agent can read/update but cannot manage access control
 
 ## Part 1: Automated Setup (CLI)
 
