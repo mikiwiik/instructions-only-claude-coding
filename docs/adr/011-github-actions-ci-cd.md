@@ -32,10 +32,6 @@ We will use **GitHub Actions** as our CI/CD platform for the following workflow:
 - Multi-OS testing (Ubuntu, Windows, macOS)
 - npm dependency caching for performance
 - Build artifact storage for potential deployment use
-- Security scanning:
-  - Weekly npm audit for dependency vulnerabilities
-  - CodeQL code scanning for source code security analysis
-  - SonarCloud static analysis for code quality
 
 ## Consequences
 
