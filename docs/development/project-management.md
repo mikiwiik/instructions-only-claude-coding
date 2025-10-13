@@ -18,6 +18,25 @@ providing visual workflow management, prioritization, and planning capabilities.
 **Key Distinction**: Humans use the visual boards for planning and oversight; agents use the CLI and API to read
 priorities and update state as they execute the work defined in issues.
 
+### Role-Based Access Model
+
+The project uses GitHub Projects' built-in roles to enforce the separation between planning and execution:
+
+| User Type | Role  | Responsibilities                                                             |
+| --------- | ----- | ---------------------------------------------------------------------------- |
+| **Human** | Admin | Project ownership, view configuration, access management, strategic planning |
+| **Agent** | Write | Read priorities, update item states, execute work, no access control changes |
+
+**Why This Matters**:
+
+- **Least Privilege**: Agents get exactly the permissions needed for execution, nothing more
+- **Clear Boundaries**: Humans manage structure/access, agents execute defined work
+- **Auditability**: Role assignments make it clear who can do what
+- **Security**: Agents cannot accidentally modify project access or structure
+
+See [GitHub Projects Setup Guide](github-projects-setup.md#role-based-access-control) for detailed role documentation
+and setup instructions.
+
 ## Kanban-Style Continuous Delivery Workflow
 
 The Todo App follows a **kanban-style workflow** with continuous, on-demand releases. There are no formal sprints or
