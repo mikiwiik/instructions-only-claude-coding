@@ -318,7 +318,7 @@ const securityEvents = [
 6. **Security Misconfiguration**: Secure defaults, headers
 7. **Cross-Site Scripting**: Content sanitization
 8. **Insecure Deserialization**: JSON parsing with validation
-9. **Known Vulnerabilities**: Dependency scanning, updates
+9. **Known Vulnerabilities**: Dependency scanning (npm audit), CodeQL code scanning, SonarCloud analysis
 10. **Insufficient Logging**: Security event logging
 
 ## Risk Assessment Matrix
