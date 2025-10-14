@@ -13,7 +13,7 @@
  * @see https://commitlint.js.org/
  */
 
-export default {
+const config = {
   extends: ['@commitlint/config-conventional'],
 
   rules: {
@@ -129,3 +129,5 @@ export default {
   helpUrl:
     'https://github.com/mikiwiik/instructions-only-claude-coding/blob/main/docs/core/workflows.md#atomic-commit-strategy',
 };
+
+export default config;
