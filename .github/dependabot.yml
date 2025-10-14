@@ -26,6 +26,16 @@ updates:
     # Group minor and patch updates to reduce PR volume
     # Major updates remain separate for careful review
     groups:
+      # React ecosystem packages must update together
+      # Ensures react, react-dom, and their types stay in sync
+      # Especially critical for major version updates (e.g., React 19)
+      react-ecosystem:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+
       production-dependencies:
         dependency-type: "production"
         update-types:
