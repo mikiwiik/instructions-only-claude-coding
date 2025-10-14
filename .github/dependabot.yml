@@ -55,6 +55,23 @@ updates:
       prefix-development: "build(deps-dev)"
       include: "scope"
 
+    # Ignore rules to prevent incompatible upgrades
+    # React 19 requires Next.js 15+ due to peer dependency constraints
+    # See ADR: React/Next.js Version Dependency Constraints
+    # Upgrade path: Next.js 14 → Next.js 15, then React 18 → React 19
+    # Related issues: #232, #191, #223
+    ignore:
+      # Prevent React major version upgrades until Next.js is compatible
+      # React 19+ requires Next.js 15+ (current: Next.js 14.2.33)
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/react-dom"
+        update-types: ["version-update:semver-major"]
+
     # Labels for dependency PRs
     # Enables easy filtering and tracking
     labels:
