@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Todo, TodoState, TodoFilter } from '../types/todo';
 
 const STORAGE_KEY = 'todos';
@@ -19,13 +19,7 @@ function generateId(): string {
 }
 
 export function useTodos() {
-  const [state, setState] = useState<TodoState>({
-    todos: [],
-    filter: 'active',
-  });
-
-  // Load todos from localStorage on initialization
-  useEffect(() => {
+  const [state, setState] = useState<TodoState>(() => {
     try {
       const storedTodos = localStorage.getItem(STORAGE_KEY);
       if (storedTodos) {
@@ -54,17 +48,18 @@ export function useTodos() {
                 : undefined,
           })
         );
-        setState({
+        return {
           todos: todosWithDates,
           filter: 'active',
-        });
+        };
       }
     } catch (error) {
       // Handle corrupted localStorage data gracefully
       // eslint-disable-next-line no-console
       console.warn('Failed to load todos from localStorage:', error);
     }
-  }, []);
+    return { todos: [], filter: 'active' };
+  });
 
   // Save todos to localStorage whenever todos change
   const saveTodos = (todos: Todo[]) => {
