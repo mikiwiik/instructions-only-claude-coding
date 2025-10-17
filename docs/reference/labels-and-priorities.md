@@ -208,3 +208,158 @@ gh issue create --title "Issue Title" \
 - **Category**: category-documentation (process documentation)
 
 This labeling system enables effective issue prioritization, effort estimation, and strategic development planning.
+
+## GitHub Projects Integration
+
+### Overview
+
+GitHub Projects enhances the label-based system with visual workflow management and lifecycle tracking.
+**Labels remain the primary source of truth**—Projects provides an additional visual layer.
+
+**📋 Full Documentation**: See [docs/development/project-management.md](../development/project-management.md#github-projects-integration)
+for complete GitHub Projects usage.
+
+**🔧 Setup Guide**: See [docs/development/github-projects-setup.md](../development/github-projects-setup.md) for
+configuration steps.
+
+**📖 Decision Rationale**: See [ADR-020: GitHub Projects Adoption](../adr/020-github-projects-adoption.md) for
+decision context and trade-offs.
+
+### Lifecycle Field
+
+GitHub Projects adds a **Lifecycle** field to track idea maturity from conception to completion:
+
+#### lifecycle-icebox 🧊
+
+- **Purpose**: Low-friction capture of ideas without full requirements
+- **Requirements**: Title + brief description (optional labels)
+- **Characteristics**:
+  - Unclear scope or approach
+  - Needs research or exploration
+  - "Nice to have someday" without immediate plan
+  - Rough idea without clear requirements
+- **Example**: "Explore dark mode implementation"
+- **Triage**: Periodic weekly review to promote to Backlog or close
+
+#### lifecycle-backlog 📋
+
+- **Purpose**: Well-defined issues awaiting selection
+- **Requirements**: Full description + priority + complexity + category labels
+- **Characteristics**:
+  - Clear requirements and acceptance criteria
+  - Proper labels assigned
+  - Ready for implementation when capacity available
+  - May have dependency or sequencing considerations
+- **Example**: "Implement dark mode toggle with system preference detection" (priority-2-high, complexity-moderate, category-feature)
+- **Selection**: Reviewed via Backlog view or `/select-next-issue` when current work completes
+
+#### lifecycle-active ⚡
+
+- **Purpose**: Currently being worked on (1-2 issues) or next up
+- **Requirements**: Full labels + Status field tracking
+- **Characteristics**:
+  - 1-2 issues maximum (WIP limit)
+  - High priority and ready to start
+  - Currently in progress
+  - May block other work
+- **Example**: "Implement dark mode toggle" (Status: In Progress)
+- **Visibility**: Appears in Board, Backlog, Quick Wins, and Agent Workload views
+
+#### lifecycle-done ✅
+
+- **Purpose**: Finished work, deployed to production
+- **Automation**: Auto-set when PR merged and issue closed
+- **Archival**: Automatically archived after 30 days
+- **Example**: Closed issues with merged PRs
+
+### Label-to-Field Mapping
+
+GitHub Projects custom fields mirror label values:
+
+| Label                     | Projects Field | Values         |
+| ------------------------- | -------------- | -------------- |
+| `priority-1-critical`     | Priority       | Critical       |
+| `priority-2-high`         | Priority       | High           |
+| `priority-3-medium`       | Priority       | Medium         |
+| `priority-4-low`          | Priority       | Low            |
+| `complexity-minimal`      | Complexity     | Minimal        |
+| `complexity-simple`       | Complexity     | Simple         |
+| `complexity-moderate`     | Complexity     | Moderate       |
+| `complexity-complex`      | Complexity     | Complex        |
+| `complexity-epic`         | Complexity     | Epic           |
+| `category-feature`        | Category       | Feature        |
+| `category-infrastructure` | Category       | Infrastructure |
+| `category-documentation`  | Category       | Documentation  |
+| `category-dx`             | Category       | DX             |
+
+**Note**: Lifecycle field has no corresponding labels—it's managed exclusively in GitHub Projects.
+
+### Workflow Integration
+
+**Issue Creation**:
+
+```bash
+# Well-defined issue → Auto-adds to Backlog
+gh issue create --title "Feature Title" \
+  --label "priority-2-high,complexity-moderate,category-feature" \
+  --body "Full description"
+
+# Raw idea → Manually set Lifecycle:Icebox in Projects
+gh issue create --title "Explore feature X" \
+  --body "Initial idea: investigate approach for X"
+```
+
+**Lifecycle Progression**:
+
+```text
+Raw Idea → Icebox (capture)
+         → Backlog (triage + add labels)
+         → Active (select for work, WIP limit: 1-2)
+         → Done (PR merged, auto-archived)
+```
+
+**Daily Workflow**:
+
+1. Check Board view for In Progress items
+2. Move through Status stages as work progresses
+3. When complete, use Backlog view to select next issue
+4. Check Quick Wins view for momentum opportunities
+
+**Weekly Triage**:
+
+1. Review Icebox view
+2. Promote ready ideas to Backlog with proper labels
+3. Close or archive stale Icebox items
+
+### Project Views Reference
+
+**Five specialized views**:
+
+1. **Board - Workflow**: Kanban view (Status columns, Priority grouping, Lifecycle:Active/Backlog)
+2. **Backlog - Next Issue**: Table sorted by Priority → Complexity (replacement for `/select-next-issue`)
+3. **Quick Wins**: Filtered board (priority-2-high + complexity-simple/minimal + Lifecycle:Active)
+4. **Agent Workload**: Current work by agent specialization (Lifecycle:Active)
+5. **Icebox - Raw Ideas**: Idea capture (Lifecycle:Icebox)
+
+**Quick Access**: Project board provides visual alternative to label-based filtering and selection.
+
+### Best Practices
+
+**Label First, Projects Second**:
+
+- Always assign priority, complexity, and category **labels** to well-defined issues
+- Use GitHub Projects for visual management and lifecycle tracking
+- Labels enable CLI workflows and filtering; Projects adds visual layer
+
+**Lifecycle Guidelines**:
+
+- **Icebox**: Capture ideas freely without over-thinking
+- **Backlog**: Ensure full labels before promoting from Icebox
+- **Active**: Respect WIP limit (1-2 issues maximum)
+- **Done**: Trust automation; manual updates rarely needed
+
+**Avoid Label Duplication**:
+
+- Don't create `icebox`, `backlog`, `active` **labels**
+- Lifecycle is a Projects-only field, not a label
+- Keep labels focused on priority, complexity, and category
