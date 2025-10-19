@@ -2,16 +2,19 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import TodoItem from '../../components/TodoItem';
 import { Todo } from '../../types/todo';
 
-// Mock @dnd-kit components
-jest.mock('@dnd-kit/sortable', () => ({
-  useSortable: () => ({
-    attributes: { 'aria-roledescription': 'sortable' },
-    listeners: { onPointerDown: jest.fn() },
-    setNodeRef: jest.fn(),
-    transform: null,
-    transition: null,
-    isDragging: false,
-  }),
+// Mock pragmatic-drag-and-drop
+jest.mock('@atlaskit/pragmatic-drag-and-drop/element/adapter', () => ({
+  draggable: jest.fn(() => jest.fn()),
+  dropTargetForElements: jest.fn(() => jest.fn()),
+  monitorForElements: jest.fn(() => jest.fn()),
+}));
+
+jest.mock('@atlaskit/pragmatic-drag-and-drop/combine', () => ({
+  combine: jest.fn(
+    (...fns) =>
+      () =>
+        fns.forEach((fn) => fn && fn())
+  ),
 }));
 
 const createMockTodo = (overrides: Partial<Todo> = {}): Todo => ({
@@ -296,8 +299,9 @@ describe('TodoItem - Reordering functionality', () => {
       );
 
       const dragHandle = screen.getByTestId('drag-handle');
-      expect(dragHandle).toHaveAttribute('aria-roledescription', 'sortable');
       expect(dragHandle).toHaveAttribute('role', 'button');
+      expect(dragHandle).toHaveAttribute('aria-label', 'Drag to reorder todo');
+      expect(dragHandle).toHaveAttribute('tabIndex', '0');
     });
 
     it('should have proper ARIA labels for arrow buttons', () => {
