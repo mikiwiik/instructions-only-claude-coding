@@ -327,7 +327,7 @@ Five specialized views provide different perspectives on the work:
 - Layout: Board (kanban)
 - Columns: Status field (Todo → In Progress → Review → Testing → Done)
 - Grouping: Priority (horizontal swimlanes)
-- Filter: `Lifecycle:Active OR Lifecycle:Backlog`
+- Filter: `Lifecycle:Active,Backlog`
 
 **Use Case**: See what's being worked on, move issues through workflow stages, identify bottlenecks
 
@@ -340,7 +340,7 @@ Five specialized views provide different perspectives on the work:
 - Layout: Table
 - Columns: Title, Priority, Complexity, Category, Status, Lifecycle
 - Sorting: Priority (Critical first), then Complexity (Simple first)
-- Filter: `Lifecycle:Active OR Lifecycle:Backlog`
+- Filter: `Lifecycle:Active,Backlog`
 
 **Use Case**: Replacement/enhancement for `/select-next-issue` with sortable, filterable table view
 

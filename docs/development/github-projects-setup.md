@@ -195,7 +195,7 @@ Navigate to project: `gh project view $PROJECT_NUMBER --web`
    - **Layout**: Board
    - **Group by**: Status
    - **Column grouping**: Priority (swimlanes)
-   - **Filter**: `Lifecycle:Active OR Lifecycle:Backlog`
+   - **Filter**: `Lifecycle:Active,Backlog`
 4. Click Save
 
 #### View 2: Backlog - Next Issue
@@ -206,7 +206,7 @@ Navigate to project: `gh project view $PROJECT_NUMBER --web`
    - **Layout**: Table
    - **Columns**: Title, Priority, Complexity, Category, Status, Lifecycle
    - **Sort**: Priority (Critical → Low), then Complexity (Minimal → Epic)
-   - **Filter**: `Lifecycle:Active OR Lifecycle:Backlog`
+   - **Filter**: `Lifecycle:Active,Backlog`
 4. Click Save
 
 #### View 3: Quick Wins - High Priority + Simple
@@ -444,7 +444,7 @@ gh project view $PROJECT_NUMBER --owner mikiwiik --web
 
 **Views not filtering correctly**:
 
-- Double-check filter syntax: `Lifecycle:Active OR Lifecycle:Backlog`
+- Double-check filter syntax: `Lifecycle:Active,Backlog`
 - Ensure field values match exactly (case-sensitive)
 
 **Automation not working**:
