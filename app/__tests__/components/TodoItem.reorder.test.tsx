@@ -2,16 +2,39 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import TodoItem from '../../components/TodoItem';
 import { Todo } from '../../types/todo';
 
+// Type definitions for pragmatic-drag-and-drop configuration
+interface DraggableData {
+  type: string;
+  todoId: string;
+}
+
+interface DropTargetData {
+  todoId: string;
+}
+
+interface DraggableConfig {
+  element: HTMLElement | null;
+  dragHandle?: HTMLElement | null;
+  getInitialData: () => DraggableData;
+  onDragStart: () => void;
+  onDrop: () => void;
+}
+
+interface DropTargetConfig {
+  element: HTMLElement | null;
+  getData: () => DropTargetData;
+}
+
 // Mock pragmatic-drag-and-drop with spy to capture callbacks
-let draggableConfig: any = null;
-let dropTargetConfig: any = null;
+let draggableConfig: DraggableConfig | null = null;
+let dropTargetConfig: DropTargetConfig | null = null;
 
 jest.mock('@atlaskit/pragmatic-drag-and-drop/element/adapter', () => ({
-  draggable: jest.fn((config: any) => {
+  draggable: jest.fn((config: DraggableConfig) => {
     draggableConfig = config;
     return jest.fn();
   }),
-  dropTargetForElements: jest.fn((config: any) => {
+  dropTargetForElements: jest.fn((config: DropTargetConfig) => {
     dropTargetConfig = config;
     return jest.fn();
   }),
@@ -119,14 +142,14 @@ describe('TodoItem - Reordering functionality', () => {
 
       // Verify draggable was configured
       expect(draggableConfig).not.toBeNull();
-      expect(draggableConfig.getInitialData()).toEqual({
+      expect(draggableConfig!.getInitialData()).toEqual({
         type: 'todo-item',
         todoId: 'drag-test',
       });
 
       // Verify dropTargetForElements was configured
       expect(dropTargetConfig).not.toBeNull();
-      expect(dropTargetConfig.getData()).toEqual({ todoId: 'drag-test' });
+      expect(dropTargetConfig!.getData()).toEqual({ todoId: 'drag-test' });
     });
 
     it('should configure drag callbacks when isDraggable is true', () => {
@@ -145,10 +168,10 @@ describe('TodoItem - Reordering functionality', () => {
 
       // Verify callbacks exist
       expect(draggableConfig).not.toBeNull();
-      expect(draggableConfig.onDragStart).toBeDefined();
-      expect(draggableConfig.onDrop).toBeDefined();
-      expect(typeof draggableConfig.onDragStart).toBe('function');
-      expect(typeof draggableConfig.onDrop).toBe('function');
+      expect(draggableConfig!.onDragStart).toBeDefined();
+      expect(draggableConfig!.onDrop).toBeDefined();
+      expect(typeof draggableConfig!.onDragStart).toBe('function');
+      expect(typeof draggableConfig!.onDrop).toBe('function');
     });
   });
 

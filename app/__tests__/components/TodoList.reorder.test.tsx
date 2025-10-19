@@ -2,13 +2,44 @@ import { render, screen } from '@testing-library/react';
 import TodoList from '../../components/TodoList';
 import { Todo } from '../../types/todo';
 
+// Type definitions for pragmatic-drag-and-drop events
+interface DropTargetData {
+  todoId?: string;
+}
+
+interface DropTarget {
+  data: DropTargetData;
+}
+
+interface SourceData {
+  type?: string;
+  todoId?: string;
+}
+
+interface DropLocation {
+  current: {
+    dropTargets: DropTarget[];
+  };
+}
+
+interface DropEvent {
+  source: {
+    data: SourceData;
+  };
+  location: DropLocation;
+}
+
+interface MonitorConfig {
+  onDrop: (event: DropEvent) => void;
+}
+
 // Mock pragmatic-drag-and-drop with spy to capture callbacks
-let monitorCallback: ((args: any) => void) | null = null;
+let monitorCallback: ((args: DropEvent) => void) | null = null;
 
 jest.mock('@atlaskit/pragmatic-drag-and-drop/element/adapter', () => ({
   draggable: jest.fn(() => jest.fn()),
   dropTargetForElements: jest.fn(() => jest.fn()),
-  monitorForElements: jest.fn((config: any) => {
+  monitorForElements: jest.fn((config: MonitorConfig) => {
     monitorCallback = config.onDrop;
     return jest.fn();
   }),
