@@ -21,6 +21,10 @@ describe('SyncQueue', () => {
     (global.fetch as jest.Mock).mockClear();
   });
 
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   describe('add', () => {
     it('should add operation to queue', async () => {
       (global.fetch as jest.Mock).mockResolvedValueOnce({
@@ -81,7 +85,9 @@ describe('SyncQueue', () => {
       expect(global.fetch).toHaveBeenCalledTimes(1);
     });
 
-    it.skip('should retry failed operations with exponential backoff', async () => {
+    it('should retry failed operations with exponential backoff', async () => {
+      jest.useFakeTimers();
+
       (global.fetch as jest.Mock)
         .mockRejectedValueOnce(new Error('Network error'))
         .mockRejectedValueOnce(new Error('Network error'))
@@ -90,22 +96,43 @@ describe('SyncQueue', () => {
           json: () => Promise.resolve({}),
         });
 
-      const startTime = Date.now();
-      await syncQueue.add('create', 'todo-1', { text: 'Test' });
-      const endTime = Date.now();
+      const addPromise = syncQueue.add('create', 'todo-1', { text: 'Test' });
 
-      // Should have retried with backoff
+      // First attempt fails immediately
+      await jest.runOnlyPendingTimersAsync();
+
+      // First retry after 2000ms (baseDelay * 2^1)
+      await jest.advanceTimersByTimeAsync(2000);
+
+      // Second retry after 4000ms (baseDelay * 2^2)
+      await jest.advanceTimersByTimeAsync(4000);
+
+      await addPromise;
+
+      // Should have retried with exponential backoff
       expect(global.fetch).toHaveBeenCalledTimes(3);
-      // Backoff delays: 1000ms + 2000ms = 3000ms minimum
-      expect(endTime - startTime).toBeGreaterThanOrEqual(2900);
     });
 
-    it.skip('should mark operation as failed after max retries', async () => {
+    it('should mark operation as failed after max retries', async () => {
+      jest.useFakeTimers();
+
       (global.fetch as jest.Mock).mockRejectedValue(new Error('Network error'));
 
-      await syncQueue.add('create', 'todo-1', { text: 'Test' });
+      const addPromise = syncQueue.add('create', 'todo-1', { text: 'Test' });
 
-      // Should have tried 3 times (max retries)
+      // First attempt fails
+      await jest.runOnlyPendingTimersAsync();
+
+      // First retry after 2000ms (baseDelay * 2^1)
+      await jest.advanceTimersByTimeAsync(2000);
+
+      // Second retry after 4000ms (baseDelay * 2^2)
+      await jest.advanceTimersByTimeAsync(4000);
+
+      // Third retry would exceed max retries (3), so operation is removed
+      await addPromise;
+
+      // Should have tried 3 times (initial + 2 retries = max retries)
       expect(global.fetch).toHaveBeenCalledTimes(3);
       expect(syncQueue.getStatus().pendingCount).toBe(0); // Removed from queue
     });
