@@ -19,6 +19,58 @@ This setup combines **automated CLI steps** (project/field creation) with **manu
 > **Note**: GitHub Projects v2 GraphQL API and `gh` CLI do not currently support programmatic view creation
 > or automation workflow configuration. These features are only available via the web interface.
 
+## Labels vs Custom Fields: Core Principles
+
+**Understanding the distinction between labels and custom fields is essential for effective GitHub Projects usage.**
+
+### Labels (Atomic, Issue-Specific, Not Time-Bound)
+
+Labels describe **what the issue is** - intrinsic properties that belong to the issue itself:
+
+- **Priority** (priority-1-critical through priority-4-low): Issue importance
+- **Complexity** (complexity-minimal through complexity-epic): Implementation effort
+- **Category** (category-feature, category-infrastructure, etc.): Work type
+
+**Key characteristics**:
+
+- ✅ **Atomic data**: Belong to issues, not projects
+- ✅ **Universal compatibility**: Work everywhere (CLI, GitHub Actions, all projects, issue views)
+- ✅ **Not time-bound**: Don't change based on workflow progression
+- ✅ **No sync needed**: Single source of truth, auto-visible in Projects via Labels field
+
+### Custom Fields (Workflow State, Time-Bound)
+
+Custom fields describe **where the issue is** in the development workflow - transient state that changes over time:
+
+- **Status** (Todo → In Progress → Review → Testing → Done → Blocked): Current work state
+- **Lifecycle** (Icebox → Backlog → Active → Done): Idea maturity stage
+
+**Key characteristics**:
+
+- ⚙️ **Project-specific**: Belong to project items, not issues themselves
+- ⚙️ **Workflow tracking**: Change as work progresses
+- ⚙️ **Time-bound**: Reflect current state, not intrinsic properties
+- ⚙️ **Manual updates**: Require updates during workflow progression
+
+### Why This Matters
+
+**Labels as atomic data**:
+
+- No duplication across projects
+- Zero synchronization burden
+- Compatible with all GitHub workflows (CLI, Actions, automations)
+- Aligns with instruction-only philosophy (no manual sync required)
+
+**Custom fields for workflow**:
+
+- Visual kanban workflow management
+- Idea maturity tracking (Icebox → Backlog → Active)
+- Work-in-progress visualization
+- Workflow automation triggers
+
+See [ADR-020](../adr/020-github-projects-adoption.md#update-labels-only-architecture-2025-10-19) for
+architectural decision rationale.
+
 ## Prerequisites
 
 - Repository admin access to create projects
@@ -124,33 +176,49 @@ gh project field-create $PROJECT_NUMBER \
   --single-select-options "Icebox,Backlog,Active,Done"
 ```
 
-**Note**: GitHub Projects creates default built-in fields automatically:
-
-- **Status** (workflow tracking)
-- **Sub-issues progress** (tracks completion of child issues)
-
-These built-in fields can be configured or hidden as needed. We only create one custom field (Lifecycle) for idea
-maturity tracking.
+**Note**: The default "Status" field is created automatically with the project.
 
 **Why only Lifecycle?** We use the built-in **Labels** field for Priority, Complexity, and Category to maintain
 labels as the single source of truth and avoid data duplication. See
 [ADR-020](../adr/020-github-projects-adoption.md#update-labels-only-architecture-2025-10-19) for rationale.
 
-### Step 3: Configure Built-in Fields
+#### Why These Two Custom Fields Are Required
 
-GitHub Projects creates default built-in fields that may need customization:
+**Status and Lifecycle track workflow state - they cannot be replaced by labels.**
 
-**Status field:**
+**Status** (built-in field):
+
+- **What it tracks**: Current work state (Todo → In Progress → Review → Testing → Done → Blocked)
+- **Why it's needed**: Visualizes where issues are in the development workflow
+- **Why not a label**: Changes frequently as work progresses (time-bound, project-specific)
+- **Example**: Issue moves from "In Progress" to "Review" when PR created
+
+**Lifecycle** (custom field):
+
+- **What it tracks**: Idea maturity stage (Icebox → Backlog → Active → Done)
+- **Why it's needed**: Manages issue readiness and work-in-progress limits
+- **Why not a label**: Reflects current planning state, not issue properties
+- **Example**: Raw idea starts in "Icebox", moves to "Backlog" after triage with proper labels
+
+**Why NOT create Priority/Complexity/Category custom fields:**
+
+- These are **intrinsic properties** of the issue (what it IS, not where it IS)
+- Already exist as **issue labels** (priority-2-high, complexity-moderate, category-feature)
+- Built-in **Labels field** displays them automatically in all project views
+- Creating custom fields would **duplicate data** and require synchronization
+- Labels are **atomic data** - belong to issues, work everywhere (CLI, Actions, all projects)
+
+**Key Principle**: Custom fields for **workflow state** (changes over time), labels for **issue properties**
+(don't change based on workflow).
+
+### Step 3: Configure Default Status Field
+
+The Status field is created automatically but may need option customization:
 
 1. Navigate to project: `gh project view $PROJECT_NUMBER --web`
 2. Click Status field → Edit field
 3. Ensure options: `Todo`, `In Progress`, `Review`, `Testing`, `Done`, `Blocked`
 4. Add any missing options
-
-**Sub-issues progress field:**
-
-- Automatically tracks completion percentage of child issues
-- No configuration needed unless you want to hide it from views
 
 ### Step 4: Bulk Add Existing Issues
 
