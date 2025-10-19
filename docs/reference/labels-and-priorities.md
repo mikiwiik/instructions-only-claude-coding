@@ -225,6 +225,36 @@ configuration steps.
 **📖 Decision Rationale**: See [ADR-020: GitHub Projects Adoption](../adr/020-github-projects-adoption.md) for
 decision context and trade-offs.
 
+### Labels vs Custom Fields: Core Distinction
+
+**Labels (Atomic, Issue-Specific, Not Time-Bound)**:
+
+- **What they describe**: Intrinsic properties of the issue itself
+- **Examples**: Priority (importance), Complexity (effort), Category (work type)
+- **Characteristics**:
+  - Atomic data that belongs to issues, not projects
+  - Universal compatibility (CLI, GitHub Actions, all projects)
+  - Not time-bound - don't change based on workflow progression
+  - Single source of truth, auto-visible in Projects via Labels field
+  - No synchronization needed
+
+**Custom Fields (Workflow State, Time-Bound)**:
+
+- **What they describe**: Where the issue is in the development workflow
+- **Examples**: Status (work state), Lifecycle (idea maturity)
+- **Characteristics**:
+  - Project-specific, not issue properties
+  - Change as work progresses through workflow
+  - Time-bound - reflect current state, not intrinsic properties
+  - Manual updates during workflow progression
+
+**Why This Matters**:
+
+- Labels aren't duplicated as custom fields (zero sync burden)
+- Labels work everywhere in GitHub ecosystem (universal compatibility)
+- Clear separation between static properties (labels) and dynamic state (custom fields)
+- Aligns with instruction-only philosophy (no manual sync required)
+
 ### Lifecycle Field
 
 GitHub Projects adds a **Lifecycle** field to track idea maturity from conception to completion:

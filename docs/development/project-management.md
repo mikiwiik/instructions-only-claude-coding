@@ -304,24 +304,71 @@ full rationale and trade-offs.
 
 ### Custom Fields
 
-GitHub Projects includes built-in fields and custom fields for workflow tracking:
+GitHub Projects uses custom fields for workflow tracking:
 
-**Built-in Fields** (created automatically):
-
-| Field                   | Type          | Values                                            | Purpose                  |
-| ----------------------- | ------------- | ------------------------------------------------- | ------------------------ |
-| **Status**              | Single Select | Todo, In Progress, Review, Testing, Done, Blocked | Manual workflow tracking |
-| **Sub-issues progress** | Number        | 0-100%                                            | Child issue completion   |
-
-**Custom Fields** (created during setup):
-
-| Field         | Type          | Values                        | Purpose             |
-| ------------- | ------------- | ----------------------------- | ------------------- |
-| **Lifecycle** | Single Select | Icebox, Backlog, Active, Done | Idea maturity stage |
+| Field         | Type          | Values                                            | Source                   |
+| ------------- | ------------- | ------------------------------------------------- | ------------------------ |
+| **Status**    | Single Select | Todo, In Progress, Review, Testing, Done, Blocked | Manual workflow tracking |
+| **Lifecycle** | Single Select | Icebox, Backlog, Active, Done                     | Idea maturity stage      |
 
 **Priority, Complexity, and Category** are managed via issue labels and displayed using GitHub Projects' built-in
 **Labels** field. This maintains labels as the single source of truth and eliminates data duplication. See
 [ADR-020](../adr/020-github-projects-adoption.md#update-labels-only-architecture-2025-10-19) for rationale.
+
+#### Why Only These Two Custom Fields?
+
+**Status and Lifecycle are the ONLY custom fields** because they track **workflow state**, which:
+
+- Changes as work progresses (time-bound, not static)
+- Is project-specific (not an intrinsic property of the issue)
+- Cannot be represented by labels (labels describe what the issue IS, not where it IS in workflow)
+
+**Status** tracks current work state (Todo → In Progress → Review → Done)
+**Lifecycle** tracks idea maturity (Icebox → Backlog → Active → Done)
+
+**Priority, Complexity, and Category do NOT need custom fields** because they:
+
+- Are intrinsic properties of the issue (what it IS: important, complex, a feature)
+- Already exist as issue labels (priority-2-high, complexity-moderate, category-feature)
+- Are displayed automatically via built-in Labels field (no duplication needed)
+- Are atomic data that belongs to issues, not projects (work everywhere in GitHub)
+
+**Result**: Zero data duplication, zero synchronization burden, universal label compatibility.
+
+### Labels vs Custom Fields Architecture
+
+**Understanding the distinction between labels and custom fields is essential for effective workflow management.**
+
+**Labels (Atomic, Issue-Specific, Not Time-Bound)**:
+
+Labels describe **what the issue is** - intrinsic properties that belong to the issue itself:
+
+- Priority, Complexity, Category
+- Atomic data that belongs to issues, not projects
+- Universal compatibility (CLI, GitHub Actions, all projects, issue views)
+- Not time-bound - don't change based on workflow progression
+- Single source of truth, auto-visible in Projects via Labels field
+
+**Custom Fields (Workflow State, Time-Bound)**:
+
+Custom fields describe **where the issue is** in the development workflow - transient state that changes over time:
+
+- Status (Todo → In Progress → Done): Current work state
+- Lifecycle (Icebox → Backlog → Active → Done): Idea maturity stage
+- Project-specific, not issue properties
+- Change as work progresses through workflow
+- Time-bound - reflect current state, not intrinsic properties
+- Manual updates during workflow progression
+
+**Why This Matters**:
+
+- **No duplication**: Labels aren't duplicated as custom fields
+- **No sync burden**: Labels automatically visible, no manual synchronization
+- **Universal compatibility**: Labels work everywhere in GitHub ecosystem
+- **Clear separation**: Static properties (labels) vs dynamic state (custom fields)
+- **Instruction-only alignment**: No manual sync steps required
+
+See [GitHub Projects Setup Guide](github-projects-setup.md#labels-vs-custom-fields-core-principles) for detailed explanation.
 
 ### Project Views
 
