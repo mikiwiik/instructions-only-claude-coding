@@ -20,6 +20,14 @@
    to preserve atomic commits - NEVER direct commits to main - only claim completion AFTER PR merged and verified with
    `gh issue view #X`
 8. **🚨 ADRs BEFORE ARCHITECTURE**: Document significant technical decisions in `docs/adr/` before implementation
+   - **ADR Immutability**: Once accepted and merged, ADRs are historical records and MUST NOT be retroactively modified
+   - **Architectural Evolution**: Create NEW ADRs to document changes, don't edit existing ones
+   - **Acceptable Edits**: Only typos, formatting, broken links, and status field updates
+   - **Superseding/Amending**: Use "Status: Superseded by ADR-XXX" or "Amended by ADR-XXX" for architectural changes
+   - **Verification Required**: Always run `./scripts/validate-adrs.sh` and check `ls docs/adr/0*.md | sort` before
+     creating new ADRs
+   - See `docs/adr/PROCESS.md` for complete ADR evolution guidelines and `docs/adr/026-security-scanning-ci-cd-pipeline.md`
+     for amendment pattern example
 9. **🚨 DOCUMENT FOR HUMANS**: Always update README.md and relevant markdown files so humans can understand all
    changes and project evolution
 10. **🚨 DOCUMENTATION QUALITY**: Keep all documentation comprehensive, up-to-date, and concise - eliminate outdated
