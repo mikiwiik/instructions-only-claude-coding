@@ -222,7 +222,7 @@ for complete GitHub Projects usage.
 **🔧 Setup Guide**: See [docs/development/github-projects-setup.md](../development/github-projects-setup.md) for
 configuration steps.
 
-**📖 Decision Rationale**: See [ADR-020: GitHub Projects Adoption](../adr/020-github-projects-adoption.md) for
+**📖 Decision Rationale**: See [ADR-024: GitHub Projects Adoption](../adr/024-github-projects-adoption.md) for
 decision context and trade-offs.
 
 ### Labels vs Custom Fields: Core Distinction
@@ -316,7 +316,7 @@ GitHub Projects displays labels using the built-in **Labels** field:
 
 **Rationale**: Labels are atomic data that belong to issues themselves. Using the built-in Labels field eliminates
 duplication and maintains labels as the single source of truth. See
-[ADR-020](../adr/020-github-projects-adoption.md#update-labels-only-architecture-2025-10-19) for details.
+[ADR-024](../adr/024-github-projects-adoption.md#update-labels-only-architecture-2025-10-19) for details.
 
 **Filtering examples**:
 

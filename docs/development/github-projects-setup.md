@@ -2,7 +2,7 @@
 
 This guide provides step-by-step instructions for setting up GitHub Projects for the Todo App project.
 
-**📋 Context**: See [ADR-020: GitHub Projects Adoption](../adr/020-github-projects-adoption.md) for decision rationale.
+**📋 Context**: See [ADR-024: GitHub Projects Adoption](../adr/024-github-projects-adoption.md) for decision rationale.
 
 **📖 Usage**: See [Project Management Documentation](project-management.md#github-projects-integration) for daily
 workflow and best practices.
@@ -68,7 +68,7 @@ Custom fields describe **where the issue is** in the development workflow - tran
 - Work-in-progress visualization
 - Workflow automation triggers
 
-See [ADR-020](../adr/020-github-projects-adoption.md#update-labels-only-architecture-2025-10-19) for
+See [ADR-024](../adr/024-github-projects-adoption.md#update-labels-only-architecture-2025-10-19) for
 architectural decision rationale.
 
 ## Prerequisites
@@ -225,7 +225,7 @@ gh project field-create $PROJECT_NUMBER \
 
 **Why only Lifecycle?** We use the built-in **Labels** field for Priority, Complexity, and Category to maintain
 labels as the single source of truth and avoid data duplication. See
-[ADR-020](../adr/020-github-projects-adoption.md#update-labels-only-architecture-2025-10-19) for rationale.
+[ADR-024](../adr/024-github-projects-adoption.md#update-labels-only-architecture-2025-10-19) for rationale.
 
 #### Why These Two Custom Fields Are Required
 
@@ -627,4 +627,4 @@ After setup:
 1. Use project daily for 2-3 months (pilot period)
 2. Evaluate effectiveness vs. overhead
 3. Document lessons learned
-4. Decide on full adoption or rollback per [ADR-020](../adr/020-github-projects-adoption.md)
+4. Decide on full adoption or rollback per [ADR-024](../adr/024-github-projects-adoption.md)
