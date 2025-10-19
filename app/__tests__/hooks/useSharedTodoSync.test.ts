@@ -49,7 +49,15 @@ class MockEventSource {
   }
 }
 
-global.EventSource = MockEventSource as unknown as typeof EventSource;
+// Create a mock constructor that tracks instances
+const mockEventSourceInstances: MockEventSource[] = [];
+const MockEventSourceConstructor = jest.fn((url: string) => {
+  const instance = new MockEventSource(url);
+  mockEventSourceInstances.push(instance);
+  return instance;
+});
+
+global.EventSource = MockEventSourceConstructor as unknown as typeof EventSource;
 
 describe('useSharedTodoSync', () => {
   const mockTodos: Todo[] = [
@@ -63,6 +71,7 @@ describe('useSharedTodoSync', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockEventSourceInstances.length = 0; // Clear instances array
   });
 
   it('should initialize with disconnected state', () => {
@@ -79,46 +88,7 @@ describe('useSharedTodoSync', () => {
     expect(result.current.isConnected).toBe(false);
   });
 
-  it.skip('should connect when enabled', async () => {
-    const onSync = jest.fn();
-    const { result } = renderHook(() =>
-      useSharedTodoSync({
-        listId: 'list-1',
-        userId: 'user-1',
-        onSync,
-        enabled: true,
-      })
-    );
-
-    await waitFor(() => {
-      expect(result.current.syncState.status).not.toBe('pending');
-    });
-  });
-
-  it.skip('should call onSync when sync event received', async () => {
-    const onSync = jest.fn();
-    const { result } = renderHook(() =>
-      useSharedTodoSync({
-        listId: 'list-1',
-        userId: 'user-1',
-        onSync,
-        enabled: true,
-      })
-    );
-
-    // Simulate connected event
-    await act(async () => {
-      const eventSource = (global.EventSource as unknown as jest.Mock).mock
-        .instances[0] as MockEventSource;
-      if (eventSource) {
-        eventSource.simulateEvent('connected', { listId: 'list-1' });
-      }
-    });
-
-    expect(result.current.isConnected).toBe(true);
-  });
-
-  it.skip('should handle sync events', async () => {
+  it('should connect when enabled', async () => {
     const onSync = jest.fn();
     renderHook(() =>
       useSharedTodoSync({
@@ -129,21 +99,13 @@ describe('useSharedTodoSync', () => {
       })
     );
 
-    await act(async () => {
-      const eventSource = (global.EventSource as unknown as jest.Mock).mock
-        .instances[0] as MockEventSource;
-      if (eventSource) {
-        eventSource.simulateEvent('sync', {
-          todos: mockTodos,
-          lastModified: Date.now(),
-        });
-      }
+    await waitFor(() => {
+      expect(mockEventSourceInstances.length).toBe(1);
+      expect(mockEventSourceInstances[0].url).toBe('/api/shared/list-1/subscribe');
     });
-
-    expect(onSync).toHaveBeenCalledWith(mockTodos);
   });
 
-  it.skip('should update connection state on error', async () => {
+  it('should call onSync when sync event received', async () => {
     const onSync = jest.fn();
     const { result } = renderHook(() =>
       useSharedTodoSync({
@@ -154,12 +116,69 @@ describe('useSharedTodoSync', () => {
       })
     );
 
-    await act(async () => {
-      const eventSource = (global.EventSource as unknown as jest.Mock).mock
-        .instances[0] as MockEventSource;
-      if (eventSource) {
-        eventSource.simulateEvent('error', {});
-      }
+    // Wait for EventSource to be created
+    await waitFor(() => {
+      expect(mockEventSourceInstances.length).toBe(1);
+    });
+
+    // Simulate connected event
+    act(() => {
+      mockEventSourceInstances[0].simulateEvent('connected', { listId: 'list-1' });
+    });
+
+    await waitFor(() => {
+      expect(result.current.isConnected).toBe(true);
+    });
+  });
+
+  it('should handle sync events', async () => {
+    const onSync = jest.fn();
+    renderHook(() =>
+      useSharedTodoSync({
+        listId: 'list-1',
+        userId: 'user-1',
+        onSync,
+        enabled: true,
+      })
+    );
+
+    // Wait for EventSource to be created
+    await waitFor(() => {
+      expect(mockEventSourceInstances.length).toBe(1);
+    });
+
+    // Simulate sync event
+    act(() => {
+      mockEventSourceInstances[0].simulateEvent('sync', {
+        todos: mockTodos,
+        lastModified: Date.now(),
+      });
+    });
+
+    await waitFor(() => {
+      expect(onSync).toHaveBeenCalledWith(mockTodos);
+    });
+  });
+
+  it('should update connection state on error', async () => {
+    const onSync = jest.fn();
+    const { result } = renderHook(() =>
+      useSharedTodoSync({
+        listId: 'list-1',
+        userId: 'user-1',
+        onSync,
+        enabled: true,
+      })
+    );
+
+    // Wait for EventSource to be created
+    await waitFor(() => {
+      expect(mockEventSourceInstances.length).toBe(1);
+    });
+
+    // Simulate error event
+    act(() => {
+      mockEventSourceInstances[0].simulateEvent('error', {});
     });
 
     await waitFor(() => {
@@ -167,7 +186,7 @@ describe('useSharedTodoSync', () => {
     });
   });
 
-  it.skip('should cleanup on unmount', () => {
+  it('should cleanup on unmount', async () => {
     const onSync = jest.fn();
     const { unmount } = renderHook(() =>
       useSharedTodoSync({
@@ -178,9 +197,12 @@ describe('useSharedTodoSync', () => {
       })
     );
 
-    const eventSource = (global.EventSource as unknown as jest.Mock).mock
-      .instances[0] as MockEventSource;
-    const closeSpy = jest.spyOn(eventSource, 'close');
+    // Wait for EventSource to be created
+    await waitFor(() => {
+      expect(mockEventSourceInstances.length).toBe(1);
+    });
+
+    const closeSpy = jest.spyOn(mockEventSourceInstances[0], 'close');
 
     unmount();
 
