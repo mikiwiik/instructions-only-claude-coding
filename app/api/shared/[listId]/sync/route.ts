@@ -9,9 +9,9 @@ import type { Todo } from '@/types/todo';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { listId: string } }
+  { params }: { params: Promise<{ listId: string }> }
 ) {
-  const { listId } = params;
+  const { listId } = await params;
 
   try {
     const body = await request.json();
@@ -81,9 +81,9 @@ export async function POST(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { listId: string } }
+  { params }: { params: Promise<{ listId: string }> }
 ) {
-  const { listId } = params;
+  const { listId } = await params;
 
   try {
     const list = await KVStore.getList(listId);
