@@ -254,19 +254,20 @@ In project settings (three dots menu → Workflows):
 
 #### Auto-Add Workflow
 
-1. Find **Item added to project** workflow
-2. Enable **Auto-add to project**
-3. Filter: `repo:mikiwiik/instructions-only-claude-coding is:issue is:open`
+1. Find **Auto-add to project** workflow (standalone workflow)
+2. Enable the workflow
+3. Set filter: `repo:mikiwiik/instructions-only-claude-coding is:issue is:open`
 4. This automatically adds all new and existing open issues
-5. Click Save
 
-#### Auto-Archive Workflow
+#### Item Closed Workflow
 
 1. Find **Item closed** workflow
-2. Enable **Auto-archive items**
+2. Enable **Set status**
 3. When: `Item closed`
 4. Set: `Status = Done`, `Lifecycle = Done`
-5. Click Save
+
+**Note**: GitHub Projects also has a separate **Auto-archive items** workflow if you want items to be archived
+automatically after closing (not configured by default).
 
 #### PR Merge Workflow (if available)
 
@@ -274,9 +275,8 @@ In project settings (three dots menu → Workflows):
 2. Enable **Set field values**
 3. When: `Pull request merged and linked issue`
 4. Set: `Status = Done`
-5. Click Save
 
-**Note**: Some automation may require GitHub Projects beta features.
+**Note**: Some automation workflows may require GitHub Projects beta features or may vary based on your GitHub plan.
 
 ## Part 3: Initial Population and Triage
 
