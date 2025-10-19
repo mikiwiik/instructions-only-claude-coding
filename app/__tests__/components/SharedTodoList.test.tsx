@@ -175,14 +175,12 @@ describe('SharedTodoList', () => {
   });
 
   describe('todo interactions', () => {
-    beforeEach(() => {
+    it('should toggle todo when checkbox is clicked', () => {
       mockUseSharedTodos.mockReturnValueOnce({
         ...mockReturnValue,
         todos: mockTodos,
       });
-    });
 
-    it('should toggle todo when checkbox is clicked', () => {
       render(<SharedTodoList listId='list-1' userId='user-1' />);
 
       const checkbox = screen.getAllByRole('checkbox')[0];
@@ -192,6 +190,11 @@ describe('SharedTodoList', () => {
     });
 
     it('should delete todo when delete button is clicked', () => {
+      mockUseSharedTodos.mockReturnValueOnce({
+        ...mockReturnValue,
+        todos: mockTodos,
+      });
+
       render(<SharedTodoList listId='list-1' userId='user-1' />);
 
       const deleteButtons = screen.getAllByText('Delete');
@@ -201,6 +204,11 @@ describe('SharedTodoList', () => {
     });
 
     it('should show completed todos with strikethrough', () => {
+      mockUseSharedTodos.mockReturnValueOnce({
+        ...mockReturnValue,
+        todos: mockTodos,
+      });
+
       render(<SharedTodoList listId='list-1' userId='user-1' />);
 
       const completedTodo = screen.getByText('Test todo 2');
@@ -257,14 +265,12 @@ describe('SharedTodoList', () => {
   });
 
   describe('accessibility', () => {
-    beforeEach(() => {
+    it('should have proper ARIA labels for checkboxes', () => {
       mockUseSharedTodos.mockReturnValueOnce({
         ...mockReturnValue,
         todos: mockTodos,
       });
-    });
 
-    it('should have proper ARIA labels for checkboxes', () => {
       render(<SharedTodoList listId='list-1' userId='user-1' />);
 
       expect(
@@ -273,6 +279,11 @@ describe('SharedTodoList', () => {
     });
 
     it('should have proper ARIA labels for delete buttons', () => {
+      mockUseSharedTodos.mockReturnValueOnce({
+        ...mockReturnValue,
+        todos: mockTodos,
+      });
+
       render(<SharedTodoList listId='list-1' userId='user-1' />);
 
       expect(screen.getByLabelText('Delete "Test todo 1"')).toBeInTheDocument();

@@ -125,6 +125,12 @@ describe('useSharedTodos', () => {
 
   describe('updateTodo', () => {
     it('should update todo optimistically', async () => {
+      // Mock fetch to return initialTodos
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ todos: initialTodos }),
+      });
+
       const { result } = renderHook(() =>
         useSharedTodos({
           listId: 'list-1',
@@ -167,6 +173,12 @@ describe('useSharedTodos', () => {
 
   describe('toggleTodo', () => {
     it('should toggle todo completion status', async () => {
+      // Mock fetch to return initialTodos
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ todos: initialTodos }),
+      });
+
       const { result } = renderHook(() =>
         useSharedTodos({
           listId: 'list-1',
@@ -221,6 +233,12 @@ describe('useSharedTodos', () => {
           updatedAt: new Date(),
         },
       ];
+
+      // Mock fetch to return the todos
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ todos }),
+      });
 
       const { result } = renderHook(() =>
         useSharedTodos({
