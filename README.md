@@ -151,6 +151,7 @@ See [Development Workflow](docs/development/workflow.md) for complete branch str
 - **🚀 [Installation Guide](docs/setup/installation.md)** - Complete development environment setup
 - **📦 [Deployment Guide](docs/setup/deployment.md)** - Production deployment with Vercel
 - **🔍 [SonarCloud Setup](docs/setup/sonarcloud-setup.md)** - Code quality analysis integration
+- **💡 [SonarLint IDE Setup](docs/setup/sonarlint-ide-setup.md)** - Real-time code quality feedback in your IDE
 - **⚙️ [Development Workflow](docs/development/workflow.md)** - Coding standards and practices
 - **📊 [Project Management](docs/development/project-management.md)** - Issue tracking and planning
 - **🏗️ [Architecture Overview](docs/architecture/overview.md)** - Technical architecture and decisions
