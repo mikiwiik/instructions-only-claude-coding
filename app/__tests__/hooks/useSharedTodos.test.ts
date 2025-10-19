@@ -48,6 +48,15 @@ global.fetch = jest.fn(() =>
   })
 ) as jest.Mock;
 
+// Mock crypto.randomUUID
+let uuidCounter = 0;
+Object.defineProperty(global, 'crypto', {
+  value: {
+    randomUUID: () => `test-uuid-${++uuidCounter}`,
+  },
+  writable: true,
+});
+
 describe('useSharedTodos', () => {
   const initialTodos: Todo[] = [
     {
@@ -61,6 +70,7 @@ describe('useSharedTodos', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (global.fetch as jest.Mock).mockClear();
+    uuidCounter = 0; // Reset UUID counter
   });
 
   it('should initialize with provided todos', () => {
@@ -89,7 +99,7 @@ describe('useSharedTodos', () => {
   });
 
   describe('addTodo', () => {
-    it.skip('should add todo optimistically', async () => {
+    it('should add todo optimistically', async () => {
       const { result } = renderHook(() =>
         useSharedTodos({
           listId: 'list-1',
@@ -102,15 +112,14 @@ describe('useSharedTodos', () => {
         await result.current.addTodo('New todo');
       });
 
-      await waitFor(() => {
-        expect(result.current.todos).toHaveLength(1);
-      });
+      expect(result.current.todos).toHaveLength(1);
       expect(result.current.todos[0].text).toBe('New todo');
+      expect(result.current.todos[0].id).toBe('test-uuid-1');
     });
   });
 
   describe('updateTodo', () => {
-    it.skip('should update todo optimistically', async () => {
+    it('should update todo optimistically', async () => {
       const { result } = renderHook(() =>
         useSharedTodos({
           listId: 'list-1',
@@ -124,6 +133,7 @@ describe('useSharedTodos', () => {
       });
 
       expect(result.current.todos[0].text).toBe('Updated text');
+      expect(result.current.todos[0].id).toBe('todo-1');
     });
   });
 
@@ -146,7 +156,7 @@ describe('useSharedTodos', () => {
   });
 
   describe('toggleTodo', () => {
-    it.skip('should toggle todo completion status', async () => {
+    it('should toggle todo completion status', async () => {
       const { result } = renderHook(() =>
         useSharedTodos({
           listId: 'list-1',
@@ -160,6 +170,7 @@ describe('useSharedTodos', () => {
       });
 
       expect(result.current.todos[0].completedAt).toBeDefined();
+      expect(result.current.todos[0].completedAt).toBeInstanceOf(Date);
     });
 
     it('should not throw if todo not found', async () => {
@@ -180,7 +191,7 @@ describe('useSharedTodos', () => {
   });
 
   describe('reorderTodos', () => {
-    it.skip('should reorder todos', async () => {
+    it('should reorder todos', async () => {
       const todos: Todo[] = [
         {
           id: 'todo-1',
@@ -211,7 +222,9 @@ describe('useSharedTodos', () => {
       });
 
       expect(result.current.todos[0].id).toBe('todo-2');
+      expect(result.current.todos[0].text).toBe('Second');
       expect(result.current.todos[1].id).toBe('todo-1');
+      expect(result.current.todos[1].text).toBe('First');
     });
   });
 
