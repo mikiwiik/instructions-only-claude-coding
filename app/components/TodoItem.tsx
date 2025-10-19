@@ -11,8 +11,11 @@ import {
   Undo2,
 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+import {
+  draggable,
+  dropTargetForElements,
+} from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
@@ -117,16 +120,34 @@ export default function TodoItem({
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const itemRef = useRef<HTMLLIElement>(null);
+  const dragHandleRef = useRef<HTMLDivElement>(null);
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: todo.id, disabled: !isDraggable });
+  // Setup drag and drop with pragmatic-drag-and-drop
+  useEffect(() => {
+    const itemEl = itemRef.current;
+    const dragHandleEl = dragHandleRef.current;
+
+    if (!itemEl || !isDraggable) {
+      return;
+    }
+
+    return combine(
+      draggable({
+        element: itemEl,
+        dragHandle: dragHandleEl || undefined,
+        getInitialData: () => ({ type: 'todo-item', todoId: todo.id }),
+        onDragStart: () => setIsDragging(true),
+        onDrop: () => setIsDragging(false),
+      }),
+      dropTargetForElements({
+        element: itemEl,
+        getData: () => ({ todoId: todo.id }),
+      })
+    );
+  }, [todo.id, isDraggable]);
 
   // Swipe gesture handlers
   const swipeGesture = useSwipeGesture({
@@ -257,12 +278,6 @@ export default function TodoItem({
     }
   };
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
-  };
-
   // Combine gesture handlers for touch events
   const touchHandlers = {
     onTouchStart: (e: React.TouchEvent) => {
@@ -281,20 +296,18 @@ export default function TodoItem({
 
   return (
     <li
-      ref={setNodeRef}
-      style={style}
+      ref={itemRef}
       className={`flex items-start gap-2 sm:gap-3 p-2 sm:p-4 rounded-none sm:rounded-lg ${
         isFirst ? 'border-t-0' : 'border-t'
       } border-x-0 sm:border sm:border-t border-b-0 sm:border-b fade-in transition-transform ${
         todo.deletedAt ? 'bg-muted border-dashed opacity-75' : 'bg-background'
-      }`}
+      } ${isDragging ? 'opacity-50' : ''}`}
       {...touchHandlers}
     >
       <div className='flex flex-col md:flex-row items-center gap-1 md:gap-2'>
         {isDraggable && (
           <div
-            {...attributes}
-            {...listeners}
+            ref={dragHandleRef}
             data-testid='drag-handle'
             role='button'
             tabIndex={0}

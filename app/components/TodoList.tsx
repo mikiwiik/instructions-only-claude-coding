@@ -1,18 +1,6 @@
 import { Circle } from 'lucide-react';
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from '@dnd-kit/core';
-import {
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
+import { useEffect } from 'react';
+import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import { Todo } from '../types/todo';
 import TodoItem from './TodoItem';
 import GestureHint from './GestureHint';
@@ -42,27 +30,43 @@ export default function TodoList({
   moveUp,
   moveDown,
 }: TodoListProps) {
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
   const isReorderingEnabled = Boolean(reorderTodos);
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-
-    if (active.id !== over?.id && reorderTodos) {
-      const oldIndex = todos.findIndex((todo) => todo.id === active.id);
-      const newIndex = todos.findIndex((todo) => todo.id === over?.id);
-
-      if (oldIndex !== -1 && newIndex !== -1) {
-        reorderTodos(oldIndex, newIndex);
-      }
+  // Setup drag monitoring with pragmatic-drag-and-drop
+  useEffect(() => {
+    if (!isReorderingEnabled) {
+      return;
     }
-  };
+
+    return monitorForElements({
+      onDrop({ source, location }) {
+        const target = location.current.dropTargets[0];
+        if (!target) {
+          return;
+        }
+
+        const sourceData = source.data;
+        const targetData = target.data;
+
+        if (
+          sourceData.type === 'todo-item' &&
+          targetData.todoId &&
+          sourceData.todoId !== targetData.todoId &&
+          reorderTodos
+        ) {
+          const sourceId = sourceData.todoId as string;
+          const targetId = targetData.todoId as string;
+
+          const oldIndex = todos.findIndex((todo) => todo.id === sourceId);
+          const newIndex = todos.findIndex((todo) => todo.id === targetId);
+
+          if (oldIndex !== -1 && newIndex !== -1) {
+            reorderTodos(oldIndex, newIndex);
+          }
+        }
+      },
+    });
+  }, [isReorderingEnabled, todos, reorderTodos]);
 
   if (todos.length === 0) {
     return (
@@ -109,22 +113,7 @@ export default function TodoList({
         <h3 className='text-base sm:text-lg font-medium text-card-foreground mb-3 sm:mb-4'>
           Your Todos ({todos.length})
         </h3>
-        {isReorderingEnabled ? (
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={todos.map((todo) => todo.id)}
-              strategy={verticalListSortingStrategy}
-            >
-              {todosList}
-            </SortableContext>
-          </DndContext>
-        ) : (
-          todosList
-        )}
+        {todosList}
       </div>
       <GestureHint />
     </>
