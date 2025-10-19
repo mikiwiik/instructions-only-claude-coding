@@ -304,7 +304,7 @@ The project uses **GitHub Projects** to enhance the label-based issue management
 management, quick wins identification, and idea capture capabilities. Projects complements the existing
 priority/complexity label system while maintaining labels as the primary source of truth.
 
-**📋 Decision Documentation**: See [ADR-020: GitHub Projects Adoption](../adr/020-github-projects-adoption.md) for
+**📋 Decision Documentation**: See [ADR-024: GitHub Projects Adoption](../adr/024-github-projects-adoption.md) for
 full rationale and trade-offs.
 
 **🔧 Setup Guide**: See [GitHub Projects Setup Guide](github-projects-setup.md) for detailed configuration instructions.
@@ -320,7 +320,7 @@ GitHub Projects uses custom fields for workflow tracking:
 
 **Priority, Complexity, and Category** are managed via issue labels and displayed using GitHub Projects' built-in
 **Labels** field. This maintains labels as the single source of truth and eliminates data duplication. See
-[ADR-020](../adr/020-github-projects-adoption.md#update-labels-only-architecture-2025-10-19) for rationale.
+[ADR-020](../adr/024-github-projects-adoption.md#update-labels-only-architecture-2025-10-19) for rationale.
 
 #### Why Only These Two Custom Fields?
 

@@ -1,4 +1,8 @@
-# React 19 Migration Assessment Report
+# ADR-025: React 19 Migration Assessment
+
+## Status
+
+Accepted
 
 **Date**: October 19, 2025
 **Issue**: #223
