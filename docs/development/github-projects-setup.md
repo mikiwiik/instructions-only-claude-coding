@@ -116,27 +116,6 @@ echo "Project number: $PROJECT_NUMBER"
 ### Step 2: Create Custom Fields
 
 ```bash
-# Create Priority field
-gh project field-create $PROJECT_NUMBER \
-  --owner mikiwiik \
-  --name "Priority" \
-  --data-type "SINGLE_SELECT" \
-  --single-select-options "Critical,High,Medium,Low"
-
-# Create Complexity field
-gh project field-create $PROJECT_NUMBER \
-  --owner mikiwiik \
-  --name "Complexity" \
-  --data-type "SINGLE_SELECT" \
-  --single-select-options "Minimal,Simple,Moderate,Complex,Epic"
-
-# Create Category field
-gh project field-create $PROJECT_NUMBER \
-  --owner mikiwiik \
-  --name "Category" \
-  --data-type "SINGLE_SELECT" \
-  --single-select-options "Feature,Infrastructure,Documentation,DX"
-
 # Create Lifecycle field
 gh project field-create $PROJECT_NUMBER \
   --owner mikiwiik \
@@ -146,6 +125,10 @@ gh project field-create $PROJECT_NUMBER \
 ```
 
 **Note**: The default "Status" field is created automatically with the project.
+
+**Why only Lifecycle?** We use the built-in **Labels** field for Priority, Complexity, and Category to maintain
+labels as the single source of truth and avoid data duplication. See
+[ADR-020](../adr/020-github-projects-adoption.md#update-labels-only-architecture-2025-10-19) for rationale.
 
 ### Step 3: Configure Default Status Field
 
@@ -194,9 +177,11 @@ Navigate to project: `gh project view $PROJECT_NUMBER --web`
 3. Configure:
    - **Layout**: Board
    - **Group by**: Status
-   - **Column grouping**: Priority (swimlanes)
-   - **Filter**: `Lifecycle:Active,Backlog`
+   - **Filter**: `label:priority-1-critical,priority-2-high Lifecycle:Active,Backlog`
 4. Click Save
+
+**Note**: We filter to show only high-priority and critical issues. Adjust the label filter to match your workflow
+needs. Labels don't support column grouping, so we group by Status only.
 
 #### View 2: Backlog - Next Issue
 
@@ -204,10 +189,12 @@ Navigate to project: `gh project view $PROJECT_NUMBER --web`
 2. Name: `Backlog - Next Issue`
 3. Configure:
    - **Layout**: Table
-   - **Columns**: Title, Priority, Complexity, Category, Status, Lifecycle
-   - **Sort**: Priority (Critical → Low), then Complexity (Minimal → Epic)
+   - **Columns**: Title, Labels, Status, Lifecycle, Assignees
    - **Filter**: `Lifecycle:Active,Backlog`
 4. Click Save
+
+**Note**: The Labels column shows priority/complexity/category labels. GitHub Projects cannot sort by labels, so use
+visual scanning or the `/select-next-issue` command for priority-based selection.
 
 #### View 3: Quick Wins - High Priority + Simple
 
@@ -216,7 +203,7 @@ Navigate to project: `gh project view $PROJECT_NUMBER --web`
 3. Configure:
    - **Layout**: Board
    - **Group by**: Status
-   - **Filter**: `Priority:High AND (Complexity:Simple OR Complexity:Minimal) AND Lifecycle:Active`
+   - **Filter**: `label:priority-2-high label:complexity-simple,complexity-minimal Lifecycle:Active`
 4. Click Save
 
 #### View 4: Agent Workload - Current Work
@@ -243,8 +230,10 @@ Navigate to project: `gh project view $PROJECT_NUMBER --web`
 3. Configure:
    - **Layout**: Table or Board (your preference)
    - **Filter**: `Lifecycle:Icebox`
-   - **Columns** (if Table): Title, Priority (optional), Complexity (optional)
+   - **Columns** (if Table): Title, Labels, Status, Lifecycle
 4. Click Save
+
+**Note**: Icebox issues may not have priority/complexity labels yet - that's expected for raw ideas.
 
 ### Step 7: Configure Automation Workflows
 
@@ -319,31 +308,9 @@ Go through each issue and set Lifecycle field based on readiness:
 - [ ] Move unclear/exploratory issues to Icebox
 - [ ] Ensure Backlog issues have proper labels
 
-### Step 9: Populate Custom Fields from Labels
+### Step 9: Populate Workflow Fields
 
-For each issue with Lifecycle `Active` or `Backlog`, set custom fields based on labels:
-
-**Priority field** (from `priority-*` labels):
-
-- `priority-1-critical` → `Critical`
-- `priority-2-high` → `High`
-- `priority-3-medium` → `Medium`
-- `priority-4-low` → `Low`
-
-**Complexity field** (from `complexity-*` labels):
-
-- `complexity-minimal` → `Minimal`
-- `complexity-simple` → `Simple`
-- `complexity-moderate` → `Moderate`
-- `complexity-complex` → `Complex`
-- `complexity-epic` → `Epic`
-
-**Category field** (from `category-*` labels):
-
-- `category-feature` → `Feature`
-- `category-infrastructure` → `Infrastructure`
-- `category-documentation` → `Documentation`
-- `category-dx` → `DX`
+For each issue with Lifecycle `Active` or `Backlog`, set workflow fields based on current state:
 
 **Status field** (based on current work state):
 
@@ -353,7 +320,10 @@ For each issue with Lifecycle `Active` or `Backlog`, set custom fields based on 
 - In testing → `Testing`
 - Blocked → `Blocked`
 
-**Note**: Icebox issues can skip Priority/Complexity if not yet defined.
+**Lifecycle field** (already set in Step 8)
+
+**Note**: Priority, Complexity, and Category are managed via issue labels and automatically visible in the Labels
+column. No manual field population needed - labels provide the source of truth.
 
 ## Verification
 
@@ -361,8 +331,8 @@ For each issue with Lifecycle `Active` or `Backlog`, set custom fields based on 
 
 Navigate through each view and verify:
 
-- [ ] **Board - Workflow**: Shows Active/Backlog issues grouped by Priority
-- [ ] **Backlog - Next Issue**: Table sorted by Priority → Complexity
+- [ ] **Board - Workflow**: Shows Active/Backlog issues with high-priority filter
+- [ ] **Backlog - Next Issue**: Table showing all Active/Backlog issues with Labels column
 - [ ] **Quick Wins**: Filtered to high-priority + simple-complexity issues only
 - [ ] **Agent Workload**: Shows Active issues
 - [ ] **Icebox**: Shows only Icebox issues
@@ -375,7 +345,7 @@ Create a test issue to verify automation:
 gh issue create \
   --repo mikiwiik/instructions-only-claude-coding \
   --title "Test: GitHub Projects Automation" \
-  --body "Testing auto-add to project and field population" \
+  --body "Testing auto-add to project and label visibility" \
   --label "priority-4-low,complexity-minimal,category-infrastructure"
 ```
 
@@ -383,7 +353,8 @@ Verify:
 
 - [ ] Issue automatically added to project
 - [ ] Appears in Backlog view
-- [ ] Can manually set Lifecycle, Priority, Complexity, Category fields
+- [ ] Labels visible in Labels column
+- [ ] Can manually set Lifecycle and Status fields
 - [ ] Closing issue sets Status and Lifecycle to Done
 
 ## Daily Workflow Quick Reference
@@ -395,9 +366,10 @@ Verify:
 
 **Selecting Next Work**:
 
-1. Open Backlog view → Sort by Priority → Complexity
+1. Open Backlog view → Review labels column for priority/complexity
 2. Or check Quick Wins view for momentum opportunities
-3. Select next issue, set Lifecycle:Active, Status:In Progress
+3. Or use `/select-next-issue` command for priority-based selection
+4. Select next issue, set Lifecycle:Active, Status:In Progress
 
 **Capturing Ideas**:
 
@@ -439,8 +411,9 @@ gh project view $PROJECT_NUMBER --owner mikiwiik --web
 
 **Fields not populating from labels**:
 
-- This is manual for now; set fields based on labels in web UI
-- Future: Could create GitHub Action to sync label → field
+- Priority, Complexity, and Category are now read directly from issue labels (no custom fields)
+- Use the Labels column in table views to see all label values
+- Status and Lifecycle are the only custom fields requiring manual updates
 
 **Views not filtering correctly**:
 
