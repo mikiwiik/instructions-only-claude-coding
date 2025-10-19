@@ -2,7 +2,16 @@
 
 ## Status
 
-[Proposed | Accepted | Deprecated | Superseded by ADR-###]
+[Proposed | Accepted | Deprecated | Superseded by ADR-### | Amended by ADR-### | Rejected]
+
+**Note**: Once accepted, this ADR should not be modified except for:
+
+- Minor corrections (typos, formatting, broken links)
+- Status updates when superseded or amended
+- Adding links to newer ADRs that reference this one
+
+For architectural changes or evolution, create a new ADR that references this one. See
+[PROCESS.md](PROCESS.md#adr-immutability-and-evolution) for complete immutability guidelines.
 
 ## Context
 
