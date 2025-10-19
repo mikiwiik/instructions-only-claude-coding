@@ -38,3 +38,15 @@ Each ADR follows this structure:
 - ADRs should be created when making significant technical choices
 - ADRs are immutable once accepted (create new ADR to supersede)
 - All team members should review proposed ADRs before acceptance
+
+## ADR Index
+
+| #                                              | Title                                | Status               | Date    |
+| ---------------------------------------------- | ------------------------------------ | -------------------- | ------- |
+| [001](001-nextjs-app-router.md)                | Use Next.js 14 with App Router       | Accepted             | 2025-01 |
+| [012](012-todo-reordering-ux-approach.md)      | Todo Reordering UX Approach          | Partially Superseded | 2025-01 |
+| [015](015-ai-agent-attribution-strategy.md)    | AI Agent Attribution Strategy        | Accepted             | 2025-01 |
+| [020](020-react-nextjs-version-constraints.md) | React/Next.js Version Constraints    | Accepted             | 2025-01 |
+| [021](021-pragmatic-drag-drop-migration.md)    | Migration to Pragmatic Drag and Drop | Accepted             | 2025-10 |
+
+> **Note**: This is a summary index. See individual ADR files for complete documentation.

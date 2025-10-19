@@ -2,7 +2,11 @@
 
 ## Status
 
-Accepted
+Partially Superseded by ADR-021 (UX approach still valid, technical implementation updated)
+
+> **Note**: The UX approach, accessibility requirements, and interaction patterns defined in this ADR
+> remain active and unchanged. Only the technical implementation (library choice) has been superseded
+> by ADR-021 to enable React 19 compatibility.
 
 ## Context
 
