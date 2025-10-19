@@ -511,6 +511,75 @@ Verify:
 
 ## CLI Reference
 
+### Helper Script for Status Updates
+
+**Location**: `.claude/scripts/update-project-status.sh`
+
+**Purpose**: Automatically update GitHub Projects Status and Lifecycle fields when starting work on an issue.
+
+**Usage**:
+
+```bash
+# Update status when starting work on an issue
+./.claude/scripts/update-project-status.sh <issue-number> "In Progress" "Active"
+
+# Example: Starting work on issue #247
+./.claude/scripts/update-project-status.sh 247 "In Progress" "Active"
+```
+
+**Features**:
+
+- Automatic project lookup by owner
+- Field ID resolution for Status and Lifecycle
+- Auto-add issue to project if not already present
+- Comprehensive error handling with helpful messages
+- Color-coded output for readability
+
+**Prerequisites**:
+
+- GitHub CLI with `project` scope: `gh auth refresh --hostname github.com --scopes project`
+- Agent invited as Write collaborator to the project
+- Project must exist with Status and Lifecycle fields configured
+
+**Error Scenarios**:
+
+- **Missing project scope**: Script provides exact command to add scope
+- **Project not found**: Suggests checking project setup
+- **Issue not in project**: Automatically adds issue, then updates fields
+- **Invalid field values**: Lists available options
+
+### Manual Commands
+
+If you prefer to update project fields manually or the helper script is unavailable:
+
+```bash
+# Step 1: Find your project number
+gh project list --owner mikiwiik
+
+# Step 2: List project fields to get field IDs
+gh project field-list $PROJECT_NUMBER --owner mikiwiik --format json
+
+# Step 3: Find issue item ID in project
+gh project item-list $PROJECT_NUMBER --owner mikiwiik --format json | \
+  jq '.items[] | select(.content.url | contains("issues/247"))'
+
+# Step 4: Update Status field
+gh project item-edit \
+  --project-id $PROJECT_ID \
+  --id $ITEM_ID \
+  --field-id $STATUS_FIELD_ID \
+  --single-select-option-id $STATUS_OPTION_ID
+
+# Step 5: Update Lifecycle field
+gh project item-edit \
+  --project-id $PROJECT_ID \
+  --id $ITEM_ID \
+  --field-id $LIFECYCLE_FIELD_ID \
+  --single-select-option-id $LIFECYCLE_OPTION_ID
+```
+
+### Common CLI Operations
+
 ```bash
 # List projects
 gh project list --owner mikiwiik
