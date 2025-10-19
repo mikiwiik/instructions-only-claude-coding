@@ -1,7 +1,9 @@
 # SonarCloud Setup for Instructions-Only Claude Coding
 
-This guide covers project-specific SonarCloud configuration. For general SonarCloud setup, follow the
+This guide covers project-specific SonarCloud configuration for CI/CD integration. For general SonarCloud setup, follow the
 [official SonarCloud GitHub integration guide](https://docs.sonarsource.com/sonarcloud/getting-started/github/).
+
+**For local IDE setup with real-time feedback**, see [SonarLint IDE Setup Guide](sonarlint-ide-setup.md).
 
 ## Project-Specific Configuration
 
@@ -157,3 +159,8 @@ The integration includes these pre-configured files:
 - **GitHub Action**: Uses latest `sonarqube-scan-action` (v5.0.0) for optimal performance
 
 The SonarCloud integration will enhance existing quality assurance without replacing current tools.
+
+## Related Documentation
+
+- **[SonarLint IDE Setup](sonarlint-ide-setup.md)** - Configure SonarLint for real-time code quality feedback in your IDE
+- **[Development Workflow](../development/workflow.md)** - Project coding standards and practices
