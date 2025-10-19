@@ -160,7 +160,7 @@ describe('SharedTodoList', () => {
       expect(mockAddTodo).not.toHaveBeenCalled();
     });
 
-    it.skip('should disable add button when disconnected', () => {
+    it('should disable add button when disconnected', () => {
       mockUseSharedTodos.mockReturnValueOnce({
         ...mockReturnValue,
         isConnected: false,
@@ -206,7 +206,7 @@ describe('SharedTodoList', () => {
       expect(completedTodo).toHaveClass('line-through');
     });
 
-    it.skip('should disable interactions when disconnected', () => {
+    it('should disable interactions when disconnected', () => {
       mockUseSharedTodos.mockReturnValueOnce({
         ...mockReturnValue,
         todos: mockTodos,
@@ -217,6 +217,9 @@ describe('SharedTodoList', () => {
 
       const checkbox = screen.getAllByRole('checkbox')[0];
       expect(checkbox).toBeDisabled();
+
+      const deleteButtons = screen.getAllByText('Delete');
+      expect(deleteButtons[0]).toBeDisabled();
     });
   });
 
