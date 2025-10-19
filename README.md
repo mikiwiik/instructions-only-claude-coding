@@ -155,12 +155,14 @@ See [Development Workflow](docs/development/workflow.md) for complete branch str
 - **📊 [Project Management](docs/development/project-management.md)** - Issue tracking and planning
 - **🏗️ [Architecture Overview](docs/architecture/overview.md)** - Technical architecture and decisions
 - **🏗️ [Architecture Flow Diagram](docs/diagrams/architecture-flow.md)** - Visual architecture flow with Mermaid diagrams
+- **👤 [User Flow Diagrams](docs/diagrams/user-flows.md)** - Complete user interaction flows and UX documentation
 
 ### Documentation Organization
 
 - **[docs/setup/](docs/setup/)** - Installation and deployment guides
 - **[docs/development/](docs/development/)** - Development workflow and project management
 - **[docs/architecture/](docs/architecture/)** - Technical architecture and design decisions
+- **[docs/diagrams/](docs/diagrams/)** - Visual diagrams for architecture and user flows
 - **[docs/adr/](docs/adr/)** - Architecture Decision Records
 - **[docs/guidelines/](docs/guidelines/)** - Process guidelines and standards
 - **[CLAUDE.md](CLAUDE.md)** - Essential 10-line framework for instruction-only development

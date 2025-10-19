@@ -29,7 +29,8 @@
    - See `docs/adr/PROCESS.md` for complete ADR evolution guidelines and `docs/adr/026-security-scanning-ci-cd-pipeline.md`
      for amendment pattern example
 9. **🚨 DOCUMENT FOR HUMANS**: Always update README.md and relevant markdown files so humans can understand all
-   changes and project evolution
+   changes and project evolution - this includes updating user flow diagrams ([docs/diagrams/user-flows.md](docs/diagrams/user-flows.md))
+   when interaction patterns change
 10. **🚨 DOCUMENTATION QUALITY**: Keep all documentation comprehensive, up-to-date, and concise - eliminate outdated
     or verbose content immediately
 11. **🚨 PINNED DEPENDENCIES**: All dependencies must use exact versions without range operators (`^`, `~`) for maximum
@@ -91,6 +92,8 @@ Agent-centric development instructions for instruction-only todo application dev
 ## Reference Documentation
 
 - **ADR Process**: [docs/adr/PROCESS.md](docs/adr/PROCESS.md)
+- **User Flow Diagrams**: [docs/diagrams/user-flows.md](docs/diagrams/user-flows.md)
+- **Architecture Flow**: [docs/diagrams/architecture-flow.md](docs/diagrams/architecture-flow.md)
 - **Troubleshooting**: [docs/reference/troubleshooting.md](docs/reference/troubleshooting.md)
 - **AI Attribution Strategy**: [docs/adr/015-ai-agent-attribution-strategy.md](docs/adr/015-ai-agent-attribution-strategy.md)
 - **GitHub Projects Adoption**: [docs/adr/024-github-projects-adoption.md](docs/adr/024-github-projects-adoption.md)
@@ -101,6 +104,7 @@ Agent-centric development instructions for instruction-only todo application dev
 docs/
 ├── agents/              # Agent-specific guidelines and coordination
 ├── core/                # Framework, workflows, project context
+├── diagrams/            # Mermaid diagrams for architecture and user flows
 ├── reference/           # Labels, priorities, troubleshooting
 ├── adr/                 # Architecture Decision Records
 └── ipl/                 # Issue Prompt Logs

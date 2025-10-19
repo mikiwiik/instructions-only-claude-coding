@@ -471,6 +471,7 @@ Assessment → Task Breakdown → User Approval → Implementation Tracking → 
 - Component interaction diagrams
 - Development workflow illustrations
 - Data flow and state management visualizations
+- User interaction flows and UX documentation
 
 **Process:**
 
@@ -481,10 +482,18 @@ Assessment → Task Breakdown → User Approval → Implementation Tracking → 
 
 **Common Diagram Types:**
 
-- **Flowcharts**: Decision logic, process flows, algorithm steps
+- **Flowcharts**: Decision logic, process flows, algorithm steps, user interaction flows
 - **Sequence Diagrams**: Component interactions, API calls, user flows
 - **Class Diagrams**: Data models, type relationships, architecture
 - **Git Graphs**: Branch strategies, workflow illustrations
+
+**User Flow Diagrams** (`docs/diagrams/user-flows.md`):
+
+- **🚨 REQUIRED**: Update when user interaction patterns change
+- Document all main user capabilities (add, edit, delete, filter, etc.)
+- Include decision points, alternate paths, and system behaviors
+- Show multi-input support (click, touch gestures, keyboard)
+- Maintain for UX understanding and onboarding
 
 ### Required Documentation Updates
 
@@ -493,6 +502,8 @@ Assessment → Task Breakdown → User Approval → Implementation Tracking → 
 - **Inline Comments**: For complex logic (sparingly)
 - **CLAUDE.md**: For workflow or process changes
 - **Mermaid Diagrams**: For architecture, flows, and system interactions
+- **User Flow Diagrams** (`docs/diagrams/user-flows.md`): When user interaction patterns change (new features, UI
+  changes, gesture modifications)
 
 ### Documentation Consistency
 
