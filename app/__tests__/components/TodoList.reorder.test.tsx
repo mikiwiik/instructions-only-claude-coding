@@ -2,31 +2,19 @@ import { render, screen } from '@testing-library/react';
 import TodoList from '../../components/TodoList';
 import { Todo } from '../../types/todo';
 
-// Mock @dnd-kit components
-jest.mock('@dnd-kit/core', () => ({
-  DndContext: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid='dnd-context'>{children}</div>
-  ),
-  closestCenter: jest.fn(),
-  KeyboardSensor: jest.fn(),
-  PointerSensor: jest.fn(),
-  useSensors: () => [],
-  useSensor: () => ({}),
+// Mock pragmatic-drag-and-drop
+jest.mock('@atlaskit/pragmatic-drag-and-drop/element/adapter', () => ({
+  draggable: jest.fn(() => jest.fn()),
+  dropTargetForElements: jest.fn(() => jest.fn()),
+  monitorForElements: jest.fn(() => jest.fn()),
 }));
 
-jest.mock('@dnd-kit/sortable', () => ({
-  SortableContext: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid='sortable-context'>{children}</div>
+jest.mock('@atlaskit/pragmatic-drag-and-drop/combine', () => ({
+  combine: jest.fn(
+    (...fns) =>
+      () =>
+        fns.forEach((fn) => fn && fn())
   ),
-  verticalListSortingStrategy: 'vertical-list-sorting',
-  useSortable: () => ({
-    attributes: { 'aria-roledescription': 'sortable' },
-    listeners: { onPointerDown: jest.fn() },
-    setNodeRef: jest.fn(),
-    transform: null,
-    transition: null,
-    isDragging: false,
-  }),
 }));
 
 const createMockTodo = (overrides: Partial<Todo> = {}): Todo => ({
@@ -50,8 +38,8 @@ describe('TodoList - Reordering functionality', () => {
     jest.clearAllMocks();
   });
 
-  describe('DnD Context', () => {
-    it('should render DndContext when reordering is enabled', () => {
+  describe('Drag and Drop Integration', () => {
+    it('should render todos list when reordering is enabled', () => {
       const todos = [
         createMockTodo({ id: '1', text: 'First todo' }),
         createMockTodo({ id: '2', text: 'Second todo' }),
@@ -69,11 +57,16 @@ describe('TodoList - Reordering functionality', () => {
         />
       );
 
-      expect(screen.getByTestId('dnd-context')).toBeInTheDocument();
-      expect(screen.getByTestId('sortable-context')).toBeInTheDocument();
+      // With pragmatic-drag-and-drop, no wrapper components needed
+      // Just verify the list structure is correct
+      const list = screen.getByRole('list');
+      expect(list).toBeInTheDocument();
+
+      const listItems = screen.getAllByRole('listitem');
+      expect(listItems).toHaveLength(2);
     });
 
-    it('should not render DndContext when reordering is disabled', () => {
+    it('should render todos list when reordering is disabled', () => {
       const todos = [
         createMockTodo({ id: '1', text: 'First todo' }),
         createMockTodo({ id: '2', text: 'Second todo' }),
@@ -88,8 +81,12 @@ describe('TodoList - Reordering functionality', () => {
         />
       );
 
-      expect(screen.queryByTestId('dnd-context')).not.toBeInTheDocument();
-      expect(screen.queryByTestId('sortable-context')).not.toBeInTheDocument();
+      // List should render the same way regardless of reordering state
+      const list = screen.getByRole('list');
+      expect(list).toBeInTheDocument();
+
+      const listItems = screen.getAllByRole('listitem');
+      expect(listItems).toHaveLength(2);
     });
   });
 
@@ -247,7 +244,7 @@ describe('TodoList - Reordering functionality', () => {
       expect(screen.getByTestId('empty-state-icon')).toBeInTheDocument();
     });
 
-    it('should not render DndContext when todos list is empty', () => {
+    it('should not render list when todos list is empty', () => {
       render(
         <TodoList
           todos={[]}
@@ -260,7 +257,7 @@ describe('TodoList - Reordering functionality', () => {
         />
       );
 
-      expect(screen.queryByTestId('dnd-context')).not.toBeInTheDocument();
+      expect(screen.queryByRole('list')).not.toBeInTheDocument();
     });
   });
 
