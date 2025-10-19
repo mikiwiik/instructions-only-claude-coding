@@ -1,4 +1,4 @@
-# ADR-018: Real-Time Synchronization Architecture
+# ADR-022: Real-Time Synchronization Architecture
 
 **Status**: Accepted
 **Date**: 2025-10-04
@@ -131,4 +131,4 @@ const optimisticCreate = (todo: NewTodo) => {
 - [Server-Sent Events Specification](https://html.spec.whatwg.org/multipage/server-sent-events.html)
 - [MDN SSE Guide](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events)
 - [Optimistic UI Patterns](https://www.apollographql.com/docs/react/performance/optimistic-ui/)
-- ADR-019: Conflict Resolution Strategy
+- ADR-023: Conflict Resolution Strategy
