@@ -9,9 +9,9 @@ export const runtime = 'edge';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { listId: string } }
+  { params }: { params: Promise<{ listId: string }> }
 ) {
-  const { listId } = params;
+  const { listId } = await params;
   const userId = request.headers.get('x-user-id') || 'anonymous';
 
   // Create SSE stream
