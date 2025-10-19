@@ -2,10 +2,19 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import TodoItem from '../../components/TodoItem';
 import { Todo } from '../../types/todo';
 
-// Mock pragmatic-drag-and-drop
+// Mock pragmatic-drag-and-drop with spy to capture callbacks
+let draggableConfig: any = null;
+let dropTargetConfig: any = null;
+
 jest.mock('@atlaskit/pragmatic-drag-and-drop/element/adapter', () => ({
-  draggable: jest.fn(() => jest.fn()),
-  dropTargetForElements: jest.fn(() => jest.fn()),
+  draggable: jest.fn((config: any) => {
+    draggableConfig = config;
+    return jest.fn();
+  }),
+  dropTargetForElements: jest.fn((config: any) => {
+    dropTargetConfig = config;
+    return jest.fn();
+  }),
   monitorForElements: jest.fn(() => jest.fn()),
 }));
 
@@ -35,6 +44,8 @@ const mockMoveDown = jest.fn();
 describe('TodoItem - Reordering functionality', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    draggableConfig = null;
+    dropTargetConfig = null;
   });
 
   describe('Drag handle', () => {
@@ -90,6 +101,54 @@ describe('TodoItem - Reordering functionality', () => {
 
       const dragHandle = screen.queryByTestId('drag-handle');
       expect(dragHandle).not.toBeInTheDocument();
+    });
+
+    it('should setup drag callbacks when isDraggable is true', () => {
+      const todo = createMockTodo({ id: 'drag-test' });
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+          moveUp={mockMoveUp}
+          moveDown={mockMoveDown}
+          isDraggable={true}
+        />
+      );
+
+      // Verify draggable was configured
+      expect(draggableConfig).not.toBeNull();
+      expect(draggableConfig.getInitialData()).toEqual({
+        type: 'todo-item',
+        todoId: 'drag-test',
+      });
+
+      // Verify dropTargetForElements was configured
+      expect(dropTargetConfig).not.toBeNull();
+      expect(dropTargetConfig.getData()).toEqual({ todoId: 'drag-test' });
+    });
+
+    it('should configure drag callbacks when isDraggable is true', () => {
+      const todo = createMockTodo();
+      render(
+        <TodoItem
+          todo={todo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+          moveUp={mockMoveUp}
+          moveDown={mockMoveDown}
+          isDraggable={true}
+        />
+      );
+
+      // Verify callbacks exist
+      expect(draggableConfig).not.toBeNull();
+      expect(draggableConfig.onDragStart).toBeDefined();
+      expect(draggableConfig.onDrop).toBeDefined();
+      expect(typeof draggableConfig.onDragStart).toBe('function');
+      expect(typeof draggableConfig.onDrop).toBe('function');
     });
   });
 

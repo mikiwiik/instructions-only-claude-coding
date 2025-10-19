@@ -2,11 +2,16 @@ import { render, screen } from '@testing-library/react';
 import TodoList from '../../components/TodoList';
 import { Todo } from '../../types/todo';
 
-// Mock pragmatic-drag-and-drop
+// Mock pragmatic-drag-and-drop with spy to capture callbacks
+let monitorCallback: ((args: any) => void) | null = null;
+
 jest.mock('@atlaskit/pragmatic-drag-and-drop/element/adapter', () => ({
   draggable: jest.fn(() => jest.fn()),
   dropTargetForElements: jest.fn(() => jest.fn()),
-  monitorForElements: jest.fn(() => jest.fn()),
+  monitorForElements: jest.fn((config: any) => {
+    monitorCallback = config.onDrop;
+    return jest.fn();
+  }),
 }));
 
 jest.mock('@atlaskit/pragmatic-drag-and-drop/combine', () => ({
@@ -36,6 +41,7 @@ const mockMoveDown = jest.fn();
 describe('TodoList - Reordering functionality', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    monitorCallback = null;
   });
 
   describe('Drag and Drop Integration', () => {
@@ -87,6 +93,158 @@ describe('TodoList - Reordering functionality', () => {
 
       const listItems = screen.getAllByRole('listitem');
       expect(listItems).toHaveLength(2);
+    });
+
+    it('should call reorderTodos when a valid drop event occurs', () => {
+      const todos = [
+        createMockTodo({ id: 'todo-1', text: 'First todo' }),
+        createMockTodo({ id: 'todo-2', text: 'Second todo' }),
+        createMockTodo({ id: 'todo-3', text: 'Third todo' }),
+      ];
+
+      render(
+        <TodoList
+          todos={todos}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+          reorderTodos={mockReorderTodos}
+          moveUp={mockMoveUp}
+          moveDown={mockMoveDown}
+        />
+      );
+
+      // Verify monitor was set up
+      expect(monitorCallback).not.toBeNull();
+
+      // Simulate drag from todo-1 to todo-3
+      monitorCallback!({
+        source: {
+          data: { type: 'todo-item', todoId: 'todo-1' },
+        },
+        location: {
+          current: {
+            dropTargets: [
+              {
+                data: { todoId: 'todo-3' },
+              },
+            ],
+          },
+        },
+      });
+
+      // Should call reorderTodos with correct indices (0 to 2)
+      expect(mockReorderTodos).toHaveBeenCalledWith(0, 2);
+    });
+
+    it('should not call reorderTodos when dropping on same item', () => {
+      const todos = [
+        createMockTodo({ id: 'todo-1', text: 'First todo' }),
+        createMockTodo({ id: 'todo-2', text: 'Second todo' }),
+      ];
+
+      render(
+        <TodoList
+          todos={todos}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+          reorderTodos={mockReorderTodos}
+          moveUp={mockMoveUp}
+          moveDown={mockMoveDown}
+        />
+      );
+
+      // Simulate drag from todo-1 to todo-1 (same item)
+      monitorCallback!({
+        source: {
+          data: { type: 'todo-item', todoId: 'todo-1' },
+        },
+        location: {
+          current: {
+            dropTargets: [
+              {
+                data: { todoId: 'todo-1' },
+              },
+            ],
+          },
+        },
+      });
+
+      // Should NOT call reorderTodos
+      expect(mockReorderTodos).not.toHaveBeenCalled();
+    });
+
+    it('should not call reorderTodos when no drop target', () => {
+      const todos = [
+        createMockTodo({ id: 'todo-1', text: 'First todo' }),
+        createMockTodo({ id: 'todo-2', text: 'Second todo' }),
+      ];
+
+      render(
+        <TodoList
+          todos={todos}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+          reorderTodos={mockReorderTodos}
+          moveUp={mockMoveUp}
+          moveDown={mockMoveDown}
+        />
+      );
+
+      // Simulate drop with no target
+      monitorCallback!({
+        source: {
+          data: { type: 'todo-item', todoId: 'todo-1' },
+        },
+        location: {
+          current: {
+            dropTargets: [],
+          },
+        },
+      });
+
+      // Should NOT call reorderTodos
+      expect(mockReorderTodos).not.toHaveBeenCalled();
+    });
+
+    it('should not call reorderTodos for non-todo-item types', () => {
+      const todos = [
+        createMockTodo({ id: 'todo-1', text: 'First todo' }),
+        createMockTodo({ id: 'todo-2', text: 'Second todo' }),
+      ];
+
+      render(
+        <TodoList
+          todos={todos}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onEdit={mockOnEdit}
+          reorderTodos={mockReorderTodos}
+          moveUp={mockMoveUp}
+          moveDown={mockMoveDown}
+        />
+      );
+
+      // Simulate drag from non-todo-item type
+      monitorCallback!({
+        source: {
+          data: { type: 'other-item', todoId: 'todo-1' },
+        },
+        location: {
+          current: {
+            dropTargets: [
+              {
+                data: { todoId: 'todo-2' },
+              },
+            ],
+          },
+        },
+      });
+
+      // Should NOT call reorderTodos
+      expect(mockReorderTodos).not.toHaveBeenCalled();
     });
   });
 
