@@ -304,12 +304,20 @@ full rationale and trade-offs.
 
 ### Custom Fields
 
-GitHub Projects uses custom fields for workflow tracking:
+GitHub Projects includes built-in fields and custom fields for workflow tracking:
 
-| Field         | Type          | Values                                            | Source                   |
-| ------------- | ------------- | ------------------------------------------------- | ------------------------ |
-| **Status**    | Single Select | Todo, In Progress, Review, Testing, Done, Blocked | Manual workflow tracking |
-| **Lifecycle** | Single Select | Icebox, Backlog, Active, Done                     | Idea maturity stage      |
+**Built-in Fields** (created automatically):
+
+| Field                   | Type          | Values                                            | Purpose                  |
+| ----------------------- | ------------- | ------------------------------------------------- | ------------------------ |
+| **Status**              | Single Select | Todo, In Progress, Review, Testing, Done, Blocked | Manual workflow tracking |
+| **Sub-issues progress** | Number        | 0-100%                                            | Child issue completion   |
+
+**Custom Fields** (created during setup):
+
+| Field         | Type          | Values                        | Purpose             |
+| ------------- | ------------- | ----------------------------- | ------------------- |
+| **Lifecycle** | Single Select | Icebox, Backlog, Active, Done | Idea maturity stage |
 
 **Priority, Complexity, and Category** are managed via issue labels and displayed using GitHub Projects' built-in
 **Labels** field. This maintains labels as the single source of truth and eliminates data duplication. See
