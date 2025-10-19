@@ -57,7 +57,8 @@ const MockEventSourceConstructor = jest.fn((url: string) => {
   return instance;
 });
 
-global.EventSource = MockEventSourceConstructor as unknown as typeof EventSource;
+global.EventSource =
+  MockEventSourceConstructor as unknown as typeof EventSource;
 
 describe('useSharedTodoSync', () => {
   const mockTodos: Todo[] = [
@@ -101,7 +102,9 @@ describe('useSharedTodoSync', () => {
 
     await waitFor(() => {
       expect(mockEventSourceInstances.length).toBe(1);
-      expect(mockEventSourceInstances[0].url).toBe('/api/shared/list-1/subscribe');
+      expect(mockEventSourceInstances[0].url).toBe(
+        '/api/shared/list-1/subscribe'
+      );
     });
   });
 
@@ -123,7 +126,9 @@ describe('useSharedTodoSync', () => {
 
     // Simulate connected event
     act(() => {
-      mockEventSourceInstances[0].simulateEvent('connected', { listId: 'list-1' });
+      mockEventSourceInstances[0].simulateEvent('connected', {
+        listId: 'list-1',
+      });
     });
 
     await waitFor(() => {
@@ -148,16 +153,25 @@ describe('useSharedTodoSync', () => {
     });
 
     // Simulate sync event
+    const syncData = {
+      todos: mockTodos,
+      lastModified: Date.now(),
+    };
+
     act(() => {
-      mockEventSourceInstances[0].simulateEvent('sync', {
-        todos: mockTodos,
-        lastModified: Date.now(),
-      });
+      mockEventSourceInstances[0].simulateEvent('sync', syncData);
     });
 
     await waitFor(() => {
-      expect(onSync).toHaveBeenCalledWith(mockTodos);
+      expect(onSync).toHaveBeenCalled();
     });
+
+    // Verify onSync was called with todos (dates will be serialized as strings)
+    expect(onSync).toHaveBeenCalledTimes(1);
+    const calledTodos = onSync.mock.calls[0][0];
+    expect(calledTodos).toHaveLength(1);
+    expect(calledTodos[0].id).toBe('todo-1');
+    expect(calledTodos[0].text).toBe('Test todo');
   });
 
   it('should update connection state on error', async () => {
