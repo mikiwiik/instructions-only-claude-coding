@@ -49,6 +49,7 @@ scheduled releases—work flows continuously from backlog to production.
 - **On-Demand Releases**: Features are pushed to production immediately upon completion
 - **Priority-Driven**: Next work is selected based on priority labels and complexity assessment
 - **Just-in-Time Planning**: Issue selection and planning happens as current work completes
+- **Automated Status Tracking**: GitHub Projects Status/Lifecycle fields automatically updated via `/work-on` command
 
 ### Work-in-Progress (WIP) Management
 
@@ -78,7 +79,10 @@ scheduled releases—work flows continuously from backlog to production.
    - Complexity (prefer quick wins: high priority + simple/minimal complexity)
    - Dependencies (blocking issues take precedence)
    - Context switching costs (related work may be more efficient)
-4. **Start implementation**: Move issue to "In Progress" and begin work
+4. **Start implementation**: Use `/work-on <issue-number>` which automatically:
+   - Sets GitHub Projects Status to "In Progress"
+   - Sets Lifecycle to "Active"
+   - Begins workflow (issue analysis, task planning, branch setup)
 
 ### Release Strategy
 
@@ -220,11 +224,14 @@ for comprehensive usage and integration guidelines.
 ### Issue Lifecycle
 
 1. **Open**: Issue created and labeled
-2. **Triaged**: Priority and complexity assessed
-3. **Assigned**: Issue assigned to developer or sprint
-4. **In Progress**: Work begins, status updates provided
-5. **Review**: Code review and testing
-6. **Closed**: Issue resolved and validated
+2. **Triaged**: Priority and complexity assessed (Lifecycle: Icebox → Backlog)
+3. **Start Work**: `/work-on` command automatically sets Status="In Progress", Lifecycle="Active"
+4. **Implementation**: Work progresses with status updates (In Progress → Review → Testing)
+5. **Review**: Code review and PR approval
+6. **Closed**: PR merged, Status/Lifecycle automatically set to "Done"
+
+**Note**: GitHub Projects Status and Lifecycle fields are automatically updated at workflow start (via `/work-on`)
+and completion (via PR merge). Manual updates only needed for mid-workflow status changes (Review, Testing, Blocked).
 
 ### Issue Linking and Tracking
 
@@ -548,9 +555,11 @@ gh project item-edit --project-id PROJECT_ID --field-id FIELD_ID --value "In Pro
 **Daily Workflow**:
 
 1. Start day by checking Board view for In Progress items
-2. Move items through Status as work progresses
-3. When work completes, use Backlog view to select next issue
-4. Check Quick Wins view for momentum opportunities
+2. Use `/work-on <issue-number>` to start new work (auto-updates Status/Lifecycle)
+3. Manual status updates only needed for mid-workflow changes (Review, Testing, Blocked)
+4. When work completes and PR merges, Status/Lifecycle automatically set to "Done"
+5. Use Backlog view or `/select-next-issue` to choose next work
+6. Check Quick Wins view for momentum opportunities
 
 **Weekly Activities**:
 
