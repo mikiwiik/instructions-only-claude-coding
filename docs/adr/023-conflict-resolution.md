@@ -1,4 +1,4 @@
-# ADR-019: Conflict Resolution Strategy
+# ADR-023: Conflict Resolution Strategy
 
 **Status**: Accepted
 **Date**: 2025-10-04
@@ -228,4 +228,4 @@ const updateTodo = async (todo: Todo) => {
 - [Conflict Resolution Patterns](https://martinfowler.com/articles/patterns-of-distributed-systems/version-vector.html)
 - [Optimistic Locking](https://en.wikipedia.org/wiki/Optimistic_concurrency_control)
 - [Last-Write-Wins](https://en.wikipedia.org/wiki/Last-write-wins)
-- ADR-018: Real-Time Synchronization Architecture
+- ADR-022: Real-Time Synchronization Architecture
