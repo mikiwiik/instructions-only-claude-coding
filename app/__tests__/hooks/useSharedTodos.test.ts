@@ -50,11 +50,14 @@ global.fetch = jest.fn(() =>
 
 // Mock crypto.randomUUID
 let uuidCounter = 0;
+const originalCrypto = global.crypto;
+
 Object.defineProperty(global, 'crypto', {
   value: {
     randomUUID: () => `test-uuid-${++uuidCounter}`,
   },
   writable: true,
+  configurable: true,
 });
 
 describe('useSharedTodos', () => {
@@ -71,6 +74,19 @@ describe('useSharedTodos', () => {
     jest.clearAllMocks();
     (global.fetch as jest.Mock).mockClear();
     uuidCounter = 0; // Reset UUID counter
+  });
+
+  afterAll(() => {
+    // Restore original crypto object
+    if (originalCrypto) {
+      Object.defineProperty(global, 'crypto', {
+        value: originalCrypto,
+        writable: true,
+        configurable: true,
+      });
+    } else {
+      delete (global as { crypto?: Crypto }).crypto;
+    }
   });
 
   it('should initialize with provided todos', () => {
