@@ -3,7 +3,7 @@
 This document provides comprehensive architectural diagrams for the real-time synchronization feature introduced in
 [GitHub Issue #122](https://github.com/mikiwiik/instructions-only-claude-coding/issues/122). For decision rationale
 and alternatives, see
-[ADR-018: Real-Time Synchronization Architecture](../adr/ADR-018-realtime-sync-architecture.md).
+[ADR-022: Real-Time Synchronization Architecture](../adr/022-realtime-sync-architecture.md).
 
 ## System Architecture Overview
 
@@ -249,7 +249,7 @@ stateDiagram-v2
 - **Stateless**: No complex merge logic or operational transforms
 - **Trade-off**: Potential data loss in rare concurrent edit scenarios
 
-See [ADR-019: Conflict Resolution Strategy](../adr/ADR-019-conflict-resolution.md) for detailed rationale.
+See [ADR-023: Conflict Resolution Strategy](../adr/023-conflict-resolution.md) for detailed rationale.
 
 ## Data Flow Summary
 
@@ -344,8 +344,8 @@ See [ADR-019: Conflict Resolution Strategy](../adr/ADR-019-conflict-resolution.m
 
 ## References
 
-- [ADR-018: Real-Time Synchronization Architecture](../adr/ADR-018-realtime-sync-architecture.md)
-- [ADR-019: Conflict Resolution Strategy](../adr/ADR-019-conflict-resolution.md)
+- [ADR-022: Real-Time Synchronization Architecture](../adr/022-realtime-sync-architecture.md)
+- [ADR-023: Conflict Resolution Strategy](../adr/023-conflict-resolution.md)
 - [Server-Sent Events Specification](https://html.spec.whatwg.org/multipage/server-sent-events.html)
 - [MDN: Server-Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events)
 - [GitHub Issue #122](https://github.com/mikiwiik/instructions-only-claude-coding/issues/122)
