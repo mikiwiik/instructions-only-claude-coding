@@ -259,7 +259,7 @@ implementation to enable React 19 compatibility.
 ## References
 
 - **Issue Tracking**: #240 (Migration), #223 (React 19 Upgrade)
-- **Migration Assessment**: PR #239 (REACT-19-MIGRATION-ASSESSMENT.md)
+- **Migration Assessment**: PR #239 (ADR-025: React 19 Migration Assessment)
 - **@dnd-kit React 19 Support**: <https://github.com/clauderic/dnd-kit/issues/1511>
 - **Pragmatic Drag and Drop**:
   - GitHub: <https://github.com/atlassian/pragmatic-drag-and-drop>
