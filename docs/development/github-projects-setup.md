@@ -42,7 +42,7 @@ Labels describe **what the issue is** - intrinsic properties that belong to the 
 
 Custom fields describe **where the issue is** in the development workflow - transient state that changes over time:
 
-- **Status** (Todo → In Progress → Review → Testing → Done → Blocked): Current work state
+- **Status** (Todo → In Progress → Done): Current work state
 - **Lifecycle** (Icebox → Backlog → Active → Done): Idea maturity stage
 
 **Key characteristics**:
@@ -233,10 +233,10 @@ labels as the single source of truth and avoid data duplication. See
 
 **Status** (built-in field):
 
-- **What it tracks**: Current work state (Todo → In Progress → Review → Testing → Done → Blocked)
+- **What it tracks**: Current work state (Todo → In Progress → Done)
 - **Why it's needed**: Visualizes where issues are in the development workflow
 - **Why not a label**: Changes frequently as work progresses (time-bound, project-specific)
-- **Example**: Issue moves from "In Progress" to "Review" when PR created
+- **Example**: Issue moves from "In Progress" to "Done" when PR merged
 
 **Lifecycle** (custom field):
 
@@ -262,7 +262,7 @@ The Status field is created automatically but may need option customization:
 
 1. Navigate to project: `gh project view $PROJECT_NUMBER --web`
 2. Click Status field → Edit field
-3. Ensure options: `Todo`, `In Progress`, `Review`, `Testing`, `Done`, `Blocked`
+3. Ensure options: `Todo`, `In Progress`, `Done`
 4. Add any missing options
 
 ### Step 4: Bulk Add Existing Issues

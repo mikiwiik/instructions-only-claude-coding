@@ -314,28 +314,24 @@ Closes #123, closes #124, fixes #125
 2. **Complete Implementation** - Code, tests, documentation
 3. **Run Quality Checks** - Ensure all tests pass, lint, typecheck
 4. **Verify Test Coverage** - All tests in version control and passing
-5. **Update Status** - Set Status to **Review** when PR created (manual or automated)
-6. **Commit for Issue Closure** - Local commit with "Closes #X"
-7. **Push to Remote** - `git push -u origin feature/XX-description`
-8. **Verify Push Success** - Confirm remote branch tracking and all tests pushed
-9. **Create PR** - Always required by methodology (ONLY after all tests pass and pushed)
+5. **Commit for Issue Closure** - Local commit with "Closes #X"
+6. **Push to Remote** - `git push -u origin feature/XX-description`
+7. **Verify Push Success** - Confirm remote branch tracking and all tests pushed
+8. **Create PR** - Always required by methodology (ONLY after all tests pass and pushed)
    - **🚨 REQUIRED**: Include "Closes #X" in PR description for automatic issue closure
-10. **🚨 REQUIRED**: Enable automerge: `gh pr merge --auto --rebase`
-11. **Wait for Merge** - CI passes + reviewer approval (automerge handles the merge)
-12. **Verify Issue Closure** - Use `gh issue view #X` to confirm
+9. **🚨 REQUIRED**: Enable automerge: `gh pr merge --auto --rebase`
+10. **Wait for Merge** - CI passes + reviewer approval (automerge handles the merge)
+11. **Verify Issue Closure** - Use `gh issue view #X` to confirm
     - Status automatically set to **Done** (via GitHub Projects automation)
     - Lifecycle automatically set to **Done** (via GitHub Projects automation)
-13. **Confirm Completion** - All requirements satisfied
+12. **Confirm Completion** - All requirements satisfied
 
 ### GitHub Projects Status Transitions
 
 **Status Field** (tracks current work state):
 
 - **Todo** → **In Progress**: When `/work-on` starts (automated)
-- **In Progress** → **Review**: When PR created (manual)
-- **Review** → **Testing**: When PR approved, awaiting final checks (manual)
-- **Testing** → **Done**: When PR merged (automated via GitHub Projects workflow)
-- Any → **Blocked**: When work cannot proceed due to dependencies/blockers (manual)
+- **In Progress** → **Done**: When PR merged (automated via GitHub Projects workflow)
 
 **Lifecycle Field** (tracks idea maturity):
 
@@ -347,7 +343,7 @@ Closes #123, closes #124, fixes #125
 
 - `/work-on` command automatically sets Status="In Progress" and Lifecycle="Active"
 - PR merge automatically sets Status="Done" and Lifecycle="Done" (GitHub Projects workflow)
-- Manual updates needed only for mid-workflow status changes (Review, Testing, Blocked)
+- Status field updates are fully automated - no manual updates needed during workflow
 
 ### Issue Closure Verification
 

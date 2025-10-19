@@ -44,7 +44,7 @@ scheduled releases—work flows continuously from backlog to production.
 
 ### Core Workflow Principles
 
-- **Continuous Flow**: Issues move through Todo → In Progress → Review → Testing → Done
+- **Continuous Flow**: Issues move through Todo → In Progress → Done
 - **Work-in-Progress Limits**: Typically 1-2 issues actively being worked on at any time
 - **On-Demand Releases**: Features are pushed to production immediately upon completion
 - **Priority-Driven**: Next work is selected based on priority labels and complexity assessment
@@ -226,12 +226,12 @@ for comprehensive usage and integration guidelines.
 1. **Open**: Issue created and labeled
 2. **Triaged**: Priority and complexity assessed (Lifecycle: Icebox → Backlog)
 3. **Start Work**: `/work-on` command automatically sets Status="In Progress", Lifecycle="Active"
-4. **Implementation**: Work progresses with status updates (In Progress → Review → Testing)
+4. **Implementation**: Work progresses (Status remains "In Progress" until PR merged)
 5. **Review**: Code review and PR approval
 6. **Closed**: PR merged, Status/Lifecycle automatically set to "Done"
 
 **Note**: GitHub Projects Status and Lifecycle fields are automatically updated at workflow start (via `/work-on`)
-and completion (via PR merge). Manual updates only needed for mid-workflow status changes (Review, Testing, Blocked).
+and completion (via PR merge). No manual status updates needed - workflow is fully automated.
 
 ### Issue Linking and Tracking
 
@@ -313,10 +313,10 @@ full rationale and trade-offs.
 
 GitHub Projects uses custom fields for workflow tracking:
 
-| Field         | Type          | Values                                            | Source                   |
-| ------------- | ------------- | ------------------------------------------------- | ------------------------ |
-| **Status**    | Single Select | Todo, In Progress, Review, Testing, Done, Blocked | Manual workflow tracking |
-| **Lifecycle** | Single Select | Icebox, Backlog, Active, Done                     | Idea maturity stage      |
+| Field         | Type          | Values                        | Source                      |
+| ------------- | ------------- | ----------------------------- | --------------------------- |
+| **Status**    | Single Select | Todo, In Progress, Done       | Automated workflow tracking |
+| **Lifecycle** | Single Select | Icebox, Backlog, Active, Done | Idea maturity stage         |
 
 **Priority, Complexity, and Category** are managed via issue labels and displayed using GitHub Projects' built-in
 **Labels** field. This maintains labels as the single source of truth and eliminates data duplication. See
@@ -388,7 +388,7 @@ Five specialized views provide different perspectives on the work:
 **Configuration**:
 
 - Layout: Board (kanban)
-- Columns: Status field (Todo → In Progress → Review → Testing → Done)
+- Columns: Status field (Todo → In Progress → Done)
 - Grouping: Status
 - Filter: `label:priority-1-critical,priority-2-high Lifecycle:Active,Backlog`
 
@@ -556,7 +556,7 @@ gh project item-edit --project-id PROJECT_ID --field-id FIELD_ID --value "In Pro
 
 1. Start day by checking Board view for In Progress items
 2. Use `/work-on <issue-number>` to start new work (auto-updates Status/Lifecycle)
-3. Manual status updates only needed for mid-workflow changes (Review, Testing, Blocked)
+3. Status updates are fully automated - no manual updates needed
 4. When work completes and PR merges, Status/Lifecycle automatically set to "Done"
 5. Use Backlog view or `/select-next-issue` to choose next work
 6. Check Quick Wins view for momentum opportunities
