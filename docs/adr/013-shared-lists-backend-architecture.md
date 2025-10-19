@@ -236,10 +236,10 @@ localStorage todos → SharedList creation → Share URL generation
 - ADR-015: API Schema Design for Shared Lists
 - ADR-016: Vercel Backend Infrastructure Architecture
 - ADR-017: Real-Time Communication Strategy
-- ADR-022: Real-Time Synchronization Architecture
-- ADR-023: Conflict Resolution Strategy
 - ADR-020: Share URL Security Architecture
 - ADR-021: Anonymous Access Control Strategy
+- ADR-022: Real-Time Synchronization Architecture
+- ADR-023: Conflict Resolution Strategy
 
 ### Security Documentation
 

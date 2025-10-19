@@ -6,15 +6,22 @@ Accepted
 
 **Amends**: [ADR-011: GitHub Actions for CI/CD Pipeline](011-github-actions-ci-cd.md)
 
+**Note on Origin**: This ADR was created retroactively as part of [issue #221](https://github.com/mikiwiik/instructions-only-claude-coding/issues/221)
+to serve dual purposes:
+
+1. **Document Existing Architecture**: Security scanning features were previously implemented (#146, #147, #154) but
+   never formally documented via ADR
+2. **Reference Example**: Demonstrate the proper **amendment pattern** for evolving architecture without modifying
+   historical ADRs
+
+This approach is valid and encouraged - creating ADRs retroactively to document existing features while following
+immutability principles.
+
 ## Context
 
 ADR-011 established GitHub Actions as our CI/CD platform with basic build, test, and lint workflows. Since that
-decision, we have recognized the need to expand our CI/CD pipeline to include comprehensive security scanning
-capabilities. This ADR documents the addition of security scanning layers without modifying the original decision to use
-GitHub Actions.
-
-**This ADR serves as an EXAMPLE** of how to properly amend an existing ADR when architecture evolves. Rather than
-modifying ADR-011 retroactively, we create this new ADR to document the security scanning additions.
+decision, we have expanded our CI/CD pipeline to include comprehensive security scanning capabilities. This ADR
+documents the addition of security scanning layers without modifying the original decision to use GitHub Actions.
 
 ### Security Scanning Requirements
 
