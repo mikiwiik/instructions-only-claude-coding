@@ -272,27 +272,27 @@ GitHub Projects adds a **Lifecycle** field to track idea maturity from conceptio
 - **Archival**: Automatically archived after 30 days
 - **Example**: Closed issues with merged PRs
 
-### Label-to-Field Mapping
+### Label Display in GitHub Projects
 
-GitHub Projects custom fields mirror label values:
+GitHub Projects displays labels using the built-in **Labels** field:
 
-| Label                     | Projects Field | Values         |
-| ------------------------- | -------------- | -------------- |
-| `priority-1-critical`     | Priority       | Critical       |
-| `priority-2-high`         | Priority       | High           |
-| `priority-3-medium`       | Priority       | Medium         |
-| `priority-4-low`          | Priority       | Low            |
-| `complexity-minimal`      | Complexity     | Minimal        |
-| `complexity-simple`       | Complexity     | Simple         |
-| `complexity-moderate`     | Complexity     | Moderate       |
-| `complexity-complex`      | Complexity     | Complex        |
-| `complexity-epic`         | Complexity     | Epic           |
-| `category-feature`        | Category       | Feature        |
-| `category-infrastructure` | Category       | Infrastructure |
-| `category-documentation`  | Category       | Documentation  |
-| `category-dx`             | Category       | DX             |
+| Label Pattern    | Display Method          | Projects Field |
+| ---------------- | ----------------------- | -------------- |
+| `priority-*`     | Labels field (built-in) | (none)         |
+| `complexity-*`   | Labels field (built-in) | (none)         |
+| `category-*`     | Labels field (built-in) | (none)         |
+| (workflow state) | Custom field            | Status         |
+| (idea maturity)  | Custom field            | Lifecycle      |
 
-**Note**: Lifecycle field has no corresponding labels—it's managed exclusively in GitHub Projects.
+**Rationale**: Labels are atomic data that belong to issues themselves. Using the built-in Labels field eliminates
+duplication and maintains labels as the single source of truth. See
+[ADR-020](../adr/020-github-projects-adoption.md#update-labels-only-architecture-2025-10-19) for details.
+
+**Filtering examples**:
+
+- High priority: `label:priority-2-high`
+- Quick wins: `label:priority-2-high label:complexity-simple,complexity-minimal`
+- Features: `label:category-feature`
 
 ### Workflow Integration
 
@@ -335,13 +335,14 @@ Raw Idea → Icebox (capture)
 
 **Five specialized views**:
 
-1. **Board - Workflow**: Kanban view (Status columns, Priority grouping, Lifecycle:Active/Backlog)
-2. **Backlog - Next Issue**: Table sorted by Priority → Complexity (replacement for `/select-next-issue`)
-3. **Quick Wins**: Filtered board (priority-2-high + complexity-simple/minimal + Lifecycle:Active)
+1. **Board - Workflow**: Kanban view (Status columns, filtered by high-priority labels + Lifecycle:Active/Backlog)
+2. **Backlog - Next Issue**: Table with Labels column (use `/select-next-issue` for priority-based selection)
+3. **Quick Wins**: Filtered board (`label:priority-2-high label:complexity-simple,complexity-minimal Lifecycle:Active`)
 4. **Agent Workload**: Current work by agent specialization (Lifecycle:Active)
 5. **Icebox - Raw Ideas**: Idea capture (Lifecycle:Icebox)
 
-**Quick Access**: Project board provides visual alternative to label-based filtering and selection.
+**Quick Access**: Project board provides visual workflow management. For priority-based issue selection, use
+`/select-next-issue` command or review Labels column in Backlog view.
 
 ### Best Practices
 

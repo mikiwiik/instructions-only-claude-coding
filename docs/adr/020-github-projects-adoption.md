@@ -123,6 +123,65 @@ philosophy and current workflow?
 - **Automated Fields Only**: Skip manual field population, rely only on label-to-field automation
   - Rejected: Not all fields (Status, Lifecycle) can be auto-populated from labels
 
+## Update: Labels-Only Architecture (2025-10-19)
+
+After initial implementation, we refined the architecture to eliminate data duplication and align with atomic data
+principles.
+
+### Revised Decision
+
+**Use built-in Labels field instead of custom Priority/Complexity/Category fields.**
+
+**Custom Fields Retained**:
+
+- **Status** (Todo/In Progress/Review/Testing/Done/Blocked) - workflow state not in labels
+- **Lifecycle** (Icebox/Backlog/Active/Done) - idea maturity stage not in labels
+
+**Custom Fields Removed**:
+
+- ~~Priority~~ - use `label:priority-*` filters instead
+- ~~Complexity~~ - use `label:complexity-*` filters instead
+- ~~Category~~ - use `label:category-*` filters instead
+
+### Rationale
+
+**Labels are atomic data**:
+
+- Belong to issues themselves (not project-specific)
+- Compatible everywhere (CLI, GitHub Actions, all projects, issue views)
+- No sync burden or automation needed
+- Single source of truth principle
+
+**Instruction-only philosophy**:
+
+- Manual field sync (Step 9) contradicts automation-first approach
+- Duplication creates maintenance overhead
+- Labels provide universal compatibility for CLI-heavy workflows
+
+### Trade-offs Accepted
+
+**UX limitations**:
+
+- ❌ Cannot group board by Priority (labels don't support grouping)
+- ❌ Cannot sort table by Priority/Complexity (labels are unordered sets)
+- ⚠️ More verbose filters (`label:priority-2-high` vs `Priority:High`)
+
+**Benefits gained**:
+
+- ✅ Zero data duplication
+- ✅ Zero sync burden (no manual Step 9 for P/C/C)
+- ✅ Universal compatibility (CLI, Actions, all contexts)
+- ✅ Simpler architecture and maintenance
+- ✅ Aligns with stated "labels as source of truth" principle
+
+### Impact on Existing Decision
+
+The core decision to adopt GitHub Projects remains valid. The refinement only affects **how** we integrate with
+Projects:
+
+- **Still gain**: Visual workflow, Icebox/Backlog/Active lifecycle tracking, quick wins filtering
+- **Now simpler**: Fewer custom fields, no duplication, compatible with existing label-based workflows
+
 ## References
 
 - [GitHub Issue #192](https://github.com/mikiwiik/instructions-only-claude-coding/issues/192): Full evaluation and analysis

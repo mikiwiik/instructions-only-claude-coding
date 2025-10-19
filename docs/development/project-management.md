@@ -304,15 +304,16 @@ full rationale and trade-offs.
 
 ### Custom Fields
 
-GitHub Projects uses custom fields to provide structured data and filtering capabilities:
+GitHub Projects uses custom fields for workflow tracking:
 
-| Field          | Type          | Values                                            | Source                           |
-| -------------- | ------------- | ------------------------------------------------- | -------------------------------- |
-| **Priority**   | Single Select | Critical, High, Medium, Low                       | Mapped from priority-\* labels   |
-| **Complexity** | Single Select | Minimal, Simple, Moderate, Complex, Epic          | Mapped from complexity-\* labels |
-| **Category**   | Single Select | Feature, Infrastructure, Documentation, DX        | Mapped from category-\* labels   |
-| **Status**     | Single Select | Todo, In Progress, Review, Testing, Done, Blocked | Manual workflow tracking         |
-| **Lifecycle**  | Single Select | Icebox, Backlog, Active, Done                     | Idea maturity stage              |
+| Field         | Type          | Values                                            | Source                   |
+| ------------- | ------------- | ------------------------------------------------- | ------------------------ |
+| **Status**    | Single Select | Todo, In Progress, Review, Testing, Done, Blocked | Manual workflow tracking |
+| **Lifecycle** | Single Select | Icebox, Backlog, Active, Done                     | Idea maturity stage      |
+
+**Priority, Complexity, and Category** are managed via issue labels and displayed using GitHub Projects' built-in
+**Labels** field. This maintains labels as the single source of truth and eliminates data duplication. See
+[ADR-020](../adr/020-github-projects-adoption.md#update-labels-only-architecture-2025-10-19) for rationale.
 
 ### Project Views
 
@@ -326,10 +327,12 @@ Five specialized views provide different perspectives on the work:
 
 - Layout: Board (kanban)
 - Columns: Status field (Todo → In Progress → Review → Testing → Done)
-- Grouping: Priority (horizontal swimlanes)
-- Filter: `Lifecycle:Active,Backlog`
+- Grouping: Status
+- Filter: `label:priority-1-critical,priority-2-high Lifecycle:Active,Backlog`
 
-**Use Case**: See what's being worked on, move issues through workflow stages, identify bottlenecks
+**Use Case**: See what's being worked on, move issues through workflow stages
+
+**Note**: Filter shows only high-priority and critical issues. Adjust label filter to match your workflow needs.
 
 #### 2. Backlog View (Issue Selection)
 
@@ -338,11 +341,14 @@ Five specialized views provide different perspectives on the work:
 **Configuration**:
 
 - Layout: Table
-- Columns: Title, Priority, Complexity, Category, Status, Lifecycle
-- Sorting: Priority (Critical first), then Complexity (Simple first)
+- Columns: Title, Labels, Status, Lifecycle, Assignees
 - Filter: `Lifecycle:Active,Backlog`
 
-**Use Case**: Replacement/enhancement for `/select-next-issue` with sortable, filterable table view
+**Use Case**: Review backlog issues with all labels visible. Use `/select-next-issue` command for priority-based
+selection.
+
+**Note**: Labels column shows priority-_, complexity-_, and category-\* labels for each issue. GitHub Projects cannot
+sort by labels.
 
 #### 3. Quick Wins View (Momentum)
 
@@ -352,7 +358,7 @@ Five specialized views provide different perspectives on the work:
 
 - Layout: Board
 - Columns: Status
-- Filter: `Priority:High AND (Complexity:Simple OR Complexity:Minimal) AND Lifecycle:Active`
+- Filter: `label:priority-2-high label:complexity-simple,complexity-minimal Lifecycle:Active`
 
 **Use Case**: Find quick wins to build momentum between larger features
 
@@ -436,22 +442,28 @@ Icebox → Backlog → Active → Done
 
 ### Integration with Labels
 
-**Labels remain the primary source of truth**:
+**Labels are the primary source of truth**:
 
 - Priority labels (priority-1-critical through priority-4-low)
 - Complexity labels (complexity-minimal through complexity-epic)
 - Category labels (category-feature, category-infrastructure, etc.)
 
-**Projects provides visual layer**:
+**Projects displays labels natively**:
 
-- Custom fields mirror label values for filtering/sorting
-- Status and Lifecycle fields add workflow tracking
-- Views provide different perspectives on labeled issues
+- Built-in Labels field shows all issue labels
+- Filters use `label:` syntax (e.g., `label:priority-2-high`)
+- No custom fields needed for Priority/Complexity/Category
+- Zero duplication, zero sync burden
+
+**Workflow-specific custom fields**:
+
+- Status: Workflow state (Todo → In Progress → Done)
+- Lifecycle: Idea maturity (Icebox → Backlog → Active → Done)
 
 **Workflow**:
 
 1. Create issue with labels (via `gh issue create` or web UI)
-2. Issue auto-added to project with fields populated from labels
+2. Issue auto-added to project with labels automatically visible
 3. Manually set Lifecycle (Icebox/Backlog/Active) based on readiness
 4. Use Board view to move through Status stages
 5. PR merge auto-updates Status and Lifecycle to Done
