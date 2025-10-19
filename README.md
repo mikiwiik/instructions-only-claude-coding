@@ -200,8 +200,8 @@ The application features Server-Sent Events (SSE) based real-time synchronizatio
 - **Connection Resilience**: Automatic reconnection with exponential backoff
 - **Offline Support**: Queued updates sync when connection is restored
 
-See [ADR-018: Real-Time Sync Architecture](docs/adr/ADR-018-realtime-sync-architecture.md) and
-[ADR-019: Conflict Resolution](docs/adr/ADR-019-conflict-resolution.md) for technical details.
+See [ADR-022: Real-Time Sync Architecture](docs/adr/022-realtime-sync-architecture.md) and
+[ADR-023: Conflict Resolution](docs/adr/023-conflict-resolution.md) for technical details.
 
 ## Project Management
 
