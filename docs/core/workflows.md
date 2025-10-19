@@ -331,9 +331,12 @@ Closes #123, closes #124, fixes #125
 
 **TypeScript Requirements:**
 
-- Strict mode compliance with no `any` types
+- Strict mode compliance with no `any` types (enforced as error per ADR-022)
 - 100% type coverage for all application code
 - Proper interface definitions and type exports
+- Use approved alternatives to `any`: `unknown`, interfaces, generics, type guards
+- Test code must maintain same type safety standards as production code
+- See [docs/guidelines/typescript-standards.md](../guidelines/typescript-standards.md) for comprehensive best practices
 
 **Linting and Formatting:**
 
