@@ -4,6 +4,8 @@
 
 Accepted
 
+**Amended by**: [ADR-026: Security Scanning in CI/CD Pipeline](026-security-scanning-ci-cd-pipeline.md)
+
 ## Context
 
 The Todo App project needs a Continuous Integration/Continuous Deployment (CI/CD) pipeline to:
