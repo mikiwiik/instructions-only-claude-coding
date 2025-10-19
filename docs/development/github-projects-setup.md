@@ -124,20 +124,33 @@ gh project field-create $PROJECT_NUMBER \
   --single-select-options "Icebox,Backlog,Active,Done"
 ```
 
-**Note**: The default "Status" field is created automatically with the project.
+**Note**: GitHub Projects creates default built-in fields automatically:
+
+- **Status** (workflow tracking)
+- **Sub-issues progress** (tracks completion of child issues)
+
+These built-in fields can be configured or hidden as needed. We only create one custom field (Lifecycle) for idea
+maturity tracking.
 
 **Why only Lifecycle?** We use the built-in **Labels** field for Priority, Complexity, and Category to maintain
 labels as the single source of truth and avoid data duplication. See
 [ADR-020](../adr/020-github-projects-adoption.md#update-labels-only-architecture-2025-10-19) for rationale.
 
-### Step 3: Configure Default Status Field
+### Step 3: Configure Built-in Fields
 
-The Status field is created automatically but may need option customization:
+GitHub Projects creates default built-in fields that may need customization:
+
+**Status field:**
 
 1. Navigate to project: `gh project view $PROJECT_NUMBER --web`
 2. Click Status field → Edit field
 3. Ensure options: `Todo`, `In Progress`, `Review`, `Testing`, `Done`, `Blocked`
 4. Add any missing options
+
+**Sub-issues progress field:**
+
+- Automatically tracks completion percentage of child issues
+- No configuration needed unless you want to hide it from views
 
 ### Step 4: Bulk Add Existing Issues
 
