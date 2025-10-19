@@ -4,6 +4,8 @@
 
 Accepted
 
+**Note**: See ADR-022 for strict type safety enforcement details (treating `any` as error).
+
 ## Context
 
 We need to decide whether to use JavaScript or TypeScript for our Todo application. Key considerations:
