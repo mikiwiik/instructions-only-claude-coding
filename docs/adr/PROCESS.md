@@ -174,20 +174,104 @@ ADRs follow a strict naming pattern with distinct filename and header formats:
 - Consider consequences and alternatives during review
 - Update status only after consensus
 
+## ADR Immutability and Evolution
+
+### Principle: ADRs Are Historical Records
+
+Architecture Decision Records document decisions **at the time they were made**. They serve as historical context for
+understanding why the architecture evolved the way it did.
+
+**Core Principle**: Once an ADR is accepted and merged, it should NOT be modified to reflect current architecture.
+
+### When Changes Are Acceptable
+
+**Minor corrections** (without changing meaning):
+
+- ✅ Typo fixes
+- ✅ Broken link updates
+- ✅ Formatting corrections
+- ✅ Grammar improvements
+- ✅ Status field updates (when superseded or amended)
+
+**NOT acceptable**:
+
+- ❌ Adding new information about current state
+- ❌ Modifying decisions to reflect current architecture
+- ❌ Updating consequences based on new knowledge
+- ❌ Adding new alternatives that weren't considered originally
+
+### Handling Architectural Changes
+
+When architecture evolves, create a **new ADR** that:
+
+1. References the original ADR
+2. Explains what changed and why
+3. Documents the new decision with current context
+4. Updates the original ADR's status field only
+
+**Example**: If ADR-011 (CI/CD) needs updating for security scanning:
+
+- ❌ Don't edit ADR-011 to add security scanning info
+- ✅ Create ADR-026 "Security Scanning in CI/CD Pipeline"
+- ✅ Add "Status: Amended by ADR-026" to ADR-011
+
+### ADR Status Values
+
+- **Proposed**: Under discussion, not yet accepted
+- **Accepted**: Decision made and implemented
+- **Deprecated**: No longer recommended, but not replaced
+- **Superseded by ADR-XXX**: Replaced by newer decision
+- **Amended by ADR-XXX**: Extended or modified by newer decision
+- **Rejected**: Considered but not adopted
+
+### Superseding vs. Amending
+
+**Superseding** (complete replacement):
+
+```markdown
+Status: Superseded by ADR-025
+```
+
+Example: Switching from LocalStorage to Backend API (complete architectural change)
+
+**Amending** (extension or modification):
+
+```markdown
+Status: Amended by ADR-026
+```
+
+Example: Adding security scanning to existing CI/CD pipeline (extending existing architecture)
+
+### Before Creating a New ADR
+
+**IMPORTANT**: Always check existing ADR numbers to avoid duplicates
+
+```bash
+# List all existing ADRs sorted by number
+ls docs/adr/0*.md | sort
+
+# Or use the validation script
+./scripts/validate-adrs.sh
+```
+
+This prevents duplicate numbering and ensures sequential ADR numbers.
+
 ## Maintenance
 
 ### Updating ADRs
 
-- ADRs are **immutable** once accepted
+- ADRs are **immutable** once accepted (see "ADR Immutability and Evolution" above)
 - Create new ADR to supersede previous decisions
 - Update index when adding new ADRs
 - Keep historical ADRs for reference
+- Use validation script to verify ADR consistency
 
 ### Periodic Review
 
 - Review ADRs during major project milestones
 - Identify outdated decisions that need superseding
 - Ensure ADR index stays current
+- Run `./scripts/validate-adrs.sh` to check for issues
 
 ---
 
