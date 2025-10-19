@@ -50,11 +50,13 @@ See `commitlint.config.mjs` for the authoritative list of allowed types. Common 
 **🚨 ENFORCED**: Commit messages are validated automatically via commitlint.
 
 **Local Validation** (commit-msg hook):
+
 - Runs on every `git commit`
 - Immediate feedback before push
 - Validates format against `commitlint.config.mjs`
 
 **CI Validation** (GitHub Actions):
+
 - Runs on all pull requests
 - Validates all commits in PR
 - Blocks merge if non-compliant commits found
@@ -90,9 +92,11 @@ docs: update README
 ```
 
 **Bypassing Validation** (emergency only):
+
 ```bash
 git commit --no-verify -m "emergency fix"
 ```
+
 ⚠️ CI will still validate - use only for local emergencies, fix before pushing.
 
 ### AI Agent Attribution
@@ -304,18 +308,46 @@ Closes #123, closes #124, fixes #125
 
 **🚨 CRITICAL WORKFLOW**: Follow exact sequence to prevent violations:
 
-1. **Complete Implementation** - Code, tests, documentation
-2. **Run Quality Checks** - Ensure all tests pass, lint, typecheck
-3. **Verify Test Coverage** - All tests in version control and passing
-4. **Commit for Issue Closure** - Local commit with "Closes #X"
-5. **Push to Remote** - `git push -u origin feature/XX-description`
-6. **Verify Push Success** - Confirm remote branch tracking and all tests pushed
-7. **Create PR** - Always required by methodology (ONLY after all tests pass and pushed)
+1. **Start Work** - Update GitHub Projects status (automated via `/work-on`)
+   - Status: Todo → **In Progress**
+   - Lifecycle: Icebox/Backlog → **Active**
+2. **Complete Implementation** - Code, tests, documentation
+3. **Run Quality Checks** - Ensure all tests pass, lint, typecheck
+4. **Verify Test Coverage** - All tests in version control and passing
+5. **Update Status** - Set Status to **Review** when PR created (manual or automated)
+6. **Commit for Issue Closure** - Local commit with "Closes #X"
+7. **Push to Remote** - `git push -u origin feature/XX-description`
+8. **Verify Push Success** - Confirm remote branch tracking and all tests pushed
+9. **Create PR** - Always required by methodology (ONLY after all tests pass and pushed)
    - **🚨 REQUIRED**: Include "Closes #X" in PR description for automatic issue closure
-8. **🚨 REQUIRED**: Enable automerge: `gh pr merge --auto --rebase`
-9. **Wait for Merge** - CI passes + reviewer approval (automerge handles the merge)
-10. **Verify Issue Closure** - Use `gh issue view #X` to confirm
-11. **Confirm Completion** - All requirements satisfied
+10. **🚨 REQUIRED**: Enable automerge: `gh pr merge --auto --rebase`
+11. **Wait for Merge** - CI passes + reviewer approval (automerge handles the merge)
+12. **Verify Issue Closure** - Use `gh issue view #X` to confirm
+    - Status automatically set to **Done** (via GitHub Projects automation)
+    - Lifecycle automatically set to **Done** (via GitHub Projects automation)
+13. **Confirm Completion** - All requirements satisfied
+
+### GitHub Projects Status Transitions
+
+**Status Field** (tracks current work state):
+
+- **Todo** → **In Progress**: When `/work-on` starts (automated)
+- **In Progress** → **Review**: When PR created (manual)
+- **Review** → **Testing**: When PR approved, awaiting final checks (manual)
+- **Testing** → **Done**: When PR merged (automated via GitHub Projects workflow)
+- Any → **Blocked**: When work cannot proceed due to dependencies/blockers (manual)
+
+**Lifecycle Field** (tracks idea maturity):
+
+- **Icebox** → **Backlog**: When idea is triaged and labeled (manual)
+- **Backlog** → **Active**: When work begins via `/work-on` (automated)
+- **Active** → **Done**: When issue closed via PR merge (automated)
+
+**Automation**:
+
+- `/work-on` command automatically sets Status="In Progress" and Lifecycle="Active"
+- PR merge automatically sets Status="Done" and Lifecycle="Done" (GitHub Projects workflow)
+- Manual updates needed only for mid-workflow status changes (Review, Testing, Blocked)
 
 ### Issue Closure Verification
 
