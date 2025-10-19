@@ -39,14 +39,13 @@ Each ADR follows this structure:
 - ADRs are immutable once accepted (create new ADR to supersede)
 - All team members should review proposed ADRs before acceptance
 
-## ADR Index
+## Browsing ADRs
 
-| #                                              | Title                                | Status               | Date    |
-| ---------------------------------------------- | ------------------------------------ | -------------------- | ------- |
-| [001](001-nextjs-app-router.md)                | Use Next.js 14 with App Router       | Accepted             | 2025-01 |
-| [012](012-todo-reordering-ux-approach.md)      | Todo Reordering UX Approach          | Partially Superseded | 2025-01 |
-| [015](015-ai-agent-attribution-strategy.md)    | AI Agent Attribution Strategy        | Accepted             | 2025-01 |
-| [020](020-react-nextjs-version-constraints.md) | React/Next.js Version Constraints    | Accepted             | 2025-01 |
-| [021](021-pragmatic-drag-drop-migration.md)    | Migration to Pragmatic Drag and Drop | Accepted             | 2025-10 |
+All ADRs are located in this directory (`docs/adr/`). To view all decisions:
 
-> **Note**: This is a summary index. See individual ADR files for complete documentation.
+- Browse the files in this directory directly
+- Each ADR filename follows the format: `###-decision-title.md`
+- ADRs are numbered sequentially from 001 onwards
+- Use your file explorer or GitHub's file browser to see the complete list
+
+For the complete and up-to-date list of all architectural decisions, refer to the individual ADR files in this directory.
