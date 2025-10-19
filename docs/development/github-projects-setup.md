@@ -83,6 +83,51 @@ architectural decision rationale.
 gh auth refresh --hostname github.com --scopes project
 ```
 
+### Project Scope Security Model
+
+#### Understanding OAuth Scope vs. Project Access
+
+The `project` scope grants the **capability** to interact with GitHub Projects API, but does **not** grant automatic
+access to any projects. This is a critical security distinction:
+
+#### What the scope does
+
+- ✅ Enables `gh project` CLI commands
+- ✅ Allows API calls to Projects v2 endpoints
+- ✅ Grants technical capability to read/write project data
+
+#### What the scope does NOT do
+
+- ❌ Does not grant access to any specific projects
+- ❌ Does not bypass project collaborator requirements
+- ❌ Does not allow viewing/editing projects without explicit invitation
+
+#### Security Principle: Scope = Capability, Invitation = Access
+
+- The `project` scope is like having a key that can unlock doors (capability)
+- The project invitation determines which doors you're allowed to unlock (access)
+- Without explicit per-project invitation, the agent **cannot** access any project data
+
+#### Security Benefits
+
+- **Least Privilege**: Agent cannot access projects it hasn't been explicitly invited to
+- **Audit Trail**: All project access requires explicit collaborator invitations
+- **Multi-Project Isolation**: Agent can only interact with projects where it has Write role
+- **Security by Design**: OAuth scope alone provides zero project visibility
+
+#### Practical Example
+
+```bash
+# After running gh auth refresh with project scope:
+gh project list --owner someuser  # ❌ Fails - agent not invited to their projects
+gh project list --owner mikiwiik  # ✅ Works - agent invited as Write collaborator
+```
+
+#### Next Step
+
+After adding the `project` scope, you **must** explicitly invite `mikiwiik-agent` as a Write
+collaborator to each project (see Step 2 below).
+
 ### Role-Based Access Control
 
 GitHub Projects supports three roles with different permission levels:
