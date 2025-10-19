@@ -108,6 +108,11 @@ describe('useSharedTodos', () => {
         })
       );
 
+      // Wait for initial fetch to complete
+      await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalled();
+      });
+
       await act(async () => {
         await result.current.addTodo('New todo');
       });
@@ -127,6 +132,11 @@ describe('useSharedTodos', () => {
           initialTodos,
         })
       );
+
+      // Wait for initial fetch to complete
+      await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalled();
+      });
 
       await act(async () => {
         await result.current.updateTodo('todo-1', { text: 'Updated text' });
@@ -164,6 +174,11 @@ describe('useSharedTodos', () => {
           initialTodos,
         })
       );
+
+      // Wait for initial fetch to complete
+      await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalled();
+      });
 
       await act(async () => {
         await result.current.toggleTodo('todo-1');
@@ -215,7 +230,12 @@ describe('useSharedTodos', () => {
         })
       );
 
-      const reordered = [todos[1], todos[0]];
+      // Wait for initial fetch to complete
+      await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalled();
+      });
+
+      const reordered = [result.current.todos[1], result.current.todos[0]];
 
       await act(async () => {
         await result.current.reorderTodos(reordered);

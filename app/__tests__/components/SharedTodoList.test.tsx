@@ -37,7 +37,7 @@ const mockReturnValue = {
   },
 };
 
-const mockUseSharedTodos = jest.fn(() => mockReturnValue);
+const mockUseSharedTodos = jest.fn();
 
 jest.mock('@/hooks/useSharedTodos', () => ({
   useSharedTodos: () => mockUseSharedTodos(),
@@ -62,6 +62,7 @@ describe('SharedTodoList', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockUseSharedTodos.mockReturnValue(mockReturnValue);
   });
 
   it('should render sync status indicator', () => {
