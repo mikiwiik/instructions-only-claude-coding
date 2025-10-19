@@ -83,12 +83,13 @@ export function SharedTodoList({
           value={newTodoText}
           onChange={(e) => setNewTodoText(e.target.value)}
           placeholder='Add a new todo...'
-          className='min-h-[44px] flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500'
+          disabled={!isConnected}
+          className='min-h-[44px] flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:bg-gray-100'
           aria-label='New todo text'
         />
         <button
           type='submit'
-          disabled={!newTodoText.trim()}
+          disabled={!newTodoText.trim() || !isConnected}
           className='min-h-[44px] min-w-[44px] rounded-lg bg-blue-500 px-6 py-2 font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-gray-300'
           aria-label='Add todo'
         >
@@ -107,7 +108,8 @@ export function SharedTodoList({
               type='checkbox'
               checked={!!todo.completedAt}
               onChange={() => toggleTodo(todo.id)}
-              className='h-5 w-5 cursor-pointer rounded border-gray-300 text-blue-500 focus:ring-2 focus:ring-blue-500'
+              disabled={!isConnected}
+              className='h-5 w-5 cursor-pointer rounded border-gray-300 text-blue-500 focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50'
               aria-label={`Mark "${todo.text}" as ${todo.completedAt ? 'incomplete' : 'complete'}`}
             />
             <span
@@ -121,7 +123,8 @@ export function SharedTodoList({
             </span>
             <button
               onClick={() => deleteTodo(todo.id)}
-              className='min-h-[44px] min-w-[44px] rounded-lg px-3 py-1 text-sm font-medium text-red-500 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500'
+              disabled={!isConnected}
+              className='min-h-[44px] min-w-[44px] rounded-lg px-3 py-1 text-sm font-medium text-red-500 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:cursor-not-allowed disabled:opacity-50'
               aria-label={`Delete "${todo.text}"`}
             >
               Delete
