@@ -13,7 +13,10 @@ export interface SharedTodoList {
 
 /**
  * Simple in-memory store for development
- * TODO: Replace with actual Vercel KV when deployed
+ *
+ * Note: This is a temporary implementation using Map for local development.
+ * Production deployment will require migration to Vercel KV or similar persistent storage.
+ * See: https://vercel.com/docs/storage/vercel-kv
  */
 const store = new Map<string, SharedTodoList>();
 
