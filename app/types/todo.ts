@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-// ==================== BASE TODO TYPES ====================
+// ==================== Base Todo Type Definitions ====================
 
 export interface Todo {
   id: string;
