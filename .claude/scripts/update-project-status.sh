@@ -53,7 +53,7 @@ PROJECT_DATA=$(gh project list --owner "$OWNER" --format json 2>&1) || {
     exit 1
 }
 
-PROJECT_NUMBER=$(echo "$PROJECT_DATA" | jq -r '.[0].number // empty')
+PROJECT_NUMBER=$(echo "$PROJECT_DATA" | jq -r '.projects[0].number // empty')
 if [[ -z "$PROJECT_NUMBER" ]]; then
     log_error "No projects found for owner: $OWNER"
     log_error "Ensure GitHub Projects is set up and you have collaborator access"
@@ -62,7 +62,7 @@ fi
 log_success "Found project #$PROJECT_NUMBER"
 
 # Get project ID (needed for item-edit command)
-PROJECT_ID=$(echo "$PROJECT_DATA" | jq -r '.[0].id')
+PROJECT_ID=$(echo "$PROJECT_DATA" | jq -r '.projects[0].id')
 log_info "Project ID: $PROJECT_ID"
 
 # Get field IDs for Status and Lifecycle
