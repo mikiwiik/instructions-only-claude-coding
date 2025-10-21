@@ -2,7 +2,9 @@
 
 ## Purpose
 
-This guide establishes comprehensive TypeScript standards for the Todo App project. It provides practical patterns, approved alternatives to problematic practices, and enforcement mechanisms that maintain type safety throughout the codebase.
+This guide establishes comprehensive TypeScript standards for the Todo App project. It provides practical
+patterns, approved alternatives to problematic practices, and enforcement mechanisms that maintain type safety
+throughout the codebase.
 
 ## Related Documentation
 
@@ -13,13 +15,15 @@ This guide establishes comprehensive TypeScript standards for the Todo App proje
 
 ## Core Principle
 
-**Type safety is non-negotiable**. Using TypeScript means committing to compile-time type checking. The `any` type defeats this purpose and is treated as an error, not a warning.
+**Type safety is non-negotiable**. Using TypeScript means committing to compile-time type checking. The `any`
+type defeats this purpose and is treated as an error, not a warning.
 
 ## The `any` Type Problem
 
 ### Why `any` is Prohibited
 
 Using `any` type:
+
 - **Bypasses type checking** - TypeScript compiler cannot catch errors
 - **Eliminates autocomplete** - IDEs cannot provide intelligent suggestions
 - **Hides bugs** - Runtime errors that could be caught at compile time
@@ -29,6 +33,7 @@ Using `any` type:
 ### Real-World Example from PR #241
 
 **Problem Pattern**:
+
 ```typescript
 // ❌ BAD - Uses 'any' as quick fix
 let monitorCallback: ((args: any) => void) | null = null;
@@ -41,12 +46,14 @@ const mockMonitor = jest.fn((callback: any) => {
 ```
 
 **Issues**:
+
 1. No type safety for callback arguments
 2. Tests can pass with incorrect data structures
 3. Refactoring becomes dangerous (no compiler errors)
 4. Documentation value lost (what is `args`?)
 
 **Proper Solution**:
+
 ```typescript
 // ✅ GOOD - Proper interfaces
 interface SourceData {
@@ -74,6 +81,7 @@ const mockMonitor = jest.fn((callback: (args: DropEvent) => void) => {
 ```
 
 **Benefits**:
+
 1. Compiler catches data structure errors
 2. IDE autocomplete works correctly
 3. Refactoring is safe (compiler errors guide changes)
@@ -162,12 +170,24 @@ const [todos, setTodos] = useLocalStorage<TodoItem[]>('todos', []);
 type TodoById = Record<string, TodoItem>;
 
 const todosMap: TodoById = {
-  'todo-1': { id: 'todo-1', text: 'Buy milk', completed: false, createdAt: new Date() },
-  'todo-2': { id: 'todo-2', text: 'Walk dog', completed: true, createdAt: new Date() },
+  'todo-1': {
+    id: 'todo-1',
+    text: 'Buy milk',
+    completed: false,
+    createdAt: new Date(),
+  },
+  'todo-2': {
+    id: 'todo-2',
+    text: 'Walk dog',
+    completed: true,
+    createdAt: new Date(),
+  },
 };
 
 // ❌ BAD - Lost type safety
-const todosMap: Record<string, any> = { /* ... */ };
+const todosMap: Record<string, any> = {
+  /* ... */
+};
 ```
 
 ### 5. Union Types
@@ -273,6 +293,7 @@ const result = someFunction();
 ```
 
 **Requirements**:
+
 1. Include comment explaining why it's necessary
 2. Reference issue/ticket if waiting for fix
 3. Keep scope minimal (single line, not entire function)
@@ -282,15 +303,79 @@ const result = someFunction();
 
 **Critical**: Test code must maintain same type safety standards as production code.
 
+### Test Isolation and Mock Cleanup
+
+**Always restore mocked global objects** to maintain test isolation and prevent test pollution.
+
+When using `Object.defineProperty` to mock global objects (window, global, etc.), you MUST:
+
+1. **Save the original** before mocking
+2. **Mark as configurable** to allow restoration
+3. **Restore in afterAll()** to maintain test isolation
+
+**Good Example**:
+
+```typescript
+// ✅ GOOD - Proper mock cleanup pattern
+import { mockLocalStorage } from '../utils/test-utils';
+
+const mockStorage = mockLocalStorage();
+const originalLocalStorage = window.localStorage;
+
+Object.defineProperty(window, 'localStorage', {
+  value: mockStorage,
+  writable: true,
+  configurable: true, // ← Required for restoration
+});
+
+describe('My Test Suite', () => {
+  afterAll(() => {
+    // Restore original localStorage to maintain test isolation
+    if (originalLocalStorage) {
+      Object.defineProperty(window, 'localStorage', {
+        value: originalLocalStorage,
+        writable: true,
+        configurable: true,
+      });
+    } else {
+      delete (window as { localStorage?: Storage }).localStorage;
+    }
+  });
+
+  beforeEach(() => {
+    mockStorage.clear();
+  });
+
+  // ... tests
+});
+```
+
+**Bad Example**:
+
+```typescript
+// ❌ BAD - No cleanup, leaks to other tests
+Object.defineProperty(window, 'localStorage', {
+  value: mockStorage,
+  // Missing: writable, configurable
+  // Missing: afterAll() cleanup
+});
+```
+
+**Why This Matters**:
+
+- **Test isolation**: Prevents one test file's mocks from affecting other test files
+- **Deterministic tests**: Tests run in any order without side effects
+- **Clean slate**: Each test file starts with a predictable environment
+- **No flaky tests**: Avoids mysterious failures from leaked mocks
+
+**Reference**: See `app/__tests__/hooks/useSharedTodos.test.ts` (lines 53-90) for the complete pattern.
+
 ### Mocking with Type Safety
 
 ```typescript
 // ✅ GOOD - Properly typed mock
 interface DragMonitorCallback {
-  (args: {
-    source: { data: SourceData };
-    location: DropLocation;
-  }): void;
+  (args: { source: { data: SourceData }; location: DropLocation }): void;
 }
 
 let monitorCallback: DragMonitorCallback | null = null;
@@ -444,24 +529,29 @@ When encountering existing `any` types (should be rare in this codebase):
 ## Resources
 
 ### TypeScript Documentation
+
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
 - [Type Guards](https://www.typescriptlang.org/docs/handbook/2/narrowing.html)
 - [Utility Types](https://www.typescriptlang.org/docs/handbook/utility-types.html)
 
 ### ESLint TypeScript
+
 - [no-explicit-any Rule](https://typescript-eslint.io/rules/no-explicit-any/)
 - [TypeScript ESLint Rules](https://typescript-eslint.io/rules/)
 
 ### React TypeScript
+
 - [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app/)
 - [React TypeScript Guide](https://www.typescriptlang.org/docs/handbook/react.html)
 
 ## Summary
 
 **Golden Rule**: If you're reaching for `any`, stop and ask:
+
 1. What is the actual type of this data?
 2. Can I define an interface?
 3. Is `unknown` + type guard more appropriate?
 4. Am I just avoiding proper typing?
 
-**Type safety is an investment** - it takes slightly more effort upfront but prevents bugs, improves maintainability, and serves as living documentation.
+**Type safety is an investment** - it takes slightly more effort upfront but prevents bugs, improves
+maintainability, and serves as living documentation.
