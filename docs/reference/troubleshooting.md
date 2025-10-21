@@ -252,6 +252,116 @@ git config --list --show-origin | grep user
 3. **Update existing PR**: Push changes to same branch
 4. **Maintain workflow**: Follow "ONE FEATURE = ONE BRANCH = ONE PR" principle
 
+### Commitlint Parser Bug
+
+#### Bullet List Validation Failures
+
+**Problem**: Commit messages with 3+ bullet points fail `footer-leading-blank` validation even when correctly formatted
+
+**Symptoms:**
+
+- Commitlint reports phantom blank line before 3rd+ bullet point
+- Same commit message format passes with 2 bullets but fails with 3+
+- Error message: `✖ footer must have leading blank line [footer-leading-blank]`
+- Inconsistent behavior - sometimes 3 bullets pass, sometimes fail
+
+**Root Cause:**
+
+Commitlint parser (both local `npx commitlint` and `wagoid/commitlint-github-action`) has a bug where it
+incorrectly inserts a blank line before the final bullet in lists with 3+ items, making subsequent text
+appear as a footer without proper spacing.
+
+**Workarounds:**
+
+##### Option 1: Limit to 2 Bullets (Recommended)
+
+```text
+type(scope): description
+
+Body paragraph explaining the change.
+
+Changes:
+- Primary change combining related items
+- Secondary change combining related items
+
+Additional details in prose format.
+
+Fixes #XXX
+```
+
+##### Option 2: Use Prose Format
+
+```text
+type(scope): description
+
+Body paragraph explaining the change.
+
+Changes include adding the category-testing section to documentation,
+removing "Testing infrastructure" from category-infrastructure scope,
+adding testing examples, and relabeling issues #257, #196, #189.
+
+Fixes #XXX
+```
+
+##### Option 3: Numbered Lists (Alternative)
+
+```text
+type(scope): description
+
+Body paragraph explaining the change.
+
+Changes:
+1. First change
+2. Second change
+
+Additional context as needed.
+
+Fixes #XXX
+```
+
+**Testing Your Commit Message:**
+
+```bash
+# Create test message in a file
+cat > /tmp/test-commit-msg.txt << 'EOF'
+type(scope): description
+
+Changes:
+- First change
+- Second change
+
+This change improves functionality.
+
+Fixes #123
+EOF
+
+# Test with commitlint
+cat /tmp/test-commit-msg.txt | npx commitlint
+```
+
+**Expected Behavior:**
+
+- ✅ 2 bullets: Passes validation consistently
+- ❌ 3+ bullets: May fail with phantom blank line error
+- ✅ Prose format: Passes validation consistently
+
+**Related Issues:**
+
+- Issue #270 - Bug documentation and workaround implementation
+- Issue #266 - Where bug was initially discovered
+
+**Technical Details:**
+
+- Affected: `@commitlint/cli@20.1.0` and `@commitlint/config-conventional@20.0.0`
+- GitHub Action: `wagoid/commitlint-github-action`
+- Rule failing: `footer-leading-blank` (level 2, 'always')
+- Status: Parser-level bug, not configuration issue
+
+**When to Report:**
+
+If you encounter this bug with a different commit message pattern, document it in issue #270 to help
+identify additional edge cases.
+
 ### Performance and Quality Issues
 
 #### Slow Development Server
