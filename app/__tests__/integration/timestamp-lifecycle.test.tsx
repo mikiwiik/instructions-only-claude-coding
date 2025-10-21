@@ -3,17 +3,10 @@ import userEvent from '@testing-library/user-event';
 import { renderHook, act } from '@testing-library/react';
 import { useTodos } from '../../hooks/useTodos';
 import TodoItem from '../../components/TodoItem';
-import { mockLocalStorage } from '../utils/test-utils';
+import { setupLocalStorageMock } from '../utils/test-utils';
 
-// Mock localStorage
-const mockStorage = mockLocalStorage();
-const originalLocalStorage = window.localStorage;
-
-Object.defineProperty(window, 'localStorage', {
-  value: mockStorage,
-  writable: true,
-  configurable: true,
-});
+// Setup localStorage mock with automatic cleanup
+const { mockStorage, restoreLocalStorage } = setupLocalStorageMock();
 
 // Mock timestamp utilities
 jest.mock('../../utils/timestamp', () => ({
@@ -81,18 +74,7 @@ jest.mock('../../utils/timestamp', () => ({
 }));
 
 describe('Timestamp Lifecycle Integration Tests', () => {
-  afterAll(() => {
-    // Restore original localStorage to maintain test isolation
-    if (originalLocalStorage) {
-      Object.defineProperty(window, 'localStorage', {
-        value: originalLocalStorage,
-        writable: true,
-        configurable: true,
-      });
-    } else {
-      delete (window as { localStorage?: Storage }).localStorage;
-    }
-  });
+  afterAll(restoreLocalStorage);
 
   beforeEach(() => {
     mockStorage.clear();
