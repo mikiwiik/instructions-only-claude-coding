@@ -4,11 +4,28 @@ import { mockLocalStorage } from '../utils/test-utils';
 
 // Mock localStorage
 const mockStorage = mockLocalStorage();
+const originalLocalStorage = window.localStorage;
+
 Object.defineProperty(window, 'localStorage', {
   value: mockStorage,
+  writable: true,
+  configurable: true,
 });
 
 describe('useTodos Hook - Soft Delete Functionality', () => {
+  afterAll(() => {
+    // Restore original localStorage to maintain test isolation
+    if (originalLocalStorage) {
+      Object.defineProperty(window, 'localStorage', {
+        value: originalLocalStorage,
+        writable: true,
+        configurable: true,
+      });
+    } else {
+      delete (window as { localStorage?: Storage }).localStorage;
+    }
+  });
+
   beforeEach(() => {
     // Clear localStorage before each test
     mockStorage.clear();
