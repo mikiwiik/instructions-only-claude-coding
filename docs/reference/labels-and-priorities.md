@@ -93,9 +93,16 @@
 
 - **DevOps, CI/CD, deployment** configurations
 - **GitHub Actions and workflows**
-- **Testing infrastructure** and automation
 - **Security and performance tooling**
 - **Backend architecture** and system design
+
+### category-testing 🧪
+
+- **Test code** (unit, integration, E2E tests)
+- **Testing infrastructure** (Jest, testing libraries, runners)
+- **Test standards** and conventions
+- **Test utilities** and mocking setup
+- **Coverage and quality** tooling
 
 ### category-documentation 🟩
 
@@ -206,6 +213,14 @@ gh issue create --title "Issue Title" \
 - **Priority**: priority-4-low (nice to have)
 - **Complexity**: complexity-minimal (diagram creation)
 - **Category**: category-documentation (process documentation)
+
+### Testing Example
+
+**Issue**: "Add cleanup hooks for Object.defineProperty mocks"
+
+- **Priority**: priority-2-high (prevents test pollution)
+- **Complexity**: complexity-simple (test utility + convention update)
+- **Category**: category-testing (test standards and utilities)
 
 This labeling system enables effective issue prioritization, effort estimation, and strategic development planning.
 
