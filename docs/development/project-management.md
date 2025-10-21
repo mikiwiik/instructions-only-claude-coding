@@ -267,6 +267,10 @@ and completion (via PR merge). No manual status updates needed - workflow is ful
   - [ ] Error handling comprehensive (network failures, conflicts)
   - [ ] Sync status indicators in UI (connection state, pending operations)
 - [ ] Comprehensive test coverage provided (including accessibility and sync tests)
+- [ ] **Test isolation verified** ([docs/guidelines/typescript-standards.md#test-isolation-and-mock-cleanup](../guidelines/typescript-standards.md#test-isolation-and-mock-cleanup)):
+  - [ ] Global object mocks properly restored in `afterAll()` hooks
+  - [ ] Mocks marked as `configurable: true` for cleanup
+  - [ ] No test pollution between test files
 - [ ] Documentation updated appropriately
 - [ ] **🚨 PR created with automerge enabled and reported to user**
 - [ ] **🚨 Agent has stopped and is waiting for human approval**
