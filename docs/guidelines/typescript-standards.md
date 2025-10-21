@@ -316,7 +316,27 @@ When using `Object.defineProperty` to mock global objects (window, global, etc.)
 **Good Example**:
 
 ```typescript
-// ✅ GOOD - Proper mock cleanup pattern
+// ✅ GOOD - Use utility function for proper cleanup
+import { setupLocalStorageMock } from '../utils/test-utils';
+
+// Setup with automatic cleanup
+const { mockStorage, restoreLocalStorage } = setupLocalStorageMock();
+
+describe('My Test Suite', () => {
+  afterAll(restoreLocalStorage);
+
+  beforeEach(() => {
+    mockStorage.clear();
+  });
+
+  // ... tests
+});
+```
+
+**Manual Implementation** (if utility not available):
+
+```typescript
+// ✅ ACCEPTABLE - Manual implementation with proper cleanup
 import { mockLocalStorage } from '../utils/test-utils';
 
 const mockStorage = mockLocalStorage();
@@ -368,7 +388,7 @@ Object.defineProperty(window, 'localStorage', {
 - **Clean slate**: Each test file starts with a predictable environment
 - **No flaky tests**: Avoids mysterious failures from leaked mocks
 
-**Reference**: See `app/__tests__/hooks/useSharedTodos.test.ts` (lines 53-90) for the complete pattern.
+**Reference**: Use `setupLocalStorageMock()` from `app/__tests__/utils/test-utils.tsx` for proper test isolation.
 
 ### Mocking with Type Safety
 

@@ -22,6 +22,47 @@ export const mockLocalStorage = () => {
   };
 };
 
+/**
+ * Setup window.localStorage mock with proper configuration for test isolation.
+ * Returns both the mock storage and the original localStorage for cleanup.
+ *
+ * @example
+ * const { mockStorage, restoreLocalStorage } = setupLocalStorageMock();
+ *
+ * describe('My Tests', () => {
+ *   afterAll(restoreLocalStorage);
+ *
+ *   beforeEach(() => {
+ *     mockStorage.clear();
+ *   });
+ *   // ... tests
+ * });
+ */
+export const setupLocalStorageMock = () => {
+  const mockStorage = mockLocalStorage();
+  const originalLocalStorage = window.localStorage;
+
+  Object.defineProperty(window, 'localStorage', {
+    value: mockStorage,
+    writable: true,
+    configurable: true,
+  });
+
+  const restoreLocalStorage = () => {
+    if (originalLocalStorage) {
+      Object.defineProperty(window, 'localStorage', {
+        value: originalLocalStorage,
+        writable: true,
+        configurable: true,
+      });
+    } else {
+      delete (window as { localStorage?: Storage }).localStorage;
+    }
+  };
+
+  return { mockStorage, restoreLocalStorage };
+};
+
 // Create a todo factory for testing
 export const createMockTodo = (
   overrides: Partial<{
