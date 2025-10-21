@@ -7,8 +7,12 @@ import { mockLocalStorage } from '../utils/test-utils';
 
 // Mock localStorage
 const mockStorage = mockLocalStorage();
+const originalLocalStorage = window.localStorage;
+
 Object.defineProperty(window, 'localStorage', {
   value: mockStorage,
+  writable: true,
+  configurable: true,
 });
 
 // Mock timestamp utilities
@@ -77,6 +81,19 @@ jest.mock('../../utils/timestamp', () => ({
 }));
 
 describe('Timestamp Lifecycle Integration Tests', () => {
+  afterAll(() => {
+    // Restore original localStorage to maintain test isolation
+    if (originalLocalStorage) {
+      Object.defineProperty(window, 'localStorage', {
+        value: originalLocalStorage,
+        writable: true,
+        configurable: true,
+      });
+    } else {
+      delete (window as { localStorage?: Storage }).localStorage;
+    }
+  });
+
   beforeEach(() => {
     mockStorage.clear();
     jest.clearAllMocks();
