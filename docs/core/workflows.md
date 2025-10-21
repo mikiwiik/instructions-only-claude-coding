@@ -63,6 +63,14 @@ See `commitlint.config.mjs` for the authoritative list of allowed types. Common 
 
 **Configuration**: See `commitlint.config.mjs` (root directory) for complete rules and allowed commit types.
 
+**⚠️ Known Limitation - Bullet List Parser Bug**:
+
+Commitlint has a parser bug that incorrectly inserts blank lines before the 3rd+ bullet point in commit
+message lists, causing `footer-leading-blank` validation failures even when the message is correctly formatted.
+
+**Workaround**: Limit bullet lists to **2 items maximum** or use prose format instead. See
+[Troubleshooting Guide](../reference/troubleshooting.md#commitlint-parser-bug) for details.
+
 **Common Validation Errors**:
 
 ```bash
@@ -108,7 +116,8 @@ git commit --no-verify -m "emergency fix"
 ```text
 type(scope): description (#issue-number)
 
-Optional body explaining the change in detail
+Optional body explaining the change in detail. If using bullet lists,
+limit to 2 items maximum to avoid commitlint parser bugs.
 
 🤖 Generated with AI Agent
 
@@ -142,10 +151,8 @@ git commit -m "test: add edge cases for feature X (#33)"
 git commit -m "docs: update README with feature X usage (#33)"
 git commit -m "feat: complete feature X implementation
 
-Implements full functionality including:
-- Core feature implementation
-- Comprehensive test coverage
-- Documentation updates
+Implements full functionality including core feature implementation,
+comprehensive test coverage, and documentation updates.
 
 Closes #33"
 ```
@@ -201,8 +208,8 @@ Addresses issue #XXX - [brief issue context]
 
 ## Implementation
 
-- Key changes made
-- Technical decisions
+Key changes made and technical decisions. Use prose format or
+limit to 2 bullet items maximum to avoid commitlint parser issues.
 
 Closes #XXX
 ```
