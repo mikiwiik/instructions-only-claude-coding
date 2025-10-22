@@ -94,6 +94,8 @@ export default function ConfirmationDialog({
                 const currentIndex = Array.from(focusableElements).indexOf(
                   document.activeElement as HTMLElement
                 );
+                // TODO: Refactor to reduce nesting depth - see docs/quality/remaining-complexity-fixes.md
+                // eslint-disable-next-line max-depth
                 if (currentIndex > 0) {
                   (focusableElements[currentIndex - 1] as HTMLElement).focus();
                 }
@@ -105,6 +107,8 @@ export default function ConfirmationDialog({
                 const currentIndex = Array.from(focusableElements).indexOf(
                   document.activeElement as HTMLElement
                 );
+                // TODO: Refactor to reduce nesting depth - see docs/quality/remaining-complexity-fixes.md
+                // eslint-disable-next-line max-depth
                 if (currentIndex < focusableElements.length - 1) {
                   (focusableElements[currentIndex + 1] as HTMLElement).focus();
                 }

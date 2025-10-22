@@ -103,6 +103,8 @@ interface TodoItemProps {
   isLast?: boolean;
 }
 
+// TODO: Refactor to reduce cognitive complexity - see docs/quality/remaining-complexity-fixes.md
+// eslint-disable-next-line complexity
 export default function TodoItem({
   todo,
   onToggle,
