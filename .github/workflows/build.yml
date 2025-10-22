@@ -116,6 +116,10 @@ jobs:
     # SonarCloud analysis runs only once per PR on ubuntu job (not on macos)
     # Matrix conditions ensure it runs on ubuntu-latest only (SonarCloud requires Linux)
     # Dependabot check excludes Dependabot PRs (no access to SONAR_TOKEN secret)
+    - name: Generate ESLint Report
+      run: npm run lint -- --format json --output-file eslint-report.json || true
+      if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
+
     - name: SonarCloud Analysis
       uses: SonarSource/sonarqube-scan-action@0303d6b62e310685c0e34d0b9cde218036885c4d
       if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x' && github.actor != 'dependabot[bot]'
