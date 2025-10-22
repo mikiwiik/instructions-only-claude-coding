@@ -334,7 +334,7 @@ GitHub Projects uses custom fields for workflow tracking:
 - Is project-specific (not an intrinsic property of the issue)
 - Cannot be represented by labels (labels describe what the issue IS, not where it IS in workflow)
 
-**Status** tracks current work state (Todo → In Progress → Review → Done)
+**Status** tracks current work state (Todo → In Progress → Done)
 **Lifecycle** tracks idea maturity (Icebox → Backlog → Active → Done)
 
 **Priority, Complexity, and Category do NOT need custom fields** because they:
