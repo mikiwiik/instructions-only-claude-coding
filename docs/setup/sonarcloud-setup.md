@@ -113,8 +113,39 @@ The integration includes these pre-configured files:
   - `sonar.tests=app/__tests__` - Test directory within app structure
   - `sonar.exclusions` - Excludes test directory from sources to prevent conflicts
 - **`.github/workflows/build.yml`** - GitHub Actions workflow with SonarCloud step
-  - Uses `SonarSource/sonarqube-scan-action@v5.0.0` (latest recommended action)
+  - Uses SHA-pinned action version for security (see [ADR-026](../adr/026-security-scanning-ci-cd-pipeline.md))
 - **`coverage/lcov.info`** - Jest coverage reports (generated automatically)
+
+## TypeScript Best Practices
+
+The project follows [SonarCloud TypeScript/JavaScript best practices](https://docs.sonarsource.com/sonarqube-cloud/advanced-setup/languages/javascript-typescript-css):
+
+- **TSConfig Paths**: Explicit `sonar.typescript.tsconfigPaths` configuration for reliable path pattern detection
+- **Source Encoding**: UTF-8 encoding specified via `sonar.sourceEncoding` for consistent file analysis
+- **TypeScript Configuration**: References project's `tsconfig.json` for type checking alignment
+
+For project-specific TypeScript standards, see relevant coding standards documentation.
+
+## ESLint Integration
+
+ESLint reports are automatically integrated into SonarCloud:
+
+- **Workflow Integration**: ESLint analysis runs before SonarCloud scan (`.github/workflows/build.yml:119-121`)
+- **Report Path**: `sonar.eslint.reportPaths=eslint-report.json` imports ESLint issues into SonarCloud dashboard
+- **Unified Quality**: All code quality issues (SonarCloud + ESLint) consolidated in one dashboard
+
+For ESLint configuration details, see `.eslintrc.json` and related linting documentation.
+
+## Coverage Metrics Alignment
+
+Coverage exclusions are aligned between Jest and SonarCloud for consistent reporting:
+
+- **Configuration Source**: `jest.config.js` defines coverage exclusions (lines 16-25)
+- **SonarCloud Alignment**: `sonar.coverage.exclusions` mirrors Jest configuration
+- **Excluded Patterns**: TypeScript definitions (`*.d.ts`), Next.js layout/page files, API routes, and temporarily
+  excluded sync features (see issues #193, #194)
+
+This ensures coverage metrics match between local Jest reports and SonarCloud dashboard.
 
 ## Troubleshooting
 
