@@ -10,7 +10,9 @@ throughout the codebase.
 
 - **ADR-002**: TypeScript Adoption (foundation decision)
 - **ADR-022**: Strict TypeScript Type Safety Enforcement (error-level enforcement)
+- **ADR-027**: Code Complexity Standards (complexity thresholds and enforcement)
 - **ADR-009**: Pre-commit Linting Strategy (enforcement mechanism)
+- **Code Complexity Guidelines**: [docs/guidelines/code-complexity-guidelines.md](code-complexity-guidelines.md)
 - **eslint.config.mjs**: Configuration enforcing these standards
 
 ## Core Principle

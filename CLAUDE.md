@@ -80,6 +80,16 @@ Agent-centric development instructions for instruction-only todo application dev
 - **Testing**: Accessibility tests required for all interactive components
 - **Definition of Done**: Accessibility checklist mandatory in [project-management.md](docs/development/project-management.md)
 
+**Code Complexity Standards**:
+
+- **🚨 ADR-027 Compliance**: All code must meet complexity thresholds defined in [ADR-027](docs/adr/027-code-complexity-standards.md)
+- **Cognitive Complexity**: ≤15 per function (enforced by ESLint + SonarCloud)
+- **Nesting Depth**: ≤4 levels (enforced by ESLint `max-depth`)
+- **Cyclomatic Complexity**: ≤15 per function (enforced by ESLint `complexity`)
+- **Refactoring Patterns**: [docs/guidelines/code-complexity-guidelines.md](docs/guidelines/code-complexity-guidelines.md)
+- **Pre-commit Enforcement**: ESLint blocks commits with complexity violations
+- **Definition of Done**: Zero complexity ESLint errors required for PR approval
+
 **Issue Management**:
 
 - **Priority Labels**: priority-1-critical through priority-4-low
