@@ -19,7 +19,7 @@ wins identification, and idea capture capabilities.
 
 **Current limitations**:
 
-- No visual representation of workflow (Todo → In Progress → Review → Done)
+- No visual representation of workflow (Todo → In Progress → Done)
 - Difficult to identify quick wins (high priority + simple complexity) at a glance
 - No dedicated space for capturing raw ideas before they're refined
 - Limited ability to visualize work-in-progress and agent coordination
@@ -46,7 +46,7 @@ philosophy and current workflow?
    - Priority (Critical/High/Medium/Low) - mapped from labels
    - Complexity (Minimal/Simple/Moderate/Complex/Epic) - mapped from labels
    - Category (Feature/Infrastructure/Documentation/DX) - mapped from labels
-   - Status (Todo/In Progress/Review/Testing/Done/Blocked) - workflow tracking
+   - Status (Todo/In Progress/Done) - workflow tracking
    - Lifecycle (Icebox/Backlog/Active/Done) - idea maturity tracking
 
 2. **Five Project Views**:
@@ -78,7 +78,7 @@ philosophy and current workflow?
 
 ### Positive
 
-1. **Visual Workflow**: Clear kanban board showing work moving through Todo → In Progress → Review → Done
+1. **Visual Workflow**: Clear kanban board showing work moving through Todo → In Progress → Done
 2. **Quick Wins Identification**: Dedicated view for high-priority + simple-complexity issues, perfect for building momentum
 3. **Idea Capture**: Icebox provides low-friction way to capture raw ideas without full requirements
 4. **Agent Coordination**: Visual tracking of which specialized agents are working on what
@@ -134,7 +134,7 @@ principles.
 
 **Custom Fields Retained**:
 
-- **Status** (Todo/In Progress/Review/Testing/Done/Blocked) - workflow state not in labels
+- **Status** (Todo/In Progress/Done) - workflow state not in labels
 - **Lifecycle** (Icebox/Backlog/Active/Done) - idea maturity stage not in labels
 
 **Custom Fields Removed**:
