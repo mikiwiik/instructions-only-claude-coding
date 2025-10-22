@@ -68,6 +68,16 @@ const eslintConfig = [
       'react/jsx-uses-react': 'off', // Not needed in Next.js
       'react/jsx-uses-vars': 'error',
 
+      // Code complexity rules (ADR-027)
+      complexity: ['error', { max: 15 }], // Cyclomatic complexity limit
+      'max-depth': ['error', { max: 4 }], // Nesting depth limit
+      'max-lines-per-function': [
+        'warn',
+        { max: 150, skipBlankLines: true, skipComments: true },
+      ],
+      'max-params': ['warn', { max: 4 }], // Function parameter limit
+      'max-statements': ['warn', { max: 30 }], // Statement count per function
+
       // General rules
       'no-console': 'warn',
       'no-debugger': 'error',
