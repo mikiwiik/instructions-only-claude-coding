@@ -91,6 +91,19 @@ const eslintConfig = [
     },
   },
 
+  // Configuration for test files - exempt from function length limits
+  {
+    files: [
+      '**/__tests__/**/*.{ts,tsx}',
+      '**/*.test.{ts,tsx}',
+      '**/*.spec.{ts,tsx}',
+    ],
+    rules: {
+      'max-lines-per-function': 'off', // Test files often have long test suites
+      'max-statements': 'off', // Test assertions can be numerous
+    },
+  },
+
   // Configuration for config files
   {
     files: ['jest.config.js', 'jest.setup.js', 'next.config.js'],
