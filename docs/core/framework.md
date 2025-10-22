@@ -75,9 +75,28 @@ Core quality principles maintained through AI development:
 - **Test-First Development**: Comprehensive testing strategies with detailed workflow in [TDD Commit Pattern](workflows.md#tdd-commit-pattern)
 - **Strict TypeScript**: No `any` types, comprehensive type safety
 - **Zero-Warning Policy**: ESLint and Prettier enforcement
+- **Code Complexity Standards**: ADR-027 compliance (cognitive complexity ≤15, nesting depth ≤4, cyclomatic complexity ≤15)
 - **Atomic Development**: Incremental commits with clear progression
 
 For complete quality standards, gates, and enforcement procedures, see [Quality Gates](workflows.md#quality-gates).
+
+## Code Complexity Quality Gates
+
+All code must meet complexity thresholds before merge (ADR-027):
+
+- **Cognitive Complexity**: ≤15 per function
+- **Nesting Depth**: ≤4 levels
+- **Cyclomatic Complexity**: ≤15 per function
+- **Function Length**: ≤150 lines (warning), ≤300 lines (error)
+- **Parameters**: ≤4 per function (warning)
+
+**Enforcement Mechanisms**:
+
+- Pre-commit: ESLint blocks commits with complexity errors
+- CI/CD: SonarCloud analysis on every PR
+- Code Review: Manual verification of complexity patterns
+
+**Refactoring Guidelines**: See [Code Complexity Guidelines](../guidelines/code-complexity-guidelines.md) for practical patterns.
 
 ## Measurable AI Contribution
 
