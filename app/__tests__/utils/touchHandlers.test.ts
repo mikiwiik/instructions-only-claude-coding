@@ -14,7 +14,7 @@ describe('combineTouchHandlers', () => {
       );
 
       const mockEvent = {} as React.TouchEvent;
-      combined.onTouchStart(mockEvent);
+      combined.onTouchStart?.(mockEvent);
 
       expect(handler1).toHaveBeenCalledWith(mockEvent);
       expect(handler2).toHaveBeenCalledWith(mockEvent);
@@ -31,7 +31,7 @@ describe('combineTouchHandlers', () => {
       );
 
       const mockEvent = {} as React.TouchEvent;
-      expect(() => combined.onTouchStart(mockEvent)).not.toThrow();
+      expect(() => combined.onTouchStart?.(mockEvent)).not.toThrow();
       expect(handler1).toHaveBeenCalledWith(mockEvent);
     });
 
@@ -39,7 +39,7 @@ describe('combineTouchHandlers', () => {
       const combined = combineTouchHandlers({}, {});
 
       const mockEvent = {} as React.TouchEvent;
-      expect(() => combined.onTouchStart(mockEvent)).not.toThrow();
+      expect(() => combined.onTouchStart?.(mockEvent)).not.toThrow();
     });
   });
 
@@ -54,7 +54,7 @@ describe('combineTouchHandlers', () => {
       );
 
       const mockEvent = {} as React.TouchEvent;
-      combined.onTouchMove(mockEvent);
+      combined.onTouchMove?.(mockEvent);
 
       expect(handler1).toHaveBeenCalledWith(mockEvent);
       expect(handler2).toHaveBeenCalledWith(mockEvent);
@@ -69,7 +69,7 @@ describe('combineTouchHandlers', () => {
       );
 
       const mockEvent = {} as React.TouchEvent;
-      expect(() => combined.onTouchMove(mockEvent)).not.toThrow();
+      expect(() => combined.onTouchMove?.(mockEvent)).not.toThrow();
       expect(handler1).toHaveBeenCalledWith(mockEvent);
     });
   });
@@ -84,7 +84,7 @@ describe('combineTouchHandlers', () => {
         { onTouchEnd: handler2 }
       );
 
-      combined.onTouchEnd();
+      combined.onTouchEnd?.();
 
       expect(handler1).toHaveBeenCalled();
       expect(handler2).toHaveBeenCalled();
@@ -98,7 +98,7 @@ describe('combineTouchHandlers', () => {
         { onTouchEnd: undefined }
       );
 
-      expect(() => combined.onTouchEnd()).not.toThrow();
+      expect(() => combined.onTouchEnd?.()).not.toThrow();
       expect(handler1).toHaveBeenCalled();
     });
   });
@@ -127,9 +127,9 @@ describe('combineTouchHandlers', () => {
 
       const mockEvent = {} as React.TouchEvent;
 
-      combined.onTouchStart(mockEvent);
-      combined.onTouchMove(mockEvent);
-      combined.onTouchEnd();
+      combined.onTouchStart?.(mockEvent);
+      combined.onTouchMove?.(mockEvent);
+      combined.onTouchEnd?.();
 
       expect(startHandler1).toHaveBeenCalledWith(mockEvent);
       expect(startHandler2).toHaveBeenCalledWith(mockEvent);
@@ -152,9 +152,9 @@ describe('combineTouchHandlers', () => {
       const mockEvent = {} as React.TouchEvent;
 
       expect(() => {
-        combined.onTouchStart(mockEvent);
-        combined.onTouchMove(mockEvent);
-        combined.onTouchEnd();
+        combined.onTouchStart?.(mockEvent);
+        combined.onTouchMove?.(mockEvent);
+        combined.onTouchEnd?.();
       }).not.toThrow();
 
       expect(startHandler).toHaveBeenCalledWith(mockEvent);
@@ -169,9 +169,9 @@ describe('combineTouchHandlers', () => {
       const mockEvent = {} as React.TouchEvent;
 
       expect(() => {
-        combined.onTouchStart(mockEvent);
-        combined.onTouchMove(mockEvent);
-        combined.onTouchEnd();
+        combined.onTouchStart?.(mockEvent);
+        combined.onTouchMove?.(mockEvent);
+        combined.onTouchEnd?.();
       }).not.toThrow();
     });
 
@@ -186,9 +186,9 @@ describe('combineTouchHandlers', () => {
 
       const mockEvent = {} as React.TouchEvent;
 
-      combined.onTouchStart(mockEvent);
-      combined.onTouchMove(mockEvent);
-      combined.onTouchEnd();
+      combined.onTouchStart?.(mockEvent);
+      combined.onTouchMove?.(mockEvent);
+      combined.onTouchEnd?.();
 
       expect(handlers.onTouchStart).toHaveBeenCalledWith(mockEvent);
       expect(handlers.onTouchMove).toHaveBeenCalledWith(mockEvent);
@@ -212,7 +212,7 @@ describe('combineTouchHandlers', () => {
 
       const combined = combineTouchHandlers(handlers1, handlers2, handlers3);
 
-      combined.onTouchStart({} as React.TouchEvent);
+      combined.onTouchStart?.({} as React.TouchEvent);
 
       expect(executionOrder).toEqual([1, 2, 3]);
     });
