@@ -1,6 +1,6 @@
 ---
 description: Start working on a specific GitHub issue with full workflow setup
-argument-hint: <issue-number>
+argument-hint: [issue-number]
 ---
 
 Start working on GitHub issue #$1 following the project's development methodology:
