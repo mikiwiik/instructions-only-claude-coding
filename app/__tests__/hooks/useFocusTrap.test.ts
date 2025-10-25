@@ -54,7 +54,7 @@ describe('useFocusTrap', () => {
     });
 
     it('should return empty array if container is null', () => {
-      const containerRef = { current: null } as RefObject<HTMLElement>;
+      const containerRef = { current: null } as RefObject<HTMLElement | null>;
       const { result } = renderHook(() => useFocusTrap(containerRef));
 
       const elements = result.current.getFocusableElements();
