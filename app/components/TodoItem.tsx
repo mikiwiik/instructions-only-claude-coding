@@ -3,7 +3,7 @@ import { Todo } from '../types/todo';
 import { useSwipeGesture } from '../hooks/useSwipeGesture';
 import { useLongPress } from '../hooks/useLongPress';
 import { useTodoItemDragAndDrop } from '../hooks/useTodoItemDragAndDrop';
-import { combineTouchHandlers } from '../utils/touchHandlers';
+import { combineTouchHandlers, TouchHandlers } from '../utils/touchHandlers';
 import TodoItemContent from './TodoItemContent';
 import TodoItemActions from './TodoItemActions';
 import TodoItemReorderButtons from './TodoItemReorderButtons';
@@ -212,7 +212,10 @@ export default function TodoItem({
   const handleMoveDown = () => !isLast && moveDown?.(todo.id);
 
   // Combine gesture handlers for touch events
-  const touchHandlers = combineTouchHandlers(swipeGesture, longPressGesture);
+  const touchHandlers = combineTouchHandlers(
+    swipeGesture as TouchHandlers,
+    longPressGesture as TouchHandlers
+  );
 
   // Build item className
   const itemClassName = buildTodoItemClassName(
