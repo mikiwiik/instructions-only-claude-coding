@@ -5,7 +5,7 @@ export interface UseDialogKeyboardOptions {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  dialogRef: RefObject<HTMLElement>;
+  dialogRef: RefObject<HTMLElement | null>;
   isLoading?: boolean;
   isConfirmDisabled?: boolean;
 }

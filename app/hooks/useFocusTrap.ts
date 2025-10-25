@@ -11,7 +11,7 @@ export interface UseFocusTrapReturn {
  * Cognitive complexity: ≤10
  */
 export function useFocusTrap(
-  containerRef: RefObject<HTMLElement>
+  containerRef: RefObject<HTMLElement | null>
 ): UseFocusTrapReturn {
   const getFocusableElements = useCallback((): HTMLElement[] => {
     if (!containerRef.current) return [];

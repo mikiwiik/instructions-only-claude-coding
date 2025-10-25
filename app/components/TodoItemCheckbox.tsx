@@ -5,7 +5,7 @@ interface TodoItemCheckboxProps {
   todoText: string;
   isCompleted: boolean;
   isDraggable: boolean;
-  dragHandleRef: RefObject<HTMLDivElement>;
+  dragHandleRef: RefObject<HTMLDivElement | null>;
   onToggle: () => void;
   sanitizeForAriaLabel: (text: string) => string;
 }
