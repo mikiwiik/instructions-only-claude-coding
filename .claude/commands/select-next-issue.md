@@ -7,7 +7,8 @@ Analyze open GitHub issues and recommend the next issue to work on based on:
 
 1. **GitHub Projects Query**: Fetch issues from Backlog or Active lifecycle states (excludes Icebox by default)
    - Use `gh project item-list 1 --owner mikiwiik --format json` to get project items
-   - Filter for `.lifecycle == "Backlog"` OR `.lifecycle == "Active"`
+   - Filter for `(.lifecycle == "Backlog" OR .lifecycle == "Active") AND .status != "Done"`
+   - Verify GitHub issue state is OPEN to exclude closed issues
    - Extract issue details from filtered project items
 2. **Priority Assessment**: Group issues by priority labels (priority-1-critical, priority-2-high,
    priority-3-medium, priority-4-low)
@@ -37,6 +38,7 @@ Analyze open GitHub issues and recommend the next issue to work on based on:
 
 - **Default**: Only considers Backlog and Active issues (ready for work)
 - **Icebox Excluded**: Raw ideas in Icebox are not refined enough for selection
+- **Status Filtering**: Excludes items where Status="Done" even if Lifecycle is stale
 - **Use "all" filter**: When you need to see all issues including unrefined Icebox items
 
 **Output Format**:
