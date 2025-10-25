@@ -36,8 +36,9 @@
     or verbose content immediately
 11. **🚨 PINNED DEPENDENCIES**: All dependencies must use exact versions without range operators (`^`, `~`) for maximum
     security control, reproducible builds, and clear audit trails - updates via Dependabot PRs only
-12. **🚨 PR APPROVAL PROTOCOL**: After creating PR, STOP and report to user - NEVER use `--admin`, `--force`, or bypass
-    flags without explicit permission - task completion means PR ready for review, NOT merged
+12. **🚨 PR APPROVAL PROTOCOL**: After creating PR, enable automerge with `--rebase` (mandatory per Principle #7), then
+    report status to user - NEVER use `--admin`, `--force`, or bypass flags without explicit permission - task completion
+    means PR merged and verified with `gh issue view #X`, NOT just PR created (see [PR Workflow](docs/core/workflows.md#pull-request-workflow))
 
 ---
 
