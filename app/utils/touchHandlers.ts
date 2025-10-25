@@ -1,9 +1,10 @@
 /**
  * Touch event handler collection
+ * Accepts both React.TouchEvent and DOM TouchEvent for flexibility
  */
 export interface TouchHandlers {
-  onTouchStart?: (e: React.TouchEvent) => void;
-  onTouchMove?: (e?: React.TouchEvent) => void;
+  onTouchStart?: (e: unknown) => void;
+  onTouchMove?: (e?: unknown) => void;
   onTouchEnd?: () => void;
 }
 
@@ -28,10 +29,10 @@ export function combineTouchHandlers(
   ...handlerSets: TouchHandlers[]
 ): TouchHandlers {
   return {
-    onTouchStart: (e: React.TouchEvent) => {
+    onTouchStart: (e: unknown) => {
       handlerSets.forEach((handlers) => handlers.onTouchStart?.(e));
     },
-    onTouchMove: (e: React.TouchEvent) => {
+    onTouchMove: (e?: unknown) => {
       handlerSets.forEach((handlers) => handlers.onTouchMove?.(e));
     },
     onTouchEnd: () => {
