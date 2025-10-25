@@ -244,16 +244,61 @@ Closes #123, closes #124, fixes #125
 - If automerge not desired: Skip step 2, merge manually after approval
 - If urgent merge needed: Use `--admin` flag to bypass protection (with permission)
 
-### PR Approval Protocol
+### PR Approval Protocol {#pull-request-workflow}
 
-**🚨 CRITICAL STOP POINT**: After creating PR with automerge enabled:
+**🚨 MANDATORY 5-STEP WORKFLOW**: Follow this exact sequence for all PRs.
 
-1. ✅ Report PR URL and status to human
-2. 🛑 **STOP and WAIT for human approval/merge**
-3. ❌ **NEVER use `--admin`, `--force`, or any bypass flags without explicit user permission**
-4. ✅ Task completion = PR created and ready for review (NOT merged)
+#### Step-by-Step PR Creation and Completion
 
-**Forbidden Actions Without User Permission:**
+##### Step 1: Create Pull Request
+
+```bash
+gh pr create --title "..." --body "..."
+```
+
+- Use descriptive title following conventional commit format
+- Include "Closes #XXX" in PR body for automatic issue closure
+- Reference related issues and provide implementation context
+
+##### Step 2: Enable Automerge with Rebase (MANDATORY)
+
+```bash
+gh pr merge <PR_NUMBER> --auto --rebase
+```
+
+- **🚨 REQUIRED**: Must be done immediately after PR creation (not optional)
+- `--rebase` preserves atomic commit history (per ADR-010)
+- Automerge triggers when CI passes and approvals received
+
+##### Step 3: Report Status to User
+
+Report the following to user:
+
+- ✅ PR URL and number
+- ✅ Automerge enabled with rebase strategy
+- ✅ Waiting for CI checks and required approvals
+- ✅ Will auto-merge when requirements met
+
+##### Step 4: Let CI Run and PR Auto-Merge
+
+- 🛑 **STOP and WAIT** - Do not claim completion yet
+- ⏳ CI checks must pass automatically
+- 👤 Required reviewer approval (automated or manual)
+- ✅ PR auto-merges when all requirements satisfied
+
+##### Step 5: Verify Completion
+
+```bash
+gh issue view #XXX
+```
+
+- **ONLY claim completion after** verifying issue is closed and PR merged
+- Confirm GitHub Projects status updated to "Done"
+- Task completion = PR merged and issue closed, NOT just PR created
+
+#### Forbidden Actions Without User Permission
+
+❌ **NEVER** use these without explicit user permission:
 
 - `gh pr merge --admin`
 - `gh pr merge --force`
@@ -261,11 +306,22 @@ Closes #123, closes #124, fixes #125
 - `git push --force-with-lease`
 - Any command that bypasses branch protection or review requirements
 
-**When PR Cannot Auto-Merge:**
+#### When PR Cannot Auto-Merge
 
 1. Report the blocking issue to user
 2. Ask user how to proceed
 3. Wait for explicit instructions
+
+#### Quick Reference
+
+```bash
+# Complete PR workflow in 2 commands
+gh pr create --title "..." --body "Closes #XXX\n\n..."
+gh pr merge <PR_NUMBER> --auto --rebase
+
+# Then wait for CI + approval, verify with:
+gh issue view #XXX
+```
 
 ### Bypass Rules (Admin Privileges)
 
