@@ -30,3 +30,6 @@ Start working on GitHub issue #$1 following the project's development methodolog
   - See [GitHub Projects Setup Guide](../../docs/development/github-projects-setup.md) for details
 
 **Output**: Ready-to-implement task plan with clear next steps.
+
+**📘 PR Creation**: When ready to create PR, see [PR Approval Protocol](../../docs/core/workflows.md#pull-request-workflow)
+for the mandatory 5-step workflow including automerge setup.
