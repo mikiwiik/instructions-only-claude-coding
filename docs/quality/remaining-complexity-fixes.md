@@ -369,7 +369,7 @@ All test strategies, file structures, and refactoring patterns are defined and r
 - **Issue #259**: Initial complexity standards and useSharedTodoSync refactoring
 - **ADR-027**: Code Complexity Standards
 - **Guidelines**: docs/guidelines/code-complexity-guidelines.md
-- **SonarCloud Analysis**: docs/quality/sonarcloud-analysis-report.md
+- **SonarCloud Analysis**: See Issue #259 comments for full analysis report
 - **Agent Implementation Plans**: Available from Issue #259 parallel agent execution
 
 ---
