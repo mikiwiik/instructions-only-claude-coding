@@ -16,7 +16,7 @@ interface TodoItemContentProps {
   todo: Todo;
   isEditing: boolean;
   editText: string;
-  textareaRef: RefObject<HTMLTextAreaElement>;
+  textareaRef: RefObject<HTMLTextAreaElement | null>;
   onEditTextChange: (text: string) => void;
   onSave: () => void;
   onCancel: () => void;

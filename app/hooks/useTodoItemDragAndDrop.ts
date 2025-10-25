@@ -8,8 +8,8 @@ import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
 export interface UseTodoItemDragAndDropOptions {
   todoId: string;
   isDraggable: boolean;
-  itemRef: RefObject<HTMLLIElement>;
-  dragHandleRef: RefObject<HTMLDivElement>;
+  itemRef: RefObject<HTMLLIElement | null>;
+  dragHandleRef: RefObject<HTMLDivElement | null>;
 }
 
 /**
