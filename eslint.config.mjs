@@ -20,7 +20,14 @@ const eslintConfig = [
 
   // Global ignores
   {
-    ignores: ['node_modules/', '.next/', 'out/', 'build/', 'dist/'],
+    ignores: [
+      'node_modules/',
+      '.next/',
+      'out/',
+      'build/',
+      'dist/',
+      'next-env.d.ts',
+    ],
   },
 
   // Next.js config using FlatCompat
