@@ -4,7 +4,10 @@ description: Create pull request following the agreed workflow in docs/core/work
 
 Create a pull request for the current feature branch following the mandatory PR workflow.
 
-## Workflow Sequence (docs/core/workflows.md:110-242)
+**📘 Complete Workflow**: See [PR Approval Protocol](../../docs/core/workflows.md#pull-request-workflow) for
+detailed 5-step process.
+
+## Quick Reference
 
 ### Pre-flight Checks
 
@@ -51,9 +54,9 @@ Create a pull request for the current feature branch following the mandatory PR 
    - Show current PR status
 
 2. **🛑 CRITICAL STOP POINT**:
-   - **STOP and WAIT** for human approval/merge
-   - Task completion = PR created and ready for review (NOT merged)
-   - Do NOT proceed with any further actions
+   - **STOP and WAIT** for CI + approval, then auto-merge
+   - Task completion = PR merged and verified with `gh issue view #XX` (NOT just PR created)
+   - Do NOT claim completion until PR merged and issue closed
 
 ## 🚨 Forbidden Actions (Without Explicit User Permission)
 
@@ -73,9 +76,9 @@ Create a pull request for the current feature branch following the mandatory PR 
 
 ## References
 
-- **Workflow Documentation**: docs/core/workflows.md (lines 110-242)
-- **CLAUDE.md Principle #7**: Feature Branch + PR Workflow
-- **CLAUDE.md Principle #12**: PR Approval Protocol
+- **Workflow Documentation**: [PR Approval Protocol](../../docs/core/workflows.md#pull-request-workflow) (5-step process)
+- **CLAUDE.md Principle #7**: Feature Branch + PR Workflow with mandatory automerge
+- **CLAUDE.md Principle #12**: PR Approval Protocol with automerge requirement
 - **ADR-010**: Merge strategy (--rebase for atomic commits)
 
 ## Success Criteria
@@ -83,6 +86,7 @@ Create a pull request for the current feature branch following the mandatory PR 
 - ✅ PR created with proper title and description
 - ✅ "Closes #XX" included in PR description
 - ✅ Automerge enabled with `--rebase` strategy
-- ✅ PR URL reported to user
-- ✅ Process stopped and awaiting user approval
+- ✅ PR URL and status reported to user
+- ✅ Waiting for CI + approval to auto-merge
+- ✅ Will verify completion with `gh issue view #XX` after merge
 - ❌ No bypass flags used without permission
