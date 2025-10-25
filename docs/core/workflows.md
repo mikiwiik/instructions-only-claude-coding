@@ -395,11 +395,23 @@ Closes #123, closes #124, fixes #125
 - Screen reader compatibility
 - See [docs/guidelines/accessibility-requirements.md](../guidelines/accessibility-requirements.md) for complete requirements
 
+**Code Complexity Standards:**
+
+- Cognitive complexity ≤15 per function (enforced as error per ADR-027)
+- Nesting depth ≤4 levels (enforced via ESLint `max-depth`)
+- Cyclomatic complexity ≤15 per function (enforced via ESLint `complexity`)
+- Function length ≤150 lines (warning), ≤300 lines (error)
+- Function parameters ≤4 (warning for maintainability)
+- Refactoring patterns: Extract functions, custom hooks, utility modules
+- See [docs/guidelines/code-complexity-guidelines.md](../guidelines/code-complexity-guidelines.md) for refactoring strategies
+- See [docs/adr/027-code-complexity-standards.md](../adr/027-code-complexity-standards.md) for decision rationale
+
 ### Pre-commit Requirements
 
-- ESLint: Zero errors or warnings
+- ESLint: Zero errors or warnings (includes complexity rules)
 - Prettier: Consistent code formatting
 - TypeScript: Strict mode compliance
+- Code Complexity: All functions meet ADR-027 thresholds
 - Tests: All tests passing and in version control
 
 ### Pre-merge Requirements
