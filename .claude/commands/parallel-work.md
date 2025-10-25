@@ -1,6 +1,6 @@
 ---
 description: Set up parallel agent execution for complex issues
-argument-hint: <issue-number>
+argument-hint: [issue-number]
 ---
 
 Set up parallel agent execution for GitHub issue #$1 using Claude Code's Task tool:
