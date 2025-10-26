@@ -6,7 +6,7 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Todo App - My First Claude Code Project',
+  title: 'Todo App - Instructions Only Claude Coding',
   description:
     'A Next.js Todo application built using Test-Driven Development (TDD) with Claude Code assistance',
 };
