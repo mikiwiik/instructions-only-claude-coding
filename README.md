@@ -178,7 +178,7 @@ and follow TDD with branch-based development.
 development planning. See [project management guide](docs/development/project-management.md).
 
 **Custom Slash Commands**: The project includes custom slash commands (`/work-on`, `/select-next-issue`, `/quick-wins`,
-`/create-pr`) for enhanced workflow. Commands are defined in `.claude/commands/`.
+`/create-pr`, `/export-closed-issues`) for enhanced workflow. Commands are defined in `.claude/commands/`.
 
 ## Features
 
