@@ -97,6 +97,9 @@ This project serves as a **template and reference** for:
 **Complete setup instructions**: See [Installation Guide](docs/setup/installation.md) for Claude Code authentication,
 troubleshooting, and development environment setup.
 
+**Developer Environment Setup**: First-time contributors should run `./scripts/setup-claude-settings.sh` to configure
+Claude Code settings via dotfiles. See [Dev Environment Setup](docs/development/dev-environment-setup.md) for details.
+
 ### Installation
 
 ```bash
