@@ -6,17 +6,20 @@ Accepted
 
 ## Context
 
-After adopting TypeScript (ADR-002), we configured ESLint to warn on explicit `any` types. However, PR #241 demonstrated that warnings are insufficient for maintaining type safety:
+After adopting TypeScript (ADR-002), we configured ESLint to warn on explicit `any` types. However, PR #241
+demonstrated that warnings are insufficient for maintaining type safety:
 
 1. Commit 58efa73 introduced `any` types in test mocks to quickly fix coverage issues
 2. ESLint warnings were visible but non-blocking in pre-commit hooks
 3. CI passed because warnings don't fail builds
 4. Code review caught the issue, requiring cleanup commit a41db44
 
-**Core Problem**: Using `any` defeats TypeScript's value proposition of compile-time type safety. Warnings allow shortcuts that create technical debt and undermine the benefits of TypeScript adoption.
+**Core Problem**: Using `any` defeats TypeScript's value proposition of compile-time type safety. Warnings allow
+shortcuts that create technical debt and undermine the benefits of TypeScript adoption.
 
 **Pattern Observed**:
-```
+
+```text
 Coverage failure → Pressure to fix quickly → any types as shortcut →
 Warning (non-blocking) → Pre-commit passes → CI passes →
 Manual code review catches → Follow-up fix required
@@ -29,17 +32,20 @@ This pattern demonstrates that warnings are too permissive for a fundamental typ
 Enforce strict TypeScript type safety by treating explicit `any` types as ESLint errors instead of warnings:
 
 **Configuration Change** (`eslint.config.mjs`):
+
 ```javascript
 '@typescript-eslint/no-explicit-any': 'error',  // Previously 'warn'
 ```
 
 **Enforcement Scope**:
+
 - All TypeScript/JavaScript files (production and test code)
 - Pre-commit hooks will block commits containing `any`
 - CI builds will fail if `any` types are introduced
 - No exceptions for test code (tests must maintain same quality standards)
 
 **Approved Alternatives** (instead of `any`):
+
 - `unknown` - for truly unknown types (requires type guards)
 - Proper interfaces - define actual structure
 - Generics - for reusable type-safe code
