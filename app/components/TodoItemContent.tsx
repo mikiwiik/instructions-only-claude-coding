@@ -51,10 +51,10 @@ export default function TodoItemContent({
           placeholder='Enter your todo text... (Markdown formatting supported)'
         />
         <MarkdownHelpBox className='mt-2' />
-        <div className='flex gap-1 sm:gap-2'>
+        <div className='flex gap-1 md:gap-2'>
           <button
             onClick={onSave}
-            className='flex-shrink-0 p-1.5 sm:p-2 rounded hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors text-muted-foreground hover:text-green-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
+            className='flex-shrink-0 p-1.5 md:p-2 rounded hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors text-muted-foreground hover:text-green-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
             aria-label='Save edit'
             type='button'
           >
@@ -62,7 +62,7 @@ export default function TodoItemContent({
           </button>
           <button
             onClick={onCancel}
-            className='flex-shrink-0 p-1.5 sm:p-2 rounded hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
+            className='flex-shrink-0 p-1.5 md:p-2 rounded hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
             aria-label='Cancel edit'
             type='button'
           >
@@ -76,7 +76,7 @@ export default function TodoItemContent({
   return (
     <>
       <div
-        className={`text-sm sm:text-base leading-relaxed break-words ${
+        className={`text-sm md:text-base leading-relaxed break-words ${
           todo.completedAt
             ? 'line-through text-muted-foreground'
             : 'text-foreground'
@@ -98,7 +98,7 @@ export default function TodoItemContent({
         )}
       </div>
       <p
-        className='text-xs text-muted-foreground mt-1 sm:mt-2'
+        className='text-xs text-muted-foreground mt-1 md:mt-2'
         title={getFullTimestamp(todo)}
       >
         {getContextualTimestamp(todo)}

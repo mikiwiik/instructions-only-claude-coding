@@ -165,14 +165,14 @@ export default function ConfirmationDialog({
         </button>
 
         {/* Content */}
-        <div className='p-6 sm:p-8'>
+        <div className='p-6 md:p-8'>
           {/* Header with icon and title */}
           <div className='flex items-start gap-4 mb-4'>
             <div className='flex-shrink-0'>{variantStyles.icon}</div>
             <div className='flex-1 min-w-0'>
               <h2
                 id='dialog-title'
-                className='text-lg sm:text-xl font-semibold text-foreground text-balance'
+                className='text-lg md:text-xl font-semibold text-foreground text-balance'
               >
                 {title}
               </h2>
@@ -182,17 +182,17 @@ export default function ConfirmationDialog({
           {/* Message */}
           <p
             id='dialog-description'
-            className='text-sm sm:text-base text-muted-foreground leading-relaxed mb-6 text-balance'
+            className='text-sm md:text-base text-muted-foreground leading-relaxed mb-6 text-balance'
           >
             {message}
           </p>
 
           {/* Action buttons */}
-          <div className='flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-end'>
+          <div className='flex flex-col md:flex-row gap-3 md:gap-4 md:justify-end'>
             <button
               ref={cancelButtonRef}
               onClick={onClose}
-              className='flex-1 sm:flex-none px-4 sm:px-6 py-3 bg-secondary text-secondary-foreground rounded-lg font-medium hover:bg-secondary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-colors min-h-[48px] text-sm sm:text-base order-2 sm:order-1'
+              className='flex-1 md:flex-none px-4 md:px-6 py-3 bg-secondary text-secondary-foreground rounded-lg font-medium hover:bg-secondary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-colors min-h-[48px] text-sm md:text-base order-2 md:order-1'
               type='button'
               aria-label={`${cancelLabel} action`}
             >
@@ -202,7 +202,7 @@ export default function ConfirmationDialog({
               ref={confirmButtonRef}
               onClick={onConfirm}
               disabled={isLoading || isConfirmDisabled}
-              className={`flex-1 sm:flex-none px-4 sm:px-6 py-3 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors min-h-[48px] text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed order-1 sm:order-2 ${variantStyles.confirmButton}`}
+              className={`flex-1 md:flex-none px-4 md:px-6 py-3 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors min-h-[48px] text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed order-1 md:order-2 ${variantStyles.confirmButton}`}
               type='button'
               aria-label={`${confirmLabel} action`}
               aria-disabled={isLoading || isConfirmDisabled}
