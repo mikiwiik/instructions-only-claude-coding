@@ -376,9 +376,12 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 | Property           | Mobile (default) | Desktop (≥768px) |
 | ------------------ | ---------------- | ---------------- |
 | Container margin   | `mb-4` (16px)    | (same)           |
+| Container padding  | `px-2` (8px)     | `px-0` (0px)     |
 | Button padding (H) | `px-2` (8px)     | `px-3` (12px)    |
 | Button padding (V) | `py-2` (8px)     | (same)           |
 | Button gap         | `gap-2` (8px)    | (same)           |
+
+**Purpose**: Container padding aligns filter buttons with TodoList heading indentation on mobile
 
 ### 6. TodoList
 
