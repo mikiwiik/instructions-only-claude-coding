@@ -3,7 +3,7 @@
 This guide provides step-by-step instructions for setting up GitHub Projects for the Todo App project.
 
 > **⚠️ Migration Notice**: This project is migrating from a dual-field system (Status + Lifecycle) to a single
-> linear Status field. See [Migration Guide](../migrations/287-linear-status-migration.md) for details.
+> linear Status field. See [Migration Guide](../migrations/287-linear-status/) for details.
 > This documentation reflects the **new single-field system**.
 
 **📋 Context**: See [ADR-024: GitHub Projects Adoption](../adr/024-github-projects-adoption.md) for decision rationale.

@@ -7,10 +7,10 @@
 #
 # PREREQUISITES:
 # 1. Status field must have options: Icebox, Backlog, In Progress, Done
-# 2. Backup exists: docs/migrations/github-projects-backup-20251114-225339.json
+# 2. Backup exists: docs/migrations/287-linear-status/backup.json
 # 3. gh CLI authenticated with project scope
 #
-# Usage: ./.claude/scripts/migrate-to-linear-status.sh [--dry-run]
+# Usage: ./docs/migrations/287-linear-status/migrate.sh [--dry-run]
 #
 
 set -euo pipefail
@@ -25,7 +25,7 @@ NC='\033[0m' # No Color
 # Configuration
 PROJECT_NUMBER=1
 OWNER="mikiwiik"
-BACKUP_FILE="docs/migrations/github-projects-backup-20251114-225339.json"
+BACKUP_FILE="docs/migrations/287-linear-status/backup.json"
 DRY_RUN=false
 
 # Check for --dry-run flag
@@ -72,7 +72,7 @@ DONE_ID=$(gh project field-list "$PROJECT_NUMBER" --owner "$OWNER" --format json
 if [[ -z "$ICEBOX_ID" ]] || [[ -z "$BACKLOG_ID" ]]; then
     echo -e "${RED}❌ Status field missing required options (Icebox or Backlog)${NC}"
     echo -e "${YELLOW}Please add these options to the Status field in GitHub Projects UI first${NC}"
-    echo -e "${YELLOW}See: docs/migrations/287-linear-status-migration.md${NC}"
+    echo -e "${YELLOW}See: docs/migrations/287-linear-status/README.md${NC}"
     exit 1
 fi
 
