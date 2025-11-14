@@ -49,12 +49,12 @@ describe('ActivityTimeline', () => {
       render(<ActivityTimeline todos={[]} />);
 
       const container = screen.getByText('No activity yet').closest('div');
-      expect(container).toHaveClass('py-6', 'sm:py-8', 'px-4');
+      expect(container).toHaveClass('py-6', 'md:py-8', 'px-4');
 
       const subtitle = screen.getByText(/Start creating todos/);
       expect(subtitle).toHaveClass(
         'text-xs',
-        'sm:text-sm',
+        'md:text-sm',
         'max-w-md',
         'mx-auto'
       );
@@ -206,7 +206,7 @@ describe('ActivityTimeline', () => {
       render(<ActivityTimeline todos={todos} />);
 
       const container = screen.getByRole('main');
-      expect(container).toHaveClass('space-y-4', 'sm:space-y-6');
+      expect(container).toHaveClass('space-y-4', 'md:space-y-6');
     });
 
     it('should have responsive text sizes', () => {
@@ -214,11 +214,11 @@ describe('ActivityTimeline', () => {
       render(<ActivityTimeline todos={todos} />);
 
       const heading = screen.getByRole('heading', { level: 3 });
-      expect(heading).toHaveClass('text-base', 'sm:text-lg');
+      expect(heading).toHaveClass('text-base', 'md:text-lg');
 
       const activity = screen.getByRole('listitem');
       const textContent = activity.querySelector('p');
-      expect(textContent).toHaveClass('text-xs', 'sm:text-sm');
+      expect(textContent).toHaveClass('text-xs', 'md:text-sm');
     });
 
     it('should have responsive padding and spacing', () => {
@@ -228,13 +228,13 @@ describe('ActivityTimeline', () => {
       const activity = screen.getByRole('listitem');
       expect(activity).toHaveClass(
         'space-x-2',
-        'sm:space-x-3',
+        'md:space-x-3',
         'p-2',
-        'sm:p-3'
+        'md:p-3'
       );
 
       const icon = activity.querySelector('.flex-shrink-0 span');
-      expect(icon).toHaveClass('text-base', 'sm:text-lg');
+      expect(icon).toHaveClass('text-base', 'md:text-lg');
     });
 
     it('should handle text overflow properly', () => {
