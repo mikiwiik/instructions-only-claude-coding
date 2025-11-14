@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { X, AlertTriangle } from 'lucide-react';
+import { useDialogKeyboard } from '../hooks/useDialogKeyboard';
 
 export interface ConfirmationDialogProps {
   /** Whether the dialog is open */
@@ -59,70 +60,14 @@ export default function ConfirmationDialog({
   }, [isOpen]);
 
   // Keyboard event handlers
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      switch (event.key) {
-        case 'Escape':
-          event.preventDefault();
-          onClose();
-          break;
-        case 'Enter':
-          event.preventDefault();
-          if (!isLoading && !isConfirmDisabled) {
-            onConfirm();
-          }
-          break;
-        case 'Tab': {
-          // Trap focus within dialog
-          event.preventDefault();
-          const focusableElements = dialogRef.current?.querySelectorAll(
-            'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-          );
-
-          if (focusableElements && focusableElements.length > 0) {
-            const firstElement = focusableElements[0] as HTMLElement;
-            const lastElement = focusableElements[
-              focusableElements.length - 1
-            ] as HTMLElement;
-
-            if (event.shiftKey) {
-              if (document.activeElement === firstElement) {
-                lastElement.focus();
-              } else {
-                const currentIndex = Array.from(focusableElements).indexOf(
-                  document.activeElement as HTMLElement
-                );
-                // TODO: Refactor to reduce nesting depth - see docs/quality/remaining-complexity-fixes.md
-                // eslint-disable-next-line max-depth
-                if (currentIndex > 0) {
-                  (focusableElements[currentIndex - 1] as HTMLElement).focus();
-                }
-              }
-            } else {
-              if (document.activeElement === lastElement) {
-                firstElement.focus();
-              } else {
-                const currentIndex = Array.from(focusableElements).indexOf(
-                  document.activeElement as HTMLElement
-                );
-                // TODO: Refactor to reduce nesting depth - see docs/quality/remaining-complexity-fixes.md
-                // eslint-disable-next-line max-depth
-                if (currentIndex < focusableElements.length - 1) {
-                  (focusableElements[currentIndex + 1] as HTMLElement).focus();
-                }
-              }
-            }
-          }
-          break;
-        }
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose, onConfirm, isLoading, isConfirmDisabled]);
+  useDialogKeyboard({
+    isOpen,
+    onClose,
+    onConfirm,
+    dialogRef,
+    isLoading,
+    isConfirmDisabled,
+  });
 
   // Handle backdrop click
   const handleBackdropClick = (event: React.MouseEvent) => {

@@ -1,33 +1,14 @@
-import {
-  Circle,
-  CheckCircle,
-  X,
-  Edit2,
-  Check,
-  X as Cancel,
-  GripVertical,
-  ChevronUp,
-  ChevronDown,
-  Undo2,
-} from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
-import {
-  draggable,
-  dropTargetForElements,
-} from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
-import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import remarkBreaks from 'remark-breaks';
 import { Todo } from '../types/todo';
-import { getContextualTimestamp, getFullTimestamp } from '../utils/timestamp';
-import {
-  hasMarkdownSyntax,
-  sanitizeMarkdown,
-  markdownConfig,
-} from '../utils/markdown';
 import { useSwipeGesture } from '../hooks/useSwipeGesture';
 import { useLongPress } from '../hooks/useLongPress';
+import { useTodoItemDragAndDrop } from '../hooks/useTodoItemDragAndDrop';
+import { combineTouchHandlers, TouchHandlers } from '../utils/touchHandlers';
+import TodoItemContent from './TodoItemContent';
+import TodoItemActions from './TodoItemActions';
+import TodoItemReorderButtons from './TodoItemReorderButtons';
+import TodoItemCheckbox from './TodoItemCheckbox';
+import ConfirmationDialog from './ConfirmationDialog';
 
 // Helper function to decode HTML entities
 const decodeHtmlEntities = (text: string): string => {
@@ -85,8 +66,6 @@ const sanitizeForAriaLabel = (text: string): string => {
     .replace(/[<>]/g, '')
     .trim();
 };
-import ConfirmationDialog from './ConfirmationDialog';
-import MarkdownHelpBox from './MarkdownHelpBox';
 
 interface TodoItemProps {
   todo: Todo;
@@ -103,8 +82,30 @@ interface TodoItemProps {
   isLast?: boolean;
 }
 
-// TODO: Refactor to reduce cognitive complexity - see docs/quality/remaining-complexity-fixes.md
-// eslint-disable-next-line complexity
+/**
+ * Builds the className for a todo item
+ * Complexity: ≤5
+ */
+function buildTodoItemClassName(
+  isFirst: boolean,
+  isDeleted: boolean,
+  isDragging: boolean
+): string {
+  const borderTopClass = isFirst ? 'border-t-0' : 'border-t';
+  const stateClass = isDeleted
+    ? 'bg-muted border-dashed opacity-75'
+    : 'bg-background';
+  const draggingClass = isDragging ? 'opacity-50' : '';
+
+  return [
+    'flex items-start gap-2 sm:gap-3 p-2 sm:p-4 rounded-none sm:rounded-lg',
+    borderTopClass,
+    'border-x-0 sm:border sm:border-t border-b-0 sm:border-b fade-in transition-transform',
+    stateClass,
+    draggingClass,
+  ].join(' ');
+}
+
 export default function TodoItem({
   todo,
   onToggle,
@@ -122,124 +123,64 @@ export default function TodoItem({
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const itemRef = useRef<HTMLLIElement>(null);
   const dragHandleRef = useRef<HTMLDivElement>(null);
 
-  // Setup drag and drop with pragmatic-drag-and-drop
-  useEffect(() => {
-    const itemEl = itemRef.current;
-    const dragHandleEl = dragHandleRef.current;
-
-    if (!itemEl || !isDraggable) {
-      return;
-    }
-
-    return combine(
-      draggable({
-        element: itemEl,
-        dragHandle: dragHandleEl || undefined,
-        getInitialData: () => ({ type: 'todo-item', todoId: todo.id }),
-        onDragStart: () => setIsDragging(true),
-        onDrop: () => setIsDragging(false),
-      }),
-      dropTargetForElements({
-        element: itemEl,
-        getData: () => ({ todoId: todo.id }),
-      })
-    );
-  }, [todo.id, isDraggable]);
+  // Setup drag and drop
+  const { isDragging } = useTodoItemDragAndDrop({
+    todoId: todo.id,
+    isDraggable,
+    itemRef,
+    dragHandleRef,
+  });
 
   // Swipe gesture handlers
   const swipeGesture = useSwipeGesture({
     onSwipeRight: () => {
-      if (!todo.completedAt && !todo.deletedAt) {
-        onToggle(todo.id);
-      }
+      if (todo.completedAt || todo.deletedAt) return;
+      onToggle(todo.id);
     },
     onSwipeLeft: () => {
-      if (!todo.deletedAt) {
-        handleDelete();
-      }
+      if (todo.deletedAt) return;
+      handleDelete();
     },
   });
 
   // Long press gesture handler
   const longPressGesture = useLongPress({
     onLongPress: () => {
-      if (!isEditing && onEdit && !todo.completedAt && !todo.deletedAt) {
-        handleEdit();
-      }
+      if (isEditing || !onEdit || todo.completedAt || todo.deletedAt) return;
+      handleEdit();
     },
     delay: 500,
     shouldPreventDefault: false,
   });
 
+  // Auto-resize and focus textarea
   useEffect(() => {
-    if (isEditing && textareaRef.current) {
-      textareaRef.current.focus();
-    }
-  }, [isEditing]);
+    if (!isEditing || !textareaRef.current) return;
 
-  // Auto-resize textarea based on content
-  const autoResize = () => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    }
-  };
+    textareaRef.current.focus();
+    textareaRef.current.style.height = 'auto';
+    textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+  }, [isEditing, editText]);
 
-  useEffect(() => {
-    if (isEditing) {
-      autoResize();
-    }
-  }, [editText, isEditing]);
+  // Only allow checking (not unchecking) via the checkbox
+  const handleToggle = () => !todo.completedAt && onToggle(todo.id);
 
-  const handleToggle = () => {
-    // Only allow checking (not unchecking) via the checkbox
-    if (!todo.completedAt) {
-      onToggle(todo.id);
-    }
-  };
+  const handleRestore = () => onRestore?.(todo.id);
+  const handleRestoreDeleted = () => onRestoreDeleted?.(todo.id);
 
-  const handleRestore = () => {
-    if (onRestore && todo.completedAt) {
-      onRestore(todo.id);
-    }
-  };
-
-  const handleRestoreDeleted = () => {
-    if (onRestoreDeleted && todo.deletedAt) {
-      onRestoreDeleted(todo.id);
-    }
-  };
-
-  const handlePermanentlyDelete = () => {
-    if (onPermanentlyDelete) {
-      onPermanentlyDelete(todo.id);
-    }
-    setShowDeleteConfirm(false);
-  };
-
-  const handleDelete = () => {
-    setShowDeleteConfirm(true);
-  };
+  const handleDelete = () => setShowDeleteConfirm(true);
 
   const handleConfirmDelete = () => {
-    if (todo.deletedAt && onPermanentlyDelete) {
-      // Permanently delete already soft-deleted todos
-      handlePermanentlyDelete();
-    } else {
-      // Soft delete active todos
-      onDelete(todo.id);
-      setShowDeleteConfirm(false);
-    }
-  };
-
-  const handleCancelDelete = () => {
+    const deleteHandler = todo.deletedAt ? onPermanentlyDelete : onDelete;
+    deleteHandler?.(todo.id);
     setShowDeleteConfirm(false);
   };
+
+  const handleCancelDelete = () => setShowDeleteConfirm(false);
 
   const handleEdit = () => {
     setEditText(todo.text);
@@ -248,10 +189,10 @@ export default function TodoItem({
 
   const handleSave = () => {
     const trimmedText = editText.trim();
-    if (trimmedText && onEdit) {
-      onEdit(todo.id, trimmedText);
-      setIsEditing(false);
-    }
+    if (!trimmedText || !onEdit) return;
+
+    onEdit(todo.id, trimmedText);
+    setIsEditing(false);
   };
 
   const handleCancel = () => {
@@ -260,250 +201,82 @@ export default function TodoItem({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSave();
-    } else if (e.key === 'Escape') {
-      handleCancel();
-    }
+    if (e.key === 'Escape') return handleCancel();
+    if (e.key !== 'Enter' || e.shiftKey) return;
+
+    e.preventDefault();
+    handleSave();
   };
 
-  const handleMoveUp = () => {
-    if (moveUp && !isFirst) {
-      moveUp(todo.id);
-    }
-  };
-
-  const handleMoveDown = () => {
-    if (moveDown && !isLast) {
-      moveDown(todo.id);
-    }
-  };
+  const handleMoveUp = () => !isFirst && moveUp?.(todo.id);
+  const handleMoveDown = () => !isLast && moveDown?.(todo.id);
 
   // Combine gesture handlers for touch events
-  const touchHandlers = {
-    onTouchStart: (e: React.TouchEvent) => {
-      swipeGesture.onTouchStart(e);
-      longPressGesture.onTouchStart(e);
-    },
-    onTouchMove: (e: React.TouchEvent) => {
-      swipeGesture.onTouchMove(e);
-      longPressGesture.onTouchMove();
-    },
-    onTouchEnd: () => {
-      swipeGesture.onTouchEnd();
-      longPressGesture.onTouchEnd();
-    },
-  };
+  const touchHandlers = combineTouchHandlers(
+    swipeGesture as TouchHandlers,
+    longPressGesture as TouchHandlers
+  );
+
+  // Build item className
+  const itemClassName = buildTodoItemClassName(
+    isFirst,
+    !!todo.deletedAt,
+    isDragging
+  );
+
+  // Dialog configuration
+  const truncatedText =
+    todo.text.length > 100 ? todo.text.substring(0, 100) + '...' : todo.text;
+  const sanitizedText = sanitizeForAriaLabel(truncatedText);
+
+  const dialogTitle = todo.deletedAt
+    ? 'Permanently Delete Todo'
+    : 'Delete Todo';
+  const dialogMessage = todo.deletedAt
+    ? `Are you sure you want to permanently delete "${sanitizedText}"? This action cannot be undone.`
+    : `Are you sure you want to delete "${sanitizedText}"? You can restore it from Recently Deleted.`;
+  const dialogConfirmLabel = todo.deletedAt ? 'Permanently Delete' : 'Delete';
 
   return (
-    <li
-      ref={itemRef}
-      className={`flex items-start gap-2 sm:gap-3 p-2 sm:p-4 rounded-none sm:rounded-lg ${
-        isFirst ? 'border-t-0' : 'border-t'
-      } border-x-0 sm:border sm:border-t border-b-0 sm:border-b fade-in transition-transform ${
-        todo.deletedAt ? 'bg-muted border-dashed opacity-75' : 'bg-background'
-      } ${isDragging ? 'opacity-50' : ''}`}
-      {...touchHandlers}
-    >
-      <div className='flex flex-col md:flex-row items-center gap-1 md:gap-2'>
-        {isDraggable && (
-          <div
-            ref={dragHandleRef}
-            data-testid='drag-handle'
-            role='button'
-            tabIndex={0}
-            aria-label='Drag to reorder todo'
-            className='flex-shrink-0 p-1.5 sm:p-2 rounded cursor-grab hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring transition-colors text-muted-foreground hover:text-foreground active:cursor-grabbing min-w-[44px] min-h-[44px] flex items-center justify-center'
-          >
-            <GripVertical className='h-4 w-4' />
-          </div>
-        )}
-        <button
-          onClick={handleToggle}
-          className={`flex-shrink-0 p-1.5 sm:p-2 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${
-            todo.completedAt
-              ? 'cursor-default opacity-75'
-              : 'hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer'
-          }`}
-          aria-label={`Toggle todo: ${sanitizeForAriaLabel(todo.text)}`}
-          aria-pressed={!!todo.completedAt}
-          aria-disabled={!!todo.completedAt}
-          type='button'
-        >
-          {todo.completedAt ? (
-            <CheckCircle
-              className='h-5 w-5 text-green-500'
-              data-testid='completed-icon'
-            />
-          ) : (
-            <Circle
-              className='h-5 w-5 text-muted-foreground'
-              data-testid='incomplete-icon'
-            />
-          )}
-        </button>
-      </div>
+    <li ref={itemRef} className={itemClassName} {...touchHandlers}>
+      <TodoItemCheckbox
+        todoText={todo.text}
+        isCompleted={!!todo.completedAt}
+        isDraggable={isDraggable}
+        dragHandleRef={dragHandleRef}
+        onToggle={handleToggle}
+        sanitizeForAriaLabel={sanitizeForAriaLabel}
+      />
       <div className='flex-1 min-w-0'>
-        {isEditing ? (
-          <div className='space-y-3'>
-            <textarea
-              ref={textareaRef}
-              value={editText}
-              onChange={(e) => setEditText(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className='w-full text-base bg-background border border-border rounded px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-ring resize-none overflow-hidden min-h-[2.5rem]'
-              aria-label='Edit todo text'
-              rows={1}
-              placeholder='Enter your todo text... (Markdown formatting supported)'
-            />
-            <MarkdownHelpBox className='mt-2' />
-            <div className='flex gap-1 sm:gap-2'>
-              <button
-                onClick={handleSave}
-                className='flex-shrink-0 p-1.5 sm:p-2 rounded hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors text-muted-foreground hover:text-green-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
-                aria-label='Save edit'
-                type='button'
-              >
-                <Check className='h-4 w-4' />
-              </button>
-              <button
-                onClick={handleCancel}
-                className='flex-shrink-0 p-1.5 sm:p-2 rounded hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
-                aria-label='Cancel edit'
-                type='button'
-              >
-                <Cancel className='h-4 w-4' />
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div
-              className={`text-sm sm:text-base leading-relaxed break-words ${
-                todo.completedAt
-                  ? 'line-through text-muted-foreground'
-                  : 'text-foreground'
-              }`}
-            >
-              {hasMarkdownSyntax(todo.text) ? (
-                <div data-testid='markdown-content'>
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm, remarkBreaks]}
-                    components={markdownConfig.components}
-                    disallowedElements={markdownConfig.disallowedElements}
-                    unwrapDisallowed={markdownConfig.unwrapDisallowed}
-                  >
-                    {sanitizeMarkdown(todo.text)}
-                  </ReactMarkdown>
-                </div>
-              ) : (
-                <p className='whitespace-pre-line'>
-                  {sanitizeMarkdown(todo.text)}
-                </p>
-              )}
-            </div>
-            <p
-              className='text-xs text-muted-foreground mt-1 sm:mt-2'
-              title={getFullTimestamp(todo)}
-            >
-              {getContextualTimestamp(todo)}
-            </p>
-          </>
-        )}
+        <TodoItemContent
+          todo={todo}
+          isEditing={isEditing}
+          editText={editText}
+          textareaRef={textareaRef}
+          onEditTextChange={setEditText}
+          onSave={handleSave}
+          onCancel={handleCancel}
+          onKeyDown={handleKeyDown}
+        />
       </div>
       <div className='flex flex-col md:flex-row items-center gap-1 md:gap-2'>
-        {(moveUp || moveDown) && (
-          <div
-            role='group'
-            aria-label='Reorder todo'
-            className='flex items-center gap-0.5 sm:gap-1'
-          >
-            {moveUp && (
-              <button
-                onClick={handleMoveUp}
-                disabled={isFirst}
-                className='flex-shrink-0 p-1.5 sm:p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground min-w-[44px] min-h-[44px] flex items-center justify-center'
-                aria-label={`Move todo up: ${sanitizeForAriaLabel(todo.text)}`}
-                type='button'
-              >
-                <ChevronUp className='h-4 w-4' />
-              </button>
-            )}
-            {moveDown && (
-              <button
-                onClick={handleMoveDown}
-                disabled={isLast}
-                className='flex-shrink-0 p-1.5 sm:p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground min-w-[44px] min-h-[44px] flex items-center justify-center'
-                aria-label={`Move todo down: ${sanitizeForAriaLabel(todo.text)}`}
-                type='button'
-              >
-                <ChevronDown className='h-4 w-4' />
-              </button>
-            )}
-          </div>
-        )}
-        <div
-          role='group'
-          aria-label='Todo actions'
-          className='flex items-center gap-0.5 sm:gap-1'
-        >
-          {todo.deletedAt ? (
-            // Actions for deleted todos
-            <>
-              {onRestoreDeleted && (
-                <button
-                  onClick={handleRestoreDeleted}
-                  className='flex-shrink-0 p-1.5 sm:p-2 rounded-full hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors text-muted-foreground hover:text-green-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
-                  aria-label={`Restore todo: ${sanitizeForAriaLabel(todo.text)}`}
-                  type='button'
-                >
-                  <Undo2 className='h-4 w-4' />
-                </button>
-              )}
-              <button
-                onClick={handleDelete}
-                className='flex-shrink-0 p-1.5 sm:p-2 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
-                aria-label={`Permanently delete todo: ${sanitizeForAriaLabel(todo.text)}`}
-                type='button'
-              >
-                <X className='h-4 w-4' />
-              </button>
-            </>
-          ) : (
-            // Actions for active todos
-            <>
-              {todo.completedAt && onRestore && (
-                <button
-                  onClick={handleRestore}
-                  className='flex-shrink-0 p-1.5 sm:p-2 rounded-full hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-colors text-muted-foreground hover:text-yellow-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
-                  aria-label={`Undo completion: ${sanitizeForAriaLabel(todo.text)}`}
-                  type='button'
-                >
-                  <Undo2 className='h-4 w-4' />
-                </button>
-              )}
-              {!isEditing && onEdit && !todo.completedAt && (
-                <button
-                  onClick={handleEdit}
-                  className='flex-shrink-0 p-1.5 sm:p-2 rounded-full hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-muted-foreground hover:text-blue-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
-                  aria-label={`Edit todo: ${sanitizeForAriaLabel(todo.text)}`}
-                  type='button'
-                >
-                  <Edit2 className='h-4 w-4' />
-                </button>
-              )}
-              <button
-                onClick={handleDelete}
-                className='flex-shrink-0 p-1.5 sm:p-2 rounded-full hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors text-muted-foreground hover:text-red-600 min-w-[44px] min-h-[44px] flex items-center justify-center'
-                aria-label={`Delete todo: ${sanitizeForAriaLabel(todo.text)}`}
-                type='button'
-              >
-                <X className='h-4 w-4' />
-              </button>
-            </>
-          )}
-        </div>
+        <TodoItemReorderButtons
+          todoText={todo.text}
+          isFirst={isFirst}
+          isLast={isLast}
+          moveUp={moveUp ? handleMoveUp : undefined}
+          moveDown={moveDown ? handleMoveDown : undefined}
+          sanitizeForAriaLabel={sanitizeForAriaLabel}
+        />
+        <TodoItemActions
+          todo={todo}
+          isEditing={isEditing}
+          onEdit={onEdit ? handleEdit : undefined}
+          onDelete={handleDelete}
+          onRestore={onRestore ? handleRestore : undefined}
+          onRestoreDeleted={onRestoreDeleted ? handleRestoreDeleted : undefined}
+          sanitizeForAriaLabel={sanitizeForAriaLabel}
+        />
       </div>
 
       {/* Delete Confirmation Dialog */}
@@ -511,13 +284,9 @@ export default function TodoItem({
         isOpen={showDeleteConfirm}
         onClose={handleCancelDelete}
         onConfirm={handleConfirmDelete}
-        title={todo.deletedAt ? 'Permanently Delete Todo' : 'Delete Todo'}
-        message={
-          todo.deletedAt
-            ? `Are you sure you want to permanently delete "${sanitizeForAriaLabel(todo.text.length > 100 ? todo.text.substring(0, 100) + '...' : todo.text)}"? This action cannot be undone.`
-            : `Are you sure you want to delete "${sanitizeForAriaLabel(todo.text.length > 100 ? todo.text.substring(0, 100) + '...' : todo.text)}"? You can restore it from Recently Deleted.`
-        }
-        confirmLabel={todo.deletedAt ? 'Permanently Delete' : 'Delete'}
+        title={dialogTitle}
+        message={dialogMessage}
+        confirmLabel={dialogConfirmLabel}
         cancelLabel='Cancel'
         variant='destructive'
       />
