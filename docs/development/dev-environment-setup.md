@@ -13,10 +13,10 @@ single source of truth across all projects.
 
 ### Setup
 
-Run the setup script in any project:
+Run the setup script from the repo:
 
 ```bash
-~/dotfiles/setup-claude-settings.sh
+./scripts/setup-claude-settings.sh
 ```
 
 The script handles:
@@ -42,7 +42,6 @@ Changes apply automatically to all projects via symlinks.
 
 - Single source of truth for personal settings
 - Automatic updates across all projects
-- Version controlled in dotfiles repo
 - Reduced setup friction for new projects
 - Consistent permissions across environments
 
