@@ -1,18 +1,11 @@
-import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
+import nextPlugin from '@next/eslint-plugin-next';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import globals from 'globals';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-});
 
 const eslintConfig = [
   // Base recommended configs
@@ -30,20 +23,60 @@ const eslintConfig = [
     ],
   },
 
-  // Next.js config using FlatCompat
-  ...compat.extends(
-    'next/core-web-vitals',
-    'next/typescript',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
-    'plugin:jsx-a11y/recommended',
-    'prettier'
-  ),
-
-  // Main configuration for all JS/TS files
+  // React plugin configuration
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
+    plugins: {
+      react: reactPlugin,
+    },
+    rules: {
+      ...reactPlugin.configs['jsx-runtime'].rules,
+      // React specific rules (preserve existing overrides)
+      'react/react-in-jsx-scope': 'off', // Not needed in Next.js
+      'react/prop-types': 'off', // Using TypeScript for prop validation
+      'react/jsx-uses-react': 'off', // Not needed in Next.js
+      'react/jsx-uses-vars': 'error',
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+  },
+
+  // React Hooks plugin configuration
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    plugins: {
+      'react-hooks': reactHooksPlugin,
+    },
+    rules: reactHooksPlugin.configs.recommended.rules,
+  },
+
+  // JSX Accessibility plugin configuration
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    plugins: {
+      'jsx-a11y': jsxA11y,
+    },
+    rules: jsxA11y.configs.recommended.rules,
+  },
+
+  // Next.js plugin configuration
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    plugins: {
+      '@next/next': nextPlugin,
+    },
+    rules: {
+      ...nextPlugin.configs.recommended.rules,
+      ...nextPlugin.configs['core-web-vitals'].rules,
+    },
+  },
+
+  // TypeScript plugin configuration
+  {
+    files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -63,18 +96,37 @@ const eslintConfig = [
       '@typescript-eslint': tsPlugin,
     },
     rules: {
-      // TypeScript specific rules
+      ...tsPlugin.configs.recommended.rules,
+      // TypeScript specific rules (preserve existing overrides)
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
+    },
+  },
 
-      // React specific rules
-      'react/react-in-jsx-scope': 'off', // Not needed in Next.js
-      'react/prop-types': 'off', // Using TypeScript for prop validation
-      'react/jsx-uses-react': 'off', // Not needed in Next.js
-      'react/jsx-uses-vars': 'error',
-
+  // Main configuration for all JS/TS files (complexity and general rules)
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.es2020,
+        ...globals.node,
+        React: 'readonly',
+        JSX: 'readonly',
+        NodeJS: 'readonly',
+      },
+    },
+    rules: {
       // Code complexity rules (ADR-027)
       complexity: ['error', { max: 15 }], // Cyclomatic complexity limit
       'max-depth': ['error', { max: 4 }], // Nesting depth limit
@@ -91,11 +143,6 @@ const eslintConfig = [
       'prefer-const': 'error',
       'no-var': 'error',
     },
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
   },
 
   // Configuration for test files - exempt from function length limits
@@ -105,6 +152,14 @@ const eslintConfig = [
       '**/*.test.{ts,tsx}',
       '**/*.spec.{ts,tsx}',
     ],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+        ...globals.node,
+        ...globals.browser,
+        EventListener: 'readonly',
+      },
+    },
     rules: {
       'max-lines-per-function': 'off', // Test files often have long test suites
       'max-statements': 'off', // Test assertions can be numerous

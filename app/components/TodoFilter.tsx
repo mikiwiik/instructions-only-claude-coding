@@ -47,7 +47,7 @@ export default function TodoFilter({
 
   return (
     <div
-      className='flex flex-wrap gap-2 mb-4'
+      className='flex flex-wrap gap-2 mb-4 px-2 md:px-0'
       role='tablist'
       aria-label='Filter todos'
     >
@@ -55,7 +55,7 @@ export default function TodoFilter({
         <button
           key={key}
           onClick={() => onFilterChange(key)}
-          className={`px-2 sm:px-3 py-2 text-sm rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-ring ${
+          className={`px-2 md:px-3 py-2 text-sm rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-ring ${
             currentFilter === key
               ? 'bg-primary text-primary-foreground'
               : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground'

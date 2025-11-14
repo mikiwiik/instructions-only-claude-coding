@@ -31,14 +31,14 @@ export default function TodoItemCheckbox({
           role='button'
           tabIndex={0}
           aria-label='Drag to reorder todo'
-          className='flex-shrink-0 p-1.5 sm:p-2 rounded cursor-grab hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring transition-colors text-muted-foreground hover:text-foreground active:cursor-grabbing min-w-[44px] min-h-[44px] flex items-center justify-center'
+          className='flex-shrink-0 p-1.5 md:p-2 rounded cursor-grab hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring transition-colors text-muted-foreground hover:text-foreground active:cursor-grabbing min-w-[44px] min-h-[44px] flex items-center justify-center'
         >
           <GripVertical className='h-4 w-4' />
         </div>
       )}
       <button
         onClick={onToggle}
-        className={`flex-shrink-0 p-1.5 sm:p-2 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${
+        className={`flex-shrink-0 p-1.5 md:p-2 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${
           isCompleted
             ? 'cursor-default opacity-75'
             : 'hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer'

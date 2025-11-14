@@ -98,9 +98,9 @@ function buildTodoItemClassName(
   const draggingClass = isDragging ? 'opacity-50' : '';
 
   return [
-    'flex items-start gap-2 sm:gap-3 p-2 sm:p-4 rounded-none sm:rounded-lg',
+    'flex items-start gap-2 md:gap-3 p-2 md:p-4 rounded-none md:rounded-lg',
     borderTopClass,
-    'border-x-0 sm:border sm:border-t border-b-0 sm:border-b fade-in transition-transform',
+    'border-x-0 md:border md:border-t border-b-0 md:border-b fade-in transition-transform',
     stateClass,
     draggingClass,
   ].join(' ');

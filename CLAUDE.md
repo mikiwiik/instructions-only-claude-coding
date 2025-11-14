@@ -61,7 +61,7 @@ Agent-centric development instructions for instruction-only todo application dev
 
 - **Methodology**: [docs/core/framework.md](docs/core/framework.md)
 - **Git Workflow**: [docs/core/workflows.md](docs/core/workflows.md)
-- **Project Context**: [docs/core/project-context.md](docs/core/project-context.md)
+- **Architecture Overview**: [docs/architecture/overview.md](docs/architecture/overview.md)
 
 ## Task Planning Protocol
 

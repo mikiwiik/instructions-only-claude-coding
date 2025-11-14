@@ -418,6 +418,19 @@ gh issue view #XXX
 
 ## Quality Gates
 
+### Quality Metrics
+
+Current project maintains the following quality targets:
+
+- **TypeScript Coverage**: 100% (strict mode, no `any` types)
+- **Test Coverage**: 80%+ line coverage, 100% for critical paths
+- **ESLint**: Zero warnings or errors policy
+- **Accessibility**: WCAG 2.2 AA compliance (see [docs/guidelines/accessibility-requirements.md](../guidelines/accessibility-requirements.md))
+- **Code Complexity**: ADR-027 compliance (cognitive ≤15, nesting ≤4, cyclomatic ≤15)
+- **Performance**: Optimal React patterns and bundle size management
+
+These metrics are enforced through pre-commit hooks, CI/CD pipelines, and manual code review.
+
 ### Code Quality Standards
 
 **TypeScript Requirements:**

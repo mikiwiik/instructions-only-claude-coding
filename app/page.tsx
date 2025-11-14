@@ -38,21 +38,21 @@ export default function HomePage() {
 
   return (
     <div className='min-h-screen bg-background safe-area-inset'>
-      <div className='max-w-sm sm:max-w-md md:max-w-2xl lg:max-w-4xl mx-auto px-0 sm:px-6 py-6 sm:py-8'>
-        <header className='text-center mb-6 sm:mb-8'>
-          <div className='flex items-center justify-center gap-2 sm:gap-3'>
+      <div className='max-w-sm md:max-w-2xl lg:max-w-4xl mx-auto px-0 md:px-6 py-6 md:py-8'>
+        <header className='text-center mb-6 md:mb-8'>
+          <div className='flex items-center justify-center gap-2 md:gap-3'>
             <CheckSquare
-              className='h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-primary'
+              className='h-6 w-6 md:h-8 md:w-8 text-primary'
               aria-hidden='true'
             />
-            <h1 className='text-2xl sm:text-3xl md:text-4xl font-bold text-foreground'>
+            <h1 className='text-2xl md:text-4xl font-bold text-foreground'>
               TODO
             </h1>
           </div>
         </header>
 
         <main
-          className='bg-card border-x-0 sm:border-x border-y sm:rounded-lg p-0 sm:p-5 md:p-6 shadow-sm fade-in'
+          className='bg-card border-x-0 md:border-x border-y md:rounded-lg p-0 md:p-6 shadow-sm fade-in'
           role='main'
           aria-label='Todo application'
         >
@@ -83,7 +83,7 @@ export default function HomePage() {
           )}
         </main>
 
-        <footer className='text-center mt-6 sm:mt-8 text-xs sm:text-sm text-muted-foreground px-2 sm:px-0'>
+        <footer className='text-center mt-6 md:mt-8 text-xs md:text-sm text-muted-foreground px-2 md:px-0'>
           <p>
             100% agent implemented - 100% human instructed with{' '}
             <a
