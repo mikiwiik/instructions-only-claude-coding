@@ -384,10 +384,16 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 **File**: `app/components/TodoList.tsx`
 
-| Property         | Mobile (default)                          | Desktop (≥768px)   |
-| ---------------- | ----------------------------------------- | ------------------ |
-| Vertical spacing | `space-y-0` (0px, borders separate items) | `space-y-3` (12px) |
-| Empty state      | `py-8` (32px)                             | `py-12` (48px)     |
+| Property          | Mobile (default)                          | Desktop (≥768px)                  |
+| ----------------- | ----------------------------------------- | --------------------------------- |
+| Heading text size | `text-lg` (18px)                          | `text-xl` (20px)                  |
+| Heading weight    | `font-bold`                               | `font-bold`                       |
+| Heading padding   | `px-2 pt-2 pb-3` (8px, 8px, 12px)         | `px-0 pt-2 pb-4` (0px, 8px, 16px) |
+| Heading border    | `border-b` (bottom only)                  | `border-b-0` (none)               |
+| Vertical spacing  | `space-y-0` (0px, borders separate items) | `space-y-3` (12px)                |
+| Empty state       | `py-8` (32px)                             | `py-12` (48px)                    |
+
+**Purpose**: Heading ("Your Todos (X)") serves as visual separator between TodoFilter and TodoList
 
 ### 7. TodoItem
 
