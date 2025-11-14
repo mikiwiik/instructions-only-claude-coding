@@ -26,11 +26,11 @@ Requirements](../guidelines/accessibility-requirements.md)
 
 ### SVG Diagrams
 
-#### Mobile Layout (< 640px)
+#### Mobile Layout (< 768px)
 
 ![Mobile Layout Diagram](diagrams/mobile-layout.svg)
 
-#### Desktop Layout (≥ 640px)
+#### Desktop Layout (≥ 768px)
 
 ![Desktop Layout Diagram](diagrams/desktop-layout.svg)
 
@@ -38,26 +38,26 @@ Requirements](../guidelines/accessibility-requirements.md)
 
 ```mermaid
 graph TB
-    A[Page Container<br/>px-4 py-6 sm:px-6 sm:py-8] --> B[Header<br/>mb-6 sm:mb-8]
-    A --> C[Main Card Container<br/>p-4 sm:p-5 md:p-6]
-    A --> D[Footer<br/>mt-6 sm:mt-8]
+    A[Page Container<br/>px-0 py-6 md:px-6 md:py-8] --> B[Header<br/>mb-6 md:mb-8]
+    A --> C[Main Card Container<br/>p-0 md:p-6]
+    A --> D[Footer<br/>mt-6 md:mt-8]
 
-    C --> E[TodoForm<br/>mb-4 sm:mb-6]
+    C --> E[TodoForm<br/>mb-4 md:mb-6]
     C --> F[TodoFilter<br/>mb-4]
     C --> G[TodoList/ActivityTimeline]
 
-    E --> E1[Textarea<br/>px-3 sm:px-4 py-3]
-    E --> E2[Button<br/>px-4 sm:px-6 py-3]
+    E --> E1[Textarea<br/>px-3 md:px-4 py-3]
+    E --> E2[Button<br/>px-4 md:px-6 py-3]
 
-    F --> F1[Filter Buttons<br/>px-3 py-2, gap-2]
+    F --> F1[Filter Buttons<br/>px-2 md:px-3 py-2, gap-2]
 
-    G --> H[TodoList Container<br/>space-y-2 sm:space-y-3]
-    H --> I[TodoItem<br/>p-3 sm:p-4]
+    G --> H[TodoList Container<br/>space-y-0 md:space-y-3]
+    H --> I[TodoItem<br/>p-2 md:p-4]
 
-    I --> I1[Drag Handle<br/>p-2, 44x44px]
-    I --> I2[Checkbox<br/>p-2, 44x44px]
+    I --> I1[Drag Handle<br/>p-1.5 md:p-2, 44x44px]
+    I --> I2[Checkbox<br/>p-1.5 md:p-2, 44x44px]
     I --> I3[Content Area<br/>flex-1]
-    I --> I4[Action Buttons<br/>p-2, 44x44px each]
+    I --> I4[Action Buttons<br/>p-1.5 md:p-2, 44x44px each]
 
     style A fill:#e3f2fd
     style C fill:#f3e5f5
@@ -135,20 +135,22 @@ Content
 
 ### Responsive Breakpoints
 
-| Breakpoint | Min Width | Tailwind Prefix | Typical Use Case            |
-| ---------- | --------- | --------------- | --------------------------- |
-| Mobile     | 0px       | (default)       | iPhone 14 (393px) and up    |
-| Small      | 640px     | `sm:`           | Large phones, small tablets |
-| Medium     | 768px     | `md:`           | Tablets                     |
-| Large      | 1024px    | `lg:`           | Desktops                    |
+| Breakpoint | Min Width | Tailwind Prefix | Typical Use Case                  |
+| ---------- | --------- | --------------- | --------------------------------- |
+| Mobile     | 0px       | (default)       | iPhone 14 (393px) through tablets |
+| Medium     | 768px     | `md:`           | Desktop and larger screens        |
+| Large      | 1024px    | `lg:`           | Large desktops                    |
+
+**Note**: This application uses a simplified two-tier responsive design. The `sm:` breakpoint (640px) is not used -
+we maintain mobile layout from 0-767px, then switch directly to desktop layout at 768px.
 
 ---
 
 ## Layout Breakdowns
 
-### Mobile Layout (< 640px)
+### Mobile Layout Breakdown (< 768px)
 
-#### Full Page Breakdown
+#### Mobile Full Page Breakdown
 
 ```text
 ┌─────────────────────────────────────────────────────────────────┐
@@ -214,9 +216,9 @@ Legend:
 ▓▓▓ = TodoItem padding (p-2 = 8px all sides)
 ```
 
-### Desktop Layout (≥ 640px)
+### Desktop Layout Breakdown (≥ 768px)
 
-#### Full Page Breakdown
+#### Desktop Full Page Breakdown
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -301,7 +303,7 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 ### Key Layout Differences
 
-#### Mobile (< 640px)
+#### Mobile (< 768px)
 
 - **Edge-to-edge layout**: No horizontal padding on Page Container (`px-0`) or Card Container (`p-0`)
 - **Borders separate items**: TodoList uses `space-y-0` with `border-t` on items
@@ -310,7 +312,7 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 - **Fixed bottom elements**: GestureHint always visible at bottom
 - **Overlay help**: MarkdownHelpDrawer slides up from bottom (45% viewport height)
 
-#### Desktop (≥ 640px)
+#### Desktop (≥ 768px)
 
 - **Contained layout**: Page Container has `px-6` (24px), Card Container has `p-5` (20px)
 - **Gaps between items**: TodoList uses `space-y-3` (12px)
@@ -328,7 +330,7 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 **File**: `app/page.tsx`
 
-| Property           | Mobile (default)          | Desktop (≥640px) |
+| Property           | Mobile (default)          | Desktop (≥768px) |
 | ------------------ | ------------------------- | ---------------- |
 | Horizontal padding | `px-0` (0px edge-to-edge) | `px-6` (24px)    |
 | Vertical padding   | `py-6` (24px)             | `py-8` (32px)    |
@@ -339,7 +341,7 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 **File**: `app/page.tsx`
 
-| Property         | Mobile (default) | Desktop (≥640px) |
+| Property         | Mobile (default) | Desktop (≥768px) |
 | ---------------- | ---------------- | ---------------- |
 | Bottom margin    | `mb-6` (24px)    | `mb-8` (32px)    |
 | Icon + title gap | `gap-2` (8px)    | `gap-3` (12px)   |
@@ -348,7 +350,7 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 **File**: `app/page.tsx`
 
-| Property | Mobile (default)                     | Small (≥640px)            | Medium (≥768px) |
+| Property | Mobile (default)                     | Medium (≥768px)           | Medium (≥768px) |
 | -------- | ------------------------------------ | ------------------------- | --------------- |
 | Padding  | `p-0` (0px, edge-to-edge)            | `p-5` (20px)              | `p-6` (24px)    |
 | Borders  | `border-x-0` (no horizontal borders) | `border-x` (full borders) | (same)          |
@@ -359,7 +361,7 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 **File**: `app/components/TodoForm.tsx`
 
-| Property             | Mobile (default) | Desktop (≥640px) |
+| Property             | Mobile (default) | Desktop (≥768px) |
 | -------------------- | ---------------- | ---------------- |
 | Container margin     | `mb-4` (16px)    | `mb-6` (24px)    |
 | Textarea padding (H) | `px-3` (12px)    | `px-4` (16px)    |
@@ -371,7 +373,7 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 **File**: `app/components/TodoFilter.tsx`
 
-| Property           | Mobile (default) | Desktop (≥640px) |
+| Property           | Mobile (default) | Desktop (≥768px) |
 | ------------------ | ---------------- | ---------------- |
 | Container margin   | `mb-4` (16px)    | (same)           |
 | Button padding (H) | `px-2` (8px)     | `px-3` (12px)    |
@@ -382,7 +384,7 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 **File**: `app/components/TodoList.tsx`
 
-| Property         | Mobile (default)                          | Desktop (≥640px)   |
+| Property         | Mobile (default)                          | Desktop (≥768px)   |
 | ---------------- | ----------------------------------------- | ------------------ |
 | Vertical spacing | `space-y-0` (0px, borders separate items) | `space-y-3` (12px) |
 | Empty state      | `py-8` (32px)                             | `py-12` (48px)     |
@@ -391,7 +393,7 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 **File**: `app/components/TodoItem.tsx`
 
-| Property         | Mobile (default)                             | Desktop (≥640px)        |
+| Property         | Mobile (default)                             | Desktop (≥768px)        |
 | ---------------- | -------------------------------------------- | ----------------------- |
 | Padding          | `p-2` (8px all sides)                        | `p-4` (16px)            |
 | Corner radius    | `rounded-none` (flat)                        | `rounded-lg`            |
@@ -406,7 +408,7 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 **File**: `app/page.tsx`
 
-| Property         | Mobile (default) | Desktop (≥640px) |
+| Property         | Mobile (default) | Desktop (≥768px) |
 | ---------------- | ---------------- | ---------------- |
 | Top margin       | `mt-6` (24px)    | `mt-8` (32px)    |
 | Internal spacing | `mt-2` (8px)     | (same)           |
@@ -417,7 +419,7 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 ## Distance Calculations
 
-### Mobile (< 640px)
+### Mobile Distance Calculations (< 768px)
 
 **Horizontal**:
 
@@ -433,14 +435,14 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 - Header → Header margin: **24px** (`mb-6`)
 - **Total from top edge to card**: 48px
 
-### Desktop (≥ 640px)
+### Desktop Distance Calculations (≥ 768px)
 
 **Horizontal**:
 
-- Screen edge → Page padding: **24px** (`px-6`)
+- Screen edge → Page padding: **24px** (`px-6` via `md:px-6`)
 - Page padding → Card border: **0px**
-- Card border → Card padding: **20px** (`p-5`)
-- **Total from edge to content**: 44px
+- Card border → Card padding: **24px** (`p-6` via `md:p-6`)
+- **Total from edge to content**: 48px
 
 **Vertical**:
 
@@ -458,14 +460,14 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 **What it IS**:
 
 - The gap between TodoItem components
-- Controlled by: **TodoList** component → `space-y-0 sm:space-y-3`
+- Controlled by: **TodoList** component → `space-y-0 md:space-y-3`
 - Mobile: 0px (borders separate items), Desktop: 12px
 
 **What it is NOT**:
 
-- Padding inside TodoItem (that's `p-2 sm:p-4`)
+- Padding inside TodoItem (that's `p-2 md:p-4`)
 - Margin around TodoList container (that's TodoFilter's `mb-4`)
-- Space between item content and buttons (that's `gap-2 sm:gap-3`)
+- Space between item content and buttons (that's `gap-2 md:gap-3`)
 - Border-top on items (that's the visual separator on mobile)
 
 ### Scenario 2: "Horizontal spacing in items"
@@ -473,21 +475,21 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 **What it IS**:
 
 - Padding inside TodoItem creating space from border to content
-- Controlled by: **TodoItem** component → `p-2 sm:p-4`
+- Controlled by: **TodoItem** component → `p-2 md:p-4`
 - Mobile: 8px, Desktop: 16px
 
 **What it is NOT**:
 
-- Gap between checkbox and text (that's `gap-2 sm:gap-3`)
-- Page padding (that's `px-0 sm:px-6` - edge-to-edge on mobile)
-- Card padding (that's `p-0 sm:p-5 md:p-6` - edge-to-edge on mobile)
+- Gap between checkbox and text (that's `gap-2 md:gap-3`)
+- Page padding (that's `px-0 md:px-6` - edge-to-edge on mobile)
+- Card padding (that's `p-0 md:p-6` - edge-to-edge on mobile)
 
 ### Scenario 3: "Distance from screen edge"
 
 **What it IS**:
 
-- **Layer 1**: Page padding (`px-0 sm:px-6`) = 0px/24px
-- **Layer 2**: Card padding (`p-0 sm:p-5`) = 0px/20px
+- **Layer 1**: Page padding (`px-0 md:px-6`) = 0px/24px
+- **Layer 2**: Card padding (`p-0 md:p-6`) = 0px/20px
 - **Total**: 0px (mobile - edge-to-edge) / 44px (desktop) from edge to content
 
 **What it is NOT**:
@@ -523,8 +525,8 @@ When discussing layout changes, use these component names and terminology for cl
 
 **When discussing spacing changes:**
 
-- ✅ "The vertical whitespace is `space-y-0 sm:space-y-3` in the **TodoList** component"
-- ✅ "The horizontal padding is `p-2 sm:p-4` in the **TodoItem** component"
+- ✅ "The vertical whitespace is `space-y-0 md:space-y-3` in the **TodoList** component"
+- ✅ "The horizontal padding is `p-2 md:p-4` in the **TodoItem** component"
 - ✅ "Edge-to-edge means `px-0` and `p-0` on mobile - 0px from screen edge"
 
 **Reference format:**
@@ -534,7 +536,7 @@ When discussing layout changes, use these component names and terminology for cl
 - **Visual diagrams** from this document for context
 
 **Example**: "We need to add vertical whitespace in the TodoList on mobile - that's the
-`space-y-0 sm:space-y-3`, currently 0px mobile (borders separate) / 12px desktop"
+`space-y-0 md:space-y-3`, currently 0px mobile (borders separate) / 12px desktop"
 
 ---
 
