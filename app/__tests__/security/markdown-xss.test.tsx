@@ -3,79 +3,53 @@ import userEvent from '@testing-library/user-event';
 import TodoItem from '../../components/TodoItem';
 import { createMockTodo } from '../utils/test-utils';
 import { sanitizeMarkdown } from '../../utils/markdown';
+import { XSS_PAYLOADS } from '../fixtures/test-constants';
+import {
+  createMockCallbacks,
+  clearMockCallbacks,
+  TodoItemCallbacks,
+} from '../utils/mock-callbacks';
+import { renderTodoItem } from '../utils/render-helpers';
+import { expectNoXSS, expectNoEventHandlers } from '../utils/assertion-helpers';
 
 describe('Markdown XSS Security Tests', () => {
-  const mockOnToggle = jest.fn();
-  const mockOnDelete = jest.fn();
-  const mockOnEdit = jest.fn();
+  let callbacks: TodoItemCallbacks;
 
   beforeEach(() => {
-    mockOnToggle.mockClear();
-    mockOnDelete.mockClear();
-    mockOnEdit.mockClear();
+    callbacks = createMockCallbacks();
+  });
+
+  afterEach(() => {
+    clearMockCallbacks(callbacks);
   });
 
   describe('Script Injection Prevention', () => {
     it('should prevent basic script injection', () => {
-      const maliciousInput = '<script>alert("XSS")</script>';
-      const todo = createMockTodo({ text: maliciousInput });
-
-      render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-          onEdit={mockOnEdit}
-        />
-      );
-
-      // Script tags should not be present in the rendered output
-      expect(document.body.innerHTML).not.toContain('<script>');
-      expect(document.body.innerHTML).not.toContain('alert("XSS")');
+      const todo = createMockTodo({ text: XSS_PAYLOADS.SCRIPT_BASIC });
+      renderTodoItem(todo, callbacks);
+      expectNoXSS();
     });
 
     it('should prevent script injection in markdown links', () => {
-      const maliciousInput = '[Click me](javascript:alert("XSS"))';
-      const todo = createMockTodo({ text: maliciousInput });
-
-      render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-          onEdit={mockOnEdit}
-        />
-      );
-
-      // JavaScript protocol should be sanitized
-      expect(document.body.innerHTML).not.toContain('javascript:');
-      expect(document.body.innerHTML).not.toContain('alert("XSS")');
+      const todo = createMockTodo({
+        text: XSS_PAYLOADS.MARKDOWN_LINK_JAVASCRIPT,
+      });
+      renderTodoItem(todo, callbacks);
+      expectNoXSS();
     });
 
     it('should prevent script injection in image tags', () => {
-      const maliciousInput = '<img src="x" onerror="alert(\'XSS\')">';
-      const todo = createMockTodo({ text: maliciousInput });
-
-      render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-          onEdit={mockOnEdit}
-        />
-      );
-
-      // Malicious attributes should be removed
-      expect(document.body.innerHTML).not.toContain('onerror');
-      expect(document.body.innerHTML).not.toContain("alert('XSS')");
+      const todo = createMockTodo({ text: XSS_PAYLOADS.ONERROR_IMG });
+      renderTodoItem(todo, callbacks);
+      expectNoEventHandlers();
     });
 
     it('should prevent inline event handlers', () => {
       const maliciousInputs = [
-        '<div onclick="alert(\'XSS\')">Click me</div>',
-        '<span onmouseover="alert(\'XSS\')">Hover me</span>',
-        '<p onload="alert(\'XSS\')">Load me</p>',
-        '<a href="#" onfocus="alert(\'XSS\')">Focus me</a>',
+        XSS_PAYLOADS.ONCLICK_DIV,
+        XSS_PAYLOADS.ONMOUSEOVER_SPAN,
+        XSS_PAYLOADS.ONLOAD_BODY,
+        XSS_PAYLOADS.ONFOCUS_LINK,
       ];
 
       maliciousInputs.forEach((input, index) => {
@@ -83,18 +57,13 @@ describe('Markdown XSS Security Tests', () => {
         const { unmount } = render(
           <TodoItem
             todo={todo}
-            onToggle={mockOnToggle}
-            onDelete={mockOnDelete}
-            onEdit={mockOnEdit}
+            onToggle={callbacks.mockOnToggle}
+            onDelete={callbacks.mockOnDelete}
+            onEdit={callbacks.mockOnEdit}
           />
         );
 
-        // No inline event handlers should be present
-        expect(document.body.innerHTML).not.toContain('onclick');
-        expect(document.body.innerHTML).not.toContain('onmouseover');
-        expect(document.body.innerHTML).not.toContain('onload');
-        expect(document.body.innerHTML).not.toContain('onfocus');
-        expect(document.body.innerHTML).not.toContain("alert('XSS')");
+        expectNoEventHandlers();
 
         unmount();
       });
@@ -103,18 +72,8 @@ describe('Markdown XSS Security Tests', () => {
 
   describe('HTML Injection Prevention', () => {
     it('should prevent iframe injection', () => {
-      const maliciousInput =
-        '<iframe src="javascript:alert(\'XSS\')"></iframe>';
-      const todo = createMockTodo({ text: maliciousInput });
-
-      render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-          onEdit={mockOnEdit}
-        />
-      );
+      const todo = createMockTodo({ text: XSS_PAYLOADS.IFRAME_BASIC });
+      renderTodoItem(todo, callbacks);
 
       expect(document.body.innerHTML).not.toContain('<iframe');
       expect(document.body.innerHTML).not.toContain('javascript:');
@@ -122,8 +81,8 @@ describe('Markdown XSS Security Tests', () => {
 
     it('should prevent object and embed injection', () => {
       const maliciousInputs = [
-        '<object data="data:text/html,<script>alert(\'XSS\')</script>"></object>',
-        '<embed src="data:image/svg+xml,<svg onload=alert(\'XSS\')>">',
+        XSS_PAYLOADS.OBJECT_DATA,
+        XSS_PAYLOADS.EMBED_SRC,
       ];
 
       maliciousInputs.forEach((input, index) => {
@@ -131,41 +90,31 @@ describe('Markdown XSS Security Tests', () => {
         const { unmount } = render(
           <TodoItem
             todo={todo}
-            onToggle={mockOnToggle}
-            onDelete={mockOnDelete}
-            onEdit={mockOnEdit}
+            onToggle={callbacks.mockOnToggle}
+            onDelete={callbacks.mockOnDelete}
+            onEdit={callbacks.mockOnEdit}
           />
         );
 
         expect(document.body.innerHTML).not.toContain('<object');
         expect(document.body.innerHTML).not.toContain('<embed');
-        expect(document.body.innerHTML).not.toContain("alert('XSS')");
+        expectNoXSS();
 
         unmount();
       });
     });
 
     it('should prevent form injection', () => {
-      const maliciousInput =
-        '<form action="javascript:alert(\'XSS\')"><input type="submit"></form>';
-      const todo = createMockTodo({ text: maliciousInput });
-
-      render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-          onEdit={mockOnEdit}
-        />
-      );
+      const todo = createMockTodo({ text: XSS_PAYLOADS.FORM_ACTION });
+      renderTodoItem(todo, callbacks);
 
       expect(document.body.innerHTML).not.toContain('<form');
-      expect(document.body.innerHTML).not.toContain('javascript:');
+      expectNoXSS();
     });
 
     it('should prevent meta and link tag injection', () => {
       const maliciousInputs = [
-        '<meta http-equiv="refresh" content="0; url=javascript:alert(\'XSS\')">',
+        XSS_PAYLOADS.META_REFRESH,
         '<link rel="stylesheet" href="javascript:alert(\'XSS\')">',
       ];
 
@@ -174,15 +123,15 @@ describe('Markdown XSS Security Tests', () => {
         const { unmount } = render(
           <TodoItem
             todo={todo}
-            onToggle={mockOnToggle}
-            onDelete={mockOnDelete}
-            onEdit={mockOnEdit}
+            onToggle={callbacks.mockOnToggle}
+            onDelete={callbacks.mockOnDelete}
+            onEdit={callbacks.mockOnEdit}
           />
         );
 
         expect(document.body.innerHTML).not.toContain('<meta');
         expect(document.body.innerHTML).not.toContain('<link');
-        expect(document.body.innerHTML).not.toContain('javascript:');
+        expectNoXSS();
 
         unmount();
       });
@@ -192,28 +141,29 @@ describe('Markdown XSS Security Tests', () => {
   describe('Data URI and Protocol Injection', () => {
     it('should prevent malicious data URIs', () => {
       const maliciousInputs = [
-        'data:text/html,<script>alert("XSS")</script>',
-        'data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4=', // base64 encoded script
+        XSS_PAYLOADS.DATA_PROTOCOL,
+        XSS_PAYLOADS.MARKDOWN_LINK_DATA,
         'data:image/svg+xml,<svg onload=alert("XSS")>',
       ];
 
       maliciousInputs.forEach((uri, index) => {
-        const maliciousMarkdown = `[Click me](${uri})`;
         const todo = createMockTodo({
           id: `test-${index}`,
-          text: maliciousMarkdown,
+          text:
+            typeof uri === 'string' && uri.startsWith('[')
+              ? uri
+              : `[Click me](${uri})`,
         });
         const { unmount } = render(
           <TodoItem
             todo={todo}
-            onToggle={mockOnToggle}
-            onDelete={mockOnDelete}
-            onEdit={mockOnEdit}
+            onToggle={callbacks.mockOnToggle}
+            onDelete={callbacks.mockOnDelete}
+            onEdit={callbacks.mockOnEdit}
           />
         );
 
-        expect(document.body.innerHTML).not.toContain(uri);
-        expect(document.body.innerHTML).not.toContain('alert');
+        expectNoXSS();
 
         unmount();
       });
@@ -221,8 +171,8 @@ describe('Markdown XSS Security Tests', () => {
 
     it('should prevent dangerous protocols', () => {
       const dangerousProtocols = [
-        'javascript:alert("XSS")',
-        'vbscript:alert("XSS")',
+        XSS_PAYLOADS.JAVASCRIPT_PROTOCOL,
+        XSS_PAYLOADS.VBSCRIPT_PROTOCOL,
         'file:///etc/passwd',
         'ftp://malicious.com',
       ];
@@ -236,9 +186,9 @@ describe('Markdown XSS Security Tests', () => {
         const { unmount } = render(
           <TodoItem
             todo={todo}
-            onToggle={mockOnToggle}
-            onDelete={mockOnDelete}
-            onEdit={mockOnEdit}
+            onToggle={callbacks.mockOnToggle}
+            onDelete={callbacks.mockOnDelete}
+            onEdit={callbacks.mockOnEdit}
           />
         );
 
@@ -267,16 +217,15 @@ describe('Markdown XSS Security Tests', () => {
         const { unmount } = render(
           <TodoItem
             todo={todo}
-            onToggle={mockOnToggle}
-            onDelete={mockOnDelete}
-            onEdit={mockOnEdit}
+            onToggle={callbacks.mockOnToggle}
+            onDelete={callbacks.mockOnDelete}
+            onEdit={callbacks.mockOnEdit}
           />
         );
 
         // Safe protocols should be preserved (though may be processed by React)
         // The important thing is no XSS occurs
-        expect(document.body.innerHTML).not.toContain('alert');
-        expect(document.body.innerHTML).not.toContain('<script');
+        expectNoXSS();
 
         unmount();
       });
@@ -285,39 +234,19 @@ describe('Markdown XSS Security Tests', () => {
 
   describe('CSS Injection Prevention', () => {
     it('should prevent CSS injection through style attributes', () => {
-      const maliciousInput =
-        '<div style="background: url(javascript:alert(\'XSS\'))">Content</div>';
-      const todo = createMockTodo({ text: maliciousInput });
-
-      render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-          onEdit={mockOnEdit}
-        />
-      );
-
-      expect(document.body.innerHTML).not.toContain('javascript:');
-      expect(document.body.innerHTML).not.toContain("alert('XSS')");
+      const todo = createMockTodo({
+        text: XSS_PAYLOADS.STYLE_BACKGROUND_URL,
+      });
+      renderTodoItem(todo, callbacks);
+      expectNoXSS();
     });
 
     it('should prevent CSS injection through style tags', () => {
-      const maliciousInput =
-        '<style>body { background: url("javascript:alert(\'XSS\')"); }</style>';
-      const todo = createMockTodo({ text: maliciousInput });
-
-      render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-          onEdit={mockOnEdit}
-        />
-      );
+      const todo = createMockTodo({ text: XSS_PAYLOADS.STYLE_IMPORT });
+      renderTodoItem(todo, callbacks);
 
       expect(document.body.innerHTML).not.toContain('<style');
-      expect(document.body.innerHTML).not.toContain('javascript:');
+      expectNoXSS();
     });
   });
 
@@ -325,15 +254,7 @@ describe('Markdown XSS Security Tests', () => {
     it('should prevent XSS in markdown code blocks', () => {
       const maliciousInput = '```html\n<script>alert("XSS")</script>\n```';
       const todo = createMockTodo({ text: maliciousInput });
-
-      render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-          onEdit={mockOnEdit}
-        />
-      );
+      renderTodoItem(todo, callbacks);
 
       // Code should be escaped and not executed
       expect(document.body.innerHTML).not.toContain('alert("XSS")');
@@ -348,77 +269,36 @@ describe('Markdown XSS Security Tests', () => {
   <img src="x" onerror="alert('XSS2')">
 </div>`;
       const todo = createMockTodo({ text: maliciousInput });
-
-      render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-          onEdit={mockOnEdit}
-        />
-      );
+      renderTodoItem(todo, callbacks);
 
       expect(document.querySelectorAll('script')).toHaveLength(0);
-      expect(document.body.innerHTML).not.toContain('onerror');
-      expect(document.body.innerHTML).not.toContain('alert');
+      expectNoEventHandlers();
     });
 
     it('should prevent XSS in markdown link titles', () => {
       const maliciousInput =
         '[Link](https://example.com "title with <script>alert(\'XSS\')</script>")';
       const todo = createMockTodo({ text: maliciousInput });
+      renderTodoItem(todo, callbacks);
 
-      render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-          onEdit={mockOnEdit}
-        />
-      );
-
-      expect(document.querySelectorAll('script')).toHaveLength(0);
-      expect(document.body.innerHTML).not.toContain("alert('XSS')");
+      expectNoXSS();
     });
 
     it('should prevent XSS in markdown image alt text', () => {
       const maliciousInput =
         '![<script>alert("XSS")</script>](https://example.com/image.png)';
       const todo = createMockTodo({ text: maliciousInput });
+      renderTodoItem(todo, callbacks);
 
-      render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-          onEdit={mockOnEdit}
-        />
-      );
-
-      expect(document.querySelectorAll('script')).toHaveLength(0);
-      expect(document.body.innerHTML).not.toContain('alert("XSS")');
+      expectNoXSS();
     });
   });
 
   describe('Advanced Attack Vectors', () => {
     it('should prevent SVG-based XSS attacks', () => {
-      const maliciousInput = `
-<svg xmlns="http://www.w3.org/2000/svg" onload="alert('XSS')">
-  <text>Malicious SVG</text>
-</svg>`;
-      const todo = createMockTodo({ text: maliciousInput });
-
-      render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-          onEdit={mockOnEdit}
-        />
-      );
-
-      expect(document.body.innerHTML).not.toContain('onload');
-      expect(document.body.innerHTML).not.toContain("alert('XSS')");
+      const todo = createMockTodo({ text: XSS_PAYLOADS.SVG_ONLOAD });
+      renderTodoItem(todo, callbacks);
+      expectNoEventHandlers();
     });
 
     it('should prevent mathml-based attacks', () => {
@@ -427,24 +307,14 @@ describe('Markdown XSS Security Tests', () => {
   <mi xlink:href="javascript:alert('XSS')">click</mi>
 </math>`;
       const todo = createMockTodo({ text: maliciousInput });
-
-      render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-          onEdit={mockOnEdit}
-        />
-      );
-
-      expect(document.body.innerHTML).not.toContain('javascript:');
-      expect(document.body.innerHTML).not.toContain("alert('XSS')");
+      renderTodoItem(todo, callbacks);
+      expectNoXSS();
     });
 
     it('should prevent encoded XSS attempts', () => {
       const encodedAttacks = [
-        '&lt;script&gt;alert(&#34;XSS&#34;)&lt;/script&gt;',
-        '%3Cscript%3Ealert%28%22XSS%22%29%3C%2Fscript%3E',
+        XSS_PAYLOADS.HTML_ENTITY_ENCODED,
+        XSS_PAYLOADS.URL_ENCODED,
         '&#60;script&#62;alert&#40;&#34;XSS&#34;&#41;&#60;/script&#62;',
       ];
 
@@ -453,14 +323,13 @@ describe('Markdown XSS Security Tests', () => {
         const { unmount } = render(
           <TodoItem
             todo={todo}
-            onToggle={mockOnToggle}
-            onDelete={mockOnDelete}
-            onEdit={mockOnEdit}
+            onToggle={callbacks.mockOnToggle}
+            onDelete={callbacks.mockOnDelete}
+            onEdit={callbacks.mockOnEdit}
           />
         );
 
-        expect(document.querySelectorAll('script')).toHaveLength(0);
-        expect(document.body.innerHTML).not.toContain('alert');
+        expectNoXSS();
 
         unmount();
       });
@@ -468,10 +337,9 @@ describe('Markdown XSS Security Tests', () => {
 
     it('should prevent bypass attempts with mixed case', () => {
       const mixedCaseAttacks = [
-        '<ScRiPt>alert("XSS")</ScRiPt>',
-        '<SCRIPT>alert("XSS")</SCRIPT>',
+        XSS_PAYLOADS.MIXED_CASE_SCRIPT,
+        XSS_PAYLOADS.UPPERCASE_ONCLICK,
         '<img SRC="javascript:alert(\'XSS\')">',
-        '<DIV ONCLICK="alert(\'XSS\')">Click</DIV>',
       ];
 
       mixedCaseAttacks.forEach((attack, index) => {
@@ -479,15 +347,14 @@ describe('Markdown XSS Security Tests', () => {
         const { unmount } = render(
           <TodoItem
             todo={todo}
-            onToggle={mockOnToggle}
-            onDelete={mockOnDelete}
-            onEdit={mockOnEdit}
+            onToggle={callbacks.mockOnToggle}
+            onDelete={callbacks.mockOnDelete}
+            onEdit={callbacks.mockOnEdit}
           />
         );
 
-        expect(document.querySelectorAll('script')).toHaveLength(0);
-        expect(document.body.innerHTML).not.toContain('alert');
-        expect(document.body.innerHTML.toLowerCase()).not.toContain('onclick');
+        expectNoXSS();
+        expectNoEventHandlers();
 
         unmount();
       });
@@ -497,15 +364,14 @@ describe('Markdown XSS Security Tests', () => {
   describe('Edit Mode Security', () => {
     it('should prevent XSS when editing malicious content', async () => {
       const user = userEvent.setup();
-      const maliciousInput = '<script>alert("XSS")</script>';
-      const todo = createMockTodo({ text: maliciousInput });
+      const todo = createMockTodo({ text: XSS_PAYLOADS.SCRIPT_BASIC });
 
       render(
         <TodoItem
           todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-          onEdit={mockOnEdit}
+          onToggle={callbacks.mockOnToggle}
+          onDelete={callbacks.mockOnDelete}
+          onEdit={callbacks.mockOnEdit}
         />
       );
 
@@ -518,7 +384,7 @@ describe('Markdown XSS Security Tests', () => {
       const textarea = screen.getByRole('textbox') as HTMLTextAreaElement;
       expect(textarea).toBeInTheDocument();
       // The raw text should be in the textarea for editing
-      expect(textarea.value).toContain(maliciousInput);
+      expect(textarea.value).toContain(XSS_PAYLOADS.SCRIPT_BASIC);
     });
 
     it('should sanitize input before saving', async () => {
@@ -528,9 +394,9 @@ describe('Markdown XSS Security Tests', () => {
       render(
         <TodoItem
           todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-          onEdit={mockOnEdit}
+          onToggle={callbacks.mockOnToggle}
+          onDelete={callbacks.mockOnDelete}
+          onEdit={callbacks.mockOnEdit}
         />
       );
 
@@ -546,7 +412,7 @@ describe('Markdown XSS Security Tests', () => {
 
       // The onEdit callback should receive the unsanitized content
       // (sanitization happens during rendering, not during saving)
-      expect(mockOnEdit).toHaveBeenCalledWith(
+      expect(callbacks.mockOnEdit).toHaveBeenCalledWith(
         'edit-test',
         '<script>alert("XSS")</script>New content'
       );
@@ -582,23 +448,12 @@ describe('Markdown XSS Security Tests', () => {
         ).not.toThrow();
       });
     });
-
-    // Note: parseMarkdownSafely is handled by react-markdown with markdownConfig
-    // The security is ensured through the configuration and sanitization
   });
 
   describe('CSP Compliance', () => {
     it('should not require unsafe-inline for styles', () => {
       const todo = createMockTodo({ text: '# Header\n**Bold** content' });
-
-      render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-          onEdit={mockOnEdit}
-        />
-      );
+      renderTodoItem(todo, callbacks);
 
       // Check that no inline styles are present that would require unsafe-inline
       const elementsWithStyle = document.querySelectorAll('[style]');
@@ -612,15 +467,7 @@ describe('Markdown XSS Security Tests', () => {
 
     it('should not require unsafe-eval for functionality', () => {
       const todo = createMockTodo({ text: '# Dynamic Content\n**Test**' });
-
-      render(
-        <TodoItem
-          todo={todo}
-          onToggle={mockOnToggle}
-          onDelete={mockOnDelete}
-          onEdit={mockOnEdit}
-        />
-      );
+      renderTodoItem(todo, callbacks);
 
       // The component should work without eval-like functionality
       expect(screen.getByRole('listitem')).toBeInTheDocument();
