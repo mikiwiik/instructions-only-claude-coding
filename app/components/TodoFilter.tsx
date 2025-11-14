@@ -47,7 +47,7 @@ export default function TodoFilter({
 
   return (
     <div
-      className='flex flex-wrap gap-2 mb-4'
+      className='flex flex-wrap gap-2 mb-4 px-2 md:px-0'
       role='tablist'
       aria-label='Filter todos'
     >
