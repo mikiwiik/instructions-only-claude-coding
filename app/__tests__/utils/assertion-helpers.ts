@@ -189,3 +189,15 @@ export const expectNoSVGInjection = (): void => {
     });
   });
 };
+
+// Simple test to satisfy Jest's requirement
+describe('Assertion Helpers', () => {
+  it('should export assertion helper functions', () => {
+    expect(expectNoXSS).toBeDefined();
+    expect(expectNoEventHandlers).toBeDefined();
+    expect(expectNoDangerousElements).toBeDefined();
+    expect(expectComprehensiveXSSSafety).toBeDefined();
+    expect(expectNoCSSInjection).toBeDefined();
+    expect(expectNoSVGInjection).toBeDefined();
+  });
+});

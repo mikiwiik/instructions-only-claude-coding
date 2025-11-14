@@ -132,3 +132,22 @@ export const expectNoCallbacksCalled = (
     }
   });
 };
+
+// Simple test to satisfy Jest's requirement
+describe('Mock Callbacks', () => {
+  it('should export mock callback utilities', () => {
+    expect(createMockCallbacks).toBeDefined();
+    expect(createMockCallbacksWithReorder).toBeDefined();
+    expect(clearMockCallbacks).toBeDefined();
+    expect(resetMockCallbacks).toBeDefined();
+    expect(expectNoCallbacksCalled).toBeDefined();
+  });
+
+  it('should create mock callbacks', () => {
+    const callbacks = createMockCallbacks();
+    expect(callbacks.mockOnToggle).toBeDefined();
+    expect(callbacks.mockOnDelete).toBeDefined();
+    expect(callbacks.mockOnEdit).toBeDefined();
+    expect(callbacks.mockOnRestore).toBeDefined();
+  });
+});
