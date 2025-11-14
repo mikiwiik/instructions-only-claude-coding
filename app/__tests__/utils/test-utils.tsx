@@ -1,5 +1,7 @@
 import { render, RenderOptions } from '@testing-library/react';
 import { ReactElement } from 'react';
+import { SharedTodo, Participant } from '../../types/todo';
+import { TEST_UUIDS, TEST_COLORS } from '../fixtures/test-constants';
 
 // Mock localStorage utilities for testing
 export const mockLocalStorage = () => {
@@ -101,6 +103,57 @@ export const createMockTodo = (
   };
 };
 
+/**
+ * Create a mock SharedTodo for testing shared list functionality
+ *
+ * @param overrides - Partial SharedTodo properties to override defaults
+ * @returns Complete SharedTodo object with defaults
+ *
+ * @example
+ * const sharedTodo = createMockSharedTodo({
+ *   text: 'Shared task',
+ *   authorId: TEST_UUIDS.USER_2,
+ * });
+ */
+export const createMockSharedTodo = (
+  overrides?: Partial<SharedTodo>
+): SharedTodo => {
+  const baseTodo = createMockTodo(overrides);
+
+  return {
+    ...baseTodo,
+    listId: TEST_UUIDS.LIST_1,
+    authorId: TEST_UUIDS.USER_1,
+    lastModifiedBy: TEST_UUIDS.USER_1,
+    syncVersion: 1,
+    ...overrides,
+  };
+};
+
+/**
+ * Create a mock Participant for testing shared list participants
+ *
+ * @param overrides - Partial Participant properties to override defaults
+ * @returns Complete Participant object with defaults
+ *
+ * @example
+ * const participant = createMockParticipant({
+ *   id: TEST_UUIDS.USER_2,
+ *   color: TEST_COLORS.BLUE,
+ * });
+ */
+export const createMockParticipant = (
+  overrides?: Partial<Participant>
+): Participant => {
+  return {
+    id: TEST_UUIDS.USER_1,
+    color: TEST_COLORS.RED,
+    lastSeenAt: new Date('2023-01-01'),
+    isActive: true,
+    ...overrides,
+  };
+};
+
 // Custom render function that includes providers if needed
 const customRender = (
   ui: ReactElement,
@@ -142,5 +195,45 @@ describe('Test Utils', () => {
     expect(todo.text).toBe('Legacy completed todo');
     expect(todo.completedAt).toEqual(new Date('2023-01-01'));
     expect(todo).not.toHaveProperty('completed');
+  });
+
+  it('should create mock shared todo with default values', () => {
+    const sharedTodo = createMockSharedTodo();
+    expect(sharedTodo).toHaveProperty('id', '1');
+    expect(sharedTodo).toHaveProperty('text', 'Test todo');
+    expect(sharedTodo).toHaveProperty('listId', TEST_UUIDS.LIST_1);
+    expect(sharedTodo).toHaveProperty('authorId', TEST_UUIDS.USER_1);
+    expect(sharedTodo).toHaveProperty('lastModifiedBy', TEST_UUIDS.USER_1);
+    expect(sharedTodo).toHaveProperty('syncVersion', 1);
+  });
+
+  it('should create mock shared todo with overrides', () => {
+    const sharedTodo = createMockSharedTodo({
+      text: 'Custom shared todo',
+      authorId: TEST_UUIDS.USER_2,
+      syncVersion: 5,
+    });
+    expect(sharedTodo.text).toBe('Custom shared todo');
+    expect(sharedTodo.authorId).toBe(TEST_UUIDS.USER_2);
+    expect(sharedTodo.syncVersion).toBe(5);
+  });
+
+  it('should create mock participant with default values', () => {
+    const participant = createMockParticipant();
+    expect(participant).toHaveProperty('id', TEST_UUIDS.USER_1);
+    expect(participant).toHaveProperty('color', TEST_COLORS.RED);
+    expect(participant).toHaveProperty('isActive', true);
+    expect(participant.lastSeenAt).toEqual(new Date('2023-01-01'));
+  });
+
+  it('should create mock participant with overrides', () => {
+    const participant = createMockParticipant({
+      id: TEST_UUIDS.USER_2,
+      color: TEST_COLORS.BLUE,
+      isActive: false,
+    });
+    expect(participant.id).toBe(TEST_UUIDS.USER_2);
+    expect(participant.color).toBe(TEST_COLORS.BLUE);
+    expect(participant.isActive).toBe(false);
   });
 });
