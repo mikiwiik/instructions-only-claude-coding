@@ -29,13 +29,13 @@ export default function TodoItemReorderButtons({
     <div
       role='group'
       aria-label='Reorder todo'
-      className='flex items-center gap-0.5 sm:gap-1'
+      className='flex items-center gap-0.5 md:gap-1'
     >
       {moveUp && (
         <button
           onClick={moveUp}
           disabled={isFirst}
-          className='flex-shrink-0 p-1.5 sm:p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground min-w-[44px] min-h-[44px] flex items-center justify-center'
+          className='flex-shrink-0 p-1.5 md:p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground min-w-[44px] min-h-[44px] flex items-center justify-center'
           aria-label={`Move todo up: ${sanitizeForAriaLabel(todoText)}`}
           type='button'
         >
@@ -46,7 +46,7 @@ export default function TodoItemReorderButtons({
         <button
           onClick={moveDown}
           disabled={isLast}
-          className='flex-shrink-0 p-1.5 sm:p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground min-w-[44px] min-h-[44px] flex items-center justify-center'
+          className='flex-shrink-0 p-1.5 md:p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors text-muted-foreground hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-muted-foreground min-w-[44px] min-h-[44px] flex items-center justify-center'
           aria-label={`Move todo down: ${sanitizeForAriaLabel(todoText)}`}
           type='button'
         >
