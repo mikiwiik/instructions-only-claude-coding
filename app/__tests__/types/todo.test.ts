@@ -27,6 +27,11 @@ import {
   safeParseTodo,
   safeParseSharedTodo,
 } from '../../types/todo';
+import { TEST_UUIDS, TEST_COLORS } from '../fixtures/test-constants';
+import {
+  createMockSharedTodo,
+  createMockParticipant,
+} from '../utils/test-utils';
 
 describe('Todo Types', () => {
   it('should define a Todo interface with correct properties', () => {
@@ -83,17 +88,13 @@ describe('Todo Types', () => {
 describe('Shared List Interfaces', () => {
   describe('SharedTodo', () => {
     it('should define a SharedTodo interface extending Todo with shared list properties', () => {
-      const sharedTodo: SharedTodo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+      const sharedTodo: SharedTodo = createMockSharedTodo({
+        id: TEST_UUIDS.TODO_1,
         text: 'Shared todo item',
-        completedAt: undefined,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        listId: '550e8400-e29b-41d4-a716-446655440001',
-        authorId: '550e8400-e29b-41d4-a716-446655440002',
-        lastModifiedBy: '550e8400-e29b-41d4-a716-446655440002',
-        syncVersion: 1,
-      };
+        listId: TEST_UUIDS.LIST_1,
+        authorId: TEST_UUIDS.USER_1,
+        lastModifiedBy: TEST_UUIDS.USER_1,
+      });
 
       expect(sharedTodo).toHaveProperty('id');
       expect(sharedTodo).toHaveProperty('text');
@@ -107,12 +108,10 @@ describe('Shared List Interfaces', () => {
 
   describe('Participant', () => {
     it('should define a Participant interface with correct properties', () => {
-      const participant: Participant = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
-        color: '#FF5733',
-        lastSeenAt: new Date(),
-        isActive: true,
-      };
+      const participant: Participant = createMockParticipant({
+        id: TEST_UUIDS.TODO_1,
+        color: TEST_COLORS.RED,
+      });
 
       expect(participant).toHaveProperty('id');
       expect(participant).toHaveProperty('color');
@@ -127,13 +126,13 @@ describe('Shared List Interfaces', () => {
   describe('SharedList', () => {
     it('should define a SharedList interface with correct properties', () => {
       const sharedList: SharedList = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         name: 'Team Tasks',
         todos: [],
         createdAt: new Date(),
         updatedAt: new Date(),
         lastSyncAt: new Date(),
-        participantIds: ['550e8400-e29b-41d4-a716-446655440001'],
+        participantIds: [TEST_UUIDS.LIST_1],
         accessToken: 'test-token',
       };
 
@@ -150,19 +149,19 @@ describe('Shared List Interfaces', () => {
   describe('Conflict', () => {
     it('should define a Conflict interface with correct properties', () => {
       const baseTodo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: 'Conflicted todo',
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
-        listId: '550e8400-e29b-41d4-a716-446655440001',
-        authorId: '550e8400-e29b-41d4-a716-446655440002',
-        lastModifiedBy: '550e8400-e29b-41d4-a716-446655440002',
+        listId: TEST_UUIDS.LIST_1,
+        authorId: TEST_UUIDS.USER_1,
+        lastModifiedBy: TEST_UUIDS.USER_1,
         syncVersion: 1,
       };
 
       const conflict: Conflict = {
-        todoId: '550e8400-e29b-41d4-a716-446655440000',
+        todoId: TEST_UUIDS.TODO_1,
         localVersion: baseTodo,
         remoteVersion: { ...baseTodo, text: 'Different text', syncVersion: 2 },
         detectedAt: new Date(),
@@ -185,7 +184,7 @@ describe('Zod Validation Schemas', () => {
   describe('TodoSchema', () => {
     it('should validate a valid Todo object', () => {
       const validTodo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: 'Valid todo',
         completedAt: undefined,
         createdAt: new Date(),
@@ -208,7 +207,7 @@ describe('Zod Validation Schemas', () => {
 
     it('should reject empty text', () => {
       const invalidTodo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: '',
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -221,7 +220,7 @@ describe('Zod Validation Schemas', () => {
 
     it('should reject text exceeding 500 characters', () => {
       const invalidTodo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: 'a'.repeat(501),
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -234,14 +233,14 @@ describe('Zod Validation Schemas', () => {
   describe('SharedTodoSchema', () => {
     it('should validate a valid SharedTodo object', () => {
       const validSharedTodo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: 'Valid shared todo',
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
-        listId: '550e8400-e29b-41d4-a716-446655440001',
-        authorId: '550e8400-e29b-41d4-a716-446655440002',
-        lastModifiedBy: '550e8400-e29b-41d4-a716-446655440002',
+        listId: TEST_UUIDS.LIST_1,
+        authorId: TEST_UUIDS.USER_1,
+        lastModifiedBy: TEST_UUIDS.USER_1,
         syncVersion: 1,
       };
 
@@ -250,13 +249,13 @@ describe('Zod Validation Schemas', () => {
 
     it('should reject SharedTodo with invalid listId UUID', () => {
       const invalidSharedTodo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: 'Invalid shared todo',
         createdAt: new Date(),
         updatedAt: new Date(),
         listId: 'invalid-uuid',
-        authorId: '550e8400-e29b-41d4-a716-446655440002',
-        lastModifiedBy: '550e8400-e29b-41d4-a716-446655440002',
+        authorId: TEST_UUIDS.USER_1,
+        lastModifiedBy: TEST_UUIDS.USER_1,
         syncVersion: 1,
       };
 
@@ -267,13 +266,13 @@ describe('Zod Validation Schemas', () => {
 
     it('should reject SharedTodo with non-positive syncVersion', () => {
       const invalidSharedTodo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: 'Invalid shared todo',
         createdAt: new Date(),
         updatedAt: new Date(),
-        listId: '550e8400-e29b-41d4-a716-446655440001',
-        authorId: '550e8400-e29b-41d4-a716-446655440002',
-        lastModifiedBy: '550e8400-e29b-41d4-a716-446655440002',
+        listId: TEST_UUIDS.LIST_1,
+        authorId: TEST_UUIDS.USER_1,
+        lastModifiedBy: TEST_UUIDS.USER_1,
         syncVersion: 0,
       };
 
@@ -284,8 +283,8 @@ describe('Zod Validation Schemas', () => {
   describe('ParticipantSchema', () => {
     it('should validate a valid Participant object', () => {
       const validParticipant = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
-        color: '#FF5733',
+        id: TEST_UUIDS.TODO_1,
+        color: TEST_COLORS.RED,
         lastSeenAt: new Date(),
         isActive: true,
       };
@@ -295,7 +294,7 @@ describe('Zod Validation Schemas', () => {
 
     it('should reject Participant with invalid color format', () => {
       const invalidParticipant = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         color: 'red',
         lastSeenAt: new Date(),
         isActive: true,
@@ -309,7 +308,7 @@ describe('Zod Validation Schemas', () => {
     it('should reject Participant with invalid UUID', () => {
       const invalidParticipant = {
         id: 'invalid-uuid',
-        color: '#FF5733',
+        color: TEST_COLORS.RED,
         lastSeenAt: new Date(),
         isActive: true,
       };
@@ -323,13 +322,13 @@ describe('Zod Validation Schemas', () => {
   describe('SharedListSchema', () => {
     it('should validate a valid SharedList object', () => {
       const validSharedList = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         name: 'Team Tasks',
         todos: [],
         createdAt: new Date(),
         updatedAt: new Date(),
         lastSyncAt: new Date(),
-        participantIds: ['550e8400-e29b-41d4-a716-446655440001'],
+        participantIds: [TEST_UUIDS.LIST_1],
         accessToken: 'test-token',
       };
 
@@ -338,7 +337,7 @@ describe('Zod Validation Schemas', () => {
 
     it('should reject SharedList with empty name', () => {
       const invalidSharedList = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         name: '',
         todos: [],
         createdAt: new Date(),
@@ -354,7 +353,7 @@ describe('Zod Validation Schemas', () => {
 
     it('should reject SharedList with name exceeding 100 characters', () => {
       const invalidSharedList = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         name: 'a'.repeat(101),
         todos: [],
         createdAt: new Date(),
@@ -372,19 +371,19 @@ describe('Zod Validation Schemas', () => {
   describe('ConflictSchema', () => {
     it('should validate a valid Conflict object', () => {
       const baseTodo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: 'Conflicted todo',
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
-        listId: '550e8400-e29b-41d4-a716-446655440001',
-        authorId: '550e8400-e29b-41d4-a716-446655440002',
-        lastModifiedBy: '550e8400-e29b-41d4-a716-446655440002',
+        listId: TEST_UUIDS.LIST_1,
+        authorId: TEST_UUIDS.USER_1,
+        lastModifiedBy: TEST_UUIDS.USER_1,
         syncVersion: 1,
       };
 
       const validConflict = {
-        todoId: '550e8400-e29b-41d4-a716-446655440000',
+        todoId: TEST_UUIDS.TODO_1,
         localVersion: baseTodo,
         remoteVersion: { ...baseTodo, syncVersion: 2 },
         detectedAt: new Date(),
@@ -396,19 +395,19 @@ describe('Zod Validation Schemas', () => {
 
     it('should reject Conflict with invalid type', () => {
       const baseTodo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: 'Conflicted todo',
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
-        listId: '550e8400-e29b-41d4-a716-446655440001',
-        authorId: '550e8400-e29b-41d4-a716-446655440002',
-        lastModifiedBy: '550e8400-e29b-41d4-a716-446655440002',
+        listId: TEST_UUIDS.LIST_1,
+        authorId: TEST_UUIDS.USER_1,
+        lastModifiedBy: TEST_UUIDS.USER_1,
         syncVersion: 1,
       };
 
       const invalidConflict = {
-        todoId: '550e8400-e29b-41d4-a716-446655440000',
+        todoId: TEST_UUIDS.TODO_1,
         localVersion: baseTodo,
         remoteVersion: baseTodo,
         detectedAt: new Date(),
@@ -424,14 +423,14 @@ describe('Type Guards', () => {
   describe('isSharedTodo', () => {
     it('should return true for SharedTodo objects', () => {
       const sharedTodo: SharedTodo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: 'Shared todo',
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
-        listId: '550e8400-e29b-41d4-a716-446655440001',
-        authorId: '550e8400-e29b-41d4-a716-446655440002',
-        lastModifiedBy: '550e8400-e29b-41d4-a716-446655440002',
+        listId: TEST_UUIDS.LIST_1,
+        authorId: TEST_UUIDS.USER_1,
+        lastModifiedBy: TEST_UUIDS.USER_1,
         syncVersion: 1,
       };
 
@@ -440,7 +439,7 @@ describe('Type Guards', () => {
 
     it('should return false for regular Todo objects', () => {
       const todo: Todo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: 'Regular todo',
         completedAt: undefined,
         createdAt: new Date(),
@@ -454,7 +453,7 @@ describe('Type Guards', () => {
   describe('isLocalTodo', () => {
     it('should return true for regular Todo objects', () => {
       const todo: Todo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: 'Regular todo',
         completedAt: undefined,
         createdAt: new Date(),
@@ -466,14 +465,14 @@ describe('Type Guards', () => {
 
     it('should return false for SharedTodo objects', () => {
       const sharedTodo: SharedTodo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: 'Shared todo',
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
-        listId: '550e8400-e29b-41d4-a716-446655440001',
-        authorId: '550e8400-e29b-41d4-a716-446655440002',
-        lastModifiedBy: '550e8400-e29b-41d4-a716-446655440002',
+        listId: TEST_UUIDS.LIST_1,
+        authorId: TEST_UUIDS.USER_1,
+        lastModifiedBy: TEST_UUIDS.USER_1,
         syncVersion: 1,
       };
 
@@ -484,8 +483,8 @@ describe('Type Guards', () => {
   describe('isParticipant', () => {
     it('should return true for valid Participant objects', () => {
       const participant = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
-        color: '#FF5733',
+        id: TEST_UUIDS.TODO_1,
+        color: TEST_COLORS.RED,
         lastSeenAt: new Date(),
         isActive: true,
       };
@@ -514,19 +513,19 @@ describe('Type Guards', () => {
   describe('isConflict', () => {
     it('should return true for valid Conflict objects', () => {
       const baseTodo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: 'Conflicted todo',
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
-        listId: '550e8400-e29b-41d4-a716-446655440001',
-        authorId: '550e8400-e29b-41d4-a716-446655440002',
-        lastModifiedBy: '550e8400-e29b-41d4-a716-446655440002',
+        listId: TEST_UUIDS.LIST_1,
+        authorId: TEST_UUIDS.USER_1,
+        lastModifiedBy: TEST_UUIDS.USER_1,
         syncVersion: 1,
       };
 
       const conflict = {
-        todoId: '550e8400-e29b-41d4-a716-446655440000',
+        todoId: TEST_UUIDS.TODO_1,
         localVersion: baseTodo,
         remoteVersion: { ...baseTodo, syncVersion: 2 },
         detectedAt: new Date(),
@@ -554,7 +553,7 @@ describe('Validation Utilities', () => {
   describe('validateTodo', () => {
     it('should validate and return a valid Todo', () => {
       const validTodo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: 'Valid todo',
         completedAt: undefined,
         createdAt: new Date(),
@@ -580,14 +579,14 @@ describe('Validation Utilities', () => {
   describe('validateSharedTodo', () => {
     it('should validate and return a valid SharedTodo', () => {
       const validSharedTodo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: 'Valid shared todo',
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
-        listId: '550e8400-e29b-41d4-a716-446655440001',
-        authorId: '550e8400-e29b-41d4-a716-446655440002',
-        lastModifiedBy: '550e8400-e29b-41d4-a716-446655440002',
+        listId: TEST_UUIDS.LIST_1,
+        authorId: TEST_UUIDS.USER_1,
+        lastModifiedBy: TEST_UUIDS.USER_1,
         syncVersion: 1,
       };
 
@@ -613,8 +612,8 @@ describe('Validation Utilities', () => {
 
   describe('isValidUUID', () => {
     it('should return true for valid UUID v4 strings', () => {
-      expect(isValidUUID('550e8400-e29b-41d4-a716-446655440000')).toBe(true);
-      expect(isValidUUID('7c9e6679-7425-40de-944b-e07fc1f90ae7')).toBe(true);
+      expect(isValidUUID(TEST_UUIDS.TODO_1)).toBe(true);
+      expect(isValidUUID(TEST_UUIDS.LIST_1)).toBe(true);
     });
 
     it('should return false for invalid UUIDs', () => {
@@ -628,7 +627,7 @@ describe('Validation Utilities', () => {
   describe('safeParseTodo', () => {
     it('should return success object for valid Todo', () => {
       const validTodo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: 'Valid todo',
         completedAt: undefined,
         createdAt: new Date(),
@@ -661,14 +660,14 @@ describe('Validation Utilities', () => {
   describe('safeParseSharedTodo', () => {
     it('should return success object for valid SharedTodo', () => {
       const validSharedTodo = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
+        id: TEST_UUIDS.TODO_1,
         text: 'Valid shared todo',
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
-        listId: '550e8400-e29b-41d4-a716-446655440001',
-        authorId: '550e8400-e29b-41d4-a716-446655440002',
-        lastModifiedBy: '550e8400-e29b-41d4-a716-446655440002',
+        listId: TEST_UUIDS.LIST_1,
+        authorId: TEST_UUIDS.USER_1,
+        lastModifiedBy: TEST_UUIDS.USER_1,
         syncVersion: 1,
       };
 
@@ -734,17 +733,17 @@ describe('API Request/Response Types', () => {
     it('should define CreateSharedListResponse with correct properties', () => {
       const response: CreateSharedListResponse = {
         list: {
-          id: '550e8400-e29b-41d4-a716-446655440000',
+          id: TEST_UUIDS.TODO_1,
           name: 'Team Tasks',
           todos: [],
           createdAt: new Date(),
           updatedAt: new Date(),
           lastSyncAt: new Date(),
-          participantIds: ['550e8400-e29b-41d4-a716-446655440001'],
+          participantIds: [TEST_UUIDS.LIST_1],
         },
         participant: {
-          id: '550e8400-e29b-41d4-a716-446655440001',
-          color: '#FF5733',
+          id: TEST_UUIDS.LIST_1,
+          color: TEST_COLORS.RED,
           lastSeenAt: new Date(),
           isActive: true,
         },
@@ -760,7 +759,7 @@ describe('API Request/Response Types', () => {
   describe('SyncRequest', () => {
     it('should define SyncRequest with correct properties', () => {
       const request: SyncRequest = {
-        listId: '550e8400-e29b-41d4-a716-446655440000',
+        listId: TEST_UUIDS.TODO_1,
         accessToken: 'test-token',
         localChanges: {
           added: [],
@@ -791,8 +790,8 @@ describe('API Request/Response Types', () => {
         conflicts: [],
         participants: [
           {
-            id: '550e8400-e29b-41d4-a716-446655440001',
-            color: '#FF5733',
+            id: TEST_UUIDS.LIST_1,
+            color: TEST_COLORS.RED,
             lastSeenAt: new Date(),
             isActive: true,
           },
