@@ -116,3 +116,11 @@ export const renderTodoItemWithProps = (
     callbacks,
   };
 };
+
+// Simple test to satisfy Jest's requirement
+describe('Render Helpers', () => {
+  it('should export render helper functions', () => {
+    expect(renderTodoItem).toBeDefined();
+    expect(renderTodoItemWithProps).toBeDefined();
+  });
+});

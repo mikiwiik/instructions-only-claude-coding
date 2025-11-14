@@ -134,3 +134,14 @@ export const TEST_COLORS = {
   YELLOW: '#F1C40F',
   PURPLE: '#9B59B6',
 } as const;
+
+// Simple test to satisfy Jest's requirement
+describe('Test Constants', () => {
+  it('should export test constants', () => {
+    expect(TEST_UUIDS).toBeDefined();
+    expect(XSS_PAYLOADS).toBeDefined();
+    expect(SAFE_MARKDOWN).toBeDefined();
+    expect(TEST_DATES).toBeDefined();
+    expect(TEST_COLORS).toBeDefined();
+  });
+});
