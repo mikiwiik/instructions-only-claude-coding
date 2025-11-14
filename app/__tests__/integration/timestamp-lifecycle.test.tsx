@@ -4,6 +4,12 @@ import { renderHook, act } from '@testing-library/react';
 import { useTodos } from '../../hooks/useTodos';
 import TodoItem from '../../components/TodoItem';
 import { setupLocalStorageMock } from '../utils/test-utils';
+import {
+  createMockCallbacks,
+  clearMockCallbacks,
+  TodoItemCallbacks,
+} from '../utils/mock-callbacks';
+import { renderTodoItem } from '../utils/render-helpers';
 
 // Setup localStorage mock with automatic cleanup
 const { mockStorage, restoreLocalStorage } = setupLocalStorageMock();
@@ -196,12 +202,17 @@ describe('Timestamp Lifecycle Integration Tests', () => {
   });
 
   describe('timestamp display integration with TodoItem', () => {
-    it('should display correct contextual timestamps for different todo states', async () => {
-      const mockOnToggle = jest.fn();
-      const mockOnDelete = jest.fn();
-      const mockOnEdit = jest.fn();
-      const mockOnRestore = jest.fn();
+    let callbacks: TodoItemCallbacks;
 
+    beforeEach(() => {
+      callbacks = createMockCallbacks();
+    });
+
+    afterEach(() => {
+      clearMockCallbacks(callbacks);
+    });
+
+    it('should display correct contextual timestamps for different todo states', async () => {
       // Test different timestamp scenarios
       const scenarios = [
         {
@@ -253,16 +264,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       ];
 
       for (const scenario of scenarios) {
-        render(
-          <TodoItem
-            key={scenario.todo.id}
-            todo={scenario.todo}
-            onToggle={mockOnToggle}
-            onDelete={mockOnDelete}
-            onEdit={mockOnEdit}
-            onRestore={mockOnRestore}
-          />
-        );
+        renderTodoItem(scenario.todo, callbacks);
 
         // TODO: After implementation, check for contextual timestamp
         // expect(screen.getByText(scenario.expectedText)).toBeInTheDocument();
@@ -461,9 +463,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
 
       // Component should not crash even if timestamp utilities fail
       expect(() => {
-        render(
-          <TodoItem todo={todo} onToggle={jest.fn()} onDelete={jest.fn()} />
-        );
+        renderTodoItem(todo);
       }).not.toThrow();
 
       expect(screen.getByText('Error handling test')).toBeInTheDocument();
@@ -502,9 +502,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
         updatedAt: new Date(Date.now() - 35 * 24 * 60 * 60 * 1000),
       };
 
-      render(
-        <TodoItem todo={todo} onToggle={jest.fn()} onDelete={jest.fn()} />
-      );
+      renderTodoItem(todo);
 
       // TODO: After implementation, should show consistent date format
       // For very old dates, should show absolute date
@@ -524,9 +522,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
         updatedAt: new Date(Date.now() - 30 * 60000),
       };
 
-      render(
-        <TodoItem todo={todo} onToggle={jest.fn()} onDelete={jest.fn()} />
-      );
+      renderTodoItem(todo);
 
       // TODO: After implementation, timestamp should have proper aria attributes
       // const timestampElement = screen.getByText(/created 30 minutes ago/i);
@@ -548,14 +544,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
         updatedAt: new Date(Date.now() - 30 * 60000),
       };
 
-      render(
-        <TodoItem
-          todo={todo}
-          onToggle={jest.fn()}
-          onDelete={jest.fn()}
-          onEdit={jest.fn()}
-        />
-      );
+      renderTodoItem(todo);
 
       // Should be able to navigate to and interact with todo components
       await user.tab(); // Should focus first interactive element
