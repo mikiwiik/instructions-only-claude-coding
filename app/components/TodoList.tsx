@@ -110,7 +110,7 @@ export default function TodoList({
   return (
     <>
       <div className='space-y-2'>
-        <h3 className='text-base md:text-lg font-medium text-card-foreground mb-3 md:mb-4'>
+        <h3 className='text-lg md:text-xl font-bold text-foreground px-2 md:px-0 pt-2 pb-3 md:pb-4 border-b md:border-b-0'>
           Your Todos ({todos.length})
         </h3>
         {todosList}
