@@ -43,7 +43,6 @@ Changes apply automatically to all projects via symlinks.
 - Single source of truth for personal settings
 - Automatic updates across all projects
 - Reduced setup friction for new projects
-- Consistent permissions across environments
 
 ## Related Documentation
 
