@@ -134,7 +134,10 @@ export default function ConfirmationDialog({
   const handleBackdropKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
-      handleBackdropClick(event as unknown as React.MouseEvent);
+      // Only close if the backdrop itself is focused, not child elements
+      if (event.target === backdropRef.current) {
+        onClose();
+      }
     }
   };
 
