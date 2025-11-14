@@ -66,7 +66,7 @@ describe('TodoItem - Layout', () => {
         'flex',
         'items-center',
         'gap-0.5',
-        'sm:gap-1'
+        'md:gap-1'
       );
     });
 
@@ -86,7 +86,7 @@ describe('TodoItem - Layout', () => {
         'flex',
         'items-center',
         'gap-0.5',
-        'sm:gap-1'
+        'md:gap-1'
       );
     });
 

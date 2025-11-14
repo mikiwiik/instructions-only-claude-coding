@@ -343,7 +343,7 @@ describe('TodoForm', () => {
 
       // The min-h-[3rem] class provides 48px which exceeds the 44px accessibility requirement
       expect(submitButton).toHaveClass('min-h-[3rem]'); // 3rem = 48px > 44px minimum
-      expect(submitButton).toHaveClass('px-4', 'sm:px-6'); // Adequate horizontal padding
+      expect(submitButton).toHaveClass('px-4', 'md:px-6'); // Adequate horizontal padding
     });
 
     it('should maintain consistent button styling across different textarea states', async () => {
