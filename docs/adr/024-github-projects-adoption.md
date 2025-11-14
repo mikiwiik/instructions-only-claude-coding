@@ -226,7 +226,7 @@ After 2 months of using the dual-field system (Status + Lifecycle), actual usage
 **Migration**:
 
 - All 66 issues migrated using automated script
-- Migration guide: [docs/migrations/287-linear-status-migration.md](../migrations/287-linear-status-migration.md)
+- Migration guide: [docs/migrations/287-linear-status/](../migrations/287-linear-status/)
 - Rollback procedure documented
 
 ### Impact on Original Decision
@@ -243,7 +243,7 @@ implementation** while retaining all key benefits:
 
 - [GitHub Issue #192](https://github.com/mikiwiik/instructions-only-claude-coding/issues/192): Full evaluation and analysis
 - [GitHub Issue #287](https://github.com/mikiwiik/instructions-only-claude-coding/issues/287): Linear status simplification
-- [Migration Guide](../migrations/287-linear-status-migration.md): Dual-field to single-field migration
+- [Migration Guide](../migrations/287-linear-status/): Dual-field to single-field migration
 - [GitHub Docs: About Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects)
 - [GitHub Docs: Built-in Automations](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-built-in-automations)
 - [GitHub Docs: Customizing Views](https://docs.github.com/en/issues/planning-and-tracking-with-projects/customizing-views-in-your-project)

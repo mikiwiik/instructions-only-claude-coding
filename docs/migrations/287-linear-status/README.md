@@ -2,7 +2,7 @@
 
 **Issue**: #287
 **Date**: 2024-11-14
-**Backup**: `docs/migrations/github-projects-backup-20251114-225339.json` (66 issues)
+**Backup**: `docs/migrations/287-linear-status/backup.json` (66 issues)
 
 ---
 
@@ -67,7 +67,7 @@ Backlog
 Run the migration script in dry-run mode to preview changes:
 
 ```bash
-./.claude/scripts/migrate-to-linear-status.sh --dry-run
+./docs/migrations/287-linear-status/migrate.sh --dry-run
 ```
 
 ### Expected Output
@@ -101,7 +101,7 @@ Total issues:    66
 If dry run looks correct, execute the migration:
 
 ```bash
-./.claude/scripts/migrate-to-linear-status.sh
+./docs/migrations/287-linear-status/migrate.sh
 ```
 
 ### Migration Mapping
@@ -283,7 +283,7 @@ Create rollback script based on backup:
 # Pseudo-code - would need implementation
 while read issue; do
   restore_lifecycle_from_backup "$issue"
-done < docs/migrations/github-projects-backup-20251114-225339.json
+done < docs/migrations/287-linear-status/backup.json
 ```
 
 ### 3. Restore View Filters
@@ -334,9 +334,9 @@ Icebox → Backlog → In Progress → Done
 
 ## Support
 
-**Backup**: `docs/migrations/github-projects-backup-20251114-225339.json`
-**Script**: `.claude/scripts/migrate-to-linear-status.sh`
+**Backup**: `docs/migrations/287-linear-status/backup.json`
+**Script**: `docs/migrations/287-linear-status/migrate.sh`
 **Issue**: #287
-**ADR**: Will be amended in `docs/adr/024-github-projects-adoption.md`
+**ADR**: `docs/adr/024-github-projects-adoption.md`
 
 For issues during migration, refer to backup file and use rollback procedure.
