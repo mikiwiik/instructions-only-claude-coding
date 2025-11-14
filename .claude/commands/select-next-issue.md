@@ -5,15 +5,15 @@ argument-hint: [filter] (optional: priority level like "high", "medium", "low" o
 
 Analyze open GitHub issues and recommend the next issue to work on based on:
 
-1. **GitHub Projects Query**: Fetch issues from Backlog or Active lifecycle states (excludes Icebox by default)
+1. **GitHub Projects Query**: Fetch issues with Status of Backlog or In Progress (excludes Icebox by default)
    - Use optimized command to get project items (strips issue bodies for 94% token reduction):
 
      ```bash
      gh project item-list 1 --owner mikiwiik --format json | \
-       jq '{items: [.items[] | {content: {number: .content.number}, title: .title, labels: .labels, lifecycle: .lifecycle, status: .status}]}'
+       jq '{items: [.items[] | {content: {number: .content.number}, title: .title, labels: .labels, status: .status}]}'
      ```
 
-   - Filter for `(.lifecycle == "Backlog" OR .lifecycle == "Active") AND .status != "Done"`
+   - Filter for `(.status == "Backlog" OR .status == "In Progress")` to exclude Done and Icebox
    - Verify GitHub issue state is OPEN to exclude closed issues
    - Extract issue details from filtered project items
    - **Token Optimization**: Only metadata needed for selection (not full issue bodies)
@@ -25,14 +25,14 @@ Analyze open GitHub issues and recommend the next issue to work on based on:
 
 **Filter Logic** (if $1 provided):
 
-- If $1 = "all": Include all Lifecycle states (Icebox, Backlog, Active) using `gh issue list --state open`
-- If $1 = "high": Focus on priority-2-high issues (Backlog/Active only)
-- If $1 = "medium": Focus on priority-3-medium issues (Backlog/Active only)
-- If $1 = "low": Focus on priority-4-low issues (Backlog/Active only)
-- If $1 = "simple": Focus on complexity-simple issues (Backlog/Active only)
-- If $1 = "quick": Focus on complexity-minimal issues (Backlog/Active only)
-- If $1 = "moderate": Focus on complexity-moderate issues (Backlog/Active only)
-- Default (no argument): All Backlog/Active issues
+- If $1 = "all": Include all Status values (Icebox, Backlog, In Progress) using `gh issue list --state open`
+- If $1 = "high": Focus on priority-2-high issues (Status: Backlog or In Progress only)
+- If $1 = "medium": Focus on priority-3-medium issues (Status: Backlog or In Progress only)
+- If $1 = "low": Focus on priority-4-low issues (Status: Backlog or In Progress only)
+- If $1 = "simple": Focus on complexity-simple issues (Status: Backlog or In Progress only)
+- If $1 = "quick": Focus on complexity-minimal issues (Status: Backlog or In Progress only)
+- If $1 = "moderate": Focus on complexity-moderate issues (Status: Backlog or In Progress only)
+- Default (no argument): All Backlog/In Progress issues
 
 **Analysis Framework**:
 
@@ -41,11 +41,11 @@ Analyze open GitHub issues and recommend the next issue to work on based on:
 - **Learning Opportunities**: Lower priority + complex work
 - **Maintenance**: Medium priority + simple complexity
 
-**Lifecycle Filtering**:
+**Status Filtering**:
 
-- **Default**: Only considers Backlog and Active issues (ready for work)
-- **Icebox Excluded**: Raw ideas in Icebox are not refined enough for selection
-- **Status Filtering**: Excludes items where Status="Done" even if Lifecycle is stale
+- **Default**: Only considers Backlog and In Progress issues (ready for work)
+- **Icebox Excluded**: Raw ideas with Status="Icebox" are not refined enough for selection
+- **Done Excluded**: Completed items with Status="Done" are automatically excluded
 - **Use "all" filter**: When you need to see all issues including unrefined Icebox items
 
 **Output Format**:
