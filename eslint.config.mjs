@@ -121,6 +121,9 @@ const eslintConfig = [
         ...globals.browser,
         ...globals.es2020,
         ...globals.node,
+        React: 'readonly',
+        JSX: 'readonly',
+        NodeJS: 'readonly',
       },
     },
     rules: {
@@ -149,6 +152,14 @@ const eslintConfig = [
       '**/*.test.{ts,tsx}',
       '**/*.spec.{ts,tsx}',
     ],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+        ...globals.node,
+        ...globals.browser,
+        EventListener: 'readonly',
+      },
+    },
     rules: {
       'max-lines-per-function': 'off', // Test files often have long test suites
       'max-statements': 'off', // Test assertions can be numerous
