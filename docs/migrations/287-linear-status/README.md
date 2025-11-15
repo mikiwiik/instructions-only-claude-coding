@@ -25,6 +25,7 @@ linear Status field based on actual usage analysis showing 96% field synchroniza
 - [ ] **Step 5**: Update 3 automation workflows (5 min)
 - [ ] **Step 6**: Verify migration success (5 min)
 - [ ] **Step 7**: Delete Lifecycle field (1 min)
+- [ ] **Step 8**: Remove deprecated Todo status option (2 min)
 
 ---
 
@@ -264,6 +265,47 @@ Should NOT include "Lifecycle".
 
 ---
 
+## Step 8: Remove Deprecated "Todo" Status Option
+
+⚠️ **IMPORTANT**: The old "Todo" status option is now redundant with "Backlog" and must be removed.
+
+**Pre-deletion verification**:
+
+```bash
+# Verify NO issues still use "Todo" status
+gh project item-list 1 --owner mikiwiik --format json | \
+  jq -r '.items[] | select(.status == "Todo") | .content.number'
+```
+
+**Expected output**: Empty (no issue numbers)
+
+If any issues still have "Todo" status, the migration script didn't run correctly. Re-run it.
+
+**Steps to remove "Todo" option**:
+
+1. Go to: <https://github.com/users/mikiwiik/projects/1/settings/fields>
+2. Find "Status" field → Click "..." menu → "Edit field"
+3. Find "Todo" option → Click "..." → "Delete option"
+4. Confirm deletion
+
+**Post-deletion verification**:
+
+```bash
+gh project field-list 1 --owner mikiwiik --format json | \
+  jq -r '.fields[] | select(.name == "Status") | .options[] | .name'
+```
+
+**Expected output** (exactly 4 options):
+
+```text
+Icebox
+Backlog
+In Progress
+Done
+```
+
+---
+
 ## Rollback Procedure
 
 If critical issues discovered:
@@ -300,14 +342,14 @@ Create GitHub issue explaining what went wrong and why rollback was necessary.
 
 ---
 
-## Post-Migration Cleanup
+## Post-Migration Notes
 
 After successful migration and verification:
 
-1. Update helper script: `.claude/scripts/update-project-status.sh` (automated in PR)
-2. Update slash commands: `.claude/commands/work-on.md`, etc. (automated in PR)
-3. Update documentation (automated in PR)
-4. Optional: Remove "Todo" status option (if no longer used)
+1. Helper script updated automatically (in PR)
+2. Slash commands updated automatically (in PR)
+3. Documentation updated automatically (in PR)
+4. "Todo" status option removed (Step 8 above)
 5. Optional: Archive this migration doc after 30 days
 
 ---
