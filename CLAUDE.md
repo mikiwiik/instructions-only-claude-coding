@@ -103,6 +103,7 @@ Agent-centric development instructions for instruction-only todo application dev
 
 ## Reference Documentation
 
+- **Dev Environment Setup**: [docs/development/dev-environment-setup.md](docs/development/dev-environment-setup.md)
 - **ADR Process**: [docs/adr/PROCESS.md](docs/adr/PROCESS.md)
 - **User Flow Diagrams**: [docs/diagrams/user-flows.md](docs/diagrams/user-flows.md)
 - **Architecture Flow**: [docs/diagrams/architecture-flow.md](docs/diagrams/architecture-flow.md)
