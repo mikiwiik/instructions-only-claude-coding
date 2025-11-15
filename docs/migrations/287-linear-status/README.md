@@ -51,15 +51,17 @@ gh project field-list 1 --owner mikiwiik --format json | \
   jq -r '.fields[] | select(.name == "Status") | .options[] | .name'
 ```
 
-**Expected output**:
+**Expected output** (may include old "Todo" option initially):
 
 ```text
-Todo
-In Progress
-Done
 Icebox
 Backlog
+In Progress
+Done
+Todo (will be removed in Step 8)
 ```
+
+Note: The order shown depends on creation order. After Step 8, only the first 4 will remain.
 
 ---
 
