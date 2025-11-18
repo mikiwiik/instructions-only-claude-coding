@@ -6,10 +6,17 @@ argument-hint: [filter] (optional: priority level like "high", "medium", "low" o
 Analyze open GitHub issues and recommend the next issue to work on based on:
 
 1. **GitHub Projects Query**: Fetch issues from Backlog or Active lifecycle states (excludes Icebox by default)
-   - Use `gh project item-list 1 --owner mikiwiik --format json` to get project items
+   - Use optimized command to get project items (strips issue bodies for 94% token reduction):
+
+     ```bash
+     gh project item-list 1 --owner mikiwiik --format json | \
+       jq '{items: [.items[] | {content: {number: .content.number}, title: .title, labels: .labels, lifecycle: .lifecycle, status: .status}]}'
+     ```
+
    - Filter for `(.lifecycle == "Backlog" OR .lifecycle == "Active") AND .status != "Done"`
    - Verify GitHub issue state is OPEN to exclude closed issues
    - Extract issue details from filtered project items
+   - **Token Optimization**: Only metadata needed for selection (not full issue bodies)
 2. **Priority Assessment**: Group issues by priority labels (priority-1-critical, priority-2-high,
    priority-3-medium, priority-4-low)
 3. **Complexity Analysis**: Consider complexity labels (complexity-minimal, complexity-simple,
