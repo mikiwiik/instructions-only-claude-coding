@@ -63,6 +63,106 @@
 - **Verify repository**: Ensure you're in correct repository directory
 - **Check permissions**: Ensure write access to repository
 
+### Token Limit Issues
+
+#### Slash Command Token Limit Exceeded
+
+**Problem**: Slash command fails with "File content (X tokens) exceeds maximum allowed tokens (25000)"
+
+**Symptoms:**
+
+- Read tool fails when processing GitHub CLI data
+- Error message shows actual token count exceeding 25,000 limit
+- Command worked previously but fails with larger project data
+- Typically occurs with bulk data fetches (issues, PRs, project items)
+
+**Root Cause:**
+
+Commands fetching GitHub data with full issue/PR bodies can consume 40,000+ tokens when only 2,000-3,000 tokens
+of metadata needed. Full issue bodies contribute 85-94% of token consumption but are usually unnecessary for
+command logic.
+
+**Quick Diagnosis:**
+
+```bash
+# Measure token consumption of a command's data fetch
+gh project item-list 1 --owner mikiwiik --format json > /tmp/data.json
+wc -c /tmp/data.json
+awk '{printf "Estimated tokens: %d\n", $1/3.5}' < <(wc -c < /tmp/data.json)
+```
+
+**Solutions:**
+
+##### Solution 1: Apply jq Filter (Recommended)
+
+Strip unnecessary data immediately after fetch:
+
+```bash
+# Before: Full data (~45,000 tokens)
+gh project item-list 1 --owner mikiwiik --format json
+
+# After: Metadata only (~2,700 tokens, 94% reduction)
+gh project item-list 1 --owner mikiwiik --format json | \
+  jq '{items: [.items[] | {content: {number: .content.number}, title: .title, labels: .labels, lifecycle: .lifecycle, status: .status}]}'
+```
+
+##### Solution 2: Use Specific Field Selection
+
+When `gh` CLI supports it, use `--json` with specific fields:
+
+```bash
+# Only fetch needed fields
+gh issue list --json number,title,labels,state,createdAt --limit 100
+```
+
+##### Solution 3: Add Limit Flags
+
+Prevent unbounded data fetches:
+
+```bash
+# Limit results to manageable size
+gh issue list --limit 50
+gh pr list --limit 30
+```
+
+**Verification:**
+
+After applying optimization, verify token consumption:
+
+```bash
+# Test optimized command
+gh project item-list 1 --owner mikiwiik --format json | \
+  jq '{items: [.items[] | {content: {number: .content.number}, title: .title, labels: .labels, lifecycle: .lifecycle, status: .status}]}' \
+  > /tmp/optimized.json
+
+# Measure tokens
+wc -c /tmp/optimized.json
+awk '{printf "Estimated tokens: %d\n", $1/3.5}' < <(wc -c < /tmp/optimized.json)
+```
+
+**Target:** Keep token consumption under 15,000 tokens for bulk data fetches (leaves buffer for processing).
+
+**Prevention:**
+
+- Use [Slash Command Best Practices](../development/slash-command-best-practices.md) when developing commands
+- Test commands with real project data before deployment
+- Document token optimization choices in command files
+- Prefer metadata-only fetches for bulk operations
+
+**Related Issues:**
+
+- Issue #320 - `/select-next-issue` token limit bug fix
+- Issue #321 - Comprehensive slash command audit
+- PR #324 - First token optimization implementation
+
+**Token Budget Guidelines:**
+
+| Operation Type     | Recommended Limit | Reasoning                      |
+| ------------------ | ----------------- | ------------------------------ |
+| Single item fetch  | No limit          | Rarely exceeds 25K tokens      |
+| Bulk metadata only | 15,000 tokens     | Leaves buffer for processing   |
+| Full issue bodies  | Avoid             | Exceeds limits with 30+ issues |
+
 ### Quality Gate Failures
 
 #### ESLint Errors
