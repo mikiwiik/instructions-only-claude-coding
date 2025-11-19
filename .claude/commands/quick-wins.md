@@ -5,10 +5,18 @@ description: Find and prioritize quick win issues (high priority + simple comple
 Find quick win opportunities from triaged, ready-to-work GitHub issues:
 
 1. **Fetch Backlog/Active Issues**: Get issues from Backlog or Active lifecycle states (excludes Icebox)
-   - Use `gh project item-list 1 --owner mikiwiik --format json` to get project items
+   - Use optimized command to get project items (strips issue bodies for 94% token reduction):
+
+     ```bash
+     gh project item-list 1 --owner mikiwiik --format json | \
+       jq '{items: [.items[] | {content: {number: .content.number}, title: .title, labels: .labels, lifecycle: .lifecycle, status: .status}]}'
+     ```
+
    - Filter for `(.lifecycle == "Backlog" OR .lifecycle == "Active") AND .status != "Done"`
    - Verify GitHub issue state is OPEN to exclude closed issues
    - Extract issue details from filtered project items
+   - **Token Optimization**: Only metadata needed for analysis (not full issue bodies)
+
 2. **Filter for Quick Wins**: Identify issues that are:
    - High priority (priority-2-high) + Simple complexity (complexity-simple or complexity-minimal)
    - Medium priority (priority-3-medium) + Minimal complexity (complexity-minimal)
