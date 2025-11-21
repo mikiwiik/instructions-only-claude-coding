@@ -532,22 +532,6 @@ Assessment → Task Breakdown → User Approval → Implementation Tracking → 
 - Include: Problem statement, alternatives considered, decision rationale
 - Reference: See `docs/adr/PROCESS.md` for complete guidelines
 
-### Issue Prompt Logs (IPLs)
-
-**Purpose:** Document instruction-only development methodology
-
-**When to Create:**
-
-- For issues demonstrating effective AI collaboration patterns
-- When prompt evolution leads to successful outcomes
-- For complex requirement refinements
-
-**Process:**
-
-- Create in `docs/ipl/###-issue-title.md` matching GitHub issue numbers
-- Include: Prompt evolution, requirement refinements, lessons learned
-- Reference: See `docs/ipl/README.md` for complete guidelines
-
 ### Mermaid Diagrams
 
 **Purpose:** Create visual representations to improve documentation clarity and system understanding
