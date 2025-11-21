@@ -63,6 +63,78 @@
 - **Verify repository**: Ensure you're in correct repository directory
 - **Check permissions**: Ensure write access to repository
 
+### Token Limit Issues
+
+#### Slash Command Token Limit Exceeded
+
+**Problem**: Slash command fails with "File content (X tokens) exceeds maximum allowed tokens (25000)"
+
+**Symptoms:**
+
+- Read tool fails when processing GitHub CLI data
+- Error message shows actual token count exceeding 25,000 limit
+- Command worked previously but fails with larger project data
+- Typically occurs with bulk data fetches (issues, PRs, project items)
+
+**Root Cause:**
+
+Commands fetching GitHub data with full issue/PR bodies can consume 40,000+ tokens when only 2,000-3,000 tokens
+of metadata needed. Full issue bodies contribute 85-94% of token consumption but are usually unnecessary for
+command logic.
+
+**Quick Diagnosis:**
+
+```bash
+# Quick token estimate
+gh project item-list 1 --owner mikiwiik --format json > /tmp/data.json
+wc -c /tmp/data.json | awk '{printf "Estimated tokens: %d\n", $1/3.5}'
+```
+
+For detailed measurement procedures, see [Slash Command Best Practices - Measuring Token
+Consumption](../development/slash-command-best-practices.md#measuring-token-consumption).
+
+**Solutions:**
+
+Apply token-efficient patterns from the [Slash Command Best Practices](../development/slash-command-best-practices.md)
+guide:
+
+1. **Strip unnecessary data** - Use jq filters to remove issue bodies immediately
+2. **Use specific field selection** - Fetch only required fields with `--json`
+3. **Add limit flags** - Prevent unbounded data fetches
+
+**Example quick fix:**
+
+```bash
+# Apply jq filter to strip issue bodies (94% token reduction)
+gh project item-list 1 --owner mikiwiik --format json | \
+  jq '{items: [.items[] | {content: {number: .content.number}, title: .title, labels: .labels, lifecycle: .lifecycle, status: .status}]}'
+```
+
+See [Token-Efficient Patterns](../development/slash-command-best-practices.md#token-efficient-patterns) for complete
+pattern catalog and detailed examples.
+
+**Verification:**
+
+After applying optimization, measure token consumption to verify reduction:
+
+```bash
+# Test and measure optimized command
+<your-optimized-command> > /tmp/optimized.json
+wc -c /tmp/optimized.json | awk '{printf "Estimated tokens: %d\n", $1/3.5}'
+```
+
+**Target:** Keep bulk data fetches under 15,000 tokens (leaves buffer for processing).
+
+**Prevention:**
+
+Follow [Slash Command Best Practices](../development/slash-command-best-practices.md) for:
+
+- Token-efficient development patterns
+- Command development checklist
+- Token budget guidelines
+- Measuring token consumption
+- Related issues and implementation examples
+
 ### Quality Gate Failures
 
 #### ESLint Errors

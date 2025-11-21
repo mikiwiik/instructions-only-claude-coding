@@ -96,7 +96,7 @@ Agent-centric development instructions for instruction-only todo application dev
 - **Priority Labels**: priority-1-critical through priority-4-low
 - **Complexity Labels**: complexity-minimal through complexity-epic
 - **Category Labels**: category-feature, category-infrastructure, category-documentation, category-dx
-- **Lifecycle Stages**: Icebox → Backlog → Active → Done (GitHub Projects)
+- **Status Progression**: Icebox → Backlog → In Progress → Done (GitHub Projects)
 - **Label Guide**: [docs/reference/labels-and-priorities.md](docs/reference/labels-and-priorities.md)
 - **Project Management**: [docs/development/project-management.md](docs/development/project-management.md)
 - **GitHub Projects Setup**: [docs/development/github-projects-setup.md](docs/development/github-projects-setup.md)
@@ -119,8 +119,7 @@ docs/
 ├── core/                # Framework, workflows, project context
 ├── diagrams/            # Mermaid diagrams for architecture and user flows
 ├── reference/           # Labels, priorities, troubleshooting
-├── adr/                 # Architecture Decision Records
-└── ipl/                 # Issue Prompt Logs
+└── adr/                 # Architecture Decision Records
 ```
 
 ---
