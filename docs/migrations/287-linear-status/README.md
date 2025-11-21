@@ -6,6 +6,21 @@
 
 ---
 
+## ⚠️ Important: Temporary Dual-Field State
+
+**During migration (Steps 1-6)**, issues will have BOTH Status AND Lifecycle fields. This is
+expected and temporary. The old Lifecycle field will be deleted in **Step 7**.
+
+**Example**: Issue #287 currently shows:
+
+- Status: "In Progress" (new, correct)
+- Lifecycle: "Active" (old, will be removed)
+
+This is **not a bug** - it's the transition state. Complete Step 7 to remove the Lifecycle
+field entirely.
+
+---
+
 ## Overview
 
 Migrates GitHub Projects from a dual-field system (Status + Lifecycle) to a single
@@ -137,22 +152,30 @@ Update filters for all 5 views:
 ### View 1: "Board - Workflow"
 
 - **Current filter**: `Lifecycle:Active,Backlog`
-- **New filter**: `Status:Backlog,"In Progress"`
+- **New filter**: No filters needed (shows all statuses)
 
 **Steps**:
 
 1. Navigate to "Board - Workflow" view
 2. Click filter icon (funnel)
-3. Remove Lifecycle filter
-4. Add Status filter → Select "Backlog" and "In Progress"
-5. Save view
+3. Remove ALL filters (Lifecycle filters)
+4. Save view
+
+**Note**: With linear Status progression, you can show all statuses on one board.
+The columns will naturally show: Icebox → Backlog → In Progress → Done.
 
 ### View 2: "Backlog - Next Issue"
 
 - **Current filter**: `Lifecycle:Active,Backlog`
 - **New filter**: `Status:Backlog,"In Progress"`
 
-**Steps**: Same as View 1
+**Steps**:
+
+1. Navigate to "Backlog - Next Issue" view
+2. Click filter icon
+3. Remove Lifecycle filter
+4. Add Status filter → Select "Backlog" and "In Progress"
+5. Save view
 
 ### View 3: "Quick Wins"
 
