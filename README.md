@@ -160,6 +160,7 @@ See [Development Workflow](docs/development/workflow.md) for complete branch str
 - **🏗️ [Architecture Overview](docs/architecture/overview.md)** - Technical architecture and decisions
 - **🏗️ [Architecture Flow Diagram](docs/diagrams/architecture-flow.md)** - Visual architecture flow with Mermaid diagrams
 - **👤 [User Flow Diagrams](docs/diagrams/user-flows.md)** - Complete user interaction flows and UX documentation
+- **📊 [Development Workflow Diagram](docs/diagrams/development-workflow.md)** - Complete development process visualization
 
 ### Documentation Organization
 

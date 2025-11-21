@@ -107,6 +107,7 @@ Agent-centric development instructions for instruction-only todo application dev
 - **ADR Process**: [docs/adr/PROCESS.md](docs/adr/PROCESS.md)
 - **User Flow Diagrams**: [docs/diagrams/user-flows.md](docs/diagrams/user-flows.md)
 - **Architecture Flow**: [docs/diagrams/architecture-flow.md](docs/diagrams/architecture-flow.md)
+- **Development Workflow**: [docs/diagrams/development-workflow.md](docs/diagrams/development-workflow.md)
 - **Troubleshooting**: [docs/reference/troubleshooting.md](docs/reference/troubleshooting.md)
 - **AI Attribution Strategy**: [docs/adr/015-ai-agent-attribution-strategy.md](docs/adr/015-ai-agent-attribution-strategy.md)
 - **GitHub Projects Adoption**: [docs/adr/024-github-projects-adoption.md](docs/adr/024-github-projects-adoption.md)
