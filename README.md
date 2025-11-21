@@ -86,6 +86,10 @@ This project serves as a **template and reference** for:
 - **Quality Assurance Through AI**: Maintaining professional standards in AI-generated code
 - **Innovation in Software Development**: Pushing boundaries of what's possible with current AI capabilities
 
+> **Deep Dive**: See [Development Principles](docs/core/principles.md) for the strategic philosophy behind
+> instruction-only development, and [Agentic Coding Framework](docs/core/framework.md) for comprehensive methodology
+> details.
+
 ## Quick Start
 
 ### Prerequisites
