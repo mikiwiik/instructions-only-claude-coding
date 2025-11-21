@@ -85,83 +85,55 @@ command logic.
 **Quick Diagnosis:**
 
 ```bash
-# Measure token consumption of a command's data fetch
+# Quick token estimate
 gh project item-list 1 --owner mikiwiik --format json > /tmp/data.json
-wc -c /tmp/data.json
-awk '{printf "Estimated tokens: %d\n", $1/3.5}' < <(wc -c < /tmp/data.json)
+wc -c /tmp/data.json | awk '{printf "Estimated tokens: %d\n", $1/3.5}'
 ```
+
+For detailed measurement procedures, see [Slash Command Best Practices - Measuring Token
+Consumption](../development/slash-command-best-practices.md#measuring-token-consumption).
 
 **Solutions:**
 
-##### Solution 1: Apply jq Filter (Recommended)
+Apply token-efficient patterns from the [Slash Command Best Practices](../development/slash-command-best-practices.md)
+guide:
 
-Strip unnecessary data immediately after fetch:
+1. **Strip unnecessary data** - Use jq filters to remove issue bodies immediately
+2. **Use specific field selection** - Fetch only required fields with `--json`
+3. **Add limit flags** - Prevent unbounded data fetches
+
+**Example quick fix:**
 
 ```bash
-# Before: Full data (~45,000 tokens)
-gh project item-list 1 --owner mikiwiik --format json
-
-# After: Metadata only (~2,700 tokens, 94% reduction)
+# Apply jq filter to strip issue bodies (94% token reduction)
 gh project item-list 1 --owner mikiwiik --format json | \
   jq '{items: [.items[] | {content: {number: .content.number}, title: .title, labels: .labels, lifecycle: .lifecycle, status: .status}]}'
 ```
 
-##### Solution 2: Use Specific Field Selection
-
-When `gh` CLI supports it, use `--json` with specific fields:
-
-```bash
-# Only fetch needed fields
-gh issue list --json number,title,labels,state,createdAt --limit 100
-```
-
-##### Solution 3: Add Limit Flags
-
-Prevent unbounded data fetches:
-
-```bash
-# Limit results to manageable size
-gh issue list --limit 50
-gh pr list --limit 30
-```
+See [Token-Efficient Patterns](../development/slash-command-best-practices.md#token-efficient-patterns) for complete
+pattern catalog and detailed examples.
 
 **Verification:**
 
-After applying optimization, verify token consumption:
+After applying optimization, measure token consumption to verify reduction:
 
 ```bash
-# Test optimized command
-gh project item-list 1 --owner mikiwiik --format json | \
-  jq '{items: [.items[] | {content: {number: .content.number}, title: .title, labels: .labels, lifecycle: .lifecycle, status: .status}]}' \
-  > /tmp/optimized.json
-
-# Measure tokens
-wc -c /tmp/optimized.json
-awk '{printf "Estimated tokens: %d\n", $1/3.5}' < <(wc -c < /tmp/optimized.json)
+# Test and measure optimized command
+<your-optimized-command> > /tmp/optimized.json
+wc -c /tmp/optimized.json | awk '{printf "Estimated tokens: %d\n", $1/3.5}'
 ```
 
-**Target:** Keep token consumption under 15,000 tokens for bulk data fetches (leaves buffer for processing).
+**Target:** Keep bulk data fetches under 15,000 tokens (leaves buffer for processing).
 
 **Prevention:**
 
-- Use [Slash Command Best Practices](../development/slash-command-best-practices.md) when developing commands
-- Test commands with real project data before deployment
-- Document token optimization choices in command files
-- Prefer metadata-only fetches for bulk operations
+Follow [Slash Command Best Practices](../development/slash-command-best-practices.md) for:
 
-**Related Issues:**
-
-- Issue #320 - `/select-next-issue` token limit bug fix
-- Issue #321 - Comprehensive slash command audit
-- PR #324 - First token optimization implementation
-
-**Token Budget Guidelines:**
-
-| Operation Type     | Recommended Limit | Reasoning                      |
-| ------------------ | ----------------- | ------------------------------ |
-| Single item fetch  | No limit          | Rarely exceeds 25K tokens      |
-| Bulk metadata only | 15,000 tokens     | Leaves buffer for processing   |
-| Full issue bodies  | Avoid             | Exceeds limits with 30+ issues |
+- Token-efficient development patterns
+- Command development checklist
+- Token budget guidelines
+- Measuring token consumption
+- Related issues and implementation examples
 
 ### Quality Gate Failures
 
