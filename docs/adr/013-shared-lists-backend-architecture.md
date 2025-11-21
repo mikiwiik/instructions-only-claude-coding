@@ -132,24 +132,39 @@ interface SharedTodo extends Todo {
 
 ## Migration and Compatibility Strategy
 
-### Backward Compatibility
+**Note**: This section has been superseded by [ADR-029: Server-Only Architecture](./029-server-only-architecture.md) (2025-11-22), which established server-backed storage as the default for all lists.
 
-- Existing `useTodos()` calls work unchanged
-- localStorage remains as fallback storage
-- Progressive enhancement approach
+### ~~Backward Compatibility~~ (Superseded)
 
-### Data Migration
+~~- Existing `useTodos()` calls work unchanged~~
+~~- localStorage remains as fallback storage~~
+~~- Progressive enhancement approach~~
 
-```typescript
-// Migration flow
-localStorage todos → SharedList creation → Share URL generation
-```
+**Current approach (ADR-029):**
+- All todos stored in Vercel KV backend
+- localStorage no longer used for primary persistence
+- Server-only architecture for all lists
 
-### Hybrid Usage
+### ~~Data Migration~~ (Superseded)
 
-- Users can maintain both local and shared lists
-- Conversion between local ↔ shared available
-- No forced migration required
+~~localStorage todos → SharedList creation → Share URL generation~~
+
+**Current approach (ADR-029):**
+- Manual localStorage clear for existing users
+- Fresh start with backend storage
+- Future migration features in separate icebox issue
+
+### ~~Hybrid Usage~~ (Superseded - Removed)
+
+~~- Users can maintain both local and shared lists~~
+~~- Conversion between local ↔ shared available~~
+~~- No forced migration required~~
+
+**Current approach (ADR-029):**
+- Single backend storage for all todos
+- No hybrid local/shared model
+- Simplified architecture with backend as single source of truth
+- Optional private localStorage mode deferred to future icebox issue
 
 ## Security and Privacy Considerations
 
