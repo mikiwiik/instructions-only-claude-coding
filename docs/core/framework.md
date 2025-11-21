@@ -63,7 +63,6 @@ plan presentation, and incremental progress tracking. For complete planning proc
 ### Documentation Standards
 
 - **Architecture Decision Records (ADRs)**: Document significant technical decisions in `docs/adr/`
-- **Issue Prompt Logs (IPLs)**: Document effective AI collaboration patterns in `docs/ipl/`
 - **Mermaid Diagrams**: Create visual representations for architecture, logic flows, and system interactions
 
 For detailed documentation workflows and requirements, see [Documentation Workflow](workflows.md#documentation-workflow).

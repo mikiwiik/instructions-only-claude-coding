@@ -119,8 +119,7 @@ docs/
 ├── core/                # Framework, workflows, project context
 ├── diagrams/            # Mermaid diagrams for architecture and user flows
 ├── reference/           # Labels, priorities, troubleshooting
-├── adr/                 # Architecture Decision Records
-└── ipl/                 # Issue Prompt Logs
+└── adr/                 # Architecture Decision Records
 ```
 
 ---
