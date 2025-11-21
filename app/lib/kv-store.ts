@@ -1,7 +1,9 @@
 /**
- * Vercel KV store wrapper for shared todo lists
+ * Vercel KV store wrapper for todo lists
+ * Uses Vercel KV (Redis-compatible) for persistent storage
  */
 
+import { kv } from '@vercel/kv';
 import type { Todo } from '@/types/todo';
 
 export interface SharedTodoList {
@@ -11,15 +13,6 @@ export interface SharedTodoList {
   subscribers: string[];
 }
 
-/**
- * Simple in-memory store for development
- *
- * Note: This is a temporary implementation using Map for local development.
- * Production deployment will require migration to Vercel KV or similar persistent storage.
- * See: https://vercel.com/docs/storage/vercel-kv
- */
-const store = new Map<string, SharedTodoList>();
-
 export class KVStore {
   private static getListKey(listId: string): string {
     return `shared:list:${listId}`;
@@ -27,7 +20,8 @@ export class KVStore {
 
   static async getList(listId: string): Promise<SharedTodoList | null> {
     const key = this.getListKey(listId);
-    return store.get(key) || null;
+    const list = await kv.get<SharedTodoList>(key);
+    return list;
   }
 
   static async setList(
@@ -42,7 +36,7 @@ export class KVStore {
       lastModified: Date.now(),
       subscribers: [userId],
     };
-    store.set(key, list);
+    await kv.set(key, list);
   }
 
   static async updateTodos(listId: string, todos: Todo[]): Promise<void> {
@@ -59,11 +53,10 @@ export class KVStore {
       lastModified: Date.now(),
     };
 
-    store.set(key, updated);
+    await kv.set(key, updated);
   }
 
   static async addSubscriber(listId: string, userId: string): Promise<void> {
-    const key = this.getListKey(listId);
     const list = await this.getList(listId);
 
     if (!list) {
@@ -72,12 +65,11 @@ export class KVStore {
 
     if (!list.subscribers.includes(userId)) {
       list.subscribers.push(userId);
-      store.set(key, list);
+      await kv.set(this.getListKey(listId), list);
     }
   }
 
   static async removeSubscriber(listId: string, userId: string): Promise<void> {
-    const key = this.getListKey(listId);
     const list = await this.getList(listId);
 
     if (!list) {
@@ -85,11 +77,11 @@ export class KVStore {
     }
 
     list.subscribers = list.subscribers.filter((id) => id !== userId);
-    store.set(key, list);
+    await kv.set(this.getListKey(listId), list);
   }
 
   static async deleteList(listId: string): Promise<void> {
     const key = this.getListKey(listId);
-    store.delete(key);
+    await kv.del(key);
   }
 }
