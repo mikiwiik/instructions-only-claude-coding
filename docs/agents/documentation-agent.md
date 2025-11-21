@@ -46,8 +46,7 @@ docs/
 ├── agents/           # Agent-specific guidelines
 ├── core/             # Framework and workflow documentation
 ├── reference/        # Lookup information and troubleshooting
-├── adr/              # Architecture Decision Records
-└── ipl/              # Issue Prompt Logs
+└── adr/              # Architecture Decision Records
 ```
 
 ## Consistency Requirements
