@@ -181,45 +181,6 @@ New to the project? Start here:
 - **[Labels and Priorities](../reference/labels-and-priorities.md)** - Issue labeling guide
 - **[Troubleshooting Guide](../reference/troubleshooting.md)** - Common issues and solutions
 
-## Quick Reference
-
-### Essential Commands
-
-```bash
-# Start development
-npm run dev
-
-# Run quality checks
-npm run lint
-npm run type-check
-npm test
-
-# Create production build
-npm run build
-```
-
-### Common Workflows
-
-**Starting work on issue #123:**
-
-```bash
-/work-on 123
-# Creates branch, updates status, presents task plan
-```
-
-**Creating a PR:**
-
-```bash
-gh pr create --title "..." --body "Closes #123\n\n..."
-gh pr merge <PR_NUMBER> --auto --rebase
-```
-
-**Checking issue status:**
-
-```bash
-gh issue view 123
-```
-
 ## Contributing
 
 All development follows the instruction-only methodology documented in [CLAUDE.md](../../CLAUDE.md). See
