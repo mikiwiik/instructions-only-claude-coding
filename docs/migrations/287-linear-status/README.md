@@ -294,10 +294,12 @@ gh project item-list 1 --owner mikiwiik --format json | \
 
 **Steps**:
 
-1. Go to: <https://github.com/users/mikiwiik/projects/1/settings/fields>
-2. Find "Lifecycle" custom field
-3. Click "..." menu → "Delete field"
-4. Confirm deletion (**irreversible**)
+1. Go to: <https://github.com/users/mikiwiik/projects/1/settings/fields/Status>
+2. Verify you're on the Status field page
+3. Navigate back to fields list: <https://github.com/users/mikiwiik/projects/1/settings/fields>
+4. Find "Lifecycle" custom field
+5. Click "..." menu → "Delete field"
+6. Confirm deletion (**irreversible**)
 
 **Post-Deletion Verification**:
 
@@ -328,9 +330,9 @@ If any issues still have "Todo" status, the migration script didn't run correctl
 
 **Steps to remove "Todo" option**:
 
-1. Go to: <https://github.com/users/mikiwiik/projects/1/settings/fields>
-2. Find "Status" field → Click "..." menu → "Edit field"
-3. Find "Todo" option → Click "..." → "Delete option"
+1. Go to: <https://github.com/users/mikiwiik/projects/1/settings/fields/231179988>
+2. Find "Todo" option in the Status field options
+3. Click "..." next to "Todo" → "Delete option"
 4. Confirm deletion
 
 **Post-deletion verification**:
