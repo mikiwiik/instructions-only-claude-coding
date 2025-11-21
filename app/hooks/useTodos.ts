@@ -1,15 +1,21 @@
-import { useState } from 'react';
+/**
+ * Main todos hook - now uses Vercel KV backend for persistence
+ * Migrated from localStorage-only to server-backed storage
+ * See ADR-029 for architectural decision
+ */
+
+import { useState, useEffect, useCallback } from 'react';
 import { Todo, TodoState, TodoFilter } from '../types/todo';
 
-const STORAGE_KEY = 'todos';
+// Hardcoded list ID for main app (single list for now)
+// Future: unique per-user list IDs (separate issue)
+const MAIN_LIST_ID = 'main-list';
 
 // Generate a unique ID compatible with all browsers
 function generateId(): string {
-  // Use crypto.randomUUID if available (modern browsers), otherwise fallback
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
     return crypto.randomUUID();
   }
-  // Fallback for older browsers or test environments
   return (
     'todo-' +
     Math.random().toString(36).substring(2) +
@@ -19,65 +25,90 @@ function generateId(): string {
 }
 
 export function useTodos() {
-  const [state, setState] = useState<TodoState>(() => {
-    try {
-      const storedTodos = localStorage.getItem(STORAGE_KEY);
-      if (storedTodos) {
-        const parsedTodos = JSON.parse(storedTodos);
-        // Convert date strings back to Date objects and ensure backward compatibility
-        const todosWithDates = parsedTodos.map(
-          (
-            todo: Partial<Todo> & {
-              createdAt: string;
-              updatedAt: string;
-              deletedAt?: string;
-              completedAt?: string;
-              completed?: boolean;
-            }
-          ) => ({
+  const [state, setState] = useState<TodoState>({
+    todos: [],
+    filter: 'active',
+  });
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch todos from backend on mount
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const response = await fetch(`/api/shared/${MAIN_LIST_ID}/sync`);
+
+        if (response.ok) {
+          const data = await response.json();
+          // Convert date strings back to Date objects
+          const todosWithDates = (data.todos || []).map((todo: Partial<Todo> & {
+            createdAt: string;
+            updatedAt: string;
+            deletedAt?: string;
+            completedAt?: string;
+          }) => ({
             ...todo,
             createdAt: new Date(todo.createdAt),
             updatedAt: new Date(todo.updatedAt),
-            // Backward compatibility: existing todos don't have deletedAt
             deletedAt: todo.deletedAt ? new Date(todo.deletedAt) : undefined,
-            // Migration: convert old completed boolean to completedAt date
-            completedAt: todo.completedAt
-              ? new Date(todo.completedAt)
-              : todo.completed
-                ? new Date(todo.updatedAt)
-                : undefined,
-          })
-        );
-        return {
-          todos: todosWithDates,
-          filter: 'active',
-        };
+            completedAt: todo.completedAt ? new Date(todo.completedAt) : undefined,
+          }));
+
+          setState({
+            todos: todosWithDates,
+            filter: 'active',
+          });
+        } else if (response.status === 404) {
+          // List doesn't exist yet - create it empty
+          await fetch(`/api/shared/${MAIN_LIST_ID}/sync`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              operation: 'create',
+              data: { id: generateId(), text: '', createdAt: new Date(), updatedAt: new Date() },
+            }),
+          });
+          // Start with empty list
+          setState({ todos: [], filter: 'active' });
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Failed to load todos from backend:', error);
+        // Start with empty list on error
+        setState({ todos: [], filter: 'active' });
+      } finally {
+        setIsLoading(false);
+        setIsInitialized(true);
       }
-    } catch (error) {
-      // Handle corrupted localStorage data gracefully
-      // eslint-disable-next-line no-console
-      console.warn('Failed to load todos from localStorage:', error);
-    }
-    return { todos: [], filter: 'active' };
-  });
+    };
 
-  // Save todos to localStorage whenever todos change
-  const saveTodos = (todos: Todo[]) => {
+    fetchTodos();
+  }, []);
+
+  // Helper to sync operation to backend
+  const syncToBackend = useCallback(async (operation: string, data: unknown) => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+      const response = await fetch(`/api/shared/${MAIN_LIST_ID}/sync`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ operation, data }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Sync failed: ${response.statusText}`);
+      }
+
+      return await response.json();
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.error('Failed to save todos to localStorage:', error);
+      console.error('Failed to sync to backend:', error);
+      throw error;
     }
-  };
+  }, []);
 
-  const addTodo = (text: string) => {
+  const addTodo = useCallback(async (text: string) => {
     const trimmedText = text.trim();
-
-    // Don't add empty or whitespace-only todos
-    if (!trimmedText) {
-      return;
-    }
+    if (!trimmedText) return;
 
     const now = new Date();
     const newTodo: Todo = {
@@ -88,204 +119,225 @@ export function useTodos() {
       updatedAt: now,
     };
 
-    setState((prev) => {
-      const updatedTodos = [newTodo, ...prev.todos];
-      saveTodos(updatedTodos);
-      return {
+    // Optimistic update
+    setState((prev) => ({
+      ...prev,
+      todos: [newTodo, ...prev.todos],
+    }));
+
+    // Sync to backend
+    try {
+      await syncToBackend('create', newTodo);
+    } catch (error) {
+      // Rollback on error
+      setState((prev) => ({
         ...prev,
-        todos: updatedTodos,
-      };
-    });
-  };
+        todos: prev.todos.filter((t) => t.id !== newTodo.id),
+      }));
+    }
+  }, [syncToBackend]);
 
-  const toggleTodo = (id: string) => {
-    setState((prev) => {
-      const updatedTodos = prev.todos.map((todo) => {
-        if (todo.id === id) {
-          const now = new Date();
-          return {
-            ...todo,
-            completedAt: todo.completedAt ? undefined : now,
-            updatedAt: now,
-          };
-        }
-        return todo;
-      });
+  const toggleTodo = useCallback(async (id: string) => {
+    const todo = state.todos.find((t) => t.id === id);
+    if (!todo) return;
 
-      saveTodos(updatedTodos);
-      return {
+    const now = new Date();
+    const updatedTodo = {
+      ...todo,
+      completedAt: todo.completedAt ? undefined : now,
+      updatedAt: now,
+    };
+
+    // Optimistic update
+    setState((prev) => ({
+      ...prev,
+      todos: prev.todos.map((t) => (t.id === id ? updatedTodo : t)),
+    }));
+
+    // Sync to backend
+    try {
+      await syncToBackend('update', updatedTodo);
+    } catch (error) {
+      // Rollback on error
+      setState((prev) => ({
         ...prev,
-        todos: updatedTodos,
-      };
-    });
-  };
+        todos: prev.todos.map((t) => (t.id === id ? todo : t)),
+      }));
+    }
+  }, [state.todos, syncToBackend]);
 
-  const restoreTodo = (id: string) => {
-    setState((prev) => {
-      const updatedTodos = prev.todos.map((todo) => {
-        if (todo.id === id && todo.completedAt) {
-          return {
-            ...todo,
-            completedAt: undefined,
-            updatedAt: new Date(),
-          };
-        }
-        return todo;
-      });
+  const restoreTodo = useCallback(async (id: string) => {
+    const todo = state.todos.find((t) => t.id === id);
+    if (!todo || !todo.completedAt) return;
 
-      saveTodos(updatedTodos);
-      return {
+    const updatedTodo = {
+      ...todo,
+      completedAt: undefined,
+      updatedAt: new Date(),
+    };
+
+    setState((prev) => ({
+      ...prev,
+      todos: prev.todos.map((t) => (t.id === id ? updatedTodo : t)),
+    }));
+
+    try {
+      await syncToBackend('update', updatedTodo);
+    } catch (error) {
+      setState((prev) => ({
         ...prev,
-        todos: updatedTodos,
-      };
-    });
-  };
+        todos: prev.todos.map((t) => (t.id === id ? todo : t)),
+      }));
+    }
+  }, [state.todos, syncToBackend]);
 
-  const deleteTodo = (id: string) => {
-    setState((prev) => {
-      const updatedTodos = prev.todos.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            deletedAt: new Date(),
-          };
-        }
-        return todo;
-      });
-      saveTodos(updatedTodos);
-      return {
+  const deleteTodo = useCallback(async (id: string) => {
+    const todo = state.todos.find((t) => t.id === id);
+    if (!todo) return;
+
+    const updatedTodo = {
+      ...todo,
+      deletedAt: new Date(),
+    };
+
+    setState((prev) => ({
+      ...prev,
+      todos: prev.todos.map((t) => (t.id === id ? updatedTodo : t)),
+    }));
+
+    try {
+      await syncToBackend('update', updatedTodo);
+    } catch (error) {
+      setState((prev) => ({
         ...prev,
-        todos: updatedTodos,
-      };
-    });
-  };
+        todos: prev.todos.map((t) => (t.id === id ? todo : t)),
+      }));
+    }
+  }, [state.todos, syncToBackend]);
 
-  const permanentlyDeleteTodo = (id: string) => {
-    setState((prev) => {
-      const updatedTodos = prev.todos.filter((todo) => todo.id !== id);
-      saveTodos(updatedTodos);
-      return {
+  const permanentlyDeleteTodo = useCallback(async (id: string) => {
+    const todo = state.todos.find((t) => t.id === id);
+    if (!todo) return;
+
+    // Optimistic removal
+    setState((prev) => ({
+      ...prev,
+      todos: prev.todos.filter((t) => t.id !== id),
+    }));
+
+    try {
+      await syncToBackend('delete', id);
+    } catch (error) {
+      // Rollback - add it back
+      setState((prev) => ({
         ...prev,
-        todos: updatedTodos,
-      };
-    });
-  };
+        todos: [...prev.todos, todo],
+      }));
+    }
+  }, [state.todos, syncToBackend]);
 
-  const restoreDeletedTodo = (id: string) => {
-    setState((prev) => {
-      const updatedTodos = prev.todos.map((todo) => {
-        if (todo.id === id && todo.deletedAt) {
-          return {
-            ...todo,
-            deletedAt: undefined,
-            updatedAt: new Date(),
-          };
-        }
-        return todo;
-      });
-      saveTodos(updatedTodos);
-      return {
+  const restoreDeletedTodo = useCallback(async (id: string) => {
+    const todo = state.todos.find((t) => t.id === id);
+    if (!todo || !todo.deletedAt) return;
+
+    const updatedTodo = {
+      ...todo,
+      deletedAt: undefined,
+      updatedAt: new Date(),
+    };
+
+    setState((prev) => ({
+      ...prev,
+      todos: prev.todos.map((t) => (t.id === id ? updatedTodo : t)),
+    }));
+
+    try {
+      await syncToBackend('update', updatedTodo);
+    } catch (error) {
+      setState((prev) => ({
         ...prev,
-        todos: updatedTodos,
-      };
-    });
-  };
+        todos: prev.todos.map((t) => (t.id === id ? todo : t)),
+      }));
+    }
+  }, [state.todos, syncToBackend]);
 
-  const editTodo = (id: string, newText: string) => {
+  const editTodo = useCallback(async (id: string, newText: string) => {
     const trimmedText = newText.trim();
+    if (!trimmedText) return;
 
-    // Don't edit with empty or whitespace-only text
-    if (!trimmedText) {
+    const todo = state.todos.find((t) => t.id === id);
+    if (!todo) return;
+
+    const updatedTodo = {
+      ...todo,
+      text: trimmedText,
+      updatedAt: new Date(),
+    };
+
+    setState((prev) => ({
+      ...prev,
+      todos: prev.todos.map((t) => (t.id === id ? updatedTodo : t)),
+    }));
+
+    try {
+      await syncToBackend('update', updatedTodo);
+    } catch (error) {
+      setState((prev) => ({
+        ...prev,
+        todos: prev.todos.map((t) => (t.id === id ? todo : t)),
+      }));
+    }
+  }, [state.todos, syncToBackend]);
+
+  const reorderTodos = useCallback(async (sourceIndex: number, destinationIndex: number) => {
+    if (
+      sourceIndex < 0 ||
+      destinationIndex < 0 ||
+      sourceIndex >= state.todos.length ||
+      destinationIndex >= state.todos.length ||
+      sourceIndex === destinationIndex
+    ) {
       return;
     }
 
-    setState((prev) => {
-      const updatedTodos = prev.todos.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            text: trimmedText,
-            updatedAt: new Date(),
-          };
-        }
-        return todo;
-      });
+    const newTodos = [...state.todos];
+    const [movedTodo] = newTodos.splice(sourceIndex, 1);
+    newTodos.splice(destinationIndex, 0, movedTodo);
 
-      saveTodos(updatedTodos);
-      return {
+    const oldTodos = state.todos;
+
+    setState((prev) => ({
+      ...prev,
+      todos: newTodos,
+    }));
+
+    try {
+      await syncToBackend('reorder', newTodos);
+    } catch (error) {
+      // Rollback
+      setState((prev) => ({
         ...prev,
-        todos: updatedTodos,
-      };
-    });
-  };
+        todos: oldTodos,
+      }));
+    }
+  }, [state.todos, syncToBackend]);
 
-  const reorderTodos = (sourceIndex: number, destinationIndex: number) => {
-    setState((prev) => {
-      // Validate indices
-      if (
-        sourceIndex < 0 ||
-        destinationIndex < 0 ||
-        sourceIndex >= prev.todos.length ||
-        destinationIndex >= prev.todos.length ||
-        sourceIndex === destinationIndex
-      ) {
-        return prev;
-      }
+  const moveUp = useCallback(async (todoId: string) => {
+    const currentIndex = state.todos.findIndex((todo) => todo.id === todoId);
+    if (currentIndex <= 0) return;
 
-      const newTodos = [...prev.todos];
-      const [movedTodo] = newTodos.splice(sourceIndex, 1);
-      newTodos.splice(destinationIndex, 0, movedTodo);
+    await reorderTodos(currentIndex, currentIndex - 1);
+  }, [state.todos, reorderTodos]);
 
-      saveTodos(newTodos);
-      return {
-        ...prev,
-        todos: newTodos,
-      };
-    });
-  };
+  const moveDown = useCallback(async (todoId: string) => {
+    const currentIndex = state.todos.findIndex((todo) => todo.id === todoId);
+    if (currentIndex < 0 || currentIndex >= state.todos.length - 1) return;
 
-  const moveUp = (todoId: string) => {
-    setState((prev) => {
-      const currentIndex = prev.todos.findIndex((todo) => todo.id === todoId);
-
-      if (currentIndex <= 0) {
-        return prev; // Already at top or not found
-      }
-
-      const newTodos = [...prev.todos];
-      const [movedTodo] = newTodos.splice(currentIndex, 1);
-      newTodos.splice(currentIndex - 1, 0, movedTodo);
-
-      saveTodos(newTodos);
-      return {
-        ...prev,
-        todos: newTodos,
-      };
-    });
-  };
-
-  const moveDown = (todoId: string) => {
-    setState((prev) => {
-      const currentIndex = prev.todos.findIndex((todo) => todo.id === todoId);
-
-      if (currentIndex < 0 || currentIndex >= prev.todos.length - 1) {
-        return prev; // Already at bottom or not found
-      }
-
-      const newTodos = [...prev.todos];
-      const [movedTodo] = newTodos.splice(currentIndex, 1);
-      newTodos.splice(currentIndex + 1, 0, movedTodo);
-
-      saveTodos(newTodos);
-      return {
-        ...prev,
-        todos: newTodos,
-      };
-    });
-  };
+    await reorderTodos(currentIndex, currentIndex + 1);
+  }, [state.todos, reorderTodos]);
 
   // Filter todos based on current filter
-  const getFilteredTodos = () => {
+  const getFilteredTodos = useCallback(() => {
     switch (state.filter) {
       case 'active':
         return state.todos.filter(
@@ -301,19 +353,21 @@ export function useTodos() {
       default:
         return state.todos.filter((todo) => !todo.deletedAt);
     }
-  };
+  }, [state.filter, state.todos]);
 
-  const setFilter = (filter: TodoFilter) => {
+  const setFilter = useCallback((filter: TodoFilter) => {
     setState((prev) => ({
       ...prev,
       filter,
     }));
-  };
+  }, []);
 
   return {
     todos: getFilteredTodos(),
     allTodos: state.todos,
     filter: state.filter,
+    isLoading,
+    isInitialized,
     addTodo,
     toggleTodo,
     restoreTodo,
