@@ -31,11 +31,11 @@ linear Status field based on actual usage analysis showing 96% field synchroniza
 
 ## Step 1: Add Status Field Options
 
-**URL**: <https://github.com/users/mikiwiik/projects/1/settings/fields>
+**URL**: <https://github.com/users/mikiwiik/projects/1/settings/fields/Status>
 
 ### Actions Required
 
-1. Navigate to Project Settings → Fields
+1. Navigate to Project Settings → Fields → Status
 2. Find "Status" field → Click "..." menu → "Edit field"
 3. Add new options:
    - Click "+ Add option" → Name: **Icebox** → Color: Gray/Light Blue
@@ -91,11 +91,13 @@ Run the migration script in dry-run mode to preview changes:
 Migration Summary
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Total issues:    66
-✓ Migrated:      ~60
-⏭ Skipped:       ~5
+✓ Migrated:      ~34
+⏭ Skipped:       ~32
 ✗ Failed:        0
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+Note: Skipped issues already have correct Status values (no migration needed).
 
 ---
 
@@ -223,6 +225,24 @@ Update 3 workflows:
 - [ ] All 5 views display correct filtered issues
 - [ ] Close a test issue → Verify Status=Done (automation test)
 - [ ] Create test issue → Verify Status=Icebox (automation test)
+
+### Troubleshooting: Issues with "No Status"
+
+If you see issues with no Status after migration, the script may have failed silently:
+
+```bash
+# Check how many issues have no status
+gh project item-list 1 --owner mikiwiik --format json | \
+  jq -r '.items[] | select(.status == null or .status == "") | .content.number' | wc -l
+```
+
+**If count > 0**: Re-run the migration script (it's idempotent and safe to re-run):
+
+```bash
+./docs/migrations/287-linear-status/migrate.sh
+```
+
+The script will skip issues that already have correct Status values.
 
 ### Verification Commands
 
