@@ -15,8 +15,8 @@
 5. **🚨 ATOMIC COMMITS + AI ATTRIBUTION**: Multiple small commits per feature, each with `🤖 Generated with AI Agent`
    and co-author attribution - limit bullet lists in commit messages to 2 items maximum to avoid commitlint parser bugs
    (see [Troubleshooting Guide](docs/reference/troubleshooting.md#commitlint-parser-bug))
-6. **🚨 TDD + QUALITY GATES**: Tests first, zero ESLint warnings, strict TypeScript, comprehensive coverage before
-   completion
+6. **🚨 TDD + QUALITY GATES**: Tests first (unit, integration, E2E for user flows), zero ESLint warnings, strict
+   TypeScript, comprehensive coverage before completion
 7. **🚨 FEATURE BRANCH + PR WORKFLOW**: All work via feature branches and PRs with MANDATORY automerge using `--rebase`
    to preserve atomic commits - NEVER direct commits to main - only claim completion AFTER PR merged and verified with
    `gh issue view #X`
