@@ -186,8 +186,13 @@ Applied same optimization pattern:
 
 ## Troubleshooting
 
-See [Troubleshooting Guide - Token Limit Issues](../reference/troubleshooting.md#token-limit-issues) for common
-errors and solutions.
+If you encounter token limit errors at runtime, see [Troubleshooting Guide - Token Limit
+Issues](../reference/troubleshooting.md#token-limit-issues) for:
+
+- Quick diagnostic procedures
+- Symptom identification
+- Step-by-step remediation
+- Verification after fixes
 
 ## References
 
