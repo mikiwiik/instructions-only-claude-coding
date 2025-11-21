@@ -2,6 +2,9 @@
 
 This document outlines the development workflow, coding standards, and quality assurance practices for the Todo App project.
 
+**🎯 Strategic Context**: [Development Principles](../core/principles.md) | [Framework](../core/framework.md) |
+[Git Workflows](../core/workflows.md)
+
 **📊 Visual Reference**: For a comprehensive visual overview of the complete development workflow, see
 [Development Workflow Diagram](../diagrams/development-workflow.md) with interactive Mermaid diagrams.
 

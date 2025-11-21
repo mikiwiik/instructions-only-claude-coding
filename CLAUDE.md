@@ -59,6 +59,7 @@ Agent-centric development instructions for instruction-only todo application dev
 
 ## Framework and Workflows
 
+- **Core Principles**: [docs/core/principles.md](docs/core/principles.md)
 - **Methodology**: [docs/core/framework.md](docs/core/framework.md)
 - **Git Workflow**: [docs/core/workflows.md](docs/core/workflows.md)
 - **Architecture Overview**: [docs/architecture/overview.md](docs/architecture/overview.md)
