@@ -338,6 +338,9 @@ graph LR
 
 ## Key Principles
 
+> **Strategic Context**: See [Development Principles](../core/principles.md) for the philosophy and strategic
+> importance of these principles.
+
 ### Atomic Commits
 
 - Each commit addresses a single concern

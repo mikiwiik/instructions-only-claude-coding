@@ -6,6 +6,12 @@ App project.
 **📊 Visual Overview**: See [Development Workflow Diagram](../diagrams/development-workflow.md) for a complete visual
 representation of the development process.
 
+**🎯 Strategic Context**: For the WHY behind our development practices, see:
+
+- **[Development Principles](../core/principles.md)** - Philosophy and strategic importance of our 5 core principles
+- **[Agentic Coding Framework](../core/framework.md)** - Complete instruction-only development methodology
+- **[Git Workflows](../core/workflows.md)** - Git workflow, atomic commits, and PR protocol
+
 ## Quick Start
 
 New to the project? Start here:

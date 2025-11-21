@@ -1,5 +1,8 @@
 # Development Workflows
 
+> **Strategic Context**: [Development Principles](principles.md) | [Framework](framework.md) |
+> [Operational Guide](../development/workflow.md)
+
 ## Git and Branch Management
 
 ### Feature Branch Workflow
