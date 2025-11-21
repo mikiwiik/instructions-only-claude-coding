@@ -145,7 +145,7 @@ while IFS=$'\t' read -r issue_number lifecycle current_status item_id; do
         SUCCESS=$((SUCCESS + 1))
     else
         # Update the issue
-        if gh project item-edit --project-id "$PROJECT_ID" --id "$item_id" --field-id "$STATUS_FIELD_ID" --option-id "$new_status_id" >/dev/null 2>&1; then
+        if gh project item-edit --project-id "$PROJECT_ID" --id "$item_id" --field-id "$STATUS_FIELD_ID" --single-select-option-id "$new_status_id" 2>&1; then
             echo -e "   ${GREEN}✓${NC} Updated to: $new_status_name"
             SUCCESS=$((SUCCESS + 1))
         else
