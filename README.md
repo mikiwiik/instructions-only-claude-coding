@@ -122,7 +122,7 @@ checks, and testing scripts.
 - **Framework**: Next.js 14 with App Router
 - **Language**: TypeScript for type safety
 - **Styling**: Tailwind CSS
-- **Testing**: Jest + React Testing Library
+- **Testing**: Jest + React Testing Library (unit/integration), Playwright (E2E)
 - **Development**: Test-Driven Development (TDD)
 - **Code Quality**: SonarCloud for automated analysis
 - **Mobile**: Touch gestures with accessibility-first design (WCAG 2.2 AA compliant)
@@ -156,6 +156,7 @@ See [Development Workflow](docs/development/workflow.md) for complete branch str
 - **🔍 [SonarCloud Setup](docs/setup/sonarcloud-setup.md)** - Code quality analysis integration
 - **💡 [SonarLint IDE Setup](docs/setup/sonarlint-ide-setup.md)** - Real-time code quality feedback in your IDE
 - **⚙️ [Development Workflow](docs/development/workflow.md)** - Coding standards and practices
+- **🧪 [E2E Testing Guide](docs/testing/e2e-testing-guide.md)** - Playwright E2E testing documentation
 - **📊 [Project Management](docs/development/project-management.md)** - Issue tracking and planning
 - **🏗️ [Architecture Overview](docs/architecture/overview.md)** - Technical architecture and decisions
 - **🏗️ [Architecture Flow Diagram](docs/diagrams/architecture-flow.md)** - Visual architecture flow with Mermaid diagrams
@@ -193,7 +194,7 @@ development planning. See [project management guide](docs/development/project-ma
 - ✅ **Local Persistence**: Browser localStorage for data persistence
 - ✅ **Responsive Design**: Works on desktop and mobile devices
 - ✅ **Type Safety**: Full TypeScript implementation
-- ✅ **Test Coverage**: Comprehensive test suite
+- ✅ **Test Coverage**: Comprehensive test suite (unit, integration, E2E)
 - ✅ **CI/CD Pipeline**: Automated testing and deployment
 
 ### Real-Time Synchronization
