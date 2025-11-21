@@ -2,6 +2,10 @@
 
 This guide provides step-by-step instructions for setting up GitHub Projects for the Todo App project.
 
+> **⚠️ Migration Notice**: This project is migrating from a dual-field system (Status + Lifecycle) to a single
+> linear Status field. See [Migration Guide](../migrations/287-linear-status/) for details.
+> This documentation reflects the **new single-field system**.
+
 **📋 Context**: See [ADR-024: GitHub Projects Adoption](../adr/024-github-projects-adoption.md) for decision rationale.
 
 **📖 Usage**: See [Project Management Documentation](project-management.md#github-projects-integration) for daily
@@ -42,13 +46,12 @@ Labels describe **what the issue is** - intrinsic properties that belong to the 
 
 Custom fields describe **where the issue is** in the development workflow - transient state that changes over time:
 
-- **Status** (Todo → In Progress → Done): Current work state
-- **Lifecycle** (Icebox → Backlog → Active → Done): Idea maturity stage
+- **Status** (Icebox → Backlog → In Progress → Done): Linear workflow progression
 
 **Key characteristics**:
 
 - ⚙️ **Project-specific**: Belong to project items, not issues themselves
-- ⚙️ **Workflow tracking**: Change as work progresses
+- ⚙️ **Workflow tracking**: Change as work progresses through linear stages
 - ⚙️ **Time-bound**: Reflect current state, not intrinsic properties
 - ⚙️ **Manual updates**: Require updates during workflow progression
 
@@ -64,7 +67,7 @@ Custom fields describe **where the issue is** in the development workflow - tran
 **Custom fields for workflow**:
 
 - Visual kanban workflow management
-- Idea maturity tracking (Icebox → Backlog → Active)
+- Linear progression tracking (Icebox → Backlog → In Progress → Done)
 - Work-in-progress visualization
 - Workflow automation triggers
 
@@ -515,16 +518,18 @@ Verify:
 
 **Location**: `.claude/scripts/update-project-status.sh`
 
-**Purpose**: Automatically update GitHub Projects Status and Lifecycle fields when starting work on an issue.
+**Purpose**: Automatically update GitHub Projects Status field when starting work on an issue.
 
 **Usage**:
 
 ```bash
 # Update status when starting work on an issue
-./.claude/scripts/update-project-status.sh <issue-number> "In Progress" "Active"
+./.claude/scripts/update-project-status.sh <issue-number> "In Progress"
 
 # Example: Starting work on issue #247
-./.claude/scripts/update-project-status.sh 247 "In Progress" "Active"
+./.claude/scripts/update-project-status.sh 247 "In Progress"
+
+# Valid status values: Icebox, Backlog, In Progress, Done
 ```
 
 **Features**:

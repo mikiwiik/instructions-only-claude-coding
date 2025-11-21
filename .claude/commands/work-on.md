@@ -6,8 +6,8 @@ argument-hint: [issue-number]
 Start working on GitHub issue #$1 following the project's development methodology:
 
 1. **Issue Analysis**: Read and understand the issue requirements using `gh issue view $1`
-2. **Update GitHub Projects**: Set Status="In Progress" and Lifecycle="Active" using helper script:
-   - Run: `./.claude/scripts/update-project-status.sh $1 "In Progress" "Active"`
+2. **Update GitHub Projects**: Set Status="In Progress" using helper script:
+   - Run: `./.claude/scripts/update-project-status.sh $1 "In Progress"`
    - If this fails due to missing project scope, follow the error message instructions
    - Manual alternative: `gh project item-edit` (see [GitHub Projects Setup](../../docs/development/github-projects-setup.md))
    - Continue with workflow even if project update fails (graceful degradation)

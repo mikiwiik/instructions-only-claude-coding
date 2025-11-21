@@ -182,9 +182,68 @@ Projects:
 - **Still gain**: Visual workflow, Icebox/Backlog/Active lifecycle tracking, quick wins filtering
 - **Now simpler**: Fewer custom fields, no duplication, compatible with existing label-based workflows
 
+## Update: Single Linear Status Field (2024-11-14)
+
+**Status**: Amended by [Issue #287](https://github.com/mikiwiik/instructions-only-claude-coding/issues/287)
+
+### Background
+
+After 2 months of using the dual-field system (Status + Lifecycle), actual usage analysis revealed:
+
+- **96% field synchronization**: Status and Lifecycle moved in lockstep almost always
+- **Only 6 state combinations used** out of 12 possible (3 Status × 4 Lifecycle)
+- **Redundant tracking**: Lifecycle:Active duplicated Status:In Progress
+- **Cognitive overhead**: Two fields for what is fundamentally linear progression
+
+**Usage data** (66 issues):
+
+```text
+21 issues (40%): Done + Done          ← Perfect lockstep
+13 issues (25%): Icebox + (no status) ← Icebox distinction
+13 issues (25%): Backlog + (no status)← Ready, not started
+ 4 issues (7%):  Backlog + Todo       ← Ready, explicitly marked
+ 1 issue  (2%):  Active + In Progress ← Only 1 Active issue!
+ 1 issue  (2%):  Active + Done        ← Edge case
+```
+
+**Key insight**: The workflow is inherently **linear progression**, not a two-dimensional matrix.
+
+### Amendment Decision
+
+**Replace dual-field system with single linear Status field**:
+
+- **Old**: Status (Todo/In Progress/Done) + Lifecycle (Icebox/Backlog/Active/Done)
+- **New**: Status (Icebox → Backlog → In Progress → Done)
+
+**Rationale**:
+
+- Simpler mental model (one field, clear progression)
+- Matches actual usage patterns (96% synchronization)
+- Reduces maintenance burden (no field sync needed)
+- Better semantics ("Status" perfectly describes "where is this issue?")
+- Easier onboarding for new contributors
+
+**Migration**:
+
+- All 66 issues migrated using automated script
+- Migration guide: [docs/migrations/287-linear-status/](../migrations/287-linear-status/)
+- Rollback procedure documented
+
+### Impact on Original Decision
+
+The core GitHub Projects adoption decision remains valid and successful. This amendment **simplifies
+implementation** while retaining all key benefits:
+
+- ✅ **Still provides**: Visual workflow, idea capture (Icebox), quick wins filtering
+- ✅ **Now simpler**: Single field instead of two, clearer progression model
+- ✅ **Better alignment**: Linear progression matches kanban-style continuous delivery workflow
+- ✅ **Extensible**: Future states (e.g., "In Review") fit naturally into linear progression
+
 ## References
 
 - [GitHub Issue #192](https://github.com/mikiwiik/instructions-only-claude-coding/issues/192): Full evaluation and analysis
+- [GitHub Issue #287](https://github.com/mikiwiik/instructions-only-claude-coding/issues/287): Linear status simplification
+- [Migration Guide](../migrations/287-linear-status/): Dual-field to single-field migration
 - [GitHub Docs: About Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects)
 - [GitHub Docs: Built-in Automations](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-built-in-automations)
 - [GitHub Docs: Customizing Views](https://docs.github.com/en/issues/planning-and-tracking-with-projects/customizing-views-in-your-project)
