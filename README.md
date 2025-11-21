@@ -166,6 +166,7 @@ See [Development Workflow](docs/development/workflow.md) for complete branch str
 
 - **[docs/setup/](docs/setup/)** - Installation and deployment guides
 - **[docs/development/](docs/development/)** - Development workflow and project management
+  ([Overview](docs/development/README.md))
 - **[docs/architecture/](docs/architecture/)** - Technical architecture and design decisions
 - **[docs/diagrams/](docs/diagrams/)** - Visual diagrams for architecture and user flows
 - **[docs/adr/](docs/adr/)** - Architecture Decision Records
