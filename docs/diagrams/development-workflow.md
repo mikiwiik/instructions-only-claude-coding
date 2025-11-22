@@ -10,7 +10,7 @@ graph TB
     Start([New Feature/Issue]) --> IssueCreate[Create GitHub Issue]
     IssueCreate --> IssueLabel[Add Priority & Complexity Labels]
     IssueLabel --> IssueProject[Add to GitHub Project]
-    IssueProject --> WorkOn[/work-on Command]
+    IssueProject --> WorkOn["work-on Command"]
 
     WorkOn --> UpdateStatus[Update Status: In Progress]
     UpdateStatus --> ArchDecision{Significant<br/>Architecture<br/>Decision?}
