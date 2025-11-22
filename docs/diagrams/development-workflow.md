@@ -207,7 +207,7 @@ Issues move through statuses automatically via workflow automation:
 ```mermaid
 graph LR
     Icebox[Icebox<br/>Raw Ideas] --> Backlog[Backlog<br/>Triaged & Labeled]
-    Backlog --> WorkOn[/work-on Command]
+    Backlog --> WorkOn["work-on Command"]
     WorkOn --> InProgress[In Progress<br/>Active Development]
     InProgress --> PRCreate[Create PR]
     PRCreate --> Review[In Review<br/>CI + Approval]
