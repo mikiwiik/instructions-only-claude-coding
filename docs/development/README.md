@@ -62,23 +62,6 @@ New to the project? Start here:
 - Automated status updates
 - Issue management best practices
 
-### GitHub Projects Setup
-
-**[github-projects-setup.md](github-projects-setup.md)** - Step-by-step GitHub Projects configuration
-
-- Project creation and field configuration
-- Status field setup and workflow automation
-- CLI authentication and permissions
-- Agent access configuration
-- Troubleshooting common issues
-
-**Use Cases:**
-
-- Initial project setup for new repositories
-- Configuring agent access to GitHub Projects
-- Troubleshooting authentication issues
-- Understanding project field structure
-
 ### Auto-Merge Workflow
 
 **[auto-merge-workflow.md](auto-merge-workflow.md)** - Automated PR approval and merge process
@@ -140,7 +123,6 @@ New to the project? Start here:
 **For Project Managers:**
 
 1. [project-management.md](project-management.md) - Issue planning and tracking
-2. [github-projects-setup.md](github-projects-setup.md) - Project configuration
 
 **For AI Agents:**
 
@@ -153,8 +135,7 @@ New to the project? Start here:
 **Setting Up a New Development Environment:**
 
 1. [dev-environment-setup.md](dev-environment-setup.md) - Configure Claude Code settings
-2. [github-projects-setup.md](github-projects-setup.md) - Set up GitHub Projects access
-3. [workflow.md](workflow.md) - Review development workflow
+2. [workflow.md](workflow.md) - Review development workflow
 
 **Starting Work on an Issue:**
 
