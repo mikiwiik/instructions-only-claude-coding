@@ -123,7 +123,10 @@ graph LR
 
 ## ADR Creation Process
 
-Architecture decisions follow this workflow before implementation:
+Architecture decisions follow this workflow before implementation.
+
+> **Reference**: See [ADR Index](../adr/README.md) for all architecture decisions and
+> [ADR Process](../adr/PROCESS.md) for detailed guidelines.
 
 ```mermaid
 graph TB
