@@ -28,6 +28,33 @@ The script handles:
 
 See the script itself for detailed documentation and error messages.
 
+### Transferring Settings to a New Computer
+
+When setting up Claude Code on a new computer, transfer your existing settings from your old machine:
+
+**On old computer:**
+
+```bash
+pbcopy < ~/dotfiles/.claude/settings.local.json
+```
+
+**Transfer to new computer** (via Slack, email, secure messaging, etc.)
+
+**On new computer:**
+
+```bash
+mkdir -p ~/dotfiles/.claude
+pbpaste > ~/dotfiles/.claude/settings.local.json
+```
+
+**Then checkout your repo and run the setup script:**
+
+```bash
+./scripts/setup-claude-settings.sh
+```
+
+The symlink will be created automatically, and all your tool permissions will be preserved across machines.
+
 ### Updating Settings
 
 Edit the canonical file to update all projects:
