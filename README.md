@@ -86,6 +86,10 @@ This project serves as a **template and reference** for:
 - **Quality Assurance Through AI**: Maintaining professional standards in AI-generated code
 - **Innovation in Software Development**: Pushing boundaries of what's possible with current AI capabilities
 
+> **Deep Dive**: See [Development Principles](docs/core/principles.md) for the strategic philosophy behind
+> instruction-only development, and [Agentic Coding Framework](docs/core/framework.md) for comprehensive methodology
+> details.
+
 ## Quick Start
 
 ### Prerequisites
@@ -160,11 +164,13 @@ See [Development Workflow](docs/development/workflow.md) for complete branch str
 - **🏗️ [Architecture Overview](docs/architecture/overview.md)** - Technical architecture and decisions
 - **🏗️ [Architecture Flow Diagram](docs/diagrams/architecture-flow.md)** - Visual architecture flow with Mermaid diagrams
 - **👤 [User Flow Diagrams](docs/diagrams/user-flows.md)** - Complete user interaction flows and UX documentation
+- **📊 [Development Workflow Diagram](docs/diagrams/development-workflow.md)** - Complete development process visualization
 
 ### Documentation Organization
 
 - **[docs/setup/](docs/setup/)** - Installation and deployment guides
 - **[docs/development/](docs/development/)** - Development workflow and project management
+  ([Overview](docs/development/README.md))
 - **[docs/architecture/](docs/architecture/)** - Technical architecture and design decisions
 - **[docs/diagrams/](docs/diagrams/)** - Visual diagrams for architecture and user flows
 - **[docs/adr/](docs/adr/)** - Architecture Decision Records

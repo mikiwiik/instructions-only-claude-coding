@@ -1,5 +1,8 @@
 # Agentic Coding Framework
 
+> **Related Documentation**: [Development Principles](principles.md) | [Git Workflows](workflows.md) |
+> [Operational Guide](../development/workflow.md)
+
 ## Core Methodology
 
 **🚨 CRITICAL FRAMEWORK**: This project demonstrates instruction-only development where

@@ -2,6 +2,12 @@
 
 This document outlines the development workflow, coding standards, and quality assurance practices for the Todo App project.
 
+**🎯 Strategic Context**: [Development Principles](../core/principles.md) | [Framework](../core/framework.md) |
+[Git Workflows](../core/workflows.md)
+
+**📊 Visual Reference**: For a comprehensive visual overview of the complete development workflow, see
+[Development Workflow Diagram](../diagrams/development-workflow.md) with interactive Mermaid diagrams.
+
 ## Development Workflow Overview
 
 ### Branch-Based Development
@@ -291,7 +297,7 @@ npm run test:coverage
 # Overall project should maintain 90%+ coverage
 ```
 
-#### Best Practices
+#### Type Testing Best Practices
 
 1. **Test Valid Cases First**: Ensure valid data passes all validations
 2. **Test All Invalid Cases**: Cover each validation rule with failing tests
@@ -317,7 +323,7 @@ npm run lint:md      # Lint markdown files
 npm run lint:md:fix  # Auto-fix markdown issues
 ```
 
-### Development Commands
+### Server and Build Commands
 
 ```bash
 npm run dev          # Start development server
@@ -498,7 +504,7 @@ gh issue list --state closed --search "linked:pr-<pr-number>"
 - [ ] Pull request merged and branch cleaned up
 - [ ] No orphaned issues or incomplete workflows
 
-#### Best Practices
+#### Issue Management Best Practices
 
 **Issue Management:**
 

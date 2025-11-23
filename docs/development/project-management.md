@@ -3,6 +3,9 @@
 This document outlines the project management practices, issue tracking workflow, and planning methodologies
 used in the Todo App project.
 
+**📊 Visual Reference**: For a visual overview of how GitHub Projects integrates with the development workflow, see
+[Development Workflow Diagram](../diagrams/development-workflow.md).
+
 ## Overview: Human and Agent Collaboration
 
 **Primary Users**: The GitHub Projects views and boards are designed primarily for **human project management** -
