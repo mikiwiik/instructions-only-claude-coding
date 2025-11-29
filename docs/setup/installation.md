@@ -2,9 +2,16 @@
 
 This guide covers all necessary setup steps for developing and contributing to the Todo App project.
 
-## Prerequisites
+## System Requirements
 
-### Claude Code Subscription Setup
+- **Node.js**: Version 22.x or higher
+- **npm**: Version 10.x or higher
+- **Git**: For version control
+- **Modern Browser**: For development and testing
+
+## Claude Code Setup
+
+### Subscription Setup
 
 **Required for AI-assisted development:**
 
@@ -14,7 +21,7 @@ This guide covers all necessary setup steps for developing and contributing to t
 4. **Configure Claude Code**: Setup at <https://claude.ai/settings/claude-code>
 5. **Follow Official Guide**: <https://docs.claude.com/en/docs/claude-code/overview#install-and-authenticate>
 
-### Claude Code CLI Installation
+### CLI Installation
 
 ```bash
 # Install Claude Code CLI globally
@@ -26,13 +33,6 @@ claude
 
 **Optional**: For shared settings across multiple projects, see
 [Claude Code Settings Management](#claude-code-settings-management-optional).
-
-### System Requirements
-
-- **Node.js**: Version 22.x or higher
-- **npm**: Version 10.x or higher
-- **Git**: For version control
-- **Modern Browser**: For development and testing
 
 ## Project Setup
 
