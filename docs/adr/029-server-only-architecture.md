@@ -250,7 +250,7 @@ This ADR explicitly **excludes**:
 2. **Environment variables**: Must set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`
 3. **Local development**: Requires `.env.local` with Upstash Redis credentials
 
-**Setup guide**: See `docs/deployment/upstash-setup.md`
+**Setup guide**: See `docs/setup/upstash-setup.md`
 
 ## Related Decisions
 
