@@ -9,12 +9,12 @@ import type { Todo } from '@/types/todo';
 // Tell Jest to use the manual mock from __mocks__/@upstash/redis.ts
 jest.mock('@upstash/redis');
 
-// Import mock functions from the mocked module
+// Import mock functions directly from the mock file (for TypeScript recognition)
 import {
   __mockGet as mockGet,
   __mockSet as mockSet,
   __mockDel as mockDel,
-} from '@upstash/redis';
+} from '@/__mocks__/@upstash/redis';
 
 // Import the module under test
 import { KVStore, type SharedTodoList } from '@/lib/kv-store';
