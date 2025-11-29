@@ -28,7 +28,7 @@ authentication.
 ### Trust Boundaries
 
 ```text
-Internet ←→ Vercel Edge ←→ API Routes ←→ Vercel KV ←→ Real-time SSE
+Internet ←→ Vercel Edge ←→ API Routes ←→ Upstash Redis ←→ Real-time SSE
    │              │            │            │            │
    └── HTTPS ──────┴─ Auth ─────┴─ Valid. ───┴─ Encrypt ──┘
 ```
@@ -195,7 +195,7 @@ const todoSchema = z.object({
 ### RL-1: API Rate Limiting
 
 ```typescript
-// Vercel KV-based rate limiting
+// Upstash Redis-based rate limiting
 const rateLimit = {
   createShare: '10/hour', // Share creation
   syncOperations: '300/minute', // Todo operations
@@ -204,7 +204,7 @@ const rateLimit = {
 ```
 
 - **Addresses**: T4 (DoS), T1 (URL Enumeration)
-- **Implementation**: Sliding window with Vercel KV
+- **Implementation**: Sliding window with Upstash Redis
 - **Verification**: Load testing and abuse simulation
 
 ### RL-2: Resource Limits

@@ -73,7 +73,7 @@ interface SharedTodo extends Todo {
 ### Migration Flow
 
 ```
-localStorage → Migration Service → Vercel KV → Share URL Generation
+localStorage → Migration Service → Upstash Redis → Share URL Generation
      ↓              ↓                ↓              ↓
   Original     Data Transform    Cloud Storage   Access Link
    Format      + Validation     + Persistence   + Security

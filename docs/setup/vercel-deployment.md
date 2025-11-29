@@ -15,8 +15,8 @@ this or similar projects.
 
 > **📝 Configuration Overview**
 >
-> This project uses a minimal `vercel.json` configuration file for Vercel KV (Redis) backend integration. The file
-> configures API function timeouts, deployment region (colocated with KV storage), and environment variable references.
+> This project uses a minimal `vercel.json` configuration file for Upstash Redis backend integration. The file
+> configures API function timeouts, deployment region (colocated with Redis storage), and environment variable references.
 > All other settings (framework, build commands, Node version) are auto-detected from `package.json` and Next.js
 > conventions.
 
@@ -60,20 +60,20 @@ Vercel automatically detects these settings from `package.json` and Next.js conv
 }
 ```
 
-The project also includes a `vercel.json` for Vercel KV backend configuration:
+The project also includes a `vercel.json` for Upstash Redis backend configuration:
 
 ```json
 {
   "functions": { "app/api/**/*.ts": { "maxDuration": 10 } },
   "regions": ["iad1"],
   "env": {
-    "KV_REST_API_URL": "@kv-rest-api-url",
-    "KV_REST_API_TOKEN": "@kv-rest-api-token"
+    "UPSTASH_REDIS_REST_URL": "@upstash-redis-rest-url",
+    "UPSTASH_REDIS_REST_TOKEN": "@upstash-redis-rest-token"
   }
 }
 ```
 
-**Note**: See [Vercel KV Setup Guide](../deployment/vercel-kv-setup.md) for complete backend configuration.
+**Note**: See [Upstash Redis Setup Guide](../deployment/upstash-setup.md) for complete backend configuration.
 
 #### 4. Deploy
 
@@ -102,7 +102,7 @@ The project also includes a `vercel.json` for Vercel KV backend configuration:
 - **Framework Detection**: Automatic Next.js project recognition from `package.json`
 - **Build Optimization**: Production-ready builds auto-configured from Next.js conventions
 - **Performance**: Automatic CDN, compression, and caching
-- **Vercel KV Config**: Minimal `vercel.json` for backend integration (region, timeouts, env vars)
+- **Upstash Redis Config**: Minimal `vercel.json` for backend integration (region, timeouts, env vars)
 
 ### Custom Domains
 
@@ -114,20 +114,20 @@ The project also includes a `vercel.json` for Vercel KV backend configuration:
 
 ### Required Environment Variables
 
-This project uses Vercel KV for backend storage. Configure these variables in Vercel Dashboard:
+This project uses Upstash Redis for backend storage. Configure these variables in Vercel Dashboard:
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `KV_REST_API_URL` | Vercel KV REST API endpoint | Yes |
-| `KV_REST_API_TOKEN` | Vercel KV authentication token | Yes |
+| `UPSTASH_REDIS_REST_URL` | Upstash Redis REST API endpoint | Yes |
+| `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis authentication token | Yes |
 
 ### Setup Steps
 
 1. Go to Vercel Dashboard → Project Settings → Environment Variables
-2. Add `KV_REST_API_URL` and `KV_REST_API_TOKEN` (from Vercel KV setup)
+2. Add `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` (from Upstash console)
 3. Enable for all environments: Production, Preview, Development
 
-See [Vercel KV Setup Guide](../deployment/vercel-kv-setup.md) for detailed instructions.
+See [Upstash Redis Setup Guide](../deployment/upstash-setup.md) for detailed instructions.
 
 ## CI/CD Integration
 
@@ -191,7 +191,7 @@ Current production deployment status:
 - ✅ **Performance**: Optimized Next.js production build
 - ✅ **Preview Deployments**: PR preview URLs working
 - ✅ **Build Caching**: Dependency and build caching enabled
-- ✅ **Backend Storage**: Vercel KV (Redis) for persistent data
+- ✅ **Backend Storage**: Upstash Redis for persistent data
 
 ## Troubleshooting
 

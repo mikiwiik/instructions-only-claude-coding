@@ -45,7 +45,7 @@ educational goals and technical requirements.
 #### Technology Components
 
 - **Backend**: Next.js API Routes (Vercel Functions)
-- **Database**: Vercel KV (Redis-compatible)
+- **Database**: Upstash Redis (serverless Redis)
 - **Real-time**: Server-Sent Events (SSE)
 - **Authentication**: Anonymous sharing (no user accounts)
 - **Deployment**: Vercel edge network
@@ -70,11 +70,11 @@ Development Velocity (9/10):
 - Familiar Next.js patterns
 
 Cost Effectiveness (10/10):
-- Generous free tier: 30GB KV storage, 100k requests/month
+- Generous free tier: 10k commands/day, 256MB storage
 - No additional services required
 - Pay-per-use scaling model
 - No database hosting costs
-- Integrated analytics included
+- Integrated with Vercel marketplace
 
 Integration Ease (10/10):
 - Native Next.js integration
@@ -87,10 +87,10 @@ Integration Ease (10/10):
 ### Vercel Stack Limitations
 
 ```text
-Vendor Lock-in (High):
-- Tightly coupled to Vercel ecosystem
-- KV data format specific to Vercel
-- Migration requires significant refactoring
+Vendor Lock-in (Medium):
+- Works with standard Redis API
+- Upstash data format is standard Redis
+- Migration to other Redis providers is straightforward
 
 Real-time Constraints:
 - SSE less responsive than WebSockets
@@ -98,9 +98,9 @@ Real-time Constraints:
 - Connection limits on free tier
 
 Scalability Ceiling:
-- KV storage limits (30GB free tier)
+- Upstash free tier limits (10k commands/day)
 - Function execution time limits (10s free, 60s pro)
-- Regional restrictions for compliance
+- Can upgrade to paid tier as needed
 ```
 
 #### Implementation Example
@@ -114,14 +114,14 @@ export default async function handler(
   const { listId } = req.query;
   const { operations } = req.body;
 
-  // Get current state from Vercel KV
-  const currentList = await kv.get(`list:${listId}`);
+  // Get current state from Upstash Redis
+  const currentList = await redis.get(`list:${listId}`);
 
   // Apply operations with conflict resolution
   const updatedList = applyOperations(currentList, operations);
 
-  // Save to KV
-  await kv.set(`list:${listId}`, updatedList);
+  // Save to Upstash Redis
+  await redis.set(`list:${listId}`, updatedList);
 
   // Return updated state
   res.json({ success: true, list: updatedList });
@@ -140,7 +140,7 @@ export default async function subscribe(
 
   // Stream updates to client
   const interval = setInterval(async () => {
-    const updates = await kv.get(`updates:${listId}`);
+    const updates = await redis.get(`updates:${listId}`);
     res.write(`data: ${JSON.stringify(updates)}\n\n`);
   }, 1000);
 }
@@ -655,7 +655,7 @@ Re-evaluate technology choices when:
 
 If migration becomes necessary:
 
-1. **Data Export**: Implement comprehensive data export from Vercel KV
+1. **Data Export**: Implement comprehensive data export from Upstash Redis
 2. **API Compatibility**: Maintain API interface for smooth transition
 3. **Gradual Migration**: Move features incrementally rather than all at once
 4. **User Communication**: Clear migration timeline and benefits

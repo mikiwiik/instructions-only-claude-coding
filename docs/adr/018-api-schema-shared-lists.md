@@ -410,7 +410,7 @@ Response: 200 OK + ETag: "version-6" (if changed)
 
 ### Data Storage
 
-**Vercel KV (Redis):**
+**Upstash Redis (Redis):**
 
 ```typescript
 // List metadata
@@ -568,13 +568,13 @@ Clients consuming this API must:
 
 - 50+ concurrent participants per list
 - High-frequency sync operations (100+ changes/minute)
-- Vercel KV response times under stress
+- Upstash Redis response times under stress
 - Cold start frequency and duration
 
 ### Failure Recovery Testing
 
 - Network interruption and reconnection
-- Vercel KV timeout handling
+- Upstash Redis timeout handling
 - Partial sync failure recovery
 - Conflict resolution edge cases
 
@@ -636,7 +636,7 @@ Clients consuming this API must:
 - **Polling Overhead**: Not truly real-time (5s interval)
 - **Network Dependency**: Requires active connection for sync
 - **Conflict Resolution**: Client must handle conflicts
-- **Storage Costs**: Vercel KV usage scales with users
+- **Storage Costs**: Upstash Redis usage scales with users
 - **Cold Starts**: Initial requests may be slow
 
 ### Neutral
@@ -650,7 +650,7 @@ Clients consuming this API must:
 ### Phase 1: Core API Routes
 
 1. Implement `/api/v1/lists` (create, join, delete)
-2. Add Vercel KV storage integration
+2. Add Upstash Redis storage integration
 3. Create basic error handling middleware
 4. Add rate limiting
 
@@ -674,7 +674,7 @@ Clients consuming this API must:
 - ADR-013: Shared Lists Backend Architecture
 - ADR-017: Shared Todo List Data Model Design
 - [Vercel Serverless Functions](https://vercel.com/docs/functions/serverless-functions)
-- [Vercel KV Documentation](https://vercel.com/docs/storage/vercel-kv)
+- [Upstash Redis Documentation](https://upstash.com/docs/redis)
 - [REST API Best Practices](https://restfulapi.net/)
 - [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
 - [WCAG 2.2 AA Guidelines](https://www.w3.org/WAI/WCAG22/quickref/)
