@@ -51,6 +51,16 @@ export default function HomePage() {
           </div>
         </header>
 
+        {/* Beta notice - temporary until #333 personal lists */}
+        <div
+          className='mb-4 md:mb-6 bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800'
+          role='status'
+          aria-label='Beta notice'
+        >
+          <span className='font-medium'>Beta:</span> Currently all users share
+          one list. Personal lists coming soon.
+        </div>
+
         <main
           className='bg-card border-x-0 md:border-x border-y md:rounded-lg p-0 md:p-6 shadow-sm fade-in'
           role='main'
