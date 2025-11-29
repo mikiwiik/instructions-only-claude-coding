@@ -16,7 +16,7 @@ representation of the development process.
 
 New to the project? Start here:
 
-1. **[Development Environment Setup](dev-environment-setup.md)** - Configure your local development environment
+1. **[Development Environment Setup](../setup/installation.md)** - Configure your local development environment
 2. **[Development Workflow](workflow.md)** - Learn the branch-based workflow, TDD practices, and quality standards
 3. **[Project Management](project-management.md)** - Understand issue tracking and GitHub Projects workflow
 
@@ -81,18 +81,19 @@ New to the project? Start here:
 
 ### Development Environment
 
-**[dev-environment-setup.md](dev-environment-setup.md)** - Local environment configuration
+**[Installation Guide](../setup/installation.md)** - Complete development environment setup
 
+- System requirements (Node.js, npm)
+- Project setup and dependency installation
+- IDE configuration
 - Claude Code settings management
-- Dotfiles symlink strategy
-- Settings sharing across projects
-- Tool permissions configuration
+- Dotfiles symlink strategy for settings sharing
 
 **Topics:**
 
-- Settings file location and structure
-- Symlink setup for shared settings
-- Permission management
+- Prerequisites and installation
+- Development tools and quality assurance
+- Claude Code settings and permissions
 
 ### Slash Command Best Practices
 
@@ -118,7 +119,7 @@ New to the project? Start here:
 
 1. [workflow.md](workflow.md) - Daily development practices
 2. [project-management.md](project-management.md) - Issue tracking workflow
-3. [dev-environment-setup.md](dev-environment-setup.md) - Local setup
+3. [Installation Guide](../setup/installation.md) - Local setup
 
 **For Project Managers:**
 
@@ -134,7 +135,7 @@ New to the project? Start here:
 
 **Setting Up a New Development Environment:**
 
-1. [dev-environment-setup.md](dev-environment-setup.md) - Configure Claude Code settings
+1. [Installation Guide](../setup/installation.md) - Configure development environment and Claude Code settings
 2. [workflow.md](workflow.md) - Review development workflow
 
 **Starting Work on an Issue:**
