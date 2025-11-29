@@ -39,7 +39,7 @@ maintaining the project's focus on simplicity and educational value.
 We will implement a **Vercel-native serverless architecture** using:
 
 1. **Backend**: Next.js API Routes (serverless functions)
-2. **Storage**: Vercel KV (Redis-compatible)
+2. **Storage**: Upstash Redis (Redis-compatible)
 3. **Real-time**: Server-Sent Events (SSE) with polling fallback
 4. **Authentication**: Anonymous sharing (no user accounts)
 5. **Deployment**: Vercel edge deployment with global distribution
@@ -49,7 +49,7 @@ We will implement a **Vercel-native serverless architecture** using:
 | Component          | Choice             | Alternatives Considered               | Rationale                                             |
 | ------------------ | ------------------ | ------------------------------------- | ----------------------------------------------------- |
 | **Backend**        | Next.js API Routes | Supabase, Firebase, Custom Node.js    | Keeps everything in Next.js stack, serverless scaling |
-| **Database**       | Vercel KV (Redis)  | PostgreSQL, MongoDB, Supabase         | Zero config, edge replication, perfect for real-time  |
+| **Database**       | Upstash Redis (Redis)  | PostgreSQL, MongoDB, Supabase         | Zero config, edge replication, perfect for real-time  |
 | **Real-time**      | Server-Sent Events | WebSockets, Pusher, Polling           | Simple, reliable, no external dependencies            |
 | **Authentication** | Anonymous sharing  | NextAuth, Clerk, Auth0, Supabase Auth | Avoids complexity, maintains educational focus        |
 | **Hosting**        | Vercel             | Railway, AWS, Google Cloud            | Integrated ecosystem, free tier, educational use      |
@@ -109,7 +109,7 @@ interface SharedTodo extends Todo {
 ### Phase 1: Foundation (Week 1)
 
 - Data model design and API schema
-- Vercel KV setup and basic API routes
+- Upstash Redis setup and basic API routes
 - localStorage to shared list conversion
 
 ### Phase 2: Core Functionality (Week 2-3)
@@ -141,7 +141,7 @@ interface SharedTodo extends Todo {
 ~~- Progressive enhancement approach~~
 
 **Current approach (ADR-029):**
-- All todos stored in Vercel KV backend
+- All todos stored in Upstash Redis backend
 - localStorage no longer used for primary persistence
 - Server-only architecture for all lists
 
@@ -186,14 +186,14 @@ interface SharedTodo extends Todo {
 
 ### Vercel Free Tier Coverage
 
-- **Vercel KV**: 30GB storage, 100k requests/month
+- **Upstash Redis**: 30GB storage, 100k requests/month
 - **API Routes**: 100GB-hrs execution time
 - **Bandwidth**: 100GB/month
 - **Expected Cost**: $0 for development, $0-20/month for moderate usage
 
 ### Scaling Considerations
 
-- Vercel KV scales automatically
+- Upstash Redis scales automatically
 - Serverless functions scale to zero
 - Pay-per-use model aligns with usage
 - Free tier sufficient for educational use
