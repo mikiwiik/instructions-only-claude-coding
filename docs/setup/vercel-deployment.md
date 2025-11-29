@@ -182,31 +182,6 @@ Current production deployment status:
 - ✅ **Preview Deployments**: PR preview URLs working
 - ✅ **Build Caching**: Dependency and build caching enabled
 
-## Deploying Other Next.js Projects
-
-### Project Compatibility Requirements
-
-Ensure your `package.json` includes:
-
-```json
-{
-  "scripts": {
-    "build": "next build",
-    "start": "next start"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  }
-}
-```
-
-### Setup Process
-
-1. **Follow Setup Steps**: Use the same Vercel setup process outlined above
-2. **Configure Environment Variables**: Add any required variables in Vercel dashboard
-3. **Custom Domain**: Optional custom domain configuration in Vercel settings
-4. **Build Settings**: Adjust build/install commands if needed
-
 ## Troubleshooting
 
 ### Common Deployment Issues
