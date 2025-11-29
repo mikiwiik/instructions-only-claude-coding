@@ -1,4 +1,4 @@
-# ADR-029: Server-Only Architecture with Vercel KV Backend
+# ADR-029: Server-Only Architecture with Upstash Redis Backend
 
 **Status**: Proposed
 **Date**: 2025-11-22
@@ -9,7 +9,7 @@
 
 ## Summary
 
-Migrate from localStorage-only persistence to server-backed storage using Vercel KV (Redis) for all todo lists. This establishes the backend as the single source of truth, enabling multi-device access and future collaborative features.
+Migrate from localStorage-only persistence to server-backed storage using Upstash Redis (Redis) for all todo lists. This establishes the backend as the single source of truth, enabling multi-device access and future collaborative features.
 
 ## Context
 
@@ -32,7 +32,7 @@ Migrate from localStorage-only persistence to server-backed storage using Vercel
 
 ### Desired State
 
-- **Storage**: Vercel KV (Redis-compatible) as single source of truth
+- **Storage**: Upstash Redis (Redis-compatible) as single source of truth
 - **Scope**: Multi-device access for all users
 - **Persistence**: Server-side with automatic persistence
 - **Collaboration**: Ready for future share URL implementation
@@ -44,7 +44,7 @@ Migrate from localStorage-only persistence to server-backed storage using Vercel
 
 Migrate to **server-only architecture** where:
 
-1. **All todos stored in Vercel KV backend** (not localStorage)
+1. **All todos stored in Upstash Redis backend** (not localStorage)
 2. **Single hardcoded list ID** (`"main-list"`) for now - unique per-user IDs deferred to future issue
 3. **localStorage deprecated** - no longer used for persistence (future: caching only)
 4. **Backend as single source of truth** - all operations go through API routes
@@ -54,7 +54,7 @@ Migrate to **server-only architecture** where:
 
 | Component | Technology | Rationale |
 |-----------|-----------|-----------|
-| **Backend Storage** | Vercel KV (Redis) | Zero-config Vercel integration, generous free tier, edge replication |
+| **Backend Storage** | Upstash Redis (Redis) | Zero-config Vercel integration, generous free tier, edge replication |
 | **API Routes** | Next.js API Routes | Serverless, already set up, reuses existing infrastructure |
 | **Persistence** | Server-side only | Single source of truth, enables multi-device |
 | **Client State** | React useState + useEffect | Simple, fits existing patterns |
@@ -68,14 +68,14 @@ For this implementation:
 ### Data Flow
 
 ```typescript
-User Action → useTodos Hook → API Route → Vercel KV → Response → UI Update
+User Action → useTodos Hook → API Route → Upstash Redis → Response → UI Update
 
 Example: Add Todo
 1. User types todo text, clicks "Add"
 2. useTodos.addTodo() creates todo object
 3. Optimistic update: Add to local state immediately (instant UI feedback)
 4. POST /api/shared/main-list/sync with operation="create"
-5. API route stores in Vercel KV
+5. API route stores in Upstash Redis
 6. On success: Keep optimistic update
 7. On error: Rollback local state, show error
 ```
@@ -110,7 +110,7 @@ Example: Add Todo
 - **Better UX**: Cross-device access by default
 - **Educational value**: Demonstrates full-stack development
 
-### Why Vercel KV?
+### Why Upstash Redis?
 
 **Alternatives considered:**
 - **PostgreSQL**: Overkill for key-value storage, more complex
@@ -118,7 +118,7 @@ Example: Add Todo
 - **Supabase**: External dependency, additional service to manage
 - **Firebase**: Google ecosystem lock-in, different auth model
 
-**Vercel KV advantages:**
+**Upstash Redis advantages:**
 - Zero-configuration integration with Vercel deployment
 - Redis-compatible (industry-standard)
 - Global edge replication
@@ -137,22 +137,22 @@ Example: Add Todo
 
 ## Implementation Details
 
-### Vercel KV Setup
+### Upstash Redis Setup
 
 ```bash
 # Install package
-npm install @vercel/kv --save-exact
+npm install @upstash/redis --save-exact
 
 # Environment variables (from Vercel dashboard)
-KV_REST_API_URL=https://...kv.vercel-storage.com
-KV_REST_API_TOKEN=...
+UPSTASH_REDIS_REST_URL=https://...kv.vercel-storage.com
+UPSTASH_REDIS_REST_TOKEN=...
 ```
 
 ### KVStore Implementation
 
 ```typescript
 // app/lib/kv-store.ts
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 
 export class KVStore {
   static async getList(listId: string) {
@@ -220,7 +220,7 @@ This ADR explicitly **excludes**:
 - ✅ **Future-ready**: Foundation for sharing and collaboration
 - ✅ **Simpler architecture**: Single source of truth
 - ✅ **Educational value**: Demonstrates full-stack development
-- ✅ **Cost-effective**: Vercel KV free tier sufficient
+- ✅ **Cost-effective**: Upstash Redis free tier sufficient
 - ✅ **Modern patterns**: Serverless, edge functions, optimistic updates
 
 ### Negative
@@ -233,7 +233,7 @@ This ADR explicitly **excludes**:
 ### Neutral
 
 - ⚪ **Learning curve**: Developers learn backend integration
-- ⚪ **Setup required**: Vercel KV must be configured (documented)
+- ⚪ **Setup required**: Upstash Redis must be configured (documented)
 - ⚪ **Cost monitoring**: Need to track free tier usage (very low for this app)
 
 ## Breaking Changes
@@ -246,11 +246,11 @@ This ADR explicitly **excludes**:
 
 ### For Developers
 
-1. **Vercel KV setup required**: Must configure Vercel KV in dashboard
-2. **Environment variables**: Must set `KV_REST_API_URL` and `KV_REST_API_TOKEN`
-3. **Local development**: Requires `.env.local` with Vercel KV credentials
+1. **Upstash Redis setup required**: Must configure Upstash Redis in dashboard
+2. **Environment variables**: Must set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`
+3. **Local development**: Requires `.env.local` with Upstash Redis credentials
 
-**Setup guide**: See `docs/deployment/vercel-kv-setup.md`
+**Setup guide**: See `docs/deployment/upstash-setup.md`
 
 ## Related Decisions
 
@@ -277,7 +277,7 @@ This ADR explicitly **excludes**:
 - ✅ Data persists after browser refresh
 - ✅ Data persists after localStorage clear
 - ✅ API response times < 200ms
-- ✅ Zero data loss in Vercel KV
+- ✅ Zero data loss in Upstash Redis
 
 ### User Experience Metrics
 - ✅ Instant UI feedback (optimistic updates)
@@ -289,16 +289,16 @@ This ADR explicitly **excludes**:
 - ✅ Demonstrates serverless architecture
 - ✅ Shows backend integration patterns
 - ✅ Illustrates optimistic UI updates
-- ✅ Teaches Vercel KV usage
+- ✅ Teaches Upstash Redis usage
 
 ## Implementation Timeline
 
 **Completed in Issue #121:**
-1. ✅ Install `@vercel/kv` package
-2. ✅ Update `KVStore` to use Vercel KV SDK
+1. ✅ Install `@upstash/redis` package
+2. ✅ Update `KVStore` to use Upstash Redis SDK
 3. ✅ Refactor `useTodos` hook for backend API
 4. ✅ Create Vercel configuration files
-5. ✅ Document Vercel KV setup process
+5. ✅ Document Upstash Redis setup process
 
 **Future Issues:**
 - Unique URL per user (backlog)
@@ -308,7 +308,7 @@ This ADR explicitly **excludes**:
 
 ## References
 
-- [Vercel KV Documentation](https://vercel.com/docs/storage/vercel-kv)
+- [Upstash Redis Documentation](https://upstash.com/docs/redis/overall/getstarted)
 - [Redis Best Practices](https://redis.io/docs/manual/patterns/)
 - [Optimistic UI Patterns](https://www.apollographql.com/docs/react/performance/optimistic-ui/)
 - [Next.js API Routes](https://nextjs.org/docs/api-routes/introduction)
@@ -325,7 +325,7 @@ This ADR explicitly **excludes**:
 
 ### Security Considerations
 
-- Vercel KV secured by environment variables
+- Upstash Redis secured by environment variables
 - API routes use Next.js serverless security
 - Rate limiting handled by Vercel
 - Future: Add access tokens for sensitive lists
@@ -374,7 +374,7 @@ This ADR explicitly **excludes**:
 - Different ecosystem from Vercel
 - PostgreSQL overkill for key-value
 
-**Decision:** Rejected - Vercel KV better integrated, simpler
+**Decision:** Rejected - Upstash Redis better integrated, simpler
 
 ## Decision Makers
 
