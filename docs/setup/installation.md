@@ -24,6 +24,9 @@ npm install -g @anthropic-ai/claude-code
 claude
 ```
 
+**Optional**: For shared settings across multiple projects, see
+[Claude Code Settings Management](#claude-code-settings-management-optional).
+
 ### System Requirements
 
 - **Node.js**: Version 22.x or higher
@@ -216,7 +219,10 @@ Add to your workspace `.vscode/settings.json`:
 }
 ```
 
-## Claude Code Settings Management
+## Claude Code Settings Management (Optional)
+
+This section is optional and intended for developers who work across multiple projects and want to share
+Claude Code settings via dotfiles.
 
 ### Settings Sharing with Dotfiles
 
