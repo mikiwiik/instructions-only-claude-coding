@@ -145,10 +145,11 @@ const eslintConfig = [
     },
   },
 
-  // Configuration for test files - exempt from function length limits
+  // Configuration for test files and mocks - exempt from function length limits
   {
     files: [
       '**/__tests__/**/*.{ts,tsx}',
+      '**/__mocks__/**/*.{ts,tsx}',
       '**/*.test.{ts,tsx}',
       '**/*.spec.{ts,tsx}',
     ],
