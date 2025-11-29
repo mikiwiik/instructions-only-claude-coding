@@ -10,8 +10,14 @@ The Todo App is automatically deployed to Vercel and updated on every push to th
 
 ## Vercel Deployment Setup
 
-This project is configured for automatic deployment to Vercel with GitHub integration. Follow these steps to set up
-deployment for this or similar projects.
+This project uses automatic deployment to Vercel with GitHub integration. Follow these steps to set up deployment for
+this or similar projects.
+
+> **📝 Zero Configuration Setup**
+>
+> This project requires **no Vercel configuration files** (`vercel.json`) in the repository. Vercel automatically
+> detects all settings from `package.json` and Next.js conventions. You'll find zero Vercel-specific config files in
+> this codebase - everything is handled through framework auto-detection.
 
 ### Prerequisites
 
@@ -41,7 +47,7 @@ deployment for this or similar projects.
 
 #### 3. Automatic Configuration
 
-Vercel automatically detects and configures:
+Vercel automatically detects and configures these settings **without any configuration files**:
 
 ```json
 {
@@ -52,6 +58,9 @@ Vercel automatically detects and configures:
   "installCommand": "npm ci"
 }
 ```
+
+**Note**: These settings are auto-detected from your `package.json` and Next.js project structure. No `vercel.json` or
+other configuration files are needed in your repository.
 
 #### 4. Deploy
 
@@ -77,9 +86,10 @@ Vercel automatically detects and configures:
 
 ### Zero Configuration
 
-- **Framework Detection**: Automatic Next.js project recognition
-- **Build Optimization**: Production-ready builds with no configuration
-- **Performance**: Automatic CDN, compression, and caching
+- **No Config Files**: No `vercel.json` or Vercel-specific configuration files in repository
+- **Framework Detection**: Automatic Next.js project recognition from `package.json`
+- **Build Optimization**: Production-ready builds auto-configured from Next.js conventions
+- **Performance**: Automatic CDN, compression, and caching without any setup
 
 ### Custom Domains
 
