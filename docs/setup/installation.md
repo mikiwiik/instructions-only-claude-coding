@@ -80,6 +80,24 @@ npm run dev
 
 The development server will start at `http://localhost:3000`.
 
+## Upstash Redis Setup
+
+The application requires Upstash Redis for backend storage. This is required for both local development and production.
+
+### Quick Setup
+
+1. Create an Upstash account at [console.upstash.com](https://console.upstash.com)
+2. Create a Redis database
+3. Copy the REST API credentials
+4. Create `.env.local` in the project root:
+
+```bash
+UPSTASH_REDIS_REST_URL=https://your-database.upstash.io
+UPSTASH_REDIS_REST_TOKEN=your-token-here
+```
+
+For detailed instructions, see [Upstash Setup Guide](upstash-setup.md).
+
 ## Development Tools and Quality Assurance
 
 ### Pre-commit Hooks
