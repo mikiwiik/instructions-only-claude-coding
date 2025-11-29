@@ -73,7 +73,7 @@ The project also includes a `vercel.json` for Upstash Redis backend configuratio
 }
 ```
 
-**Note**: See [Upstash Redis Setup Guide](../deployment/upstash-setup.md) for complete backend configuration.
+**Note**: See [Upstash Redis Setup Guide](upstash-setup.md) for complete backend configuration.
 
 #### 4. Deploy
 
@@ -127,7 +127,7 @@ This project uses Upstash Redis for backend storage. Configure these variables i
 2. Add `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` (from Upstash console)
 3. Enable for all environments: Production, Preview, Development
 
-See [Upstash Redis Setup Guide](../deployment/upstash-setup.md) for detailed instructions.
+See [Upstash Redis Setup Guide](upstash-setup.md) for detailed instructions.
 
 ## CI/CD Integration
 
