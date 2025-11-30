@@ -1,6 +1,15 @@
 import '@testing-library/jest-dom';
 import React from 'react';
 
+// Mock global fetch for API calls
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    ok: true,
+    status: 200,
+    json: () => Promise.resolve({ todos: [] }),
+  })
+);
+
 // Mock localStorage with actual storage functionality
 const localStorageMock = (() => {
   let store = {};
@@ -84,4 +93,14 @@ beforeEach(() => {
   localStorageMock.getItem.mockClear();
   localStorageMock.setItem.mockClear();
   localStorageMock.removeItem.mockClear();
+
+  // Reset fetch mock to default successful response
+  global.fetch.mockClear();
+  global.fetch.mockImplementation(() =>
+    Promise.resolve({
+      ok: true,
+      status: 200,
+      json: () => Promise.resolve({ todos: [] }),
+    })
+  );
 });

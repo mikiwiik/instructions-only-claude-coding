@@ -11,6 +11,8 @@ const customJestConfig = {
   moduleNameMapper: {
     // Handle module aliases (this will be automatically configured for you based on your tsconfig.json paths)
     '^@/(.*)$': '<rootDir>/app/$1',
+    // Mock @upstash/redis for tests
+    '^@upstash/redis$': '<rootDir>/__mocks__/@upstash/redis.ts',
   },
   testEnvironment: 'jest-environment-jsdom',
   collectCoverageFrom: [
