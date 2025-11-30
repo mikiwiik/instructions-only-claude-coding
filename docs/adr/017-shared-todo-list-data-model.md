@@ -196,9 +196,9 @@ Per ADR-014 (Anonymous Sharing Architecture), we avoid user authentication to:
 - Enable instant collaboration without signup friction
 - Minimize privacy concerns
 
-### Why Vercel KV Compatible?
+### Why Upstash Redis Compatible?
 
-Per ADR-013 (Shared Lists Backend Architecture), we're using Vercel KV (Redis-compatible) which requires:
+Per ADR-013 (Shared Lists Backend Architecture), we're using Upstash Redis (Redis-compatible) which requires:
 
 - Flat data structures (easily serialized)
 - UUID-based keys for partitioning
@@ -230,7 +230,7 @@ Per ADR-013 (Shared Lists Backend Architecture), we're using Vercel KV (Redis-co
 ### Data Sanitization
 
 - **XSS Prevention**: Todo text sanitized before storage/display
-- **SQL Injection**: N/A (using Vercel KV, not SQL)
+- **SQL Injection**: N/A (using Upstash Redis, not SQL)
 - **Input Constraints**: Maximum lengths for todo text and list names
 
 ## Accessibility Considerations (WCAG 2.2 AA)

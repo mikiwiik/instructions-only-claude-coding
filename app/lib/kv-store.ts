@@ -1,8 +1,18 @@
 /**
- * Vercel KV store wrapper for shared todo lists
+ * Upstash Redis store wrapper for todo lists
+ *
+ * Requires UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN environment variables.
+ * See docs/setup/upstash-setup.md for configuration instructions.
  */
 
+import { Redis } from '@upstash/redis';
 import type { Todo } from '@/types/todo';
+
+// Initialize Upstash Redis client
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL!,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+});
 
 export interface SharedTodoList {
   id: string;
@@ -11,15 +21,6 @@ export interface SharedTodoList {
   subscribers: string[];
 }
 
-/**
- * Simple in-memory store for development
- *
- * Note: This is a temporary implementation using Map for local development.
- * Production deployment will require migration to Vercel KV or similar persistent storage.
- * See: https://vercel.com/docs/storage/vercel-kv
- */
-const store = new Map<string, SharedTodoList>();
-
 export class KVStore {
   private static getListKey(listId: string): string {
     return `shared:list:${listId}`;
@@ -27,7 +28,7 @@ export class KVStore {
 
   static async getList(listId: string): Promise<SharedTodoList | null> {
     const key = this.getListKey(listId);
-    return store.get(key) || null;
+    return await redis.get<SharedTodoList>(key);
   }
 
   static async setList(
@@ -42,7 +43,7 @@ export class KVStore {
       lastModified: Date.now(),
       subscribers: [userId],
     };
-    store.set(key, list);
+    await redis.set(key, list);
   }
 
   static async updateTodos(listId: string, todos: Todo[]): Promise<void> {
@@ -58,12 +59,10 @@ export class KVStore {
       todos,
       lastModified: Date.now(),
     };
-
-    store.set(key, updated);
+    await redis.set(key, updated);
   }
 
   static async addSubscriber(listId: string, userId: string): Promise<void> {
-    const key = this.getListKey(listId);
     const list = await this.getList(listId);
 
     if (!list) {
@@ -72,12 +71,12 @@ export class KVStore {
 
     if (!list.subscribers.includes(userId)) {
       list.subscribers.push(userId);
-      store.set(key, list);
+      const key = this.getListKey(listId);
+      await redis.set(key, list);
     }
   }
 
   static async removeSubscriber(listId: string, userId: string): Promise<void> {
-    const key = this.getListKey(listId);
     const list = await this.getList(listId);
 
     if (!list) {
@@ -85,11 +84,12 @@ export class KVStore {
     }
 
     list.subscribers = list.subscribers.filter((id) => id !== userId);
-    store.set(key, list);
+    const key = this.getListKey(listId);
+    await redis.set(key, list);
   }
 
   static async deleteList(listId: string): Promise<void> {
     const key = this.getListKey(listId);
-    store.delete(key);
+    await redis.del(key);
   }
 }

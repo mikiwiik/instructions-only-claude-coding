@@ -13,11 +13,12 @@ The Todo App is automatically deployed to Vercel and updated on every push to th
 This project uses automatic deployment to Vercel with GitHub integration. Follow these steps to set up deployment for
 this or similar projects.
 
-> **📝 Zero Configuration Setup**
+> **📝 Configuration Overview**
 >
-> This project requires **no Vercel configuration files** (`vercel.json`) in the repository. Vercel automatically
-> detects all settings from `package.json` and Next.js conventions. You'll find zero Vercel-specific config files in
-> this codebase - everything is handled through framework auto-detection.
+> This project uses a minimal `vercel.json` configuration file for Upstash Redis backend integration. The file
+> configures API function timeouts, deployment region (colocated with Redis storage), and environment variable references.
+> All other settings (framework, build commands, Node version) are auto-detected from `package.json` and Next.js
+> conventions.
 
 ### Prerequisites
 
@@ -45,9 +46,9 @@ this or similar projects.
 # 3. Click "Import"
 ```
 
-#### 3. Automatic Configuration
+#### 3. Configuration
 
-Vercel automatically detects and configures these settings **without any configuration files**:
+Vercel automatically detects these settings from `package.json` and Next.js conventions:
 
 ```json
 {
@@ -59,8 +60,20 @@ Vercel automatically detects and configures these settings **without any configu
 }
 ```
 
-**Note**: These settings are auto-detected from your `package.json` and Next.js project structure. No `vercel.json` or
-other configuration files are needed in your repository.
+The project also includes a `vercel.json` for Upstash Redis backend configuration:
+
+```json
+{
+  "functions": { "app/api/**/*.ts": { "maxDuration": 10 } },
+  "regions": ["iad1"],
+  "env": {
+    "UPSTASH_REDIS_REST_URL": "@upstash-redis-rest-url",
+    "UPSTASH_REDIS_REST_TOKEN": "@upstash-redis-rest-token"
+  }
+}
+```
+
+**Note**: See [Upstash Redis Setup Guide](upstash-setup.md) for complete backend configuration.
 
 #### 4. Deploy
 
@@ -84,12 +97,12 @@ other configuration files are needed in your repository.
 - **Branch Previews**: Feature branches can be previewed before merge
 - **Safe Testing**: Test changes without affecting production
 
-### Zero Configuration
+### Minimal Configuration
 
-- **No Config Files**: No `vercel.json` or Vercel-specific configuration files in repository
 - **Framework Detection**: Automatic Next.js project recognition from `package.json`
 - **Build Optimization**: Production-ready builds auto-configured from Next.js conventions
-- **Performance**: Automatic CDN, compression, and caching without any setup
+- **Performance**: Automatic CDN, compression, and caching
+- **Upstash Redis Config**: Minimal `vercel.json` for backend integration (region, timeouts, env vars)
 
 ### Custom Domains
 
@@ -99,25 +112,22 @@ other configuration files are needed in your repository.
 
 ## Environment Configuration
 
-### Current Setup
+### Required Environment Variables
 
-```bash
-# No environment variables needed for this Todo App
-# All data is stored in localStorage (client-side)
-# Production build automatically optimized by Next.js
-```
+This project uses Upstash Redis for backend storage. Configure these variables in Vercel Dashboard:
 
-### For Projects with Environment Variables
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `UPSTASH_REDIS_REST_URL` | Upstash Redis REST API endpoint | Yes |
+| `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis authentication token | Yes |
 
-```bash
-# In Vercel Dashboard:
-# 1. Go to Project Settings
-# 2. Navigate to Environment Variables
-# 3. Add required variables for each environment:
-#    - Production
-#    - Preview
-#    - Development
-```
+### Setup Steps
+
+1. Go to Vercel Dashboard → Project Settings → Environment Variables
+2. Add `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` (from Upstash console)
+3. Enable for all environments: Production, Preview, Development
+
+See [Upstash Redis Setup Guide](upstash-setup.md) for detailed instructions.
 
 ## CI/CD Integration
 
@@ -181,6 +191,7 @@ Current production deployment status:
 - ✅ **Performance**: Optimized Next.js production build
 - ✅ **Preview Deployments**: PR preview URLs working
 - ✅ **Build Caching**: Dependency and build caching enabled
+- ✅ **Backend Storage**: Upstash Redis for persistent data
 
 ## Troubleshooting
 

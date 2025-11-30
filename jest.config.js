@@ -11,6 +11,8 @@ const customJestConfig = {
   moduleNameMapper: {
     // Handle module aliases (this will be automatically configured for you based on your tsconfig.json paths)
     '^@/(.*)$': '<rootDir>/app/$1',
+    // Mock @upstash/redis for tests
+    '^@upstash/redis$': '<rootDir>/__mocks__/@upstash/redis.ts',
   },
   testEnvironment: 'jest-environment-jsdom',
   collectCoverageFrom: [
@@ -18,10 +20,6 @@ const customJestConfig = {
     '!app/**/*.d.ts',
     '!app/**/layout.tsx',
     '!app/**/page.tsx',
-    '!app/api/**/*', // Temporarily excluded - see issue #193
-    '!app/hooks/useSharedTodoSync.ts', // Temporarily excluded - see issue #194
-    '!app/hooks/useSharedTodos.ts', // Temporarily excluded - see issue #194
-    '!app/lib/sync-queue.ts', // Temporarily excluded - see issue #194
   ],
   coverageReporters: ['json-summary', 'text', 'lcov', 'html'],
   reporters: [

@@ -145,10 +145,11 @@ const eslintConfig = [
     },
   },
 
-  // Configuration for test files - exempt from function length limits
+  // Configuration for test files and mocks - exempt from function length limits
   {
     files: [
       '**/__tests__/**/*.{ts,tsx}',
+      '__mocks__/**/*.{ts,tsx}',
       '**/*.test.{ts,tsx}',
       '**/*.spec.{ts,tsx}',
     ],
@@ -163,6 +164,7 @@ const eslintConfig = [
     rules: {
       'max-lines-per-function': 'off', // Test files often have long test suites
       'max-statements': 'off', // Test assertions can be numerous
+      '@typescript-eslint/no-require-imports': 'off', // Allow require() for Jest mocks
     },
   },
 

@@ -242,12 +242,12 @@ complete and up-to-date list of all ADRs, see [Architecture Decision Records](..
 
 - **Client-side Storage**: Limited to browser localStorage for local todos
 - **Polling-Based Sync**: Development uses polling instead of Redis Pub/Sub for shared todos
-- **In-Memory KV Store**: Production should use persistent storage (Redis, Vercel KV)
+- **In-Memory KV Store**: Production should use persistent storage (Upstash Redis)
 
 ### Future Scalability Options
 
 - **Redis Pub/Sub**: Replace polling with real-time Pub/Sub for SSE broadcasts
-- **Persistent KV Store**: Transition from in-memory to Redis or Vercel KV
+- **Persistent KV Store**: Transition from in-memory to Upstash Redis
 - **User Authentication**: Add auth layer for secure shared list access
 - **Operational Transforms**: Advanced conflict resolution beyond last-write-wins
 - **Presence Indicators**: Show active users in shared lists
