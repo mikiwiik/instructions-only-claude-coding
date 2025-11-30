@@ -20,12 +20,19 @@ export async function POST(
       data: unknown;
     };
 
-    const list = await KVStore.getList(listId);
+    let list = await KVStore.getList(listId);
+
+    // Auto-create list if it doesn't exist and this is a create operation
     if (!list) {
-      return NextResponse.json({ error: 'List not found' }, { status: 404 });
+      if (operation === 'create') {
+        await KVStore.setList(listId, [], 'anonymous');
+        list = await KVStore.getList(listId);
+      } else {
+        return NextResponse.json({ error: 'List not found' }, { status: 404 });
+      }
     }
 
-    let updatedTodos = [...list.todos];
+    let updatedTodos = [...(list?.todos || [])];
 
     switch (operation) {
       case 'create': {
