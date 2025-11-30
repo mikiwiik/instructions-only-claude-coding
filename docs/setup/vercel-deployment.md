@@ -15,10 +15,10 @@ this or similar projects.
 
 > **📝 Configuration Overview**
 >
-> This project uses a minimal `vercel.json` configuration file for Upstash Redis backend integration. The file
-> configures API function timeouts, deployment region (colocated with Redis storage), and environment variable references.
-> All other settings (framework, build commands, Node version) are auto-detected from `package.json` and Next.js
-> conventions.
+> This project uses a minimal `vercel.json` configuration file for API function settings. The file configures API
+> function timeouts and deployment region (colocated with Upstash Redis storage). Environment variables are configured
+> directly in the Vercel Dashboard and auto-injected at runtime. All other settings (framework, build commands,
+> Node version) are auto-detected from `package.json` and Next.js conventions.
 
 ### Prerequisites
 
@@ -60,20 +60,17 @@ Vercel automatically detects these settings from `package.json` and Next.js conv
 }
 ```
 
-The project also includes a `vercel.json` for Upstash Redis backend configuration:
+The project also includes a `vercel.json` for API function configuration:
 
 ```json
 {
   "functions": { "app/api/**/*.ts": { "maxDuration": 10 } },
-  "regions": ["iad1"],
-  "env": {
-    "UPSTASH_REDIS_REST_URL": "@upstash-redis-rest-url",
-    "UPSTASH_REDIS_REST_TOKEN": "@upstash-redis-rest-token"
-  }
+  "regions": ["iad1"]
 }
 ```
 
-**Note**: See [Upstash Redis Setup Guide](upstash-setup.md) for complete backend configuration.
+Environment variables (`UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`) are configured directly in the Vercel
+Dashboard and auto-injected at runtime. See [Upstash Redis Setup Guide](upstash-setup.md) for backend configuration.
 
 #### 4. Deploy
 
@@ -102,7 +99,7 @@ The project also includes a `vercel.json` for Upstash Redis backend configuratio
 - **Framework Detection**: Automatic Next.js project recognition from `package.json`
 - **Build Optimization**: Production-ready builds auto-configured from Next.js conventions
 - **Performance**: Automatic CDN, compression, and caching
-- **Upstash Redis Config**: Minimal `vercel.json` for backend integration (region, timeouts, env vars)
+- **Upstash Redis Config**: Minimal `vercel.json` for backend integration (region, timeouts)
 
 ### Custom Domains
 
@@ -116,10 +113,10 @@ The project also includes a `vercel.json` for Upstash Redis backend configuratio
 
 This project uses Upstash Redis for backend storage. Configure these variables in Vercel Dashboard:
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `UPSTASH_REDIS_REST_URL` | Upstash Redis REST API endpoint | Yes |
-| `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis authentication token | Yes |
+| Variable                   | Description                        | Required |
+| -------------------------- | ---------------------------------- | -------- |
+| `UPSTASH_REDIS_REST_URL`   | Upstash Redis REST API endpoint    | Yes      |
+| `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis authentication token | Yes      |
 
 ### Setup Steps
 
