@@ -1,32 +1,60 @@
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { useTodos } from '../../hooks/useTodos';
-import type { Todo } from '../../types/todo';
+
+// Mock fetch globally for backend API calls
+const mockFetch = jest.fn();
+global.fetch = mockFetch;
+
+// Type for fetch options
+type FetchOptions = { method?: string; body?: string };
 
 describe('useTodos hook', () => {
   beforeEach(() => {
-    // Clear localStorage before each test
-    localStorage.clear();
+    jest.clearAllMocks();
     // Use fake timers for timestamp tests
     jest.useFakeTimers();
+
+    // Default mock: empty list, successful responses
+    mockFetch.mockImplementation((url: string, options?: FetchOptions) => {
+      if (options?.method === 'POST') {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ success: true }),
+        });
+      }
+      // GET request - return empty list
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ todos: [] }),
+      });
+    });
   });
 
   afterEach(() => {
-    localStorage.clear();
     jest.useRealTimers();
   });
 
-  it('should initialize with empty todos array', () => {
+  it('should initialize with empty todos array', async () => {
     const { result } = renderHook(() => useTodos());
+
+    // Wait for initialization to complete
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
+    });
 
     expect(result.current.todos).toEqual([]);
     expect(result.current.filter).toBe('active');
   });
 
-  it('should add a new todo', () => {
+  it('should add a new todo', async () => {
     const { result } = renderHook(() => useTodos());
 
-    act(() => {
-      result.current.addTodo('Learn React Testing');
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
+    });
+
+    await act(async () => {
+      await result.current.addTodo('Learn React Testing');
     });
 
     expect(result.current.todos).toHaveLength(1);
@@ -39,24 +67,33 @@ describe('useTodos hook', () => {
     expect(result.current.todos[0]).toHaveProperty('updatedAt');
   });
 
-  it('should generate unique IDs for each todo', () => {
+  it('should generate unique IDs for each todo', async () => {
     const { result } = renderHook(() => useTodos());
 
-    act(() => {
-      result.current.addTodo('First todo');
-      result.current.addTodo('Second todo');
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
+    });
+
+    await act(async () => {
+      await result.current.addTodo('First todo');
+      await result.current.addTodo('Second todo');
     });
 
     expect(result.current.todos).toHaveLength(2);
     expect(result.current.todos[0].id).not.toBe(result.current.todos[1].id);
   });
 
-  it('should set createdAt and updatedAt timestamps', () => {
+  it('should set createdAt and updatedAt timestamps', async () => {
     const { result } = renderHook(() => useTodos());
+
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
+    });
+
     const beforeTime = new Date();
 
-    act(() => {
-      result.current.addTodo('Timestamped todo');
+    await act(async () => {
+      await result.current.addTodo('Timestamped todo');
     });
 
     const afterTime = new Date();
@@ -71,91 +108,141 @@ describe('useTodos hook', () => {
     expect(todo.updatedAt.getTime()).toBe(todo.createdAt.getTime());
   });
 
-  it('should add todos to the beginning of the list', () => {
+  it('should add todos to the beginning of the list', async () => {
     const { result } = renderHook(() => useTodos());
 
-    act(() => {
-      result.current.addTodo('First todo');
-      result.current.addTodo('Second todo');
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
+    });
+
+    await act(async () => {
+      await result.current.addTodo('First todo');
+      await result.current.addTodo('Second todo');
     });
 
     expect(result.current.todos[0].text).toBe('Second todo');
     expect(result.current.todos[1].text).toBe('First todo');
   });
 
-  it('should persist todos to localStorage when adding', () => {
+  it('should sync todos to backend when adding', async () => {
     const { result } = renderHook(() => useTodos());
 
-    act(() => {
-      result.current.addTodo('Persistent todo');
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
     });
 
-    const storedTodos = JSON.parse(localStorage.getItem('todos') || '[]');
-    expect(storedTodos).toHaveLength(1);
-    expect(storedTodos[0].text).toBe('Persistent todo');
+    await act(async () => {
+      await result.current.addTodo('Persistent todo');
+    });
+
+    // Verify fetch was called with POST to sync the new todo
+    const postCalls = mockFetch.mock.calls.filter(
+      (call: [string, FetchOptions?]) => call[1]?.method === 'POST'
+    );
+    expect(postCalls.length).toBeGreaterThan(0);
+
+    const lastPostCall = postCalls[postCalls.length - 1];
+    const body = JSON.parse(lastPostCall[1]?.body as string);
+    expect(body.operation).toBe('create');
+    expect(body.data.text).toBe('Persistent todo');
   });
 
-  it('should load todos from localStorage on initialization', () => {
+  it('should load todos from backend on initialization', async () => {
     const existingTodos = [
       {
         id: 'existing-1',
         text: 'Existing todo',
-        completed: false,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
     ];
-    localStorage.setItem('todos', JSON.stringify(existingTodos));
+
+    // Mock fetch to return existing todos
+    mockFetch.mockImplementation((url: string, options?: FetchOptions) => {
+      if (options?.method === 'POST') {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ success: true }),
+        });
+      }
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ todos: existingTodos }),
+      });
+    });
 
     const { result } = renderHook(() => useTodos());
+
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
+    });
 
     expect(result.current.todos).toHaveLength(1);
     expect(result.current.todos[0].text).toBe('Existing todo');
     expect(result.current.todos[0].createdAt).toBeInstanceOf(Date);
   });
 
-  it('should handle corrupted localStorage data gracefully', () => {
-    localStorage.setItem('todos', 'invalid json');
+  it('should handle backend errors gracefully', async () => {
+    // Mock fetch to return an error
+    mockFetch.mockImplementation(() => {
+      return Promise.reject(new Error('Network error'));
+    });
 
     const { result } = renderHook(() => useTodos());
+
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
+    });
 
     expect(result.current.todos).toEqual([]);
   });
 
-  it('should not add empty or whitespace-only todos', () => {
+  it('should not add empty or whitespace-only todos', async () => {
     const { result } = renderHook(() => useTodos());
 
-    act(() => {
-      result.current.addTodo('');
-      result.current.addTodo('   ');
-      result.current.addTodo('\t\n');
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
+    });
+
+    await act(async () => {
+      await result.current.addTodo('');
+      await result.current.addTodo('   ');
+      await result.current.addTodo('\t\n');
     });
 
     expect(result.current.todos).toHaveLength(0);
   });
 
-  it('should trim whitespace from todo text', () => {
+  it('should trim whitespace from todo text', async () => {
     const { result } = renderHook(() => useTodos());
 
-    act(() => {
-      result.current.addTodo('  Trimmed todo  ');
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
+    });
+
+    await act(async () => {
+      await result.current.addTodo('  Trimmed todo  ');
     });
 
     expect(result.current.todos[0].text).toBe('Trimmed todo');
   });
 
   describe('toggleTodo', () => {
-    it('should toggle a todo from incomplete to complete', () => {
+    it('should toggle a todo from incomplete to complete', async () => {
       const { result } = renderHook(() => useTodos());
 
-      act(() => {
-        result.current.addTodo('Todo to toggle');
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('Todo to toggle');
       });
 
       const todoId = result.current.todos[0].id;
 
-      act(() => {
-        result.current.toggleTodo(todoId);
+      await act(async () => {
+        await result.current.toggleTodo(todoId);
       });
 
       // After toggling to complete, the todo is filtered out from active view
@@ -166,40 +253,48 @@ describe('useTodos hook', () => {
       expect(result.current.todos).toHaveLength(0);
     });
 
-    it('should toggle a todo from complete to incomplete', () => {
+    it('should toggle a todo from complete to incomplete', async () => {
       const { result } = renderHook(() => useTodos());
 
-      act(() => {
-        result.current.addTodo('Todo to toggle back');
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('Todo to toggle back');
       });
 
       const todoId = result.current.todos[0].id;
 
       // Toggle to complete
-      act(() => {
-        result.current.toggleTodo(todoId);
+      await act(async () => {
+        await result.current.toggleTodo(todoId);
       });
 
       // Toggle back to incomplete
-      act(() => {
-        result.current.toggleTodo(todoId);
+      await act(async () => {
+        await result.current.toggleTodo(todoId);
       });
 
       expect(!!result.current.todos[0].completedAt).toBe(false);
     });
 
-    it('should not affect other todos when toggling', () => {
+    it('should not affect other todos when toggling', async () => {
       const { result } = renderHook(() => useTodos());
 
-      act(() => {
-        result.current.addTodo('First todo');
-        result.current.addTodo('Second todo');
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('First todo');
+        await result.current.addTodo('Second todo');
       });
 
       const secondTodoId = result.current.todos[0].id;
 
-      act(() => {
-        result.current.toggleTodo(secondTodoId);
+      await act(async () => {
+        await result.current.toggleTodo(secondTodoId);
       });
 
       // After toggling, check allTodos to see both todos
@@ -216,55 +311,75 @@ describe('useTodos hook', () => {
       expect(!!result.current.todos[0].completedAt).toBe(false);
     });
 
-    it('should handle toggling non-existent todo gracefully', () => {
+    it('should handle toggling non-existent todo gracefully', async () => {
       const { result } = renderHook(() => useTodos());
 
-      act(() => {
-        result.current.addTodo('Existing todo');
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('Existing todo');
       });
 
       const originalTodos = result.current.todos;
 
-      act(() => {
-        result.current.toggleTodo('non-existent-id');
+      await act(async () => {
+        await result.current.toggleTodo('non-existent-id');
       });
 
       expect(result.current.todos).toEqual(originalTodos);
     });
 
-    it('should persist todo state to localStorage when toggling', () => {
+    it('should sync todo state to backend when toggling', async () => {
       const { result } = renderHook(() => useTodos());
 
-      act(() => {
-        result.current.addTodo('Todo to persist');
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('Todo to persist');
       });
 
       const todoId = result.current.todos[0].id;
 
-      act(() => {
-        result.current.toggleTodo(todoId);
+      await act(async () => {
+        await result.current.toggleTodo(todoId);
       });
 
-      const storedTodos = JSON.parse(localStorage.getItem('todos') || '[]');
-      expect(!!storedTodos[0].completedAt).toBe(true);
+      // Verify fetch was called with POST to sync the toggle
+      const postCalls = mockFetch.mock.calls.filter(
+        (call: [string, FetchOptions?]) => call[1]?.method === 'POST'
+      );
+      expect(postCalls.length).toBeGreaterThan(1); // At least create + update
+
+      const lastPostCall = postCalls[postCalls.length - 1];
+      const body = JSON.parse(lastPostCall[1]?.body as string);
+      expect(body.operation).toBe('update');
+      expect(body.data.completedAt).toBeDefined();
     });
   });
 
   describe('deleteTodo', () => {
-    it('should soft delete todo (hide from filtered view but keep in allTodos)', () => {
+    it('should soft delete todo (hide from filtered view but keep in allTodos)', async () => {
       const { result } = renderHook(() => useTodos());
 
-      act(() => {
-        result.current.addTodo('Todo to delete');
-        result.current.addTodo('Todo to keep');
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('Todo to delete');
+        await result.current.addTodo('Todo to keep');
       });
 
       expect(result.current.todos).toHaveLength(2);
       expect(result.current.allTodos).toHaveLength(2);
       const todoToDeleteId = result.current.todos[1].id; // First todo added
 
-      act(() => {
-        result.current.deleteTodo(todoToDeleteId);
+      await act(async () => {
+        await result.current.deleteTodo(todoToDeleteId);
       });
 
       // Soft delete: hidden from filtered todos but kept in allTodos
@@ -276,37 +391,45 @@ describe('useTodos hook', () => {
       ).toBeInstanceOf(Date);
     });
 
-    it('should handle deleting non-existent todo gracefully', () => {
+    it('should handle deleting non-existent todo gracefully', async () => {
       const { result } = renderHook(() => useTodos());
 
-      act(() => {
-        result.current.addTodo('Existing todo');
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('Existing todo');
       });
 
       const originalTodos = result.current.todos;
 
-      act(() => {
-        result.current.deleteTodo('non-existent-id');
+      await act(async () => {
+        await result.current.deleteTodo('non-existent-id');
       });
 
       expect(result.current.todos).toEqual(originalTodos);
     });
 
-    it('should not affect other todos when one is soft deleted', () => {
+    it('should not affect other todos when one is soft deleted', async () => {
       const { result } = renderHook(() => useTodos());
 
-      act(() => {
-        result.current.addTodo('First todo');
-        result.current.addTodo('Second todo');
-        result.current.addTodo('Third todo');
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('First todo');
+        await result.current.addTodo('Second todo');
+        await result.current.addTodo('Third todo');
       });
 
       const middleTodoId = result.current.todos[1].id;
       const firstTodoText = result.current.todos[0].text;
       const lastTodoText = result.current.todos[2].text;
 
-      act(() => {
-        result.current.deleteTodo(middleTodoId);
+      await act(async () => {
+        await result.current.deleteTodo(middleTodoId);
       });
 
       // After soft delete, visible todos should be 2 (first and last)
@@ -317,19 +440,23 @@ describe('useTodos hook', () => {
       expect(result.current.allTodos).toHaveLength(3);
     });
 
-    it('should work with both completed and incomplete todos', () => {
+    it('should work with both completed and incomplete todos', async () => {
       const { result } = renderHook(() => useTodos());
 
-      act(() => {
-        result.current.addTodo('Incomplete todo');
-        result.current.addTodo('Complete todo');
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('Incomplete todo');
+        await result.current.addTodo('Complete todo');
       });
 
       const completeTodoId = result.current.todos[0].id;
 
       // Mark one todo as complete
-      act(() => {
-        result.current.toggleTodo(completeTodoId);
+      await act(async () => {
+        await result.current.toggleTodo(completeTodoId);
       });
 
       // Check completed todo in allTodos since it's filtered out from active view
@@ -339,8 +466,8 @@ describe('useTodos hook', () => {
       expect(!!completedTodo?.completedAt).toBe(true);
 
       // Delete the completed todo
-      act(() => {
-        result.current.deleteTodo(completeTodoId);
+      await act(async () => {
+        await result.current.deleteTodo(completeTodoId);
       });
 
       expect(result.current.todos).toHaveLength(1);
@@ -348,66 +475,78 @@ describe('useTodos hook', () => {
       expect(!!result.current.todos[0].completedAt).toBe(false);
     });
 
-    it('should persist updated todo list to localStorage when deleting', () => {
+    it('should sync updated todo to backend when deleting', async () => {
       const { result } = renderHook(() => useTodos());
 
-      act(() => {
-        result.current.addTodo('Todo to delete');
-        result.current.addTodo('Todo to keep');
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('Todo to delete');
+        await result.current.addTodo('Todo to keep');
       });
 
       const todoToDeleteId = result.current.todos[1].id;
 
-      act(() => {
-        result.current.deleteTodo(todoToDeleteId);
+      await act(async () => {
+        await result.current.deleteTodo(todoToDeleteId);
       });
 
-      const storedTodos = JSON.parse(localStorage.getItem('todos') || '[]');
-      expect(storedTodos).toHaveLength(2); // Both todos still stored
-      expect(
-        storedTodos.find((t: Todo) => t.text === 'Todo to keep')?.deletedAt
-      ).toBeUndefined();
-      expect(
-        storedTodos.find((t: Todo) => t.text === 'Todo to delete')?.deletedAt
-      ).toBeDefined();
+      // Verify fetch was called with POST to sync the delete
+      const postCalls = mockFetch.mock.calls.filter(
+        (call: [string, FetchOptions?]) => call[1]?.method === 'POST'
+      );
+      expect(postCalls.length).toBeGreaterThan(2); // create x2 + update
+
+      const lastPostCall = postCalls[postCalls.length - 1];
+      const body = JSON.parse(lastPostCall[1]?.body as string);
+      expect(body.operation).toBe('update');
+      expect(body.data.deletedAt).toBeDefined();
     });
 
-    it('should handle soft deleting all todos (kept in localStorage with deletedAt)', () => {
+    it('should handle soft deleting all todos (kept in allTodos with deletedAt)', async () => {
       const { result } = renderHook(() => useTodos());
 
-      act(() => {
-        result.current.addTodo('Only todo');
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('Only todo');
       });
 
       const todoId = result.current.todos[0].id;
 
-      act(() => {
-        result.current.deleteTodo(todoId);
+      await act(async () => {
+        await result.current.deleteTodo(todoId);
       });
 
-      // Soft delete: todos are hidden from filtered view but kept in localStorage
+      // Soft delete: todos are hidden from filtered view but kept in allTodos
       expect(result.current.todos).toHaveLength(0); // Hidden from default filter
-
-      const storedTodos = JSON.parse(localStorage.getItem('todos') || '[]');
-      expect(storedTodos).toHaveLength(1); // Still stored with deletedAt field
-      expect(storedTodos[0].deletedAt).toBeDefined();
+      expect(result.current.allTodos).toHaveLength(1); // Still in allTodos
+      expect(result.current.allTodos[0].deletedAt).toBeInstanceOf(Date);
     });
   });
 
   describe('Edit Functionality', () => {
-    it('should edit todo text when editTodo is called', () => {
+    it('should edit todo text when editTodo is called', async () => {
       const { result } = renderHook(() => useTodos());
 
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
       // Add a todo first
-      act(() => {
-        result.current.addTodo('Original todo text');
+      await act(async () => {
+        await result.current.addTodo('Original todo text');
       });
 
       const todoId = result.current.todos[0].id;
 
       // Edit the todo
-      act(() => {
-        result.current.editTodo(todoId, 'Updated todo text');
+      await act(async () => {
+        await result.current.editTodo(todoId, 'Updated todo text');
       });
 
       expect(result.current.todos).toHaveLength(1);
@@ -415,26 +554,30 @@ describe('useTodos hook', () => {
       expect(result.current.todos[0].id).toBe(todoId);
     });
 
-    it('should preserve completion status when editing', () => {
+    it('should preserve completion status when editing', async () => {
       const { result } = renderHook(() => useTodos());
 
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
       // Add and complete a todo
-      act(() => {
-        result.current.addTodo('Completed todo');
+      await act(async () => {
+        await result.current.addTodo('Completed todo');
       });
 
       const todoId = result.current.todos[0].id;
 
-      act(() => {
-        result.current.toggleTodo(todoId);
+      await act(async () => {
+        await result.current.toggleTodo(todoId);
       });
 
       // Check completed status in allTodos since it's filtered out from active view
       expect(!!result.current.allTodos[0].completedAt).toBe(true);
 
       // Edit the completed todo
-      act(() => {
-        result.current.editTodo(todoId, 'Updated completed todo');
+      await act(async () => {
+        await result.current.editTodo(todoId, 'Updated completed todo');
       });
 
       // Check the edited todo in allTodos
@@ -442,11 +585,15 @@ describe('useTodos hook', () => {
       expect(!!result.current.allTodos[0].completedAt).toBe(true);
     });
 
-    it('should update updatedAt timestamp when editing', () => {
+    it('should update updatedAt timestamp when editing', async () => {
       const { result } = renderHook(() => useTodos());
 
-      act(() => {
-        result.current.addTodo('Todo to edit');
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('Todo to edit');
       });
 
       const todoId = result.current.todos[0].id;
@@ -455,8 +602,8 @@ describe('useTodos hook', () => {
       // Wait a small amount to ensure timestamp difference
       jest.advanceTimersByTime(10);
 
-      act(() => {
-        result.current.editTodo(todoId, 'Edited todo');
+      await act(async () => {
+        await result.current.editTodo(todoId, 'Edited todo');
       });
 
       expect(result.current.todos[0].updatedAt).not.toEqual(originalUpdatedAt);
@@ -465,104 +612,120 @@ describe('useTodos hook', () => {
       );
     });
 
-    it('should persist edited todos to localStorage', () => {
+    it('should sync edited todos to backend', async () => {
       const { result } = renderHook(() => useTodos());
 
-      act(() => {
-        result.current.addTodo('Todo to edit');
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('Todo to edit');
       });
 
       const todoId = result.current.todos[0].id;
 
-      act(() => {
-        result.current.editTodo(todoId, 'Edited todo text');
+      await act(async () => {
+        await result.current.editTodo(todoId, 'Edited todo text');
       });
 
-      const storedTodos = JSON.parse(localStorage.getItem('todos') || '[]').map(
-        (todo: {
-          createdAt: string;
-          updatedAt: string;
-          [key: string]: unknown;
-        }) => ({
-          ...todo,
-          createdAt: new Date(todo.createdAt),
-          updatedAt: new Date(todo.updatedAt),
-        })
+      // Verify fetch was called with POST to sync the edit
+      const postCalls = mockFetch.mock.calls.filter(
+        (call: [string, FetchOptions?]) => call[1]?.method === 'POST'
       );
+      expect(postCalls.length).toBeGreaterThan(1); // create + update
 
-      expect(storedTodos).toHaveLength(1);
-      expect(storedTodos[0].text).toBe('Edited todo text');
-      expect(storedTodos[0].id).toBe(todoId);
+      const lastPostCall = postCalls[postCalls.length - 1];
+      const body = JSON.parse(lastPostCall[1]?.body as string);
+      expect(body.operation).toBe('update');
+      expect(body.data.text).toBe('Edited todo text');
+      expect(body.data.id).toBe(todoId);
     });
 
-    it('should handle editing non-existent todo gracefully', () => {
+    it('should handle editing non-existent todo gracefully', async () => {
       const { result } = renderHook(() => useTodos());
 
-      act(() => {
-        result.current.addTodo('Existing todo');
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('Existing todo');
       });
 
       const originalTodos = [...result.current.todos];
 
       // Try to edit a non-existent todo
-      act(() => {
-        result.current.editTodo('non-existent-id', 'Should not work');
+      await act(async () => {
+        await result.current.editTodo('non-existent-id', 'Should not work');
       });
 
       // Todos should remain unchanged
       expect(result.current.todos).toEqual(originalTodos);
     });
 
-    it('should handle empty text edit gracefully', () => {
+    it('should handle empty text edit gracefully', async () => {
       const { result } = renderHook(() => useTodos());
 
-      act(() => {
-        result.current.addTodo('Original text');
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('Original text');
       });
 
       const todoId = result.current.todos[0].id;
       const originalTodos = [...result.current.todos];
 
       // Try to edit with empty text
-      act(() => {
-        result.current.editTodo(todoId, '');
+      await act(async () => {
+        await result.current.editTodo(todoId, '');
       });
 
       // Todo should remain unchanged
       expect(result.current.todos).toEqual(originalTodos);
     });
 
-    it('should trim whitespace from edited text', () => {
+    it('should trim whitespace from edited text', async () => {
       const { result } = renderHook(() => useTodos());
 
-      act(() => {
-        result.current.addTodo('Original text');
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('Original text');
       });
 
       const todoId = result.current.todos[0].id;
 
-      act(() => {
-        result.current.editTodo(todoId, '  Trimmed text  ');
+      await act(async () => {
+        await result.current.editTodo(todoId, '  Trimmed text  ');
       });
 
       expect(result.current.todos[0].text).toBe('Trimmed text');
     });
 
-    it('should handle editing multiple todos independently', () => {
+    it('should handle editing multiple todos independently', async () => {
       const { result } = renderHook(() => useTodos());
 
-      act(() => {
-        result.current.addTodo('First todo');
-        result.current.addTodo('Second todo');
-        result.current.addTodo('Third todo');
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('First todo');
+        await result.current.addTodo('Second todo');
+        await result.current.addTodo('Third todo');
       });
 
       const firstId = result.current.todos[0].id;
       const thirdId = result.current.todos[2].id;
 
-      act(() => {
-        result.current.editTodo(firstId, 'Edited first todo');
-        result.current.editTodo(thirdId, 'Edited third todo');
+      await act(async () => {
+        await result.current.editTodo(firstId, 'Edited first todo');
+        await result.current.editTodo(thirdId, 'Edited third todo');
       });
 
       expect(result.current.todos[0].text).toBe('Edited first todo');
