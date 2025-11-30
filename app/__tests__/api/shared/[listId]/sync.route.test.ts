@@ -10,6 +10,7 @@ jest.mock('@/lib/kv-store', () => {
   return {
     KVStore: {
       getList: jest.fn(),
+      setList: jest.fn(),
       updateTodos: jest.fn(),
     },
   };
@@ -295,7 +296,7 @@ describe('Sync API Route', () => {
     });
 
     describe('error handling', () => {
-      it('should return 404 for non-existent list', async () => {
+      it('should return 404 for non-existent list on non-create operations', async () => {
         mockedKVStore.getList.mockResolvedValue(null);
 
         const request = createRequest(
@@ -303,8 +304,8 @@ describe('Sync API Route', () => {
           {
             method: 'POST',
             body: JSON.stringify({
-              operation: 'create',
-              data: {},
+              operation: 'update',
+              data: { id: 'todo-1', text: 'Updated' },
             }),
           }
         );
