@@ -1,9 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderHook, act } from '@testing-library/react';
 import { useTodos } from '../../hooks/useTodos';
 import TodoItem from '../../components/TodoItem';
-import { setupLocalStorageMock } from '../utils/test-utils';
 import {
   createMockCallbacks,
   clearMockCallbacks,
@@ -11,8 +10,12 @@ import {
 } from '../utils/mock-callbacks';
 import { renderTodoItem } from '../utils/render-helpers';
 
-// Setup localStorage mock with automatic cleanup
-const { mockStorage, restoreLocalStorage } = setupLocalStorageMock();
+// Mock fetch globally for backend API calls
+const mockFetch = jest.fn();
+global.fetch = mockFetch;
+
+// Type for fetch options
+type FetchOptions = { method?: string; body?: string };
 
 // Mock timestamp utilities
 jest.mock('../../utils/timestamp', () => ({
@@ -80,20 +83,36 @@ jest.mock('../../utils/timestamp', () => ({
 }));
 
 describe('Timestamp Lifecycle Integration Tests', () => {
-  afterAll(restoreLocalStorage);
-
   beforeEach(() => {
-    mockStorage.clear();
     jest.clearAllMocks();
+
+    // Default mock: empty list, successful responses
+    mockFetch.mockImplementation((url: string, options?: FetchOptions) => {
+      if (options?.method === 'POST') {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ success: true }),
+        });
+      }
+      // GET request - return empty list
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ todos: [] }),
+      });
+    });
   });
 
   describe('complete todo lifecycle with timestamps', () => {
     it('should track timestamps through full todo lifecycle: create → edit → complete → restore → delete', async () => {
       const { result } = renderHook(() => useTodos());
 
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
       // Step 1: Create todo
-      act(() => {
-        result.current.addTodo('Lifecycle test todo');
+      await act(async () => {
+        await result.current.addTodo('Lifecycle test todo');
       });
 
       let todo = result.current.todos[0];
@@ -107,8 +126,8 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       // Step 2: Edit todo (should update updatedAt)
       await new Promise((resolve) => setTimeout(resolve, 10)); // Ensure different timestamp
 
-      act(() => {
-        result.current.editTodo(todo.id, 'Edited lifecycle test todo');
+      await act(async () => {
+        await result.current.editTodo(todo.id, 'Edited lifecycle test todo');
       });
 
       todo = result.current.todos[0];
@@ -122,8 +141,8 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       // Step 3: Complete todo (should update updatedAt)
       await new Promise((resolve) => setTimeout(resolve, 10));
 
-      act(() => {
-        result.current.toggleTodo(todo.id);
+      await act(async () => {
+        await result.current.toggleTodo(todo.id);
       });
 
       todo = result.current.allTodos[0];
@@ -138,8 +157,8 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       // Step 4: Restore todo (should update updatedAt)
       await new Promise((resolve) => setTimeout(resolve, 10));
 
-      act(() => {
-        result.current.restoreTodo(todo.id);
+      await act(async () => {
+        await result.current.restoreTodo(todo.id);
       });
 
       todo = result.current.todos[0];
@@ -149,44 +168,73 @@ describe('Timestamp Lifecycle Integration Tests', () => {
         afterCompleteUpdatedAt.getTime()
       );
 
-      // Step 5: Delete todo
-      act(() => {
-        result.current.deleteTodo(todo.id);
+      // Step 5: Delete todo (soft delete)
+      await act(async () => {
+        await result.current.deleteTodo(todo.id);
       });
 
-      // Current implementation removes todo completely
+      // Soft delete: hidden from filtered view but still in allTodos
       expect(result.current.todos).toHaveLength(0);
-
-      // TODO: After soft delete implementation:
-      // todo = result.current.todos[0];
-      // expect(todo.deletedAt).toBeInstanceOf(Date);
-      // expect(todo.deletedAt.getTime()).toBeGreaterThan(todo.updatedAt.getTime());
+      expect(result.current.allTodos).toHaveLength(1);
+      expect(result.current.allTodos[0].deletedAt).toBeInstanceOf(Date);
     });
 
-    it('should maintain timestamp consistency across localStorage persistence', async () => {
+    it('should maintain timestamp consistency across backend persistence', async () => {
       const { result } = renderHook(() => useTodos());
 
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
       // Create and modify a todo
-      act(() => {
-        result.current.addTodo('Persistence test todo');
+      await act(async () => {
+        await result.current.addTodo('Persistence test todo');
       });
 
       const todoId = result.current.todos[0].id;
 
-      act(() => {
-        result.current.editTodo(todoId, 'Modified for persistence test');
+      await act(async () => {
+        await result.current.editTodo(todoId, 'Modified for persistence test');
       });
 
       const originalTodo = result.current.todos[0];
 
-      // Verify localStorage contains the todo with timestamps
-      const storedData = JSON.parse(mockStorage.getItem('todos') || '[]');
-      expect(storedData).toHaveLength(1);
-      expect(storedData[0]).toHaveProperty('createdAt');
-      expect(storedData[0]).toHaveProperty('updatedAt');
+      // Verify fetch was called to sync
+      const postCalls = mockFetch.mock.calls.filter(
+        (call: [string, FetchOptions?]) => call[1]?.method === 'POST'
+      );
+      expect(postCalls.length).toBeGreaterThan(0);
+
+      // Mock backend to return the saved todo
+      mockFetch.mockImplementation((url: string, options?: FetchOptions) => {
+        if (options?.method === 'POST') {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({ success: true }),
+          });
+        }
+        return Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve({
+              todos: [
+                {
+                  id: originalTodo.id,
+                  text: originalTodo.text,
+                  createdAt: originalTodo.createdAt.toISOString(),
+                  updatedAt: originalTodo.updatedAt.toISOString(),
+                },
+              ],
+            }),
+        });
+      });
 
       // Create new hook instance (simulates page reload)
       const { result: result2 } = renderHook(() => useTodos());
+
+      await waitFor(() => {
+        expect(result2.current.isInitialized).toBe(true);
+      });
 
       // Should load todo with preserved timestamps
       expect(result2.current.todos).toHaveLength(1);
@@ -278,9 +326,13 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       const user = userEvent.setup();
       const { result } = renderHook(() => useTodos());
 
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
       // Create a todo
-      act(() => {
-        result.current.addTodo('Interactive timestamp test');
+      await act(async () => {
+        await result.current.addTodo('Interactive timestamp test');
       });
 
       let todo = result.current.todos[0];
@@ -297,9 +349,6 @@ describe('Timestamp Lifecycle Integration Tests', () => {
 
       const { rerender } = render(<MockedTodoItem />);
 
-      // TODO: Initial state should show "Created X ago"
-      // expect(screen.getByText(/created.*ago/i)).toBeInTheDocument();
-
       // Edit the todo
       const editButton = screen.getByRole('button', { name: /edit todo/i });
       await user.click(editButton);
@@ -310,15 +359,8 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       await user.click(screen.getByRole('button', { name: /save edit/i }));
 
       // Update the todo reference and rerender
-      act(() => {
-        // The edit was performed, get updated todo
-      });
-
       todo = result.current.todos[0];
       rerender(<MockedTodoItem />);
-
-      // TODO: Should now show "Updated X ago"
-      // expect(screen.getByText(/updated.*ago/i)).toBeInTheDocument();
 
       // Toggle completion
       const toggleButton = screen.getByRole('button', { name: /toggle todo/i });
@@ -330,24 +372,25 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       todo = result.current.allTodos.find((t) => t.id === todoId)!;
       rerender(<MockedTodoItem />);
 
-      // TODO: Should now show "Completed X ago"
-      // expect(screen.getByText(/completed.*ago/i)).toBeInTheDocument();
-
       // Current behavior: check that edits work
       expect(screen.getByText('Edited interactive test')).toBeInTheDocument();
     });
   });
 
   describe('performance and efficiency', () => {
-    it('should handle multiple todos with different timestamps efficiently', () => {
+    it('should handle multiple todos with different timestamps efficiently', async () => {
       const { result } = renderHook(() => useTodos());
+
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
 
       const startTime = performance.now();
 
       // Create multiple todos with different timestamps
-      act(() => {
+      await act(async () => {
         for (let i = 0; i < 100; i++) {
-          result.current.addTodo(`Todo ${i}`);
+          await result.current.addTodo(`Todo ${i}`);
         }
       });
 
@@ -398,18 +441,38 @@ describe('Timestamp Lifecycle Integration Tests', () => {
   });
 
   describe('error recovery and resilience', () => {
-    it('should handle localStorage corruption gracefully without losing timestamp functionality', () => {
-      // Corrupt localStorage data
-      mockStorage.setItem('todos', 'invalid json{');
+    it('should handle backend errors gracefully without losing timestamp functionality', async () => {
+      // Mock backend error
+      mockFetch.mockImplementation(() => {
+        return Promise.reject(new Error('Network error'));
+      });
 
       const { result } = renderHook(() => useTodos());
+
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
 
       // Should initialize with empty array
       expect(result.current.todos).toEqual([]);
 
+      // Reset mock for adding new todos
+      mockFetch.mockImplementation((url: string, options?: FetchOptions) => {
+        if (options?.method === 'POST') {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({ success: true }),
+          });
+        }
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ todos: [] }),
+        });
+      });
+
       // Should still work normally for new todos
-      act(() => {
-        result.current.addTodo('Recovery test todo');
+      await act(async () => {
+        await result.current.addTodo('Recovery test todo');
       });
 
       expect(result.current.todos).toHaveLength(1);
@@ -418,28 +481,38 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       expect(todo.updatedAt).toBeInstanceOf(Date);
     });
 
-    it('should handle todos with malformed timestamp data in localStorage', () => {
+    it('should handle todos with malformed timestamp data from backend', async () => {
       const malformedTodo = {
         id: 'malformed-timestamps',
         text: 'Malformed timestamp todo',
-        completed: false,
         createdAt: 'invalid-date',
         updatedAt: null,
       };
 
-      mockStorage.setItem('todos', JSON.stringify([malformedTodo]));
+      mockFetch.mockImplementation((url: string, options?: FetchOptions) => {
+        if (options?.method === 'POST') {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({ success: true }),
+          });
+        }
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ todos: [malformedTodo] }),
+        });
+      });
 
       const { result } = renderHook(() => useTodos());
 
-      // Should handle malformed data gracefully
-      expect(result.current.todos).toHaveLength(1);
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
 
-      // TODO: After enhancement, should have valid Date objects or undefined
+      // Should handle malformed data gracefully - loads with Date objects
+      expect(result.current.todos).toHaveLength(1);
       const todo = result.current.todos[0];
       expect(todo.text).toBe('Malformed timestamp todo');
-
-      // Current behavior: may load with malformed dates
-      // After enhancement: should validate and fix timestamps
+      expect(todo.createdAt).toBeInstanceOf(Date);
     });
 
     it('should maintain functionality when timestamp utilities fail', () => {
@@ -471,16 +544,20 @@ describe('Timestamp Lifecycle Integration Tests', () => {
   });
 
   describe('timezone and internationalization considerations', () => {
-    it('should handle different timezone offsets correctly', () => {
+    it('should handle different timezone offsets correctly', async () => {
       // Test timezone handling with different date formats
       new Date('2024-01-15T12:00:00Z'); // UTC
       new Date('2024-01-15T12:00:00'); // Local
 
       const { result } = renderHook(() => useTodos());
 
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
       // Create todos with different date formats
-      act(() => {
-        result.current.addTodo('UTC timezone test');
+      await act(async () => {
+        await result.current.addTodo('UTC timezone test');
       });
 
       const todo = result.current.todos[0];
