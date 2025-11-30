@@ -20,10 +20,6 @@ const customJestConfig = {
     '!app/**/*.d.ts',
     '!app/**/layout.tsx',
     '!app/**/page.tsx',
-    '!app/api/**/*', // Temporarily excluded - see issue #193
-    '!app/hooks/useSharedTodoSync.ts', // Temporarily excluded - see issue #194
-    '!app/hooks/useSharedTodos.ts', // Temporarily excluded - see issue #194
-    '!app/lib/sync-queue.ts', // Temporarily excluded - see issue #194
   ],
   coverageReporters: ['json-summary', 'text', 'lcov', 'html'],
   reporters: [
