@@ -13,6 +13,8 @@ let addSubscriberCalls: Array<[string, string]> = [];
 let removeSubscriberCalls: Array<[string, string]> = [];
 let getListCalls: string[] = [];
 let mockListResponse: SharedTodoList | null = null;
+let addSubscriberShouldFail = false;
+let removeSubscriberShouldFail = false;
 
 // Mock KVStore
 jest.mock('@/lib/kv-store', () => {
@@ -20,10 +22,16 @@ jest.mock('@/lib/kv-store', () => {
     KVStore: {
       addSubscriber: jest.fn((listId: string, userId: string) => {
         addSubscriberCalls.push([listId, userId]);
+        if (addSubscriberShouldFail) {
+          return Promise.reject(new Error('Failed to add subscriber'));
+        }
         return Promise.resolve(undefined);
       }),
       removeSubscriber: jest.fn((listId: string, userId: string) => {
         removeSubscriberCalls.push([listId, userId]);
+        if (removeSubscriberShouldFail) {
+          return Promise.reject(new Error('Failed to remove subscriber'));
+        }
         return Promise.resolve(undefined);
       }),
       getList: jest.fn((listId: string) => {
@@ -145,15 +153,22 @@ describe('Subscribe API Route', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.useFakeTimers();
     addSubscriberCalls = [];
     removeSubscriberCalls = [];
     getListCalls = [];
+    addSubscriberShouldFail = false;
+    removeSubscriberShouldFail = false;
     mockListResponse = {
       id: 'list-1',
       todos: mockTodos,
       lastModified: Date.now(),
       subscribers: ['user-1'],
     };
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   describe('SSE Connection', () => {
@@ -184,8 +199,10 @@ describe('Subscribe API Route', () => {
         params: Promise.resolve({ listId: 'list-1' }),
       });
 
-      // Wait for async operations
-      await new Promise((resolve) => setTimeout(resolve, 50));
+      // Flush promises and advance timers
+      await Promise.resolve();
+      jest.advanceTimersByTime(100);
+      await Promise.resolve();
 
       // Check addSubscriber was called with user-123
       expect(addSubscriberCalls).toContainEqual(['list-1', 'user-123']);
@@ -200,8 +217,10 @@ describe('Subscribe API Route', () => {
         params: Promise.resolve({ listId: 'list-1' }),
       });
 
-      // Wait for async operations
-      await new Promise((resolve) => setTimeout(resolve, 50));
+      // Flush promises and advance timers
+      await Promise.resolve();
+      jest.advanceTimersByTime(100);
+      await Promise.resolve();
 
       // Check addSubscriber was called with anonymous
       expect(addSubscriberCalls).toContainEqual(['list-1', 'anonymous']);
@@ -232,6 +251,175 @@ describe('Subscribe API Route', () => {
         'abort',
         expect.any(Function)
       );
+    });
+
+    it('should handle addSubscriber error gracefully', async () => {
+      addSubscriberShouldFail = true;
+
+      const request = new MockNextRequest(
+        'http://localhost/api/shared/list-1/subscribe',
+        {
+          headers: { 'x-user-id': 'user-123' },
+        }
+      );
+
+      // Should not throw, error is caught and logged
+      const response = await GET(request as never, {
+        params: Promise.resolve({ listId: 'list-1' }),
+      });
+
+      // Flush promises and advance timers
+      await Promise.resolve();
+      jest.advanceTimersByTime(100);
+      await Promise.resolve();
+
+      // Response should still be returned
+      expect(response).toBeDefined();
+      expect(response.headers.get('content-type')).toBe('text/event-stream');
+    });
+
+    it('should trigger polling for list data', async () => {
+      const request = new MockNextRequest(
+        'http://localhost/api/shared/list-1/subscribe'
+      );
+
+      await GET(request as never, {
+        params: Promise.resolve({ listId: 'list-1' }),
+      });
+
+      // Advance timers to trigger poll interval (2000ms)
+      jest.advanceTimersByTime(2100);
+      await Promise.resolve(); // Flush promises
+
+      // getList should have been called by polling
+      expect(getListCalls.length).toBeGreaterThan(0);
+    });
+
+    it('should close stream when list is deleted during polling', async () => {
+      const request = new MockNextRequest(
+        'http://localhost/api/shared/list-1/subscribe'
+      );
+
+      const response = await GET(request as never, {
+        params: Promise.resolve({ listId: 'list-1' }),
+      });
+
+      // Set list to null (deleted)
+      mockListResponse = null;
+
+      // Advance timers to trigger poll interval
+      jest.advanceTimersByTime(2100);
+      await Promise.resolve(); // Flush promises
+
+      // Stream should have been closed (controller.close called)
+      expect(response.body.controller.close).toHaveBeenCalled();
+    });
+
+    it('should trigger ping to keep connection alive', async () => {
+      const request = new MockNextRequest(
+        'http://localhost/api/shared/list-1/subscribe'
+      );
+
+      const response = await GET(request as never, {
+        params: Promise.resolve({ listId: 'list-1' }),
+      });
+
+      // Advance timers to trigger ping interval (30000ms)
+      jest.advanceTimersByTime(30100);
+
+      // Controller.enqueue should have been called with ping data
+      const enqueueCalls = response.body.controller.enqueue.mock.calls;
+      const hasPing = enqueueCalls.some((call: unknown[]) => {
+        const encoded = call[0] as Uint8Array;
+        const text = Buffer.from(encoded).toString();
+        return text.includes('ping');
+      });
+      expect(hasPing).toBe(true);
+    });
+
+    it('should call removeSubscriber on abort', async () => {
+      let abortHandler: (() => void) | null = null;
+
+      const request = new MockNextRequest(
+        'http://localhost/api/shared/list-1/subscribe',
+        {
+          headers: { 'x-user-id': 'user-456' },
+        }
+      );
+
+      // Capture the abort handler
+      request.signal.addEventListener = jest.fn(
+        (event: string, handler: () => void) => {
+          if (event === 'abort') {
+            abortHandler = handler;
+          }
+        }
+      );
+
+      await GET(request as never, {
+        params: Promise.resolve({ listId: 'list-1' }),
+      });
+
+      // Flush promises and advance timers
+      await Promise.resolve();
+      jest.advanceTimersByTime(100);
+      await Promise.resolve();
+
+      // Simulate abort by calling the handler
+      if (abortHandler) {
+        await (abortHandler as () => Promise<void>)();
+      }
+
+      // Flush promises after abort
+      await Promise.resolve();
+      jest.advanceTimersByTime(100);
+      await Promise.resolve();
+
+      // removeSubscriber should have been called
+      expect(removeSubscriberCalls).toContainEqual(['list-1', 'user-456']);
+    });
+
+    it('should handle removeSubscriber error gracefully on abort', async () => {
+      removeSubscriberShouldFail = true;
+      let abortHandler: (() => void) | null = null;
+
+      const request = new MockNextRequest(
+        'http://localhost/api/shared/list-1/subscribe',
+        {
+          headers: { 'x-user-id': 'user-789' },
+        }
+      );
+
+      // Capture the abort handler
+      request.signal.addEventListener = jest.fn(
+        (event: string, handler: () => void) => {
+          if (event === 'abort') {
+            abortHandler = handler;
+          }
+        }
+      );
+
+      await GET(request as never, {
+        params: Promise.resolve({ listId: 'list-1' }),
+      });
+
+      // Flush promises and advance timers
+      await Promise.resolve();
+      jest.advanceTimersByTime(100);
+      await Promise.resolve();
+
+      // Simulate abort - should not throw
+      if (abortHandler) {
+        await (abortHandler as () => Promise<void>)();
+      }
+
+      // Flush promises after abort
+      await Promise.resolve();
+      jest.advanceTimersByTime(100);
+      await Promise.resolve();
+
+      // removeSubscriber was called (and failed gracefully)
+      expect(removeSubscriberCalls).toContainEqual(['list-1', 'user-789']);
     });
   });
 });
