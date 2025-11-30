@@ -312,7 +312,8 @@ describe('Subscribe API Route', () => {
       await Promise.resolve(); // Flush promises
 
       // Stream should have been closed (controller.close called)
-      expect(response.body.controller.close).toHaveBeenCalled();
+      const mockBody = response.body as unknown as MockReadableStream;
+      expect(mockBody.controller.close).toHaveBeenCalled();
     });
 
     it('should trigger ping to keep connection alive', async () => {
@@ -328,7 +329,8 @@ describe('Subscribe API Route', () => {
       jest.advanceTimersByTime(30100);
 
       // Controller.enqueue should have been called with ping data
-      const enqueueCalls = response.body.controller.enqueue.mock.calls;
+      const mockBody = response.body as unknown as MockReadableStream;
+      const enqueueCalls = mockBody.controller.enqueue.mock.calls;
       const hasPing = enqueueCalls.some((call: unknown[]) => {
         const encoded = call[0] as Uint8Array;
         const text = Buffer.from(encoded).toString();
