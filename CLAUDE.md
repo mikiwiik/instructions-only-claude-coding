@@ -42,6 +42,17 @@
 
 ---
 
+## Environment Setup
+
+This project uses Claude Code hooks to automatically initialize nvm for npm commands. The hook is configured in
+`.claude/settings.json` and runs on session start via `CLAUDE_ENV_FILE`.
+
+**Manual fallback** (if hooks don't work): `source ~/.nvm/nvm.sh && npm install`
+
+See [ADR-030](docs/adr/030-claude-code-environment-hooks.md) for details.
+
+---
+
 Agent-centric development instructions for instruction-only todo application development.
 
 ## Agent Selection Guide
