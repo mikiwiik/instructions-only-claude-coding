@@ -180,6 +180,19 @@ nvm install 22
 nvm use 22
 ```
 
+### Claude Code with nvm
+
+Claude Code runs bash commands in non-interactive shells that don't source `~/.zshrc`. This project includes a
+SessionStart hook (`.claude/settings.json`) that automatically sources nvm.
+
+If you still see `npm: command not found`:
+
+1. **Restart Claude Code** to trigger the SessionStart hook
+2. **Manual fallback**: `source ~/.nvm/nvm.sh && npm install`
+3. **Verify hook**: Check `.claude/settings.json` contains the SessionStart hook
+
+See [ADR-030](../adr/030-claude-code-environment-hooks.md) for technical details.
+
 ### Dependency Issues
 
 ```bash
