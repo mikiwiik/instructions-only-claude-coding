@@ -49,10 +49,10 @@ export class KVStore {
 
   static async getList(listId: string): Promise<SharedTodoList | null> {
     const key = this.getListKey(listId);
+    /* istanbul ignore else -- E2E tested in-memory path */
     if (redis) {
       return await redis.get<SharedTodoList>(key);
     }
-    // istanbul ignore next -- E2E tested
     return inMemoryStore.get(key) ?? null;
   }
 
@@ -68,10 +68,10 @@ export class KVStore {
       lastModified: Date.now(),
       subscribers: [userId],
     };
+    /* istanbul ignore else -- E2E tested in-memory path */
     if (redis) {
       await redis.set(key, list);
     } else {
-      // istanbul ignore next -- E2E tested
       inMemoryStore.set(key, list);
     }
   }
@@ -89,10 +89,10 @@ export class KVStore {
       todos,
       lastModified: Date.now(),
     };
+    /* istanbul ignore else -- E2E tested in-memory path */
     if (redis) {
       await redis.set(key, updated);
     } else {
-      // istanbul ignore next -- E2E tested
       inMemoryStore.set(key, updated);
     }
   }
@@ -107,10 +107,10 @@ export class KVStore {
     if (!list.subscribers.includes(userId)) {
       list.subscribers.push(userId);
       const key = this.getListKey(listId);
+      /* istanbul ignore else -- E2E tested in-memory path */
       if (redis) {
         await redis.set(key, list);
       } else {
-        // istanbul ignore next -- E2E tested
         inMemoryStore.set(key, list);
       }
     }
@@ -125,20 +125,20 @@ export class KVStore {
 
     list.subscribers = list.subscribers.filter((id) => id !== userId);
     const key = this.getListKey(listId);
+    /* istanbul ignore else -- E2E tested in-memory path */
     if (redis) {
       await redis.set(key, list);
     } else {
-      // istanbul ignore next -- E2E tested
       inMemoryStore.set(key, list);
     }
   }
 
   static async deleteList(listId: string): Promise<void> {
     const key = this.getListKey(listId);
+    /* istanbul ignore else -- E2E tested in-memory path */
     if (redis) {
       await redis.del(key);
     } else {
-      // istanbul ignore next -- E2E tested
       inMemoryStore.delete(key);
     }
   }
