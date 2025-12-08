@@ -6,8 +6,9 @@ test.describe('Complete Todo Flow', () => {
 
   test.beforeEach(async ({ page }) => {
     todoPage = new TodoPage(page);
-    await todoPage.clearLocalStorage();
     await todoPage.goto();
+    await todoPage.clearLocalStorage();
+    await page.reload();
   });
 
   test('should mark todo as completed when checkbox is clicked', async () => {
