@@ -6,8 +6,9 @@ test.describe('Data Persistence Flow', () => {
 
   test.beforeEach(async ({ page }) => {
     todoPage = new TodoPage(page);
-    await todoPage.clearLocalStorage();
     await todoPage.goto();
+    await todoPage.clearLocalStorage();
+    await page.reload();
   });
 
   test('should persist todos across page reloads', async ({ page }) => {
