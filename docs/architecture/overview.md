@@ -182,7 +182,7 @@ complete and up-to-date list of all ADRs, see [Architecture Decision Records](..
 - **TypeScript**: Type checking and compilation
 - **markdownlint**: Documentation formatting
 
-#### CI/CD Pipeline
+#### CI/CD Quality Checks
 
 - **Testing**: Automated test suite execution
 - **Building**: Production build verification
@@ -235,6 +235,28 @@ complete and up-to-date list of all ADRs, see [Architecture Decision Records](..
 - **Vercel Analytics**: Basic traffic and performance metrics
 - **GitHub Integration**: Deployment status in commit history
 - **Error Tracking**: Built-in error monitoring
+
+## Environments
+
+The application uses environment variables to determine storage backend:
+
+| Environment   | USE_IN_MEMORY_STORE | Data Storage  | Use Case                     |
+| ------------- | ------------------- | ------------- | ---------------------------- |
+| Production    | not set             | Upstash Redis | Live app on Vercel           |
+| CI E2E tests  | `true`              | In-memory Map | E2E tests without Redis      |
+| CI unit tests | not set             | Jest mock     | Unit tests with mocked Redis |
+| Development   | not set             | Upstash Redis | Local development            |
+
+### E2E Test Environment
+
+When `USE_IN_MEMORY_STORE=true`, the KV store (`app/lib/kv-store.ts`) uses an in-memory Map
+instead of Redis. This allows E2E tests to run without external dependencies.
+
+**Why explicit flag instead of NODE_ENV?**
+
+- Unit tests use Jest mocks for Redis (need actual code paths tested)
+- E2E tests run real app (need in-memory fallback, no Redis credentials in CI)
+- Production must never accidentally use in-memory storage
 
 ## Scalability Considerations
 

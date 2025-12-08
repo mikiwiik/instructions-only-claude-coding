@@ -172,6 +172,7 @@ jobs:
       run: npm run test:e2e
       env:
         CI: true
+        USE_IN_MEMORY_STORE: 'true'  # Use in-memory store instead of Redis for E2E
 
     - name: Upload Playwright Report
       uses: actions/upload-artifact@v4
