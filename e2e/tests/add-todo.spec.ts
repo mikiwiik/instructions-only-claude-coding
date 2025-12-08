@@ -6,8 +6,9 @@ test.describe('Add Todo Flow', () => {
 
   test.beforeEach(async ({ page }) => {
     todoPage = new TodoPage(page);
-    await todoPage.clearLocalStorage();
     await todoPage.goto();
+    await todoPage.clearLocalStorage();
+    await page.reload();
   });
 
   test('should add new todo when Enter key is pressed', async () => {
