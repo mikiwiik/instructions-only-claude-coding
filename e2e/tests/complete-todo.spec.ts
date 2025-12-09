@@ -7,7 +7,8 @@ test.describe('Complete Todo Flow', () => {
   test.beforeEach(async ({ page }) => {
     todoPage = new TodoPage(page);
     await todoPage.goto();
-    await todoPage.clearLocalStorage();
+    await todoPage.resetTestData(); // Clear server-side data
+    await todoPage.clearLocalStorage(); // Clear client-side data
     await page.reload();
   });
 
