@@ -46,8 +46,9 @@ export class TodoPage {
 
   async completeTodo(text: string) {
     const todo = await this.getTodoByText(text);
-    const checkbox = todo.getByRole('checkbox');
-    await checkbox.click();
+    // The toggle is a button with aria-pressed, not a checkbox
+    const toggleButton = todo.getByRole('button', { name: /toggle todo/i });
+    await toggleButton.click();
   }
 
   async deleteTodo(text: string) {
@@ -61,8 +62,10 @@ export class TodoPage {
 
   async isTodoCompleted(text: string): Promise<boolean> {
     const todo = await this.getTodoByText(text);
-    const checkbox = todo.getByRole('checkbox');
-    return await checkbox.isChecked();
+    // The toggle is a button with aria-pressed, not a checkbox
+    const toggleButton = todo.getByRole('button', { name: /toggle todo/i });
+    const ariaPressed = await toggleButton.getAttribute('aria-pressed');
+    return ariaPressed === 'true';
   }
 
   async clearLocalStorage() {
