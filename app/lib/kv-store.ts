@@ -42,6 +42,17 @@ if (useInMemoryStore) {
   console.log('[KVStore] E2E test mode: using in-memory store');
 }
 
+/**
+ * Reset the in-memory store (for E2E testing only)
+ * Only works when USE_IN_MEMORY_STORE=true
+ */
+// istanbul ignore next -- E2E tested
+export function resetInMemoryStore(): void {
+  if (useInMemoryStore) {
+    inMemoryStore.clear();
+  }
+}
+
 export class KVStore {
   private static getListKey(listId: string): string {
     return `shared:list:${listId}`;

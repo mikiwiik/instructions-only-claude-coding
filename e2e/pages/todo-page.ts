@@ -68,4 +68,15 @@ export class TodoPage {
   async clearLocalStorage() {
     await this.page.evaluate(() => localStorage.clear());
   }
+
+  /**
+   * Reset server-side test data (in-memory store)
+   * Must be called before each test to ensure clean state
+   */
+  async resetTestData() {
+    const response = await this.page.request.post('/api/test/reset');
+    if (!response.ok()) {
+      throw new Error(`Failed to reset test data: ${response.status()}`);
+    }
+  }
 }
