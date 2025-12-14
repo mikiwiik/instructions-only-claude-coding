@@ -10,6 +10,8 @@ test.describe('Data Persistence Flow', () => {
     await todoPage.resetTestData(); // Clear server-side data
     await todoPage.clearLocalStorage(); // Clear client-side data
     await page.reload();
+    // Wait for empty state to be visible
+    await page.waitForLoadState('networkidle');
   });
 
   test('should persist todos across page reloads', async ({ page }) => {
@@ -25,12 +27,12 @@ test.describe('Data Persistence Flow', () => {
     // Reload the page
     await page.reload();
 
-    // Verify todos are still present after reload
+    // Verify todos are still present after reload (newest first)
     todoItems = await todoPage.getTodoItems();
     await expect(todoItems).toHaveCount(3);
-    await expect(todoItems.nth(0)).toContainText('Persistent todo 1');
+    await expect(todoItems.nth(0)).toContainText('Persistent todo 3');
     await expect(todoItems.nth(1)).toContainText('Persistent todo 2');
-    await expect(todoItems.nth(2)).toContainText('Persistent todo 3');
+    await expect(todoItems.nth(2)).toContainText('Persistent todo 1');
   });
 
   test('should persist completion state across page reloads', async ({
@@ -62,10 +64,10 @@ test.describe('Data Persistence Flow', () => {
     // Reload page
     await page.reload();
 
-    // Verify order is preserved
+    // Verify order is preserved (newest first)
     const todoItems = await todoPage.getTodoItems();
-    await expect(todoItems.nth(0)).toContainText('First');
+    await expect(todoItems.nth(0)).toContainText('Third');
     await expect(todoItems.nth(1)).toContainText('Second');
-    await expect(todoItems.nth(2)).toContainText('Third');
+    await expect(todoItems.nth(2)).toContainText('First');
   });
 });

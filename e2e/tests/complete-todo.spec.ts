@@ -10,6 +10,8 @@ test.describe('Complete Todo Flow', () => {
     await todoPage.resetTestData(); // Clear server-side data
     await todoPage.clearLocalStorage(); // Clear client-side data
     await page.reload();
+    // Wait for empty state to be visible
+    await page.waitForLoadState('networkidle');
   });
 
   test('should mark todo as completed when checkbox is clicked', async () => {
