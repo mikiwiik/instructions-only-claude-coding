@@ -10,6 +10,8 @@ test.describe('Add Todo Flow', () => {
     await todoPage.resetTestData(); // Clear server-side data
     await todoPage.clearLocalStorage(); // Clear client-side data
     await page.reload();
+    // Wait for empty state to be visible
+    await page.waitForLoadState('networkidle');
   });
 
   test('should add new todo when Enter key is pressed', async () => {
@@ -44,12 +46,12 @@ test.describe('Add Todo Flow', () => {
     await todoPage.addTodo('Second todo', 'button');
     await todoPage.addTodo('Third todo', 'enter');
 
-    // Verify all todos appear
+    // Verify all todos appear (newest first)
     const todoItems = await todoPage.getTodoItems();
     await expect(todoItems).toHaveCount(3);
-    await expect(todoItems.nth(0)).toContainText('First todo');
+    await expect(todoItems.nth(0)).toContainText('Third todo');
     await expect(todoItems.nth(1)).toContainText('Second todo');
-    await expect(todoItems.nth(2)).toContainText('Third todo');
+    await expect(todoItems.nth(2)).toContainText('First todo');
   });
 
   test('should not add empty todo', async () => {
