@@ -48,8 +48,11 @@ if (useInMemoryStore) {
  */
 // istanbul ignore next -- E2E tested
 export function resetInMemoryStore(): void {
-  if (useInMemoryStore) {
+  // Check env directly in case module was loaded before env was set
+  if (process.env.USE_IN_MEMORY_STORE === 'true') {
     inMemoryStore.clear();
+    // eslint-disable-next-line no-console
+    console.log('[KVStore] In-memory store reset');
   }
 }
 
