@@ -41,10 +41,17 @@ function shouldUseInMemoryStore(): boolean {
  */
 // istanbul ignore next -- E2E tested
 function getRedis(): Redis | null {
-  if (shouldUseInMemoryStore()) {
+  const useInMemory = shouldUseInMemoryStore();
+  // eslint-disable-next-line no-console
+  console.log('[KVStore] getRedis called, useInMemory:', useInMemory, 'existing redis:', !!redis);
+  if (useInMemory) {
+    // eslint-disable-next-line no-console
+    console.log('[KVStore] Using in-memory store');
     return null;
   }
   if (!redis) {
+    // eslint-disable-next-line no-console
+    console.log('[KVStore] Creating Redis client');
     redis = new Redis({
       url: process.env.UPSTASH_REDIS_REST_URL!,
       token: process.env.UPSTASH_REDIS_REST_TOKEN!,
