@@ -76,5 +76,10 @@ export default defineConfig({
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
+    // Explicitly pass USE_IN_MEMORY_STORE to the server process
+    env: {
+      ...process.env,
+      USE_IN_MEMORY_STORE: process.env.USE_IN_MEMORY_STORE || 'false',
+    },
   },
 });

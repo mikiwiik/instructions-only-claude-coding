@@ -50,11 +50,9 @@ export class TodoPage {
     const todo = await this.getTodoByText(text);
     // Wait for the todo item to be visible
     await todo.waitFor({ state: 'visible' });
-    // The toggle is a button with aria-pressed, not a checkbox
-    // Match the full aria-label pattern: "Toggle todo: {text}"
-    const toggleButton = todo.getByRole('button', {
-      name: new RegExp(`toggle todo.*${text.substring(0, 20)}`, 'i'),
-    });
+    // The toggle button has aria-pressed attribute - use locator with CSS selector
+    // This is more reliable than matching the dynamic aria-label
+    const toggleButton = todo.locator('button[aria-pressed]');
     await toggleButton.waitFor({ state: 'visible' });
     await toggleButton.click();
   }
@@ -72,11 +70,9 @@ export class TodoPage {
     const todo = await this.getTodoByText(text);
     // Wait for the todo item to be visible
     await todo.waitFor({ state: 'visible' });
-    // The toggle is a button with aria-pressed, not a checkbox
-    // Match the full aria-label pattern: "Toggle todo: {text}"
-    const toggleButton = todo.getByRole('button', {
-      name: new RegExp(`toggle todo.*${text.substring(0, 20)}`, 'i'),
-    });
+    // The toggle button has aria-pressed attribute - use locator with CSS selector
+    // This is more reliable than matching the dynamic aria-label
+    const toggleButton = todo.locator('button[aria-pressed]');
     await toggleButton.waitFor({ state: 'visible' });
     const ariaPressed = await toggleButton.getAttribute('aria-pressed');
     return ariaPressed === 'true';
