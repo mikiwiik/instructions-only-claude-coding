@@ -34,6 +34,8 @@ export class TodoPage {
     } else {
       await this.addButton.click();
     }
+    // Wait for the todo item to appear in the list
+    await this.page.getByRole('listitem').filter({ hasText: text }).waitFor();
   }
 
   async getTodoItems() {
@@ -46,8 +48,14 @@ export class TodoPage {
 
   async completeTodo(text: string) {
     const todo = await this.getTodoByText(text);
+    // Wait for the todo item to be visible
+    await todo.waitFor({ state: 'visible' });
     // The toggle is a button with aria-pressed, not a checkbox
-    const toggleButton = todo.getByRole('button', { name: /toggle todo/i });
+    // Match the full aria-label pattern: "Toggle todo: {text}"
+    const toggleButton = todo.getByRole('button', {
+      name: new RegExp(`toggle todo.*${text.substring(0, 20)}`, 'i'),
+    });
+    await toggleButton.waitFor({ state: 'visible' });
     await toggleButton.click();
   }
 
@@ -62,8 +70,14 @@ export class TodoPage {
 
   async isTodoCompleted(text: string): Promise<boolean> {
     const todo = await this.getTodoByText(text);
+    // Wait for the todo item to be visible
+    await todo.waitFor({ state: 'visible' });
     // The toggle is a button with aria-pressed, not a checkbox
-    const toggleButton = todo.getByRole('button', { name: /toggle todo/i });
+    // Match the full aria-label pattern: "Toggle todo: {text}"
+    const toggleButton = todo.getByRole('button', {
+      name: new RegExp(`toggle todo.*${text.substring(0, 20)}`, 'i'),
+    });
+    await toggleButton.waitFor({ state: 'visible' });
     const ariaPressed = await toggleButton.getAttribute('aria-pressed');
     return ariaPressed === 'true';
   }

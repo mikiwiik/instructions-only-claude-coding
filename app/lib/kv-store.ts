@@ -18,28 +18,39 @@ export interface SharedTodoList {
   subscribers: string[];
 }
 
-// Use in-memory store for E2E tests (set USE_IN_MEMORY_STORE=true in CI workflow)
-// Note: Unit tests use Jest mock, E2E tests use this in-memory fallback
-// istanbul ignore next -- evaluated at module load, E2E tested
-const useInMemoryStore = process.env.USE_IN_MEMORY_STORE === 'true';
-
 // In-memory store for testing (E2E tested, not unit tested)
 // istanbul ignore next -- E2E tested
 const inMemoryStore = new Map<string, SharedTodoList>();
 
-// Initialize Redis client only when not using in-memory store
+// Lazy-initialized Redis client (only created when actually needed)
 // istanbul ignore next -- conditional on env var, E2E tested
-const redis = useInMemoryStore
-  ? null
-  : new Redis({
+let redis: Redis | null = null;
+
+/**
+ * Check if in-memory store should be used (runtime check)
+ * This allows the env var to be set after module load
+ */
+// istanbul ignore next -- E2E tested
+function shouldUseInMemoryStore(): boolean {
+  return process.env.USE_IN_MEMORY_STORE === 'true';
+}
+
+/**
+ * Get Redis client (lazy initialization)
+ * Returns null if in-memory store should be used
+ */
+// istanbul ignore next -- E2E tested
+function getRedis(): Redis | null {
+  if (shouldUseInMemoryStore()) {
+    return null;
+  }
+  if (!redis) {
+    redis = new Redis({
       url: process.env.UPSTASH_REDIS_REST_URL!,
       token: process.env.UPSTASH_REDIS_REST_TOKEN!,
     });
-
-// istanbul ignore next -- E2E tested
-if (useInMemoryStore) {
-  // eslint-disable-next-line no-console
-  console.log('[KVStore] E2E test mode: using in-memory store');
+  }
+  return redis;
 }
 
 /**
@@ -63,9 +74,10 @@ export class KVStore {
 
   static async getList(listId: string): Promise<SharedTodoList | null> {
     const key = this.getListKey(listId);
+    const redisClient = getRedis();
     /* istanbul ignore else -- E2E tested in-memory path */
-    if (redis) {
-      return await redis.get<SharedTodoList>(key);
+    if (redisClient) {
+      return await redisClient.get<SharedTodoList>(key);
     }
     return inMemoryStore.get(key) ?? null;
   }
@@ -82,9 +94,10 @@ export class KVStore {
       lastModified: Date.now(),
       subscribers: [userId],
     };
+    const redisClient = getRedis();
     /* istanbul ignore else -- E2E tested in-memory path */
-    if (redis) {
-      await redis.set(key, list);
+    if (redisClient) {
+      await redisClient.set(key, list);
     } else {
       inMemoryStore.set(key, list);
     }
@@ -103,9 +116,10 @@ export class KVStore {
       todos,
       lastModified: Date.now(),
     };
+    const redisClient = getRedis();
     /* istanbul ignore else -- E2E tested in-memory path */
-    if (redis) {
-      await redis.set(key, updated);
+    if (redisClient) {
+      await redisClient.set(key, updated);
     } else {
       inMemoryStore.set(key, updated);
     }
@@ -121,9 +135,10 @@ export class KVStore {
     if (!list.subscribers.includes(userId)) {
       list.subscribers.push(userId);
       const key = this.getListKey(listId);
+      const redisClient = getRedis();
       /* istanbul ignore else -- E2E tested in-memory path */
-      if (redis) {
-        await redis.set(key, list);
+      if (redisClient) {
+        await redisClient.set(key, list);
       } else {
         inMemoryStore.set(key, list);
       }
@@ -139,9 +154,10 @@ export class KVStore {
 
     list.subscribers = list.subscribers.filter((id) => id !== userId);
     const key = this.getListKey(listId);
+    const redisClient = getRedis();
     /* istanbul ignore else -- E2E tested in-memory path */
-    if (redis) {
-      await redis.set(key, list);
+    if (redisClient) {
+      await redisClient.set(key, list);
     } else {
       inMemoryStore.set(key, list);
     }
@@ -149,9 +165,10 @@ export class KVStore {
 
   static async deleteList(listId: string): Promise<void> {
     const key = this.getListKey(listId);
+    const redisClient = getRedis();
     /* istanbul ignore else -- E2E tested in-memory path */
-    if (redis) {
-      await redis.del(key);
+    if (redisClient) {
+      await redisClient.del(key);
     } else {
       inMemoryStore.delete(key);
     }
