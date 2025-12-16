@@ -88,8 +88,14 @@ export class TodoPage {
    */
   async resetTestData() {
     const response = await this.page.request.post('/api/test/reset');
+    const body = await response.text();
+    // Log response for debugging in CI
+    // eslint-disable-next-line no-console
+    console.log(`[E2E Reset] Status: ${response.status()}, Body: ${body}`);
     if (!response.ok()) {
-      throw new Error(`Failed to reset test data: ${response.status()}`);
+      throw new Error(
+        `Failed to reset test data: ${response.status()} - ${body}`
+      );
     }
   }
 }
