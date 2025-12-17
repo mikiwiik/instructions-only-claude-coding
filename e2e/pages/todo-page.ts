@@ -97,5 +97,11 @@ export class TodoPage {
         `Failed to reset test data: ${response.status()} - ${body}`
       );
     }
+
+    // Debug: Check KVStore state after reset
+    const debugResponse = await this.page.request.get('/api/test/debug');
+    const debugBody = await debugResponse.text();
+    // eslint-disable-next-line no-console
+    console.log(`[E2E Debug] After reset: ${debugBody}`);
   }
 }
