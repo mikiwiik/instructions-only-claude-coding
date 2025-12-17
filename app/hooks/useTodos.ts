@@ -65,21 +65,8 @@ export function useTodos() {
             filter: 'active',
           });
         } else if (response.status === 404) {
-          // List doesn't exist yet - create it empty
-          await fetch(`/api/shared/${MAIN_LIST_ID}/sync`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              operation: 'create',
-              data: {
-                id: generateId(),
-                text: '',
-                createdAt: new Date(),
-                updatedAt: new Date(),
-              },
-            }),
-          });
-          // Start with empty list
+          // List doesn't exist yet - start with empty list
+          // The list will be auto-created when the first todo is added via sync API
           setState({ todos: [], filter: 'active' });
         }
       } catch (error) {
