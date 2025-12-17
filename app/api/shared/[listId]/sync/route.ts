@@ -37,7 +37,8 @@ export async function POST(
     switch (operation) {
       case 'create': {
         const newTodo = data as Todo;
-        updatedTodos.push(newTodo);
+        // Prepend to maintain newest-first order (consistent with client-side)
+        updatedTodos.unshift(newTodo);
         break;
       }
 
