@@ -40,6 +40,9 @@ test.describe('Data Persistence Flow', () => {
   test('should persist completion state across page reloads', async ({
     page,
   }) => {
+    // Switch to All filter to see both active and completed todos
+    await todoPage.setFilterAll();
+
     // Add todos and complete one
     await todoPage.addTodo('Todo 1');
     await todoPage.addTodo('Todo 2');
@@ -51,6 +54,9 @@ test.describe('Data Persistence Flow', () => {
 
     // Reload the page
     await page.reload();
+
+    // Switch to All filter again after reload (default is Active)
+    await todoPage.setFilterAll();
 
     // Verify completion states are preserved
     expect(await todoPage.isTodoCompleted('Todo 1')).toBe(false);
