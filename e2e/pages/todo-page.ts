@@ -47,14 +47,18 @@ export class TodoPage {
   }
 
   async completeTodo(text: string) {
-    const todo = await this.getTodoByText(text);
-    // Wait for the todo item to be visible
-    await todo.waitFor({ state: 'visible' });
-    // The toggle button has aria-pressed attribute - use locator with CSS selector
-    // This is more reliable than matching the dynamic aria-label
-    const toggleButton = todo.locator('button[aria-pressed]');
+    // Use aria-label to find the toggle button directly
+    // The button has aria-label="Toggle todo: {text}"
+    const toggleButton = this.page.getByRole('button', {
+      name: new RegExp(`toggle todo:.*${this.escapeRegex(text)}`, 'i'),
+    });
     await toggleButton.waitFor({ state: 'visible' });
     await toggleButton.click();
+  }
+
+  // Helper to escape regex special characters
+  private escapeRegex(text: string): string {
+    return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
   async deleteTodo(text: string) {
@@ -67,12 +71,11 @@ export class TodoPage {
   }
 
   async isTodoCompleted(text: string): Promise<boolean> {
-    const todo = await this.getTodoByText(text);
-    // Wait for the todo item to be visible
-    await todo.waitFor({ state: 'visible' });
-    // The toggle button has aria-pressed attribute - use locator with CSS selector
-    // This is more reliable than matching the dynamic aria-label
-    const toggleButton = todo.locator('button[aria-pressed]');
+    // Use aria-label to find the toggle button directly
+    // The button has aria-label="Toggle todo: {text}" and aria-pressed
+    const toggleButton = this.page.getByRole('button', {
+      name: new RegExp(`toggle todo:.*${this.escapeRegex(text)}`, 'i'),
+    });
     await toggleButton.waitFor({ state: 'visible' });
     const ariaPressed = await toggleButton.getAttribute('aria-pressed');
     return ariaPressed === 'true';
