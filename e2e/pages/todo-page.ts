@@ -78,6 +78,22 @@ export class TodoPage {
     return ariaPressed === 'true';
   }
 
+  async setFilterAll() {
+    await this.filterAll.click();
+    // Wait for filter to be applied (button should be selected)
+    await this.page.waitForTimeout(100);
+  }
+
+  async setFilterActive() {
+    await this.filterActive.click();
+    await this.page.waitForTimeout(100);
+  }
+
+  async setFilterCompleted() {
+    await this.filterCompleted.click();
+    await this.page.waitForTimeout(100);
+  }
+
   async clearLocalStorage() {
     await this.page.evaluate(() => localStorage.clear());
   }

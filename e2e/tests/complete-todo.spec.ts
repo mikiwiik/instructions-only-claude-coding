@@ -15,6 +15,9 @@ test.describe('Complete Todo Flow', () => {
   });
 
   test('should mark todo as completed when checkbox is clicked', async () => {
+    // Switch to All filter to see todos regardless of completion state
+    await todoPage.setFilterAll();
+
     // Add a todo
     await todoPage.addTodo('Complete this task');
 
@@ -24,11 +27,14 @@ test.describe('Complete Todo Flow', () => {
     // Complete the todo
     await todoPage.completeTodo('Complete this task');
 
-    // Verify todo is marked as completed
+    // Verify todo is marked as completed (still visible in All filter)
     expect(await todoPage.isTodoCompleted('Complete this task')).toBe(true);
   });
 
   test('should toggle todo completion state', async () => {
+    // Switch to All filter to see todos regardless of completion state
+    await todoPage.setFilterAll();
+
     // Add and complete a todo
     await todoPage.addTodo('Toggle me');
     await todoPage.completeTodo('Toggle me');
@@ -40,6 +46,9 @@ test.describe('Complete Todo Flow', () => {
   });
 
   test('should complete multiple todos independently', async () => {
+    // Switch to All filter to see todos regardless of completion state
+    await todoPage.setFilterAll();
+
     // Add multiple todos
     await todoPage.addTodo('First task');
     await todoPage.addTodo('Second task');
