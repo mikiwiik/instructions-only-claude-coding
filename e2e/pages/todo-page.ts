@@ -80,6 +80,19 @@ export class TodoPage {
     return ariaPressed === 'true';
   }
 
+  async restoreTodo(text: string) {
+    // Find the todo item first, then the restore button within it
+    const todoItem = this.page.getByRole('listitem').filter({ hasText: text });
+    await todoItem.waitFor({ state: 'visible' });
+
+    // Find the restore button (Undo completion) within the todo item
+    const restoreButton = todoItem.getByRole('button', {
+      name: /undo completion/i,
+    });
+    await restoreButton.waitFor({ state: 'visible' });
+    await restoreButton.click();
+  }
+
   async setFilterAll() {
     await this.filterAll.click();
     // Wait for filter to be applied (button should be selected)
