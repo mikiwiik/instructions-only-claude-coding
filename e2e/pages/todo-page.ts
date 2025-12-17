@@ -47,6 +47,19 @@ export class TodoPage {
   }
 
   async completeTodo(text: string) {
+    // Debug: log all buttons with toggle in name
+
+    const allButtons = this.page.getByRole('button');
+    const count = await allButtons.count();
+    // eslint-disable-next-line no-console
+    console.log(`[E2E Debug] Total buttons on page: ${count}`);
+    for (let i = 0; i < Math.min(count, 10); i++) {
+      const btn = allButtons.nth(i);
+      const name = await btn.getAttribute('aria-label');
+      // eslint-disable-next-line no-console
+      console.log(`[E2E Debug] Button ${i}: aria-label="${name}"`);
+    }
+
     // Use aria-label to find the toggle button directly
     // The button has aria-label="Toggle todo: {text}"
     const toggleButton = this.page.getByRole('button', {
