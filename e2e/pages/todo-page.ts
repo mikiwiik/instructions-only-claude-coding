@@ -18,9 +18,12 @@ export class TodoPage {
     this.todoInput = page.getByRole('textbox', { name: /add.*todo/i });
     this.addButton = page.getByRole('button', { name: /add/i });
     this.todoList = page.getByRole('list').first();
-    this.filterAll = page.getByRole('button', { name: /^all$/i });
-    this.filterActive = page.getByRole('button', { name: /active/i });
-    this.filterCompleted = page.getByRole('button', { name: /completed/i });
+    // Filter buttons have text like "All (0)", "Active (5)", etc.
+    this.filterAll = page.getByRole('button', { name: /^all\s*\(/i });
+    this.filterActive = page.getByRole('button', { name: /^active\s*\(/i });
+    this.filterCompleted = page.getByRole('button', {
+      name: /^completed\s*\(/i,
+    });
   }
 
   async goto() {
