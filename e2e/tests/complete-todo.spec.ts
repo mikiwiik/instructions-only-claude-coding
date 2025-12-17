@@ -40,8 +40,8 @@ test.describe('Complete Todo Flow', () => {
     await todoPage.completeTodo('Toggle me');
     expect(await todoPage.isTodoCompleted('Toggle me')).toBe(true);
 
-    // Toggle back to incomplete
-    await todoPage.completeTodo('Toggle me');
+    // Restore to incomplete (use restore button, not toggle - toggle is disabled when completed)
+    await todoPage.restoreTodo('Toggle me');
     expect(await todoPage.isTodoCompleted('Toggle me')).toBe(false);
   });
 
