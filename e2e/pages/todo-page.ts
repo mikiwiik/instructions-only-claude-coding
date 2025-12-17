@@ -19,11 +19,10 @@ export class TodoPage {
     this.addButton = page.getByRole('button', { name: /add/i });
     this.todoList = page.getByRole('list').first();
     // Filter buttons have text like "All (0)", "Active (5)", etc.
-    this.filterAll = page.getByRole('button', { name: /^all\s*\(/i });
-    this.filterActive = page.getByRole('button', { name: /^active\s*\(/i });
-    this.filterCompleted = page.getByRole('button', {
-      name: /^completed\s*\(/i,
-    });
+    // Use role=tab since they have tablist/tab roles
+    this.filterAll = page.getByRole('tab', { name: /all/i });
+    this.filterActive = page.getByRole('tab', { name: /active/i });
+    this.filterCompleted = page.getByRole('tab', { name: /completed/i });
   }
 
   async goto() {
