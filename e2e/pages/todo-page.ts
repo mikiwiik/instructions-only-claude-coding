@@ -47,12 +47,12 @@ export class TodoPage {
   }
 
   async completeTodo(text: string) {
-    // Use CSS attribute selector for exact aria-label match
-    // The button has aria-label="Toggle todo: {text}"
-    const escapedText = text.replace(/"/g, '\\"');
-    const toggleButton = this.page.locator(
-      `button[aria-label="Toggle todo: ${escapedText}"]`
-    );
+    // Find the todo item first, then the toggle button within it
+    const todoItem = this.page.getByRole('listitem').filter({ hasText: text });
+    await todoItem.waitFor({ state: 'visible' });
+
+    // Find the toggle button within the todo item by aria-pressed attribute
+    const toggleButton = todoItem.locator('button[aria-pressed]');
     await toggleButton.waitFor({ state: 'visible' });
     await toggleButton.click();
   }
@@ -67,12 +67,12 @@ export class TodoPage {
   }
 
   async isTodoCompleted(text: string): Promise<boolean> {
-    // Use CSS attribute selector for exact aria-label match
-    // The button has aria-label="Toggle todo: {text}" and aria-pressed
-    const escapedText = text.replace(/"/g, '\\"');
-    const toggleButton = this.page.locator(
-      `button[aria-label="Toggle todo: ${escapedText}"]`
-    );
+    // Find the todo item first, then the toggle button within it
+    const todoItem = this.page.getByRole('listitem').filter({ hasText: text });
+    await todoItem.waitFor({ state: 'visible' });
+
+    // Find the toggle button within the todo item by aria-pressed attribute
+    const toggleButton = todoItem.locator('button[aria-pressed]');
     await toggleButton.waitFor({ state: 'visible' });
     const ariaPressed = await toggleButton.getAttribute('aria-pressed');
     return ariaPressed === 'true';
