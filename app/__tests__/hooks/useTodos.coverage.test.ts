@@ -23,13 +23,13 @@ describe('useTodos hook - coverage tests', () => {
     jest.useRealTimers();
   });
 
-  describe('404 handling - creates empty list when list does not exist', () => {
-    it('should create empty list when backend returns 404', async () => {
-      let createCalled = false;
+  describe('404 handling - starts with empty list when list does not exist', () => {
+    it('should start with empty list when backend returns 404 (no POST call)', async () => {
+      let postCalled = false;
 
       mockFetch.mockImplementation((url: string, options?: FetchOptions) => {
         if (options?.method === 'POST') {
-          createCalled = true;
+          postCalled = true;
           return Promise.resolve({
             ok: true,
             json: () => Promise.resolve({ success: true }),
@@ -49,8 +49,8 @@ describe('useTodos hook - coverage tests', () => {
         expect(result.current.isInitialized).toBe(true);
       });
 
-      // Should have called POST to create the list
-      expect(createCalled).toBe(true);
+      // Should NOT have called POST - list is created lazily on first addTodo
+      expect(postCalled).toBe(false);
       // Should start with empty todos
       expect(result.current.todos).toEqual([]);
     });
