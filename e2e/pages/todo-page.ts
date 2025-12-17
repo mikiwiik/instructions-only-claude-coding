@@ -47,31 +47,14 @@ export class TodoPage {
   }
 
   async completeTodo(text: string) {
-    // Debug: log all buttons with toggle in name
-
-    const allButtons = this.page.getByRole('button');
-    const count = await allButtons.count();
-    // eslint-disable-next-line no-console
-    console.log(`[E2E Debug] Total buttons on page: ${count}`);
-    for (let i = 0; i < Math.min(count, 10); i++) {
-      const btn = allButtons.nth(i);
-      const name = await btn.getAttribute('aria-label');
-      // eslint-disable-next-line no-console
-      console.log(`[E2E Debug] Button ${i}: aria-label="${name}"`);
-    }
-
-    // Use aria-label to find the toggle button directly
+    // Use CSS attribute selector for exact aria-label match
     // The button has aria-label="Toggle todo: {text}"
-    const toggleButton = this.page.getByRole('button', {
-      name: new RegExp(`toggle todo:.*${this.escapeRegex(text)}`, 'i'),
-    });
+    const escapedText = text.replace(/"/g, '\\"');
+    const toggleButton = this.page.locator(
+      `button[aria-label="Toggle todo: ${escapedText}"]`
+    );
     await toggleButton.waitFor({ state: 'visible' });
     await toggleButton.click();
-  }
-
-  // Helper to escape regex special characters
-  private escapeRegex(text: string): string {
-    return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
   async deleteTodo(text: string) {
@@ -84,11 +67,12 @@ export class TodoPage {
   }
 
   async isTodoCompleted(text: string): Promise<boolean> {
-    // Use aria-label to find the toggle button directly
+    // Use CSS attribute selector for exact aria-label match
     // The button has aria-label="Toggle todo: {text}" and aria-pressed
-    const toggleButton = this.page.getByRole('button', {
-      name: new RegExp(`toggle todo:.*${this.escapeRegex(text)}`, 'i'),
-    });
+    const escapedText = text.replace(/"/g, '\\"');
+    const toggleButton = this.page.locator(
+      `button[aria-label="Toggle todo: ${escapedText}"]`
+    );
     await toggleButton.waitFor({ state: 'visible' });
     const ariaPressed = await toggleButton.getAttribute('aria-pressed');
     return ariaPressed === 'true';
