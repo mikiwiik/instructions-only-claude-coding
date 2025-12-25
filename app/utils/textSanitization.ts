@@ -44,14 +44,14 @@ export function sanitizeForAriaLabel(text: string): string {
   decoded = decodeHtmlEntities(decoded);
 
   // Note: Using [^<]* instead of .*? to prevent ReDoS (S5852)
-  // Using \s*[^>]* in closing tags to handle malformed HTML (CodeQL js/bad-tag-filter)
-  // This matches </script>, </script >, and </script foo="bar">
+  // Using [^>]* in closing tags handles malformed HTML like </script > (CodeQL js/bad-tag-filter)
+  // [^>]* alone matches whitespace and attributes without backtracking ambiguity
   return decoded
-    .replace(/<script[^>]*>[^<]*<\/script\s*[^>]*>/gi, '[removed]')
-    .replace(/<iframe[^>]*>[^<]*<\/iframe\s*[^>]*>/gi, '[removed]')
-    .replace(/<object[^>]*>[^<]*<\/object\s*[^>]*>/gi, '[removed]')
-    .replace(/<embed[^>]*>[^<]*<\/embed\s*[^>]*>/gi, '[removed]')
-    .replace(/<form[^>]*>[^<]*<\/form\s*[^>]*>/gi, '[removed]')
+    .replace(/<script[^>]*>[^<]*<\/script[^>]*>/gi, '[removed]')
+    .replace(/<iframe[^>]*>[^<]*<\/iframe[^>]*>/gi, '[removed]')
+    .replace(/<object[^>]*>[^<]*<\/object[^>]*>/gi, '[removed]')
+    .replace(/<embed[^>]*>[^<]*<\/embed[^>]*>/gi, '[removed]')
+    .replace(/<form[^>]*>[^<]*<\/form[^>]*>/gi, '[removed]')
     .replace(/javascript:/gi, '[removed]:')
     .replace(/data:/gi, '[removed]:')
     .replace(/vbscript:/gi, '[removed]:')
