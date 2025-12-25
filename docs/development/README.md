@@ -160,7 +160,7 @@ New to the project? Start here:
 
 ### Guidelines and Standards
 
-- **[Accessibility Requirements](../guidelines/accessibility-requirements.md)** - WCAG 2.2 AA compliance
+- **[Accessibility Requirements](../ux/accessibility-requirements.md)** - WCAG 2.2 AA compliance
 - **[Code Complexity Guidelines](../guidelines/code-complexity-guidelines.md)** - Refactoring patterns
 - **[TypeScript Standards](../guidelines/typescript-standards.md)** - Type safety best practices
 

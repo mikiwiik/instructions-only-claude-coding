@@ -428,7 +428,7 @@ Current project maintains the following quality targets:
 - **TypeScript Coverage**: 100% (strict mode, no `any` types)
 - **Test Coverage**: 80%+ line coverage, 100% for critical paths
 - **ESLint**: Zero warnings or errors policy
-- **Accessibility**: WCAG 2.2 AA compliance (see [docs/guidelines/accessibility-requirements.md](../guidelines/accessibility-requirements.md))
+- **Accessibility**: WCAG 2.2 AA compliance (see [docs/ux/accessibility-requirements.md](../ux/accessibility-requirements.md))
 - **Code Complexity**: ADR-027 compliance (cognitive ≤15, nesting ≤4, cyclomatic ≤15)
 - **Performance**: Optimal React patterns and bundle size management
 
@@ -465,7 +465,7 @@ These metrics are enforced through pre-commit hooks, CI/CD pipelines, and manual
 - Proper ARIA attributes and semantic HTML
 - Keyboard navigation support
 - Screen reader compatibility
-- See [docs/guidelines/accessibility-requirements.md](../guidelines/accessibility-requirements.md) for complete requirements
+- See [docs/ux/accessibility-requirements.md](../ux/accessibility-requirements.md) for complete requirements
 
 **Code Complexity Standards:**
 

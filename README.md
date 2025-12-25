@@ -144,9 +144,10 @@ checks, and testing scripts.
 
 **Design Documentation**:
 
-- **[Layout & Spacing Reference](docs/design/layout-and-spacing-reference.md)** - Complete visual and technical spacing reference
-- **[Mobile UX Guidelines](docs/guidelines/mobile-ux-guidelines.md)** - Mobile-first design strategy and touch interactions
-- **[Accessibility Requirements](docs/guidelines/accessibility-requirements.md)** - WCAG 2.2 AA compliance guidelines
+- **[UX Design Documentation](docs/ux/README.md)** - Complete UX design hub
+- **[Layout & Spacing Reference](docs/ux/layout-and-spacing-reference.md)** - Breakpoints and spacing system
+- **[Mobile UX Guidelines](docs/ux/mobile-ux-guidelines.md)** - Touch gestures and mobile patterns
+- **[Accessibility Requirements](docs/ux/accessibility-requirements.md)** - WCAG 2.2 AA compliance
 
 ## Browser Support
 

@@ -113,5 +113,5 @@ The app uses feature detection for cross-browser compatibility:
 
 - [E2E Testing Guide](../testing/e2e-testing-guide.md) - Playwright configuration
 - [Frontend Testing Checklist](../testing/frontend-testing-checklist.md) - Testing overview
-- [Accessibility Requirements](../guidelines/accessibility-requirements.md) - WCAG compliance
-- [Mobile UX Guidelines](../guidelines/mobile-ux-guidelines.md) - Touch interaction design
+- [Accessibility Requirements](../ux/accessibility-requirements.md) - WCAG compliance
+- [Mobile UX Guidelines](../ux/mobile-ux-guidelines.md) - Touch interaction design
