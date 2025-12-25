@@ -1,8 +1,39 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, ReactNode } from 'react';
 import { X, AlertTriangle } from 'lucide-react';
 import { useDialogKeyboard } from '../hooks/useDialogKeyboard';
+
+type DialogVariant = 'destructive' | 'warning' | 'info';
+
+interface VariantStyle {
+  icon: ReactNode;
+  confirmButton: string;
+}
+
+const VARIANT_STYLES: Record<DialogVariant, VariantStyle> = {
+  destructive: {
+    icon: (
+      <AlertTriangle className='h-6 w-6 text-destructive' aria-hidden='true' />
+    ),
+    confirmButton:
+      'bg-destructive text-destructive-foreground hover:bg-destructive/90 focus:ring-destructive',
+  },
+  warning: {
+    icon: (
+      <AlertTriangle className='h-6 w-6 text-yellow-500' aria-hidden='true' />
+    ),
+    confirmButton:
+      'bg-yellow-500 text-white hover:bg-yellow-600 focus:ring-yellow-500',
+  },
+  info: {
+    icon: (
+      <AlertTriangle className='h-6 w-6 text-blue-500' aria-hidden='true' />
+    ),
+    confirmButton:
+      'bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500',
+  },
+};
 
 export interface ConfirmationDialogProps {
   /** Whether the dialog is open */
@@ -20,7 +51,7 @@ export interface ConfirmationDialogProps {
   /** Text for the cancel button (defaults to "Cancel") */
   cancelLabel?: string;
   /** Type of confirmation - affects styling (defaults to "destructive") */
-  variant?: 'destructive' | 'warning' | 'info';
+  variant?: DialogVariant;
   /** Loading state for the confirm button */
   isLoading?: boolean;
   /** Disable confirm button */
@@ -79,57 +110,7 @@ export default function ConfirmationDialog({
   // Don't render if not open
   if (!isOpen) return null;
 
-  // Get variant-specific styles
-  const getVariantStyles = () => {
-    switch (variant) {
-      case 'destructive':
-        return {
-          icon: (
-            <AlertTriangle
-              className='h-6 w-6 text-destructive'
-              aria-hidden='true'
-            />
-          ),
-          confirmButton:
-            'bg-destructive text-destructive-foreground hover:bg-destructive/90 focus:ring-destructive',
-        };
-      case 'warning':
-        return {
-          icon: (
-            <AlertTriangle
-              className='h-6 w-6 text-yellow-500'
-              aria-hidden='true'
-            />
-          ),
-          confirmButton:
-            'bg-yellow-500 text-white hover:bg-yellow-600 focus:ring-yellow-500',
-        };
-      case 'info':
-        return {
-          icon: (
-            <AlertTriangle
-              className='h-6 w-6 text-blue-500'
-              aria-hidden='true'
-            />
-          ),
-          confirmButton:
-            'bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500',
-        };
-      default:
-        return {
-          icon: (
-            <AlertTriangle
-              className='h-6 w-6 text-destructive'
-              aria-hidden='true'
-            />
-          ),
-          confirmButton:
-            'bg-destructive text-destructive-foreground hover:bg-destructive/90 focus:ring-destructive',
-        };
-    }
-  };
-
-  const variantStyles = getVariantStyles();
+  const variantStyles = VARIANT_STYLES[variant] || VARIANT_STYLES.destructive;
 
   const handleBackdropKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' || event.key === ' ') {
