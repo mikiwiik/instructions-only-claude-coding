@@ -11,6 +11,7 @@ import {
   SetTodoStateFn,
   createOptimisticUpdate,
 } from './useTodoSync';
+import { useTodoReorder } from './useTodoReorder';
 
 interface UseTodoOperationsProps {
   state: TodoState;
@@ -24,6 +25,11 @@ export function useTodoOperations({
   syncToBackend,
 }: UseTodoOperationsProps) {
   const optimisticUpdate = createOptimisticUpdate(setState, syncToBackend);
+  const reorderOps = useTodoReorder({
+    todos: state.todos,
+    setState,
+    syncToBackend,
+  });
 
   const addTodo = useCallback(
     async (text: string) => {
@@ -159,47 +165,6 @@ export function useTodoOperations({
     [state.todos, optimisticUpdate]
   );
 
-  const reorderTodos = useCallback(
-    async (sourceIndex: number, destinationIndex: number) => {
-      const { todos } = state;
-      const isInvalid =
-        sourceIndex < 0 ||
-        destinationIndex < 0 ||
-        sourceIndex >= todos.length ||
-        destinationIndex >= todos.length ||
-        sourceIndex === destinationIndex;
-      if (isInvalid) return;
-      const newTodos = [...todos];
-      const [movedTodo] = newTodos.splice(sourceIndex, 1);
-      newTodos.splice(destinationIndex, 0, movedTodo);
-      const oldTodos = todos;
-      setState((prev) => ({ ...prev, todos: newTodos }));
-      try {
-        await syncToBackend('reorder', newTodos);
-      } catch {
-        setState((prev) => ({ ...prev, todos: oldTodos }));
-      }
-    },
-    [state, setState, syncToBackend]
-  );
-
-  const moveUp = useCallback(
-    async (todoId: string) => {
-      const idx = state.todos.findIndex((t) => t.id === todoId);
-      if (idx > 0) await reorderTodos(idx, idx - 1);
-    },
-    [state.todos, reorderTodos]
-  );
-
-  const moveDown = useCallback(
-    async (todoId: string) => {
-      const idx = state.todos.findIndex((t) => t.id === todoId);
-      if (idx >= 0 && idx < state.todos.length - 1)
-        await reorderTodos(idx, idx + 1);
-    },
-    [state.todos, reorderTodos]
-  );
-
   return {
     addTodo,
     toggleTodo,
@@ -208,8 +173,6 @@ export function useTodoOperations({
     permanentlyDeleteTodo,
     restoreDeletedTodo,
     editTodo,
-    reorderTodos,
-    moveUp,
-    moveDown,
+    ...reorderOps,
   };
 }
