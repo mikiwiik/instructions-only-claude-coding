@@ -3,8 +3,8 @@
 **Status**: Living Document
 **Last Updated**: 2025-10-04
 **Purpose**: Complete visual and technical reference for UI components, layout, and spacing
-**Related**: [Mobile UX Guidelines](../guidelines/mobile-ux-guidelines.md), [Accessibility
-Requirements](../guidelines/accessibility-requirements.md)
+**Related**: [Mobile UX Guidelines](mobile-ux-guidelines.md), [Accessibility
+Requirements](accessibility-requirements.md)
 
 ---
 
@@ -551,10 +551,8 @@ When discussing layout changes, use these component names and terminology for cl
 
 ## Related Documentation
 
-- [Mobile UX Guidelines](../guidelines/mobile-ux-guidelines.md) - Mobile-first spacing strategy and best
-  practices
-- [Accessibility Requirements](../guidelines/accessibility-requirements.md) - Touch target requirements
-  (44×44px minimum)
+- [Mobile UX Guidelines](mobile-ux-guidelines.md) - Mobile-first spacing strategy and best practices
+- [Accessibility Requirements](accessibility-requirements.md) - Touch target requirements (44×44px minimum)
 
 ---
 
