@@ -117,12 +117,12 @@ allowing `settings.json` to be committed for project-level hooks.
 
 ### Files Created/Modified
 
-| File                         | Change                                                        |
-| ---------------------------- | ------------------------------------------------------------- |
-| `.claude/settings.json`      | New file with SessionStart hook                               |
-| `.gitignore`                 | Un-ignore `settings.json` (only ignore `settings.local.json`) |
-| `CLAUDE.md`                  | Document environment setup                                    |
-| `docs/setup/installation.md` | Add troubleshooting section                                   |
+| File                            | Change                                                        |
+| ------------------------------- | ------------------------------------------------------------- |
+| `.claude/settings.json`         | New file with SessionStart hook                               |
+| `.gitignore`                    | Un-ignore `settings.json` (only ignore `settings.local.json`) |
+| `CLAUDE.md`                     | Document environment setup                                    |
+| `docs/setup/local-dev-setup.md` | Add troubleshooting section                                   |
 
 ### Verification
 

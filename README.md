@@ -102,11 +102,11 @@ This project serves as a **template and reference** for:
 - npm 10.x or higher
 - Claude Code Pro subscription
 
-**Complete setup instructions**: See [Installation Guide](docs/setup/installation.md) for Claude Code authentication,
+**Complete setup instructions**: See [Installation Guide](docs/setup/local-dev-setup.md) for Claude Code authentication,
 troubleshooting, and development environment setup.
 
 **Developer Environment Setup**: First-time contributors should run `./scripts/setup-claude-settings.sh` to configure
-Claude Code settings via dotfiles. See [Installation Guide](docs/setup/installation.md) for details.
+Claude Code settings via dotfiles. See [Installation Guide](docs/setup/local-dev-setup.md) for details.
 
 ### Installation
 
@@ -159,7 +159,7 @@ See [Development Workflow](docs/development/workflow.md) for complete branch str
 
 ### Quick Navigation
 
-- **🚀 [Installation Guide](docs/setup/installation.md)** - Complete development environment setup
+- **🚀 [Installation Guide](docs/setup/local-dev-setup.md)** - Complete development environment setup
 - **📦 [Vercel Deployment Guide](docs/setup/vercel-deployment.md)** - Production deployment with Vercel
 - **🔍 [SonarCloud Setup](docs/setup/sonarcloud-setup.md)** - Code quality analysis integration
 - **💡 [SonarLint IDE Setup](docs/setup/sonarlint-ide-setup.md)** - Real-time code quality feedback in your IDE
@@ -184,7 +184,7 @@ See [Development Workflow](docs/development/workflow.md) for complete branch str
 
 ## Contributing
 
-**Quick Start**: Review [installation guide](docs/setup/installation.md), understand the
+**Quick Start**: Review [installation guide](docs/setup/local-dev-setup.md), understand the
 [development workflow](docs/development/workflow.md), browse [GitHub issues](https://github.com/mikiwiik/instructions-only-claude-coding/issues),
 and follow TDD with branch-based development.
 

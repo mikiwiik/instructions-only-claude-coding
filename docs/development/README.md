@@ -16,7 +16,7 @@ representation of the development process.
 
 New to the project? Start here:
 
-1. **[Development Environment Setup](../setup/installation.md)** - Configure your local development environment
+1. **[Development Environment Setup](../setup/local-dev-setup.md)** - Configure your local development environment
 2. **[Development Workflow](workflow.md)** - Learn the branch-based workflow, TDD practices, and quality standards
 3. **[Project Management](project-management.md)** - Understand issue tracking and GitHub Projects workflow
 
@@ -81,7 +81,7 @@ New to the project? Start here:
 
 ### Development Environment
 
-**[Installation Guide](../setup/installation.md)** - Complete development environment setup
+**[Installation Guide](../setup/local-dev-setup.md)** - Complete development environment setup
 
 - System requirements (Node.js, npm)
 - Project setup and dependency installation
@@ -119,7 +119,7 @@ New to the project? Start here:
 
 1. [workflow.md](workflow.md) - Daily development practices
 2. [project-management.md](project-management.md) - Issue tracking workflow
-3. [Installation Guide](../setup/installation.md) - Local setup
+3. [Installation Guide](../setup/local-dev-setup.md) - Local setup
 
 **For Project Managers:**
 
@@ -135,7 +135,7 @@ New to the project? Start here:
 
 **Setting Up a New Development Environment:**
 
-1. [Installation Guide](../setup/installation.md) - Configure development environment and Claude Code settings
+1. [Installation Guide](../setup/local-dev-setup.md) - Configure development environment and Claude Code settings
 2. [workflow.md](workflow.md) - Review development workflow
 
 **Starting Work on an Issue:**
