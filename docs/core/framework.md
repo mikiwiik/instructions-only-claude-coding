@@ -10,21 +10,10 @@ humans provide strategic direction and AI handles complete implementation.
 
 ## Role Definition and Boundaries
 
-### Human Role: Strategic Architect & Product Owner
+Human provides strategic direction (requirements, architecture, feedback) while AI handles 100% of technical
+execution (code, tests, docs, deployment). Neither crosses into the other's domain.
 
-- Provides high-level requirements and feature specifications
-- Sets architectural direction and technical constraints
-- Makes product decisions and priority determinations
-- Gives feedback on implementation and user experience
-- **Does NOT write code** - maintains pure instruction-based approach
-
-### AI Role: Complete Implementation Team
-
-- Handles all code implementation with comprehensive testing strategies
-- Manages test coverage and maintains CI/CD pipeline and deployment processes
-- Creates and maintains all project documentation and ADRs
-- Ensures code quality, linting, type safety, and professional standards
-- **100% responsible for technical execution** via instruction interpretation
+> **Full Details**: See [README.md Role Definition](../../README.md#-role-definition-and-boundaries) for complete breakdown.
 
 ## Instruction-Based Development Principles
 
