@@ -1,7 +1,7 @@
-# Responsive Design Testing Checklist
+# Frontend Testing Checklist
 
-This checklist ensures comprehensive testing of the Todo App's mobile-first responsive design across all devices and
-accessibility standards.
+This checklist covers manual testing for the Todo App's responsive design, accessibility, and cross-browser
+compatibility.
 
 ## Mobile-First Breakpoint Testing
 
@@ -200,35 +200,10 @@ accessibility standards.
 
 ---
 
-## Testing Tools and Resources
+## Integrated Testing Tools
 
-### Browser Developer Tools
+The following tools are integrated into the project's CI/CD pipeline:
 
-- Chrome DevTools Device Mode
-- Firefox Responsive Design Mode
-- Safari Web Inspector
-
-### Testing Platforms
-
-- BrowserStack for cross-device testing
-- Sauce Labs for automated testing
-- Physical device lab when available
-
-### Accessibility Tools
-
-- axe DevTools extension
-- WAVE Web Accessibility Evaluator
-- Lighthouse accessibility audit
-- Screen reader testing (NVDA, JAWS, VoiceOver)
-
-### Performance Testing
-
-- Google PageSpeed Insights
-- WebPageTest
-- Chrome DevTools Performance tab
-- Real device testing on various network conditions
-
----
-
-_This checklist ensures comprehensive testing of mobile-first responsive design and accessibility compliance for the
-Todo App._
+- **ESLint jsx-a11y** - Accessibility linting during development and CI
+- **SonarCloud** - Code quality, coverage analysis, and complexity metrics
+- **Jest + React Testing Library** - Component and integration testing (90% coverage threshold)
