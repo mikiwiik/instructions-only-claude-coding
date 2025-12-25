@@ -1,0 +1,3 @@
+# Exclude test API routes from production deployment
+# These routes are only needed for E2E tests which run locally in CI
+app/api/test/

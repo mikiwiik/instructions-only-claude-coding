@@ -123,6 +123,39 @@ E2E tests run automatically in GitHub Actions after the build job completes:
 
 View reports in GitHub Actions artifacts after test completion.
 
+## Test Infrastructure
+
+### Test API Routes
+
+E2E tests use dedicated API endpoints for test isolation:
+
+| Route             | Purpose                                   |
+| ----------------- | ----------------------------------------- |
+| `/api/test/reset` | Clears in-memory store between tests      |
+| `/api/test/debug` | Returns diagnostic info about store state |
+
+**Security:** These routes are excluded from production via `.vercelignore`.
+They only exist in local/CI builds where E2E tests run.
+
+### Why Exclude from Production?
+
+1. **Not needed**: E2E tests run against local server in CI, not Vercel
+2. **Clean bundles**: No test code in production
+3. **Security**: No test endpoints discoverable in production
+
+### How It Works
+
+```text
+CI E2E Tests:
+  npm run build --> includes app/api/test/*
+  npm run start --> test routes available on localhost:3000
+  Playwright tests --> use /api/test/reset for isolation
+
+Production (Vercel):
+  .vercelignore excludes app/api/test/
+  Routes simply don't exist (404)
+```
+
 ## Debugging Tests
 
 ### UI Mode (Recommended)
