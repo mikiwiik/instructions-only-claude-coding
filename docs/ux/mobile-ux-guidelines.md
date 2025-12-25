@@ -416,13 +416,13 @@ Use browser dev tools to overlay touch target sizes:
 ---
 
 > **Note**: For complete spacing scale, breakpoints, and design token reference, see
-> [Layout and Spacing Reference](../design/layout-and-spacing-reference.md).
+> [Layout and Spacing Reference](layout-and-spacing-reference.md).
 
 ---
 
 ## Related Documentation
 
-- **Layout and Spacing Reference**: [Complete visual and technical reference](../design/layout-and-spacing-reference.md)
+- **Layout and Spacing Reference**: [Complete visual and technical reference](layout-and-spacing-reference.md)
   for all UI components, spacing mechanics, and layout details
 - **ADR-016**: Mobile Help Overlay Pattern (bottom drawer decision)
 - **Accessibility Requirements**: WCAG 2.2 AA compliance guidelines
