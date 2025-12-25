@@ -33,7 +33,7 @@ Optional body explaining the change in detail
 Optional footer for breaking changes or issue closure
 ```
 
-**Commit Types:**
+**Commit Types ([Conventional Commits](https://www.conventionalcommits.org/)):**
 
 See `commitlint.config.mjs` for the authoritative list of allowed types. Common types include:
 
