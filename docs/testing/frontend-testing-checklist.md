@@ -1,7 +1,6 @@
 # Frontend Testing Checklist
 
-This checklist covers manual testing for the Todo App's responsive design, accessibility, and cross-browser
-compatibility.
+This document describes the frontend testing infrastructure and implemented features for the Todo App.
 
 ## Integrated Testing Tools
 
@@ -16,197 +15,60 @@ For E2E testing details, see [E2E Testing Guide](e2e-testing-guide.md).
 
 ---
 
-## Mobile-First Breakpoint Testing
+## Responsive Design
 
-### 📱 Mobile (320px - 767px)
+The app uses Tailwind CSS breakpoints throughout:
 
-- [ ] **Layout**: Single column layout works properly
-- [ ] **Typography**: Text is readable at small sizes (14px minimum)
-- [ ] **Touch Targets**: All buttons meet 44px minimum size requirement
-- [ ] **Form**: TodoForm stacks vertically on mobile
-- [ ] **Button Text**: "Add" button shows abbreviated text on smallest screens
-- [ ] **Spacing**: Adequate padding and margins for touch interaction
-- [ ] **Navigation**: Easy thumb navigation of todos and buttons
-- [ ] **Safe Area**: Content respects device safe areas (notches, home indicators)
+| Breakpoint | Width        | Layout                                   |
+| ---------- | ------------ | ---------------------------------------- |
+| Mobile     | 320px-767px  | Single column, stacked forms, compact UI |
+| Tablet     | 768px-1023px | Responsive spacing, horizontal forms     |
+| Desktop    | 1024px+      | Full layout, hover states, expanded UI   |
 
-### 📱 Tablet (768px - 1023px)
+Key responsive classes used: `md:`, `lg:`, `sm:` prefixes on spacing, layout, and visibility.
 
-- [ ] **Layout**: Optimal use of additional screen space
-- [ ] **Typography**: Appropriate font scaling for tablet reading
-- [ ] **Form**: TodoForm may use horizontal layout on larger tablets
-- [ ] **Button Grouping**: Action buttons grouped appropriately
-- [ ] **Touch Targets**: Maintain 44px minimum for touch devices
-- [ ] **Orientation**: Works in both portrait and landscape modes
+---
 
-### 💻 Desktop (1024px+)
+## Touch and Gesture Support
 
-- [ ] **Layout**: Efficient use of wide screens
-- [ ] **Typography**: Comfortable reading sizes
-- [ ] **Form**: Horizontal layout with optimized button sizing
-- [ ] **Hover States**: All interactive elements have proper hover feedback
-- [ ] **Focus Management**: Keyboard navigation works smoothly
-- [ ] **Button Text**: Full "Add Todo" text displayed
+Implemented gestures (with `GestureHint` UI for discovery):
 
-## Cross-Device Testing
+| Gesture     | Action            | Implementation              |
+| ----------- | ----------------- | --------------------------- |
+| Swipe right | Toggle completion | `useSwipeGesture.ts`        |
+| Swipe left  | Delete todo       | `useSwipeGesture.ts`        |
+| Long press  | Enter edit mode   | `useLongPress.ts`           |
+| Drag & drop | Reorder todos     | `useTodoItemDragAndDrop.ts` |
 
-### Device Categories
+All touch targets meet 44px minimum (WCAG AAA).
 
-- [ ] **Small Phones**: iPhone SE, Galaxy S (320px-375px width)
-- [ ] **Large Phones**: iPhone Pro Max, Pixel XL (390px-430px width)
-- [ ] **Small Tablets**: iPad Mini (768px width)
-- [ ] **Large Tablets**: iPad Pro (1024px+ width)
-- [ ] **Laptops**: 1366px, 1440px, 1920px widths
-- [ ] **Ultra-wide**: 2560px+ widths
+---
 
-### Orientation Testing
+## Accessibility (WCAG 2.1 AA)
 
-- [ ] **Portrait Mode**: Primary layout works correctly
-- [ ] **Landscape Mode**: Layout adapts appropriately
-- [ ] **Orientation Changes**: Smooth transitions between orientations
-- [ ] **Content Preservation**: No loss of user input during rotation
+Implemented accessibility features:
 
-## Touch and Interaction Testing
+| Feature             | Implementation                                       |
+| ------------------- | ---------------------------------------------------- |
+| ARIA labels         | All interactive elements have descriptive labels     |
+| Focus traps         | Dialogs trap focus (`useFocusTrap.ts`)               |
+| Keyboard navigation | Tab, Escape, Enter support throughout                |
+| Screen reader       | Landmark roles, reading order, dynamic announcements |
+| Touch targets       | 44px minimum on all buttons and interactive elements |
+| Color contrast      | Enforced via ESLint jsx-a11y                         |
 
-### Touch Target Accessibility
+See [Accessibility Requirements](../guidelines/accessibility-requirements.md) for full guidelines.
 
-- [ ] **Minimum Size**: All interactive elements ≥ 44px × 44px
-- [ ] **Adequate Spacing**: 8px minimum between touch targets
-- [ ] **Easy Thumb Reach**: Important actions within comfortable thumb zones
-- [ ] **Clear Visual Feedback**: Immediate response to touch interactions
+---
 
-### Gesture Support
+## Edge Cases (Tested via Jest)
 
-- [ ] **Tap**: Single tap activates buttons and toggles
-- [ ] **Drag & Drop**: Todo reordering works smoothly on touch devices
-- [ ] **Scroll**: Smooth scrolling through todo lists
-- [ ] **Pinch Zoom**: Content remains usable when zoomed (accessibility)
+The following edge cases are covered by unit/integration tests:
 
-## Typography and Readability
+- **XSS Prevention** - 40+ attack vectors tested (`XSS_PAYLOADS` in test fixtures)
+- **Very Long Text** - Text wrapping and overflow handling
+- **Empty States** - Proper display when no todos exist
+- **Special Characters** - Unicode and emoji support
+- **Rapid Interactions** - Debouncing and state management
 
-### Font Size Testing
-
-- [ ] **Mobile**: 14px minimum for body text
-- [ ] **Tablet**: 16px optimal for reading
-- [ ] **Desktop**: 16px+ comfortable reading size
-- [ ] **Headings**: Proper hierarchy maintained across breakpoints
-- [ ] **Line Height**: 1.4+ for good readability
-- [ ] **Line Length**: 45-75 characters per line optimal
-
-### Content Adaptation
-
-- [ ] **Text Wrapping**: Long text wraps gracefully
-- [ ] **Overflow Handling**: Content doesn't break layout
-- [ ] **Abbreviations**: Appropriate text shortening on small screens
-- [ ] **Whitespace**: Balanced spacing for readability
-
-## Performance Testing
-
-### Mobile Performance
-
-- [ ] **Load Time**: App loads quickly on 3G networks
-- [ ] **Animations**: Smooth 60fps animations on mobile devices
-- [ ] **Memory Usage**: Efficient memory usage on lower-end devices
-- [ ] **Battery Impact**: Minimal battery drain from animations
-- [ ] **Touch Response**: Immediate feedback to touch interactions
-
-### Network Conditions
-
-- [ ] **Offline Mode**: Graceful handling of network loss
-- [ ] **Slow 3G**: Acceptable performance on slower connections
-- [ ] **4G/5G**: Optimal performance on fast networks
-- [ ] **Wi-Fi**: Full feature functionality on reliable connections
-
-## Accessibility Compliance (WCAG 2.1 AA)
-
-### Visual Accessibility
-
-- [ ] **Color Contrast**: 4.5:1 minimum ratio for normal text
-- [ ] **Color Contrast**: 3:1 minimum ratio for large text
-- [ ] **Focus Indicators**: Visible focus rings on all interactive elements
-- [ ] **Text Scaling**: Content remains usable at 200% zoom
-- [ ] **Non-Color Information**: Information not conveyed by color alone
-
-### Motor Accessibility
-
-- [ ] **Touch Targets**: 44px minimum (WCAG AAA recommendation)
-- [ ] **Motion Control**: No motion-based controls required
-- [ ] **Timeout Extensions**: Adequate time for interactions
-- [ ] **Error Prevention**: Clear error prevention and correction
-
-### Cognitive Accessibility
-
-- [ ] **Consistent Navigation**: Predictable interaction patterns
-- [ ] **Clear Labels**: Descriptive button and form labels
-- [ ] **Help Text**: Available assistance for complex interactions
-- [ ] **Error Messages**: Clear, helpful error communication
-
-### Screen Reader Testing
-
-- [ ] **ARIA Labels**: Proper labeling for all interactive elements
-- [ ] **Landmark Roles**: Proper semantic structure (main, header, footer)
-- [ ] **Reading Order**: Logical tab and reading sequence
-- [ ] **Focus Management**: Focus moves appropriately between elements
-- [ ] **Dynamic Content**: Screen reader announcements for changes
-
-## Browser and Platform Testing
-
-### Mobile Browsers
-
-- [ ] **Safari iOS**: Native iOS Safari browser
-- [ ] **Chrome Android**: Native Android Chrome browser
-- [ ] **Firefox Mobile**: Cross-platform mobile Firefox
-- [ ] **Samsung Internet**: Samsung's default browser
-- [ ] **Edge Mobile**: Microsoft Edge on mobile
-
-### Desktop Browsers
-
-- [ ] **Chrome**: Latest version compatibility
-- [ ] **Firefox**: Latest version compatibility
-- [ ] **Safari**: macOS Safari compatibility
-- [ ] **Edge**: Windows Edge compatibility
-
-### Platform-Specific Features
-
-- [ ] **iOS**: Safe area respect, scroll behavior
-- [ ] **Android**: Back button behavior, system navigation
-- [ ] **Windows**: Touch and mouse input handling
-- [ ] **macOS**: Trackpad gesture support
-
-## Edge Cases and Error Handling
-
-### Content Edge Cases
-
-- [ ] **Very Long Todos**: Handling of extremely long text
-- [ ] **Empty States**: Proper display when no todos exist
-- [ ] **Large Lists**: Performance with 100+ todos
-- [ ] **Special Characters**: Unicode and emoji support
-
-### User Interaction Edge Cases
-
-- [ ] **Rapid Interactions**: Multiple quick taps/clicks
-- [ ] **Simultaneous Actions**: Multiple users on shared device
-- [ ] **Interrupted Actions**: Network loss during operations
-- [ ] **Form Validation**: Proper error handling and user feedback
-
-## Final Quality Assurance
-
-### Visual Quality
-
-- [ ] **Pixel Perfect**: Clean alignment across all breakpoints
-- [ ] **Consistent Spacing**: Uniform padding and margins
-- [ ] **Typography Hierarchy**: Clear visual hierarchy maintained
-- [ ] **Brand Consistency**: Consistent visual language across devices
-
-### User Experience
-
-- [ ] **Intuitive Navigation**: Clear user flow across devices
-- [ ] **Fast Interactions**: Responsive feedback to all actions
-- [ ] **Error Recovery**: Easy recovery from errors
-- [ ] **Progressive Enhancement**: Core functionality works everywhere
-
-### Documentation
-
-- [ ] **Testing Results**: Document all test results and issues
-- [ ] **Device Coverage**: Record all tested devices and browsers
-- [ ] **Issue Tracking**: Log and resolve any discovered issues
-- [ ] **Accessibility Report**: Complete WCAG compliance verification
+See [Testing Guidelines](../guidelines/testing-guidelines.md) for test utility usage.
