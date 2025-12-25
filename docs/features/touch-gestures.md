@@ -120,6 +120,6 @@ The todo app uses consistent mobile-optimized patterns:
 
 - [WCAG 2.2 SC 2.5.7: Dragging Movements](https://www.w3.org/WAI/WCAG22/Understanding/dragging-movements.html)
 - [WCAG 2.2 SC 2.5.8: Target Size (Minimum)](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html)
-- [Accessibility Requirements](../guidelines/accessibility-requirements.md)
+- [Accessibility Requirements](../ux/accessibility-requirements.md)
 - [ADR-012: Todo Reordering UX Approach](../adr/012-todo-reordering-ux-approach.md)
 - [ADR-016: Mobile Help Overlay Pattern](../adr/016-mobile-help-overlay-pattern.md)

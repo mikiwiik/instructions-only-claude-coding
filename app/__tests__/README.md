@@ -379,7 +379,7 @@ const { callbacks } = renderTodoItem(todo);
 
 - **Testing Guidelines**: [docs/guidelines/testing-guidelines.md](../../docs/guidelines/testing-guidelines.md)
 - **TypeScript Standards**: [docs/guidelines/typescript-standards.md](../../docs/guidelines/typescript-standards.md)
-- **Accessibility Testing**: [docs/guidelines/accessibility-requirements.md](../../docs/guidelines/accessibility-requirements.md)
+- **Accessibility Testing**: [docs/ux/accessibility-requirements.md](../../docs/ux/accessibility-requirements.md)
 - **TDD Approach**: [docs/adr/004-test-driven-development-approach.md](../../docs/adr/004-test-driven-development-approach.md)
 
 ## Contributing

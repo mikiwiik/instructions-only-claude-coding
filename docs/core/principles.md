@@ -218,7 +218,7 @@ enterprise-level quality** without manual human intervention in implementation.
 5. **Accessibility Compliance**
    - WCAG 2.2 AA standards adherence
    - 44px touch targets, keyboard navigation, screen reader support
-   - See [../guidelines/accessibility-requirements.md](../guidelines/accessibility-requirements.md)
+   - See [../ux/accessibility-requirements.md](../ux/accessibility-requirements.md)
 
 **Enforcement Layers**:
 
@@ -238,7 +238,7 @@ enterprise-level quality** without manual human intervention in implementation.
   - [../guidelines/testing-guidelines.md](../guidelines/testing-guidelines.md) - Comprehensive testing practices
   - [../guidelines/code-complexity-guidelines.md](../guidelines/code-complexity-guidelines.md) - Refactoring patterns
   - [../guidelines/typescript-standards.md](../guidelines/typescript-standards.md) - Type safety best practices
-  - [../guidelines/accessibility-requirements.md](../guidelines/accessibility-requirements.md) - WCAG 2.2 AA compliance
+  - [../ux/accessibility-requirements.md](../ux/accessibility-requirements.md) - WCAG 2.2 AA compliance
 
 **Related Principles**:
 
