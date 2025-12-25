@@ -185,6 +185,9 @@ nvm use 22
 Claude Code runs bash commands in non-interactive shells that don't source `~/.zshrc`. This project includes a
 SessionStart hook (`.claude/settings.json`) that automatically sources nvm.
 
+**No action required**: If you have nvm installed in the standard location (`~/.nvm`), the hook works automatically.
+The hook is compatible with nvm 0.39.x and later versions installed via the official installation script.
+
 If you still see `npm: command not found`:
 
 1. **Restart Claude Code** to trigger the SessionStart hook
