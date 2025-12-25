@@ -8,6 +8,7 @@ practices, see [Development Documentation](../development/README.md).
 - **Node.js**: Version 22.x or higher
 - **npm**: Version 10.x or higher
 - **Git**: For version control
+- **jq**: JSON processor for parsing CLI output (optional but recommended)
 - **Modern Browser**: For development and testing
 
 ## Claude Code Setup
@@ -180,6 +181,33 @@ node --version
 nvm install 22
 nvm use 22
 ```
+
+### jq Installation
+
+`jq` is a command-line JSON processor used by project scripts (e.g., GitHub Projects status updates).
+
+```bash
+# macOS (Homebrew)
+brew install jq
+
+# Ubuntu/Debian
+sudo apt-get install jq
+
+# Windows (Chocolatey)
+choco install jq
+```
+
+**Alternative**: For GitHub CLI specific tasks, you can use the built-in `--jq` flag instead:
+
+```bash
+# Using jq
+gh api repos/:owner/:repo --jq '.name'
+
+# Using gh --jq (no jq installation needed)
+gh api repos/:owner/:repo --jq '.name'
+```
+
+Both approaches work identically for GitHub CLI commands. Install `jq` when you need JSON processing outside of `gh`.
 
 ### Claude Code with nvm
 
