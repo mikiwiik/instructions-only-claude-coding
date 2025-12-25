@@ -18,8 +18,8 @@ Built with Next.js 14, TypeScript, and Tailwind CSS, demonstrating modern web de
 
 ## 🎯 Role Definition and Boundaries
 
-> **🚨 CRITICAL FRAMEWORK**: This project demonstrates instruction-only development where humans provide
-> strategic direction and AI handles complete implementation.
+> **Central Framework & Project Purpose**: This project demonstrates instruction-only development where humans
+> provide strategic direction and AI handles complete implementation.
 
 ### Human Role: Strategic Architect & Product Owner
 
