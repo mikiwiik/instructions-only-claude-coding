@@ -104,13 +104,22 @@ test.describe('Feature Name', () => {
 
 Playwright configuration is in `playwright.config.ts`:
 
-- **Browsers**: Chromium, Firefox, WebKit, Mobile Chrome, Mobile Safari
 - **Base URL**: `http://localhost:3000`
 - **Retries**: 2 on CI, 0 locally
 - **Workers**: 1 on CI, 4 locally
 - **Screenshots**: On failure
 - **Videos**: On retry
 - **Trace**: On first retry
+
+### Browser Matrix
+
+| Environment | Browsers                                                |
+| ----------- | ------------------------------------------------------- |
+| CI          | Chromium only (for speed)                               |
+| Local       | Chromium, Firefox, WebKit, Mobile Chrome, Mobile Safari |
+
+Local development tests all browsers for comprehensive coverage. CI runs Chromium only to keep
+pipeline fast while still catching most issues.
 
 ## CI/CD Integration
 
