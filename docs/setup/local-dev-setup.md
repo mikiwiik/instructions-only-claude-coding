@@ -1,6 +1,7 @@
-# Installation and Development Environment Setup
+# Local Development Environment Setup
 
-This guide covers all necessary setup steps for developing and contributing to the Todo App project.
+This guide covers setting up your local development environment for the Todo App project. For development workflows and
+practices, see [Development Documentation](../development/README.md).
 
 ## System Requirements
 
@@ -344,4 +345,4 @@ After completing installation:
 
 ---
 
-This installation guide ensures a consistent development environment for all contributors to the Todo App project.
+This guide ensures a consistent local development environment for all contributors to the Todo App project.
