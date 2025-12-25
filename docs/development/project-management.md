@@ -251,7 +251,7 @@ and completion (via PR merge). No manual status updates needed - workflow is ful
 
 - [ ] All acceptance criteria met
 - [ ] Code follows project standards and conventions
-- [ ] **♿ Accessibility requirements met** ([docs/guidelines/accessibility-requirements.md](../guidelines/accessibility-requirements.md)):
+- [ ] **♿ Accessibility requirements met** ([docs/ux/accessibility-requirements.md](../ux/accessibility-requirements.md)):
   - [ ] WCAG 2.2 AA compliance verified
   - [ ] Minimum 44px × 44px touch targets for interactive elements
   - [ ] Proper ARIA labels and semantic HTML

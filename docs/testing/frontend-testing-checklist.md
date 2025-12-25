@@ -27,7 +27,7 @@ The app uses Tailwind CSS breakpoints throughout:
 
 Key responsive classes used: `md:`, `lg:`, `sm:` prefixes on spacing, layout, and visibility.
 
-See [Layout & Spacing Reference](../design/layout-and-spacing-reference.md) for detailed breakpoint specifications.
+See [Layout & Spacing Reference](../ux/layout-and-spacing-reference.md) for detailed breakpoint specifications.
 
 ---
 
@@ -59,7 +59,7 @@ Implemented accessibility features:
 | Touch targets       | 44px minimum on all buttons and interactive elements |
 | Color contrast      | Enforced via ESLint jsx-a11y                         |
 
-See [Accessibility Requirements](../guidelines/accessibility-requirements.md) for full guidelines.
+See [Accessibility Requirements](../ux/accessibility-requirements.md) for full guidelines.
 
 ---
 

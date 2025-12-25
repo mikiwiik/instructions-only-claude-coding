@@ -357,7 +357,7 @@ Per ADR-013 (Shared Lists Backend Architecture), we're using Upstash Redis (Redi
 - ADR-014: Anonymous Sharing Architecture
 - ADR-018: API Schema Design for Shared Lists
 - [WCAG 2.2 AA Guidelines](https://www.w3.org/WAI/WCAG22/quickref/)
-- [Accessibility Requirements](../guidelines/accessibility-requirements.md)
+- [Accessibility Requirements](../ux/accessibility-requirements.md)
 - [AWS Last-Write-Wins Resolution](https://docs.aws.amazon.com/amazondynamodb/latest/)
 - [Firebase Offline Capabilities](https://firebase.google.com/docs/database/web/offline-capabilities)
 
