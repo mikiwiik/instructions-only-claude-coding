@@ -102,11 +102,11 @@ This project serves as a **template and reference** for:
 - npm 10.x or higher
 - Claude Code Pro subscription
 
-**Complete setup instructions**: See [Installation Guide](docs/setup/local-dev-setup.md) for Claude Code authentication,
-troubleshooting, and development environment setup.
+**Local Development Setup**: See [Local Dev Setup Guide](docs/setup/local-dev-setup.md) for Node.js, dependencies, and
+environment configuration.
 
-**Developer Environment Setup**: First-time contributors should run `./scripts/setup-claude-settings.sh` to configure
-Claude Code settings via dotfiles. See [Installation Guide](docs/setup/local-dev-setup.md) for details.
+**Claude Code Setup**: Install Claude Code CLI and authenticate following the
+[Claude Code section](docs/setup/local-dev-setup.md#claude-code-setup) in the setup guide.
 
 ### Installation
 
