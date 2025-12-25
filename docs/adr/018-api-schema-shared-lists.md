@@ -678,7 +678,7 @@ Clients consuming this API must:
 - [REST API Best Practices](https://restfulapi.net/)
 - [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
 - [WCAG 2.2 AA Guidelines](https://www.w3.org/WAI/WCAG22/quickref/)
-- [Accessibility Requirements](../guidelines/accessibility-requirements.md)
+- [Accessibility Requirements](../ux/accessibility-requirements.md)
 
 ---
 
