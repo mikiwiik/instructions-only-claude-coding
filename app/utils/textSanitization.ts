@@ -32,7 +32,7 @@ export function decodeHtmlEntities(text: string): string {
  */
 export function sanitizeForAriaLabel(text: string): string {
   // First decode any URL encoding and HTML entities to catch encoded attacks
-  let decoded = text;
+  let decoded: string;
   try {
     decoded = decodeURIComponent(text);
   } catch {
