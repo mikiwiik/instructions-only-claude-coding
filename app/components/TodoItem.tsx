@@ -1,71 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { Todo } from '../types/todo';
-import { useSwipeGesture } from '../hooks/useSwipeGesture';
-import { useLongPress } from '../hooks/useLongPress';
 import { useTodoItemDragAndDrop } from '../hooks/useTodoItemDragAndDrop';
-import { combineTouchHandlers, TouchHandlers } from '../utils/touchHandlers';
+import { useTodoItemGestures } from '../hooks/useTodoItemGestures';
+import { sanitizeForAriaLabel } from '../utils/textSanitization';
 import TodoItemContent from './TodoItemContent';
 import TodoItemActions from './TodoItemActions';
 import TodoItemReorderButtons from './TodoItemReorderButtons';
 import TodoItemCheckbox from './TodoItemCheckbox';
 import ConfirmationDialog from './ConfirmationDialog';
-
-// Helper function to decode HTML entities
-const decodeHtmlEntities = (text: string): string => {
-  return text
-    .replace(/&lt;/gi, '<')
-    .replace(/&gt;/gi, '>')
-    .replace(/&quot;/gi, '"')
-    .replace(/&#34;/gi, '"')
-    .replace(/&#39;/gi, "'")
-    .replace(/&#40;/gi, '(')
-    .replace(/&#41;/gi, ')')
-    .replace(/&#60;/gi, '<')
-    .replace(/&#62;/gi, '>')
-    .replace(/&amp;/gi, '&')
-    .replace(/&#(\d+);/gi, (match, dec) =>
-      String.fromCharCode(parseInt(dec, 10))
-    )
-    .replace(/&#x([0-9a-f]+);/gi, (match, hex) =>
-      String.fromCharCode(parseInt(hex, 16))
-    );
-};
-
-// Helper function to sanitize text for use in aria-labels and dialog messages
-const sanitizeForAriaLabel = (text: string): string => {
-  // First decode any URL encoding and HTML entities to catch encoded attacks
-  let decoded = text;
-  try {
-    decoded = decodeURIComponent(text);
-  } catch {
-    // If decoding fails, use original text
-    decoded = text;
-  }
-
-  // Also decode HTML entities
-  decoded = decodeHtmlEntities(decoded);
-
-  return decoded
-    .replace(/<script[^>]*>.*?<\/script>/gi, '[removed]')
-    .replace(/<iframe[^>]*>.*?<\/iframe>/gi, '[removed]')
-    .replace(/<object[^>]*>.*?<\/object>/gi, '[removed]')
-    .replace(/<embed[^>]*>.*?<\/embed>/gi, '[removed]')
-    .replace(/<form[^>]*>.*?<\/form>/gi, '[removed]')
-    .replace(/javascript:/gi, '[removed]:')
-    .replace(/data:/gi, '[removed]:')
-    .replace(/vbscript:/gi, '[removed]:')
-    .replace(/file:/gi, '[removed]:')
-    .replace(/ftp:/gi, '[removed]:')
-    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '[removed]')
-    .replace(/on\w+\s*=/gi, '[removed]=')
-    .replace(/style\s*=\s*["'][^"']*["']/gi, '[removed]')
-    .replace(/alert\s*\(/gi, '[removed](')
-    .replace(/eval\s*\(/gi, '[removed](')
-    .replace(/document\./gi, '[removed].')
-    .replace(/window\./gi, '[removed].')
-    .replace(/[<>]/g, '')
-    .trim();
-};
 
 interface TodoItemProps {
   todo: Todo;
@@ -127,7 +69,6 @@ export default function TodoItem({
   const itemRef = useRef<HTMLLIElement>(null);
   const dragHandleRef = useRef<HTMLDivElement>(null);
 
-  // Setup drag and drop
   const { isDragging } = useTodoItemDragAndDrop({
     todoId: todo.id,
     isDraggable,
@@ -135,54 +76,38 @@ export default function TodoItem({
     dragHandleRef,
   });
 
-  // Swipe gesture handlers
-  const swipeGesture = useSwipeGesture({
-    onSwipeRight: () => {
-      if (todo.completedAt || todo.deletedAt) return;
-      onToggle(todo.id);
-    },
-    onSwipeLeft: () => {
-      if (todo.deletedAt) return;
-      handleDelete();
-    },
+  const handleDelete = () => setShowDeleteConfirm(true);
+  const handleEdit = () => {
+    setEditText(todo.text);
+    setIsEditing(true);
+  };
+
+  const touchHandlers = useTodoItemGestures({
+    todoId: todo.id,
+    isCompleted: !!todo.completedAt,
+    isDeleted: !!todo.deletedAt,
+    isEditing,
+    hasEditHandler: !!onEdit,
+    onToggle,
+    onDelete: handleDelete,
+    onEdit: handleEdit,
   });
 
-  // Long press gesture handler
-  const longPressGesture = useLongPress({
-    onLongPress: () => {
-      if (isEditing || !onEdit || todo.completedAt || todo.deletedAt) return;
-      handleEdit();
-    },
-    delay: 500,
-    shouldPreventDefault: false,
-  });
-
-  // Auto-resize and focus textarea
   useEffect(() => {
     if (!isEditing || !textareaRef.current) return;
-
     textareaRef.current.focus();
     textareaRef.current.style.height = 'auto';
     textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
   }, [isEditing, editText]);
 
-  // Only allow checking (not unchecking) via the checkbox
   const handleToggle = () => !todo.completedAt && onToggle(todo.id);
-
   const handleRestore = () => onRestore?.(todo.id);
   const handleRestoreDeleted = () => onRestoreDeleted?.(todo.id);
-
-  const handleDelete = () => setShowDeleteConfirm(true);
-
   const handleConfirmDelete = () => {
     (todo.deletedAt ? onPermanentlyDelete : onDelete)?.(todo.id);
     setShowDeleteConfirm(false);
   };
   const handleCancelDelete = () => setShowDeleteConfirm(false);
-  const handleEdit = () => {
-    setEditText(todo.text);
-    setIsEditing(true);
-  };
   const handleSave = () => {
     const trimmedText = editText.trim();
     if (!trimmedText || !onEdit) return;
@@ -202,32 +127,22 @@ export default function TodoItem({
 
   const handleMoveUp = () => !isFirst && moveUp?.(todo.id);
   const handleMoveDown = () => !isLast && moveDown?.(todo.id);
-
-  // Combine gesture handlers for touch events
-  const touchHandlers = combineTouchHandlers(
-    swipeGesture as TouchHandlers,
-    longPressGesture as TouchHandlers
-  );
-
-  // Build item className
   const itemClassName = buildTodoItemClassName(
     isFirst,
     !!todo.deletedAt,
     isDragging
   );
 
-  // Dialog configuration
   const truncatedText =
     todo.text.length > 100 ? todo.text.substring(0, 100) + '...' : todo.text;
   const sanitizedText = sanitizeForAriaLabel(truncatedText);
-
   const dialogTitle = todo.deletedAt
     ? 'Permanently Delete Todo'
     : 'Delete Todo';
+  const dialogConfirmLabel = todo.deletedAt ? 'Permanently Delete' : 'Delete';
   const dialogMessage = todo.deletedAt
     ? `Are you sure you want to permanently delete "${sanitizedText}"? This action cannot be undone.`
     : `Are you sure you want to delete "${sanitizedText}"? You can restore it from Recently Deleted.`;
-  const dialogConfirmLabel = todo.deletedAt ? 'Permanently Delete' : 'Delete';
 
   return (
     <li ref={itemRef} className={itemClassName} {...touchHandlers}>
