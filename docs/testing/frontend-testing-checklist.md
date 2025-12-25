@@ -27,6 +27,8 @@ The app uses Tailwind CSS breakpoints throughout:
 
 Key responsive classes used: `md:`, `lg:`, `sm:` prefixes on spacing, layout, and visibility.
 
+See [Layout & Spacing Reference](../design/layout-and-spacing-reference.md) for detailed breakpoint specifications.
+
 ---
 
 ## Touch and Gesture Support
