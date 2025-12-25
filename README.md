@@ -16,6 +16,27 @@ A modern, accessible todo application with advanced features for managing your t
 
 Built with Next.js 14, TypeScript, and Tailwind CSS, demonstrating modern web development best practices.
 
+## 🎯 Role Definition and Boundaries
+
+> **🚨 CRITICAL FRAMEWORK**: This project demonstrates instruction-only development where humans provide
+> strategic direction and AI handles complete implementation.
+
+### Human Role: Strategic Architect & Product Owner
+
+- Provides high-level requirements and feature specifications
+- Sets architectural direction and technical constraints
+- Makes product decisions and priority determinations
+- Gives feedback on implementation and user experience
+- **Does NOT write code** - maintains pure instruction-based approach
+
+### AI Role: Complete Implementation Team
+
+- Handles all code implementation with comprehensive testing strategies
+- Manages test coverage and maintains CI/CD pipeline and deployment processes
+- Creates and maintains all project documentation and ADRs
+- Ensures code quality, linting, type safety, and professional standards
+- **100% responsible for technical execution** via instruction interpretation
+
 ## Project Purpose
 
 **This project demonstrates groundbreaking agentic coding methodology** - building complete, production-ready software
@@ -34,23 +55,6 @@ traditional hand-coding. The methodology demonstrates:
 - **Enterprise-Quality Standards**: TDD, atomic commits, CI/CD, and architectural documentation maintained through AI instruction
 
 ## Agentic Development Methodology
-
-### Role-Based Interaction Patterns
-
-#### Human Role: Strategic Architect & Product Owner
-
-- Defines requirements, features, and acceptance criteria
-- Sets architectural direction and technical constraints
-- Provides feedback on implementation and user experience
-- Makes product decisions and priority calls
-
-#### AI Role: Complete Implementation Team
-
-- Writes all code following TDD methodology
-- Implements testing strategies and maintains test coverage
-- Handles CI/CD pipeline configuration and deployment
-- Creates comprehensive documentation and ADRs
-- Manages code quality, linting, and type safety
 
 ### Instruction-Based Development Process
 
