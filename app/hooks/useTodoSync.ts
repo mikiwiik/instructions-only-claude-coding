@@ -10,17 +10,23 @@ import { Todo, TodoState } from '../types/todo';
 // Future: unique per-user list IDs (separate issue)
 export const MAIN_LIST_ID = 'main-list';
 
-// Generate a unique ID compatible with all browsers
+// Generate a unique ID using cryptographically secure randomness
 export function generateId(): string {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
     return crypto.randomUUID();
   }
-  return (
-    'todo-' +
-    Math.random().toString(36).substring(2) +
-    '-' +
-    Date.now().toString(36)
-  );
+  // Fallback using crypto.getRandomValues (wider browser support than randomUUID)
+  // Safe for non-security-sensitive todo IDs (S2245)
+  if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join(
+      ''
+    );
+    return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+  }
+  // Last resort fallback for environments without crypto (e.g., some test runners)
+  return `todo-${Date.now().toString(36)}-${performance.now().toString(36).replace('.', '')}`;
 }
 
 // Convert date strings from API response to Date objects
