@@ -191,15 +191,20 @@ git commit -m "feat: handle edge cases in feature X (#issue)"
 - Clear PR title and description
 - Reference related GitHub issue with closing keywords
 
-### Issue Closure via PR Description
+### Issue Linking Requirements
 
-**🚨 REQUIRED**: Use GitHub closing keywords in PR descriptions to automatically close related issues when merged.
+**🚨 REQUIRED**: All commits and PRs related to GitHub issues MUST include appropriate linking keywords.
 
-**Supported Keywords:**
+**Closing Keywords** (automatically close issues when merged):
 
-- `Closes #123`
-- `Fixes #123`
-- `Resolves #123`
+- `Closes #123` - Use for feature implementations
+- `Fixes #123` - Use for bug fixes
+- `Resolves #123` - Use for general issue resolution
+
+**Linking Keywords** (reference without closing):
+
+- `References #123` - Use for partial work or related changes
+- `Related to #123` - Use for tangentially related commits
 
 **PR Description Template:**
 
