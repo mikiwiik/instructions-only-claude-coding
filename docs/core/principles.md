@@ -39,19 +39,15 @@ deployment.
 4. **Complete Lifecycle Coverage**: From initial planning to production deployment via instruction-only workflow
 5. **Measurable AI Contribution**: Track and document 100% AI-generated codebase metrics
 
-**Role Boundaries**:
-
-| Role                | Responsibilities                                         | Does NOT Do                              |
-| ------------------- | -------------------------------------------------------- | ---------------------------------------- |
-| Human (Strategy)    | Requirements, architecture direction, product decisions  | Write code, configure tools, run tests   |
-| AI (Implementation) | All code, tests, CI/CD, documentation, quality assurance | Make product decisions, set requirements |
+**Role Boundaries**: See [README.md Role Definition](../../README.md#-role-definition-and-boundaries) for the
+authoritative breakdown of human vs. AI responsibilities.
 
 **Documentation**:
 
+- **Role Definition**: [../../README.md](../../README.md#-role-definition-and-boundaries) - Authoritative role boundaries
 - **Strategic**: [framework.md](framework.md) - Complete methodology and agent coordination
 - **Operational**: [../development/workflow.md](../development/workflow.md) - Daily development practices
 - **Visual**: [../diagrams/development-workflow.md](../diagrams/development-workflow.md) - Process visualization
-- **Overview**: [../../README.md](../../README.md) (lines 36-78) - High-level introduction
 
 **Related Principles**: This is the WHY for all other principles. Without instruction-only development:
 
