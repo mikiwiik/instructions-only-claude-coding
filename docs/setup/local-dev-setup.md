@@ -8,7 +8,7 @@ practices, see [Development Documentation](../development/README.md).
 - **Node.js**: Version 22.x or higher
 - **npm**: Version 10.x or higher
 - **Git**: For version control
-- **jq**: JSON processor for parsing CLI output (optional but recommended)
+- **jq**: JSON processor used by Claude commands ([installation](#jq-installation))
 - **Modern Browser**: For development and testing
 
 ## Claude Code Setup
@@ -189,25 +189,12 @@ nvm use 22
 ```bash
 # macOS (Homebrew)
 brew install jq
-
-# Ubuntu/Debian
-sudo apt-get install jq
-
-# Windows (Chocolatey)
-choco install jq
 ```
 
-**Alternative**: For GitHub CLI specific tasks, you can use the built-in `--jq` flag instead:
+For other platforms, see the [jq download page](https://jqlang.github.io/jq/download/).
 
-```bash
-# Using jq
-gh api repos/:owner/:repo --jq '.name'
-
-# Using gh --jq (no jq installation needed)
-gh api repos/:owner/:repo --jq '.name'
-```
-
-Both approaches work identically for GitHub CLI commands. Install `jq` when you need JSON processing outside of `gh`.
+**Alternative**: For GitHub CLI specific tasks, you can use the built-in `--jq` flag instead of
+installing jq (e.g., `gh api repos/:owner/:repo --jq '.name'`).
 
 ### Claude Code with nvm
 
