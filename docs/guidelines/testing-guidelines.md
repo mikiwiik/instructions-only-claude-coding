@@ -602,8 +602,27 @@ All PRs must pass:
 
 - `npm test` - Full test suite
 - `npm run type-check` - TypeScript compilation
+- `npm run lint -- --max-warnings 1` - ESLint with soft warning limit
 - Coverage thresholds met
 - No accessibility violations
+
+### ESLint Soft Warnings Enforcement
+
+CI uses `--max-warnings 1` to prevent warning accumulation while allowing borderline cases:
+
+| Warnings | CI Result | Interpretation                          |
+| -------- | --------- | --------------------------------------- |
+| 0        | Pass      | Ideal state                             |
+| 1        | Pass      | Soft limit - acceptable temporarily     |
+| 2+       | Fail      | Warning accumulation - must be resolved |
+
+**Why this approach:**
+
+- Per ADR-027, rules like `max-lines-per-function` are `warn` (soft limit)
+- SonarCloud has NO equivalent for function length - uses cognitive complexity instead
+- `--max-warnings 1` prevents accumulation while providing flexibility
+
+**Local check:** `npm run lint -- --max-warnings 1`
 
 ### Definition of Done
 
