@@ -30,13 +30,16 @@ This issue was discovered during routine dependency updates when `npm audit` fai
 Claude Code provides a hook system with:
 
 - **SessionStart**: Runs once when Claude Code starts
-- **CLAUDE_ENV_FILE**: A file that Claude Code sources before every bash command
+- **CLAUDE_ENV_FILE**: An environment variable automatically provided by Claude Code in SessionStart hooks,
+  pointing to a file that Claude Code sources before every bash command
 
-This enables automatic environment setup without modifying system configuration.
+This enables automatic environment setup without modifying system configuration. Users don't need to configure
+`CLAUDE_ENV_FILE` - it's managed entirely by Claude Code.
 
 ## Decision
 
-Implement a SessionStart hook in `.claude/settings.json` that writes nvm initialization to `CLAUDE_ENV_FILE`.
+Implement a SessionStart hook in `.claude/settings.json` that writes nvm initialization to `CLAUDE_ENV_FILE`
+(automatically provided by Claude Code).
 
 ### Configuration
 

@@ -183,7 +183,8 @@ nvm use 22
 ### Claude Code with nvm
 
 Claude Code runs bash commands in non-interactive shells that don't source `~/.zshrc`. This project includes a
-SessionStart hook (`.claude/settings.json`) that automatically sources nvm.
+SessionStart hook (`.claude/settings.json`) that automatically sources nvm via Claude Code's `CLAUDE_ENV_FILE`
+mechanism (automatically managed by Claude Code - no user configuration needed).
 
 **No action required**: If you have nvm installed in the standard location (`~/.nvm`), the hook works automatically.
 The hook is compatible with nvm 0.39.x and later versions installed via the official installation script.
