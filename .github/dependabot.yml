@@ -50,10 +50,10 @@ updates:
 
     # Commit message configuration (conventional commits)
     # Aligns with project commit message conventions
+    # Note: Do NOT use "include: scope" - it duplicates the scope already in the prefix
     commit-message:
       prefix: "build(deps)"
       prefix-development: "build(deps-dev)"
-      include: "scope"
 
     # Ignore rules to prevent incompatible upgrades
     # React 19 requires Next.js 15+ due to peer dependency constraints
