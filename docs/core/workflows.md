@@ -21,6 +21,9 @@
 
 **🚨 PRINCIPLE**: Multi-step code changes are implemented as **multiple small atomic commits**, not one large commit.
 
+**This project uses [Conventional Commits](https://www.conventionalcommits.org/)** - a specification for structured,
+human and machine-readable commit messages.
+
 **Commit Message Format:**
 
 ```text
