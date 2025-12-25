@@ -148,6 +148,15 @@ checks, and testing scripts.
 - **[Mobile UX Guidelines](docs/guidelines/mobile-ux-guidelines.md)** - Mobile-first design strategy and touch interactions
 - **[Accessibility Requirements](docs/guidelines/accessibility-requirements.md)** - WCAG 2.2 AA compliance guidelines
 
+## Browser Support
+
+| Environment | Browsers Tested                                         |
+| ----------- | ------------------------------------------------------- |
+| CI (E2E)    | Chromium                                                |
+| Local Dev   | Chromium, Firefox, WebKit, Mobile Chrome, Mobile Safari |
+
+The app targets modern evergreen browsers. See [Platform Support](docs/architecture/platform-support.md) for details.
+
 ## Development Status
 
 **Current Workflow**: Branch-based development with automated PR workflow. All features developed on separate branches
