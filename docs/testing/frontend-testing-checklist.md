@@ -3,6 +3,19 @@
 This checklist covers manual testing for the Todo App's responsive design, accessibility, and cross-browser
 compatibility.
 
+## Integrated Testing Tools
+
+The following tools are integrated into the project's CI/CD pipeline:
+
+- **ESLint jsx-a11y** - Accessibility linting during development and CI
+- **SonarCloud** - Code quality, coverage analysis, and complexity metrics
+- **Jest + React Testing Library** - Component and integration testing (90% coverage threshold)
+- **Playwright** - E2E testing (Chromium in CI; full browser matrix locally)
+
+For E2E testing details, see [E2E Testing Guide](e2e-testing-guide.md).
+
+---
+
 ## Mobile-First Breakpoint Testing
 
 ### 📱 Mobile (320px - 767px)
@@ -197,16 +210,3 @@ compatibility.
 - [ ] **Device Coverage**: Record all tested devices and browsers
 - [ ] **Issue Tracking**: Log and resolve any discovered issues
 - [ ] **Accessibility Report**: Complete WCAG compliance verification
-
----
-
-## Integrated Testing Tools
-
-The following tools are integrated into the project's CI/CD pipeline:
-
-- **ESLint jsx-a11y** - Accessibility linting during development and CI
-- **SonarCloud** - Code quality, coverage analysis, and complexity metrics
-- **Jest + React Testing Library** - Component and integration testing (90% coverage threshold)
-- **Playwright** - E2E testing (Chromium in CI; full browser matrix locally)
-
-For E2E testing details, see [E2E Testing Guide](e2e-testing-guide.md).
