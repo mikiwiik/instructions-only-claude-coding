@@ -175,35 +175,27 @@ export default function TodoItem({
   const handleDelete = () => setShowDeleteConfirm(true);
 
   const handleConfirmDelete = () => {
-    const deleteHandler = todo.deletedAt ? onPermanentlyDelete : onDelete;
-    deleteHandler?.(todo.id);
+    (todo.deletedAt ? onPermanentlyDelete : onDelete)?.(todo.id);
     setShowDeleteConfirm(false);
   };
-
   const handleCancelDelete = () => setShowDeleteConfirm(false);
-
   const handleEdit = () => {
     setEditText(todo.text);
     setIsEditing(true);
   };
-
   const handleSave = () => {
     const trimmedText = editText.trim();
     if (!trimmedText || !onEdit) return;
-
     onEdit(todo.id, trimmedText);
     setIsEditing(false);
   };
-
   const handleCancel = () => {
     setEditText(todo.text);
     setIsEditing(false);
   };
-
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') return handleCancel();
     if (e.key !== 'Enter' || e.shiftKey) return;
-
     e.preventDefault();
     handleSave();
   };
