@@ -43,7 +43,12 @@ function shouldUseInMemoryStore(): boolean {
 function getRedis(): Redis | null {
   const useInMemory = shouldUseInMemoryStore();
   // eslint-disable-next-line no-console
-  console.log('[KVStore] getRedis called, useInMemory:', useInMemory, 'existing redis:', !!redis);
+  console.log(
+    '[KVStore] getRedis called, useInMemory:',
+    useInMemory,
+    'existing redis:',
+    !!redis
+  );
   if (useInMemory) {
     // eslint-disable-next-line no-console
     console.log('[KVStore] Using in-memory store');
@@ -58,6 +63,38 @@ function getRedis(): Redis | null {
     });
   }
   return redis;
+}
+
+/**
+ * Shared store helpers to abstract Redis vs in-memory storage
+ */
+// istanbul ignore next -- E2E tested in-memory path
+async function storeGet<T>(key: string): Promise<T | null> {
+  const redisClient = getRedis();
+  if (redisClient) {
+    return await redisClient.get<T>(key);
+  }
+  return (inMemoryStore.get(key) as T) ?? null;
+}
+
+// istanbul ignore next -- E2E tested in-memory path
+async function storeSet(key: string, value: SharedTodoList): Promise<void> {
+  const redisClient = getRedis();
+  if (redisClient) {
+    await redisClient.set(key, value);
+  } else {
+    inMemoryStore.set(key, value);
+  }
+}
+
+// istanbul ignore next -- E2E tested in-memory path
+async function storeDelete(key: string): Promise<void> {
+  const redisClient = getRedis();
+  if (redisClient) {
+    await redisClient.del(key);
+  } else {
+    inMemoryStore.delete(key);
+  }
 }
 
 /**
@@ -81,12 +118,7 @@ export class KVStore {
 
   static async getList(listId: string): Promise<SharedTodoList | null> {
     const key = this.getListKey(listId);
-    const redisClient = getRedis();
-    /* istanbul ignore else -- E2E tested in-memory path */
-    if (redisClient) {
-      return await redisClient.get<SharedTodoList>(key);
-    }
-    return inMemoryStore.get(key) ?? null;
+    return storeGet<SharedTodoList>(key);
   }
 
   static async setList(
@@ -101,13 +133,7 @@ export class KVStore {
       lastModified: Date.now(),
       subscribers: [userId],
     };
-    const redisClient = getRedis();
-    /* istanbul ignore else -- E2E tested in-memory path */
-    if (redisClient) {
-      await redisClient.set(key, list);
-    } else {
-      inMemoryStore.set(key, list);
-    }
+    await storeSet(key, list);
   }
 
   static async updateTodos(listId: string, todos: Todo[]): Promise<void> {
@@ -123,13 +149,7 @@ export class KVStore {
       todos,
       lastModified: Date.now(),
     };
-    const redisClient = getRedis();
-    /* istanbul ignore else -- E2E tested in-memory path */
-    if (redisClient) {
-      await redisClient.set(key, updated);
-    } else {
-      inMemoryStore.set(key, updated);
-    }
+    await storeSet(key, updated);
   }
 
   static async addSubscriber(listId: string, userId: string): Promise<void> {
@@ -142,13 +162,7 @@ export class KVStore {
     if (!list.subscribers.includes(userId)) {
       list.subscribers.push(userId);
       const key = this.getListKey(listId);
-      const redisClient = getRedis();
-      /* istanbul ignore else -- E2E tested in-memory path */
-      if (redisClient) {
-        await redisClient.set(key, list);
-      } else {
-        inMemoryStore.set(key, list);
-      }
+      await storeSet(key, list);
     }
   }
 
@@ -161,23 +175,11 @@ export class KVStore {
 
     list.subscribers = list.subscribers.filter((id) => id !== userId);
     const key = this.getListKey(listId);
-    const redisClient = getRedis();
-    /* istanbul ignore else -- E2E tested in-memory path */
-    if (redisClient) {
-      await redisClient.set(key, list);
-    } else {
-      inMemoryStore.set(key, list);
-    }
+    await storeSet(key, list);
   }
 
   static async deleteList(listId: string): Promise<void> {
     const key = this.getListKey(listId);
-    const redisClient = getRedis();
-    /* istanbul ignore else -- E2E tested in-memory path */
-    if (redisClient) {
-      await redisClient.del(key);
-    } else {
-      inMemoryStore.delete(key);
-    }
+    await storeDelete(key);
   }
 }
