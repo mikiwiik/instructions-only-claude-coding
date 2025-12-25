@@ -43,12 +43,13 @@ export function sanitizeForAriaLabel(text: string): string {
   // Also decode HTML entities
   decoded = decodeHtmlEntities(decoded);
 
+  // Note: Using [^<]* instead of .*? to prevent ReDoS (S5852)
   return decoded
-    .replace(/<script[^>]*>.*?<\/script>/gi, '[removed]')
-    .replace(/<iframe[^>]*>.*?<\/iframe>/gi, '[removed]')
-    .replace(/<object[^>]*>.*?<\/object>/gi, '[removed]')
-    .replace(/<embed[^>]*>.*?<\/embed>/gi, '[removed]')
-    .replace(/<form[^>]*>.*?<\/form>/gi, '[removed]')
+    .replace(/<script[^>]*>[^<]*<\/script>/gi, '[removed]')
+    .replace(/<iframe[^>]*>[^<]*<\/iframe>/gi, '[removed]')
+    .replace(/<object[^>]*>[^<]*<\/object>/gi, '[removed]')
+    .replace(/<embed[^>]*>[^<]*<\/embed>/gi, '[removed]')
+    .replace(/<form[^>]*>[^<]*<\/form>/gi, '[removed]')
     .replace(/javascript:/gi, '[removed]:')
     .replace(/data:/gi, '[removed]:')
     .replace(/vbscript:/gi, '[removed]:')
