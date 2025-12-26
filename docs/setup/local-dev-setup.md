@@ -376,7 +376,9 @@ After completing installation:
 2. **Development Workflow**: Read [`docs/development/workflow.md`](../development/workflow.md) for coding standards
 3. **Project Management**: See [`docs/development/project-management.md`](../development/project-management.md) for issue
    workflow
-4. **Contributing**: Review [README.md](../../README.md) for contribution guidelines
+4. **GitHub Projects Setup**: See [github-projects-setup.md](github-projects-setup.md) for project board configuration
+   and GitHub CLI `project` scope setup
+5. **Contributing**: Review [README.md](../../README.md) for contribution guidelines
 
 ## Support
 

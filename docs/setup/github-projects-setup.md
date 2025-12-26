@@ -78,6 +78,7 @@ architectural decision rationale.
 
 - Repository admin access to create projects
 - GitHub CLI with project scope permissions
+- Git user configuration (see [local-dev-setup.md](local-dev-setup.md#2-git-user-configuration) for email privacy setup)
 
 ### Authenticate GitHub CLI
 
@@ -137,9 +138,9 @@ GitHub Projects supports three roles with different permission levels:
 
 | Role      | View | Edit Items/Fields | Manage Collaborators | Use Case                 |
 | --------- | ---- | ----------------- | -------------------- | ------------------------ |
-| **Read**  | ✅   | ❌                | ❌                   | Observers                |
-| **Write** | ✅   | ✅                | ❌                   | **Agents** (recommended) |
-| **Admin** | ✅   | ✅                | ✅                   | **Humans** (owners)      |
+| **Read**  | Yes  | No                | No                   | Observers                |
+| **Write** | Yes  | Yes               | No                   | **Agents** (recommended) |
+| **Admin** | Yes  | Yes               | Yes                  | **Humans** (owners)      |
 
 ### Recommended Role Assignments
 

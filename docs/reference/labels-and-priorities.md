@@ -234,7 +234,7 @@ GitHub Projects enhances the label-based system with visual workflow management 
 **📋 Full Documentation**: See [docs/development/project-management.md](../development/project-management.md#github-projects-integration)
 for complete GitHub Projects usage.
 
-**🔧 Setup Guide**: See [docs/development/github-projects-setup.md](../development/github-projects-setup.md) for
+**🔧 Setup Guide**: See [docs/setup/github-projects-setup.md](../setup/github-projects-setup.md) for
 configuration steps.
 
 **📖 Decision Rationale**: See [ADR-024: GitHub Projects Adoption](../adr/024-github-projects-adoption.md) for

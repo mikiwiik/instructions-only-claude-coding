@@ -302,7 +302,7 @@ The result: **Human provides strategic instruction, automation handles all tacti
 - Status: Todo → In Progress (via `/work-on` command)
 - Status: In Progress → Done (when PR merged)
 - Lifecycle tracking (Icebox → Backlog → Active → Done)
-- See [../development/github-projects-setup.md](../development/github-projects-setup.md)
+- See [../setup/github-projects-setup.md](../setup/github-projects-setup.md)
 
 **Benefits for Instruction-Only Development**:
 
@@ -321,7 +321,7 @@ The result: **Human provides strategic instruction, automation handles all tacti
   - [workflows.md](workflows.md#auto-merge-protocol) - Auto-merge workflow
   - [workflows.md](workflows.md#quality-gates) - Quality gate integration
   - [../development/auto-merge-workflow.md](../development/auto-merge-workflow.md) - Detailed auto-merge setup
-  - [../development/github-projects-setup.md](../development/github-projects-setup.md) - Projects automation
+  - [../setup/github-projects-setup.md](../setup/github-projects-setup.md) - Projects automation
 
 **Related Principles**:
 

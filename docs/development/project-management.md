@@ -37,7 +37,7 @@ The project uses GitHub Projects' built-in roles to enforce the separation betwe
 - **Auditability**: Role assignments make it clear who can do what
 - **Security**: Agents cannot accidentally modify project access or structure
 
-See [GitHub Projects Setup Guide](github-projects-setup.md#role-based-access-control) for detailed role documentation
+See [GitHub Projects Setup Guide](../setup/github-projects-setup.md#role-based-access-control) for detailed role documentation
 and setup instructions.
 
 ## Kanban-Style Continuous Delivery Workflow
@@ -314,7 +314,7 @@ priority/complexity label system while maintaining labels as the primary source 
 **📋 Decision Documentation**: See [ADR-024: GitHub Projects Adoption](../adr/024-github-projects-adoption.md) for
 full rationale and trade-offs.
 
-**🔧 Setup Guide**: See [GitHub Projects Setup Guide](github-projects-setup.md) for detailed configuration instructions.
+**🔧 Setup Guide**: See [GitHub Projects Setup Guide](../setup/github-projects-setup.md) for detailed configuration instructions.
 
 ### Custom Fields
 
@@ -382,7 +382,8 @@ Custom fields describe **where the issue is** in the development workflow - tran
 - **Clear separation**: Static properties (labels) vs dynamic state (custom fields)
 - **Instruction-only alignment**: No manual sync steps required
 
-See [GitHub Projects Setup Guide](github-projects-setup.md#labels-vs-custom-fields-core-principles) for detailed explanation.
+See [GitHub Projects Setup Guide](../setup/github-projects-setup.md#labels-vs-custom-fields-core-principles) for
+detailed explanation.
 
 ### Project Views
 
