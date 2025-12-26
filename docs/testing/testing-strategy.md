@@ -116,13 +116,39 @@ Run coverage: `npm test -- --coverage`
 
 All PRs must pass:
 
-| Check    | Command                            | Requirement |
-| -------- | ---------------------------------- | ----------- |
-| Tests    | `npm test`                         | All pass    |
-| Coverage | Jest thresholds                    | 80%+        |
-| Types    | `npm run type-check`               | Zero errors |
-| Lint     | `npm run lint -- --max-warnings 1` | ≤1 warning  |
-| E2E      | `npm run test:e2e`                 | All pass    |
+| Check      | Command                            | Requirement       |
+| ---------- | ---------------------------------- | ----------------- |
+| Tests      | `npm test`                         | All pass          |
+| Coverage   | Jest thresholds                    | 80%+              |
+| Types      | `npm run type-check`               | Zero errors       |
+| Lint       | `npm run lint -- --max-warnings 1` | ≤1 warning        |
+| E2E        | `npm run test:e2e`                 | All pass          |
+| SonarCloud | Automatic scan                     | Quality gate pass |
+
+### SonarCloud Quality Gate
+
+[SonarCloud][sonarcloud-dashboard] provides additional code quality analysis:
+
+[sonarcloud-dashboard]: https://sonarcloud.io/project/overview?id=mikiwiik_instructions-only-claude-coding
+
+| Metric               | Threshold                |
+| -------------------- | ------------------------ |
+| Bugs                 | 0 (A rating)             |
+| Vulnerabilities      | 0 (A rating)             |
+| Code Smells          | Maintainability A rating |
+| Coverage             | 80% on new code          |
+| Duplications         | < 3% on new code         |
+| Cognitive Complexity | ≤15 per function         |
+
+**What SonarCloud catches:**
+
+- Security vulnerabilities (OWASP Top 10)
+- Bug patterns and code smells
+- Cognitive complexity violations
+- Code duplication
+- Coverage gaps on new code
+
+**Configuration:** See [SonarCloud Setup](../setup/sonarcloud-setup.md) and `sonar-project.properties`
 
 ### Definition of Done
 
@@ -177,5 +203,6 @@ See [Testing Guidelines](testing-guidelines.md) for comprehensive patterns and e
 
 - [ADR-004](../adr/004-test-driven-development-approach.md) - TDD foundation
 - [ADR-009](../adr/009-pre-commit-linting-strategy.md) - Pre-commit enforcement
+- [ADR-026](../adr/026-security-scanning-ci-cd-pipeline.md) - SonarCloud integration
 - [ADR-027](../adr/027-code-complexity-standards.md) - Complexity standards
 - [ADR-029](../adr/029-e2e-testing-framework-selection.md) - E2E framework selection
