@@ -18,19 +18,9 @@ Built with Next.js 14, TypeScript, and Tailwind CSS, demonstrating modern web de
 
 ## 📋 Product Vision & Requirements
 
-This project is guided by a clear **[Product Requirements Document](docs/product/requirements.md)** that defines what
-we're building and why. All development - whether by human instruction or AI implementation - traces back to these
-requirements.
-
-**How requirements drive development**:
-
-- Every GitHub issue references a requirement from the document
-- Pull requests are validated against the requirements they fulfill
-- Definition of Done includes requirement fulfillment verification
-- New functionality requires documented requirements first
-
-This ensures coherent product evolution while maintaining the flexibility for both human developers and AI agents to
-contribute effectively.
+This project is guided by a **[Product Requirements Document](docs/product/requirements.md)** that defines what we're
+building and why. All issues and PRs trace back to these requirements, ensuring coherent product evolution whether
+development is by human instruction or AI implementation.
 
 ## 🎯 Role Definition and Boundaries
 
