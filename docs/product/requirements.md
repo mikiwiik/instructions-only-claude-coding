@@ -2,6 +2,10 @@
 
 ## Product Vision
 
+**This repository is fully self-contained** - including all documentation, codebase, and infrastructure
+configuration needed to understand the project's purpose and continue development, whether by human developers
+or AI agents.
+
 A minimalist, accessible todo application that demonstrates instruction-only development - where humans provide
 strategic direction and AI handles 100% of technical implementation. The application prioritizes simplicity,
 collaboration, and enterprise-quality standards while serving as an educational reference for agentic coding
