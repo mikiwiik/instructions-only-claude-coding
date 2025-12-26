@@ -211,6 +211,7 @@ for comprehensive usage and integration guidelines.
 
 **🚨 MANDATORY**: All issues must include:
 
+- [ ] **Requirement reference** (section from [requirements.md](../product/requirements.md), or "New Requirement")
 - [ ] **Priority label** (priority-1-critical through priority-4-low)
 - [ ] **Complexity label** (complexity-minimal through complexity-epic)
 - [ ] **Category label** (exactly one category)
@@ -248,6 +249,14 @@ and completion (via PR merge). No manual status updates needed - workflow is ful
 ### Definition of Done
 
 **🚨 Task Completion**: Task is complete when PR is created and ready for review, NOT when merged.
+
+**📋 Requirement Fulfillment**:
+
+- [ ] Issue traces to documented requirement in [docs/product/requirements.md](../product/requirements.md)
+- [ ] All stated requirements for the issue are fulfilled
+- [ ] Requirement status updated if applicable (Planned → In Progress → Implemented)
+
+**✅ Implementation Quality**:
 
 - [ ] All acceptance criteria met
 - [ ] Code follows project standards and conventions
