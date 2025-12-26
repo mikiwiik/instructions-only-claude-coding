@@ -78,6 +78,10 @@
 - **Long-term projects** spanning multiple sprints
 - **Estimated effort**: 1+ weeks
 
+**Epic workflow**: Issues with `complexity-epic` (or `complexity-complex` for smaller epics) should use GitHub
+sub-issues to break down into manageable pieces. See [Working with Epics](../development/project-management.md#working-with-epics)
+for detailed guidance.
+
 ## Category Labels
 
 **Every issue must have exactly ONE category label:**
@@ -378,13 +382,14 @@ Raw Idea → Icebox (capture)
 
 ### Project Views Reference
 
-**Five specialized views**:
+**Six specialized views**:
 
 1. **Board - Workflow**: Kanban view (Status columns, filtered by high-priority labels + Lifecycle:Active/Backlog)
 2. **Backlog - Next Issue**: Table with Labels column (use `/select-next-issue` for priority-based selection)
 3. **Quick Wins**: Filtered board (`label:priority-2-high label:complexity-simple,complexity-minimal Lifecycle:Active`)
 4. **Agent Workload**: Current work by agent specialization (Lifecycle:Active)
 5. **Icebox - Raw Ideas**: Idea capture (Lifecycle:Icebox)
+6. **Epic Progress**: Table grouped by parent issue with Sub-issues progress column
 
 **Quick Access**: Project board provides visual workflow management. For priority-based issue selection, use
 `/select-next-issue` command or review Labels column in Backlog view.

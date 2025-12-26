@@ -456,6 +456,19 @@ sort by labels.
 
 **Use Case**: Capture ideas without full requirements, periodic triage to promote to Backlog
 
+#### 6. Epic Progress View (Multi-Issue Tracking)
+
+**Purpose**: Track progress of epics with sub-issues
+
+**Configuration**:
+
+- Layout: Table
+- Group by: Parent issue
+- Columns: Title, Labels, Status, Lifecycle, Sub-issues progress
+- Filter: `Lifecycle:Active,Backlog`
+
+**Use Case**: Visualize epic progress, see which sub-issues are complete, identify blocked work
+
 ### Lifecycle Workflow
 
 The **Lifecycle** field tracks idea maturity from conception to completion:
@@ -490,6 +503,71 @@ Icebox → Backlog → Active → Done
 - **Purpose**: Completed and deployed
 - **Automation**: Auto-set when PR merged and issue closed
 - **Archival**: Automatically archived after completion
+
+### Working with Epics
+
+Epics are large initiatives that span multiple issues. GitHub Projects uses built-in **sub-issues** to track
+parent-child relationships between epic parents and their sub-issues.
+
+#### When to Create an Epic
+
+Use epics for work that:
+
+- Spans **3+ related issues** that deliver a cohesive feature
+- Requires **phased implementation** with dependencies between parts
+- Benefits from **progress tracking** across multiple work items
+- Involves **multiple agents** working on different aspects
+
+**Label guidance**: Parent epics typically use `complexity-epic` or `complexity-complex` labels.
+
+#### Epic Structure
+
+```text
+Parent Epic: "Backend Protection - Rate Limiting and Monitoring"
+├── Sub-issue #1: Client-side throttling (complexity-simple)
+├── Sub-issue #2: Monitoring research (complexity-simple)
+├── Sub-issue #3: Implement monitoring (complexity-moderate) [depends on #2]
+└── Sub-issue #4: Server-side rate limiting (complexity-moderate) [depends on #3]
+```
+
+#### Creating an Epic
+
+1. **Create parent issue** with `complexity-epic` or `complexity-complex` label
+2. **Create sub-issues** with individual complexity labels
+3. **Link sub-issues** to parent via GitHub UI (Issue → Add sub-issue)
+4. **Document dependencies** in sub-issue descriptions using "Depends on #X" format
+
+#### Dependency Management
+
+Document dependencies in sub-issue descriptions:
+
+```markdown
+## Dependencies
+
+- Depends on #XXX (must complete first)
+- Blocks #YYY (this must complete before YYY can start)
+```
+
+**Dependency order** should be clear in the epic parent issue description.
+
+#### Progress Tracking
+
+- **Sub-issues progress** field shows "X of Y complete" automatically
+- **Epic Progress view** groups issues by parent for visual tracking
+- Parent epic closes when all sub-issues are complete
+
+#### WIP Limits with Epics
+
+- WIP limits (1-2 issues) apply to **active sub-issues**, not parent epics
+- Parent epic stays in Backlog until work begins on sub-issues
+- Multiple sub-issues can be Active if worked by different agents
+
+#### Epic Best Practices
+
+- **Keep epics focused**: 3-6 sub-issues per epic (avoid mega-epics)
+- **Max 2 levels**: Parent + children only (no grandchildren)
+- **Independent sub-issues**: Each sub-issue should be deployable independently when possible
+- **Clear acceptance criteria**: Both parent and sub-issues need clear done criteria
 
 ### Automation
 
