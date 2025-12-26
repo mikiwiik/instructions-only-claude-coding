@@ -320,3 +320,75 @@ flowchart LR
     Complete --> End
     Undo --> End
 ```
+
+## List Lifecycle Flow
+
+This diagram shows how users create, share, and access lists (see [ADR-031](../adr/031-list-lifecycle-architecture.md)).
+
+```mermaid
+flowchart TD
+    Start([User Opens App]) --> HasList{Active list<br/>in session?}
+    HasList -->|Yes| TodoApp[Show Todo List]
+    HasList -->|No| Landing[Show Landing Page]
+
+    Landing --> Choice{User choice?}
+    Choice -->|Create New List| CreateLocal[Create Local List]
+    Choice -->|Open Existing| OpenFlow
+
+    CreateLocal --> LocalList[Local List Created]
+    LocalList --> LocalMode[Work in Local Mode]
+    LocalMode --> TodoApp
+
+    OpenFlow --> Picker[List Picker]
+    Picker --> PickerChoice{Selection method?}
+    PickerChoice -->|Remembered list| SelectRemembered[Select from list]
+    PickerChoice -->|Enter URL| EnterURL[Paste/type list URL]
+
+    SelectRemembered --> LoadShared[Load Shared List]
+    EnterURL --> ValidateURL{URL valid?}
+    ValidateURL -->|Yes| LoadShared
+    ValidateURL -->|No| ErrorMsg[Show error message]
+    ErrorMsg --> Picker
+
+    LoadShared --> SharedMode[Work in Shared Mode]
+    SharedMode --> TodoApp
+
+    TodoApp --> WorkFlow{User action?}
+    WorkFlow -->|Add/Edit/Complete todos| TodoApp
+    WorkFlow -->|Share local list| ShareAction
+
+    ShareAction --> GenerateID[Generate unique list ID]
+    GenerateID --> SaveKV[Save to Vercel KV]
+    SaveKV --> GetURL[Generate shareable URL]
+    GetURL --> ShowURL[Show URL to user]
+    ShowURL --> Remember[Add to remembered lists]
+    Remember --> SharedMode
+```
+
+**Entry Points:**
+
+1. **Create New List** → Local ephemeral list (in-memory only)
+2. **Open Existing** → Remembered lists or manual URL entry
+
+**List Types:**
+
+| Type   | Storage   | Persistence  | Collaboration   |
+| ------ | --------- | ------------ | --------------- |
+| Local  | In-memory | Session only | Single user     |
+| Shared | Vercel KV | Permanent    | Anyone with URL |
+
+**Sharing Flow:**
+
+1. User works on local list
+2. Clicks "Share" action
+3. System generates unique list ID
+4. Todos saved to Vercel KV
+5. User receives shareable URL
+6. List added to remembered lists
+7. Real-time sync enabled
+
+**Remembered Lists:**
+
+- Stored in localStorage
+- Shown in "Open Existing" picker
+- Tracks listId, name, lastAccessed, isOwner
