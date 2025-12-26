@@ -91,6 +91,47 @@ The Todo App follows a component-based architecture with clear separation of con
 
 For detailed architecture, see [Real-Time Sync Architecture Diagram](realtime-sync-diagram.md).
 
+### List Architecture
+
+The app supports a two-tier list model with explicit transitions (see [ADR-031](../adr/031-list-lifecycle-architecture.md)):
+
+```text
+┌─────────────────┐          ┌─────────────────┐
+│   LOCAL LIST    │  Share   │  SHARED LIST    │
+│   (ephemeral)   │ ──────►  │  (persistent)   │
+│   In-memory     │  action  │  Stored in KV   │
+│   Not saved     │          │  Has URL        │
+└─────────────────┘          └─────────────────┘
+```
+
+| Type   | Storage   | Persistence  | URL          | Collaboration   |
+| ------ | --------- | ------------ | ------------ | --------------- |
+| Local  | In-memory | Session only | None         | Single user     |
+| Shared | Vercel KV | Permanent    | `/list/[id]` | Anyone with URL |
+
+#### User Entry Flow
+
+On app load (no active list):
+
+1. **Create New List** → Creates local ephemeral list
+2. **Open Existing List** → Shows remembered lists + manual URL entry
+
+#### Sharing Model
+
+- **Anonymous collaboration**: Anyone with URL can view/edit
+- **No authentication required** (per [ADR-014](../adr/014-anonymous-sharing-architecture.md))
+- **Sharing = persistence trigger**: Local lists become shared when user explicitly shares
+- **Remembered lists**: localStorage tracks list IDs user has accessed
+
+#### Key Components
+
+| Component             | Purpose                                     |
+| --------------------- | ------------------------------------------- |
+| `LandingPage`         | Entry point with list selection             |
+| `useTodos(listId?)`   | Hook supporting both local and shared modes |
+| `/list/[listId]`      | Dynamic route for shared list access        |
+| `remembered-lists.ts` | localStorage management for accessed lists  |
+
 ### Data Architecture
 
 #### Data Model
