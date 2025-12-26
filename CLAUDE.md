@@ -116,6 +116,7 @@ Agent-centric development instructions for instruction-only todo application dev
 ## Reference Documentation
 
 - **Dev Environment Setup**: [docs/setup/local-dev-setup.md](docs/setup/local-dev-setup.md)
+- **Testing Strategy**: [docs/testing/testing-strategy.md](docs/testing/testing-strategy.md)
 - **ADR Process**: [docs/adr/PROCESS.md](docs/adr/PROCESS.md)
 - **User Flow Diagrams**: [docs/diagrams/user-flows.md](docs/diagrams/user-flows.md)
 - **Architecture Flow**: [docs/diagrams/architecture-flow.md](docs/diagrams/architecture-flow.md)
@@ -132,6 +133,7 @@ docs/
 ├── core/                # Framework, workflows, project context
 ├── diagrams/            # Mermaid diagrams for architecture and user flows
 ├── reference/           # Labels, priorities, troubleshooting
+├── testing/             # Testing strategy, guidelines, and checklists
 └── adr/                 # Architecture Decision Records
 ```
 

@@ -2,6 +2,8 @@
 
 This document describes the frontend testing infrastructure and implemented features for the Todo App.
 
+For high-level testing philosophy and quality gates, see [Testing Strategy](testing-strategy.md).
+
 ## Integrated Testing Tools
 
 The following tools are integrated into the project's CI/CD pipeline:
@@ -73,4 +75,4 @@ The following edge cases are covered by unit/integration tests:
 - **Special Characters** - Unicode and emoji support
 - **Rapid Interactions** - Debouncing and state management
 
-See [Testing Guidelines](../guidelines/testing-guidelines.md) for test utility usage.
+See [Testing Guidelines](testing-guidelines.md) for test utility usage.
