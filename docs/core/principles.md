@@ -235,7 +235,7 @@ enterprise-level quality** without manual human intervention in implementation.
   - [../adr/022-strict-typescript-type-safety.md](../adr/022-strict-typescript-type-safety.md)
 - **Operational**: [../development/workflow.md](../development/workflow.md#quality-gates) - Quality gates and commands
 - **Guidelines**:
-  - [../guidelines/testing-guidelines.md](../guidelines/testing-guidelines.md) - Comprehensive testing practices
+  - [../testing/testing-guidelines.md](../testing/testing-guidelines.md) - Comprehensive testing practices
   - [../guidelines/code-complexity-guidelines.md](../guidelines/code-complexity-guidelines.md) - Refactoring patterns
   - [../guidelines/typescript-standards.md](../guidelines/typescript-standards.md) - Type safety best practices
   - [../ux/accessibility-requirements.md](../ux/accessibility-requirements.md) - WCAG 2.2 AA compliance

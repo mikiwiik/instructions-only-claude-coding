@@ -12,8 +12,8 @@ and quality gates that ensure reliable, maintainable test code.
 - **ADR-009**: Pre-commit Linting Strategy (test enforcement)
 - **ADR-027**: Code Complexity Standards (complexity in tests)
 - **Test Utilities Reference**: [app/**tests**/README.md](../../app/__tests__/README.md)
-- **TypeScript Standards**: [typescript-standards.md](typescript-standards.md)
-- **Accessibility Requirements**: [accessibility-requirements.md](accessibility-requirements.md)
+- **TypeScript Standards**: [../guidelines/typescript-standards.md](../guidelines/typescript-standards.md)
+- **Accessibility Requirements**: [../ux/accessibility-requirements.md](../ux/accessibility-requirements.md)
 
 ## Core Principles
 
@@ -781,9 +781,9 @@ it('should prevent XSS', () => {
 ### Project Documentation
 
 - [Test Utilities Reference](../../app/__tests__/README.md)
-- [TypeScript Standards](typescript-standards.md)
-- [Accessibility Requirements](accessibility-requirements.md)
-- [Code Complexity Guidelines](code-complexity-guidelines.md)
+- [TypeScript Standards](../guidelines/typescript-standards.md)
+- [Accessibility Requirements](../ux/accessibility-requirements.md)
+- [Code Complexity Guidelines](../guidelines/code-complexity-guidelines.md)
 
 ### XSS Prevention
 
