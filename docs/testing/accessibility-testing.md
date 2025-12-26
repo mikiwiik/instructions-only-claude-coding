@@ -1,14 +1,27 @@
 # Accessibility Testing
 
-This document covers how to test accessibility compliance in the Todo application.
+This document covers accessibility testing for the Todo application.
 
 For accessibility requirements and WCAG standards, see [Accessibility Requirements](../ux/accessibility-requirements.md).
 
-## Automated Testing
+## Implementation Status
 
-### ESLint jsx-a11y (Implemented)
+| Testing Method                | Status             | Enforcement     |
+| ----------------------------- | ------------------ | --------------- |
+| ESLint jsx-a11y               | ✅ Implemented     | Pre-commit + CI |
+| React Testing Library queries | ✅ Implemented     | In test suite   |
+| Keyboard navigation tests     | ✅ Implemented     | In test suite   |
+| jest-axe                      | ❌ Not implemented | -               |
+| Screen reader testing         | ❌ Not implemented | -               |
+| Color contrast verification   | ❌ Not implemented | -               |
 
-The project uses `eslint-plugin-jsx-a11y` with the recommended ruleset for static accessibility linting.
+---
+
+## Currently Implemented
+
+### ESLint jsx-a11y
+
+Static accessibility linting catches issues at development time.
 
 **Configuration** (`eslint.config.mjs`):
 
@@ -35,7 +48,7 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 - Pre-commit hooks via Husky/lint-staged
 - CI pipeline (`npm run lint`)
 
-### React Testing Library (Implemented)
+### React Testing Library Queries
 
 Tests use accessibility-focused queries that verify semantic HTML:
 
@@ -57,110 +70,41 @@ screen.getByTestId('delete-button'); // Last resort only
 4. `getByText` - Non-interactive content
 5. `getByTestId` - Last resort
 
-## Manual Testing
+### Keyboard Navigation Tests
 
-### Keyboard Navigation
-
-Test all interactive elements are keyboard accessible:
-
-1. **Tab through interface** - Verify logical focus order
-2. **Activate elements** - Enter/Space for buttons, checkboxes
-3. **Escape key** - Closes modals and dialogs
-4. **Arrow keys** - Navigation within components
-5. **Focus visibility** - Clear 2px focus ring on all elements
-
-### Screen Reader Testing
-
-Test with at least one screen reader:
-
-| Platform | Screen Reader                |
-| -------- | ---------------------------- |
-| macOS    | VoiceOver (built-in, Cmd+F5) |
-| Windows  | NVDA (free) or JAWS          |
-| iOS      | VoiceOver                    |
-| Android  | TalkBack                     |
-
-**Verify:**
-
-- All content announced correctly
-- ARIA labels read as expected
-- Dynamic content changes announced
-- Form errors associated with fields
-
-### Color Contrast
-
-Use browser DevTools or dedicated tools:
-
-- Chrome DevTools (Accessibility panel)
-- [WAVE Extension](https://wave.webaim.org/extension/)
-- [axe DevTools](https://www.deque.com/axe/devtools/)
-
-**Requirements:**
-
-- Normal text: 4.5:1 minimum
-- Large text (18pt+): 3:1 minimum
-- UI components: 3:1 minimum
-
-### Touch Target Size
-
-Verify 44px × 44px minimum for all interactive elements:
-
-```bash
-# In browser DevTools, inspect element dimensions
-# Or use the "Inspect accessibility properties" feature
-```
-
-## Writing Accessibility Tests
-
-### Component Test Pattern
+Component tests verify keyboard accessibility:
 
 ```typescript
-describe('Component Accessibility', () => {
-  it('should be keyboard accessible', async () => {
-    const user = userEvent.setup();
-    render(<MyComponent />);
+it('should be keyboard accessible', async () => {
+  const user = userEvent.setup();
+  render(<MyComponent />);
 
-    const button = screen.getByRole('button', { name: /submit/i });
-    button.focus();
-    expect(button).toHaveFocus();
+  const button = screen.getByRole('button', { name: /submit/i });
+  button.focus();
+  expect(button).toHaveFocus();
 
-    await user.keyboard('{Enter}');
-    expect(mockOnSubmit).toHaveBeenCalled();
-  });
+  await user.keyboard('{Enter}');
+  expect(mockOnSubmit).toHaveBeenCalled();
+});
 
-  it('should have proper ARIA attributes', () => {
-    render(<MyComponent isOpen={true} />);
+it('should have proper ARIA attributes', () => {
+  render(<MyComponent isOpen={true} />);
 
-    const dialog = screen.getByRole('dialog');
-    expect(dialog).toHaveAttribute('aria-modal', 'true');
-    expect(dialog).toHaveAttribute('aria-labelledby');
-  });
-
-  it('should announce dynamic content', async () => {
-    render(<MyComponent />);
-
-    // Trigger action that shows status message
-    await userEvent.click(screen.getByRole('button'));
-
-    // Verify live region exists
-    expect(screen.getByRole('status')).toHaveTextContent('Saved');
-  });
+  const dialog = screen.getByRole('dialog');
+  expect(dialog).toHaveAttribute('aria-modal', 'true');
+  expect(dialog).toHaveAttribute('aria-labelledby');
 });
 ```
 
-### Checklist for New Components
+---
 
-- [ ] Uses semantic HTML elements (`button`, `nav`, `main`, etc.)
-- [ ] Has descriptive `aria-label` where text content is insufficient
-- [ ] Keyboard navigation works (Tab, Enter, Space, Escape)
-- [ ] Focus is visible and follows logical order
-- [ ] Touch targets are 44px × 44px minimum
-- [ ] Color contrast meets WCAG AA (4.5:1 text, 3:1 UI)
-- [ ] Screen reader announces content correctly
+## Not Implemented (Future Enhancements)
 
-## Future Enhancement: jest-axe
+### jest-axe - Automated WCAG Testing
 
-For automated WCAG violation detection, consider adding `jest-axe`:
+Automated accessibility violation detection in Jest tests.
+
+**To implement:**
 
 ```bash
 npm install --save-dev jest-axe @types/jest-axe
@@ -178,7 +122,61 @@ it('should have no accessibility violations', async () => {
 });
 ```
 
-This is not currently implemented but is recommended for comprehensive automated testing.
+**Benefits:** Catches WCAG violations automatically in CI.
+
+### Screen Reader Testing
+
+Manual testing with assistive technology.
+
+**Tools:**
+
+| Platform | Screen Reader       |
+| -------- | ------------------- |
+| macOS    | VoiceOver (Cmd+F5)  |
+| Windows  | NVDA (free) or JAWS |
+| iOS      | VoiceOver           |
+| Android  | TalkBack            |
+
+**What to verify:**
+
+- All content announced correctly
+- ARIA labels read as expected
+- Dynamic content changes announced
+- Form errors associated with fields
+
+### Color Contrast Verification
+
+Manual verification of WCAG contrast requirements.
+
+**Tools:**
+
+- Chrome DevTools (Accessibility panel)
+- [WAVE Extension](https://wave.webaim.org/extension/)
+- [axe DevTools](https://www.deque.com/axe/devtools/)
+
+**Requirements:**
+
+- Normal text: 4.5:1 minimum
+- Large text (18pt+): 3:1 minimum
+- UI components: 3:1 minimum
+
+### Touch Target Size Verification
+
+Manual verification of 44px × 44px minimum for interactive elements.
+
+**How to check:** Inspect element dimensions in browser DevTools.
+
+---
+
+## Checklist for New Components
+
+- [ ] Uses semantic HTML elements (`button`, `nav`, `main`, etc.)
+- [ ] Has descriptive `aria-label` where text content is insufficient
+- [ ] Keyboard navigation works (Tab, Enter, Space, Escape)
+- [ ] Focus is visible and follows logical order
+- [ ] Touch targets are 44px × 44px minimum
+- [ ] Color contrast meets WCAG AA (4.5:1 text, 3:1 UI)
+- [ ] Screen reader announces content correctly
 
 ## Resources
 
