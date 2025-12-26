@@ -39,6 +39,9 @@
 12. **🚨 PR APPROVAL PROTOCOL**: After creating PR, enable automerge with `--rebase` (mandatory per Principle #7), then
     report status to user - NEVER use `--admin`, `--force`, or bypass flags without explicit permission - task completion
     means PR merged and verified with `gh issue view #X`, NOT just PR created (see [PR Workflow](docs/core/workflows.md#pull-request-workflow))
+13. **🚨 REQUIREMENT TRACEABILITY**: All issues/PRs must trace to requirements in
+    [docs/product/requirements.md](docs/product/requirements.md) - new issues checked against existing requirements, PRs
+    validated against requirements they fulfill
 
 ---
 
@@ -128,6 +131,7 @@ See [Working with Epics](docs/development/project-management.md#working-with-epi
 
 ## Reference Documentation
 
+- **Product Requirements**: [docs/product/requirements.md](docs/product/requirements.md)
 - **Dev Environment Setup**: [docs/setup/local-dev-setup.md](docs/setup/local-dev-setup.md)
 - **Testing Strategy**: [docs/testing/testing-strategy.md](docs/testing/testing-strategy.md)
 - **ADR Process**: [docs/adr/PROCESS.md](docs/adr/PROCESS.md)
@@ -145,6 +149,7 @@ docs/
 ├── agents/              # Agent-specific guidelines and coordination
 ├── core/                # Framework, workflows, project context
 ├── diagrams/            # Mermaid diagrams for architecture and user flows
+├── product/             # Product vision and requirements
 ├── reference/           # Labels, priorities, troubleshooting
 ├── testing/             # Testing strategy, guidelines, and checklists
 └── adr/                 # Architecture Decision Records
