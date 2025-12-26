@@ -150,3 +150,37 @@ Enhanced real-time collaboration features for shared lists.
 - User cursors or activity indicators
 - List naming and organization
 - Operational transforms for conflict-free editing
+
+### 10. SaaS Development Best Practices
+
+**Status**: Implemented
+
+Follow current industry best practices for SaaS-style software development, regardless of whether
+implementation is performed by human developers or AI agents.
+
+**Key Capabilities**:
+
+- Feature branch workflow with pull request reviews
+- Continuous Integration/Continuous Deployment (CI/CD)
+- Automated testing at all levels (unit, integration, E2E)
+- Security scanning and dependency management
+- Semantic versioning and changelog maintenance
+- Infrastructure as code and reproducible deployments
+- Monitoring, logging, and observability foundations
+
+### 11. Self-Contained Knowledge Repository
+
+**Status**: Implemented
+
+Provide a standalone, complete repository that includes all knowledge needed to understand the project
+and continue development - whether by human developers or through agent-driven development.
+
+**Key Capabilities**:
+
+- Comprehensive documentation covering architecture, workflows, and decisions
+- Architecture Decision Records (ADRs) for all significant technical choices
+- Agent instructions (CLAUDE.md) enabling autonomous AI development
+- Setup guides for local development and deployment
+- Inline code documentation where logic is non-obvious
+- Visual diagrams for architecture and user flows
+- Troubleshooting guides and common patterns
