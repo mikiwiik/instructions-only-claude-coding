@@ -109,7 +109,7 @@ Reliable storage options for both local and shared usage patterns.
 **Key Capabilities**:
 
 - localStorage for local list state
-- Vercel KV (Redis-backed) for shared list persistence
+- Upstash Redis for shared list persistence
 - Automatic save on change
 - Unique list IDs for shared lists
 
@@ -169,8 +169,8 @@ Enhanced real-time collaboration features for shared lists.
 
 **Key Capabilities**:
 
-- Presence indicators showing active collaborators
-- User cursors or activity indicators
+- Presence indicators showing who is currently viewing the list
+- Real-time visibility of other users' edits as they happen
 - List naming and organization
 - Operational transforms for conflict-free editing
 
@@ -189,6 +189,8 @@ implementation is performed by human developers or AI agents.
 - Security scanning and dependency management ✓
 - Semantic versioning and changelog maintenance (planned)
 - Infrastructure as code and reproducible deployments ✓
+- Deployed to scalable, cost-effective infrastructure (Vercel + Upstash) ✓
+- Frontend error detection and monitoring (planned)
 - Monitoring, logging, and observability foundations (planned)
 
 ### 12. Self-Contained Knowledge Repository
@@ -203,6 +205,7 @@ and continue development - whether by human developers or through agent-driven d
 - Product vision and requirements documented as the source of truth
 - Comprehensive documentation covering architecture, workflows, and decisions
 - Architecture Decision Records (ADRs) for all significant technical choices
+- GitHub Issues as living backlog tracking planned and completed work
 - Agent instructions (CLAUDE.md) enabling autonomous AI development
 - Setup guides for local development and deployment
 - Inline code documentation where logic is non-obvious
