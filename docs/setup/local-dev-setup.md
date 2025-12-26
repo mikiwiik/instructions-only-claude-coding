@@ -52,10 +52,18 @@ npm --version   # Should be 10.x or higher
 
 ### 2. Git User Configuration
 
-Configure your Git identity for this repository to ensure commits are properly attributed to your GitHub account:
+Configure your Git identity for this repository to ensure commits are properly attributed to your GitHub account
+while keeping your personal email private.
+
+First, go to <https://github.com/settings/emails> and enable these privacy settings:
+
+- **Keep my email addresses private** - Uses your noreply email for web-based Git operations
+- **Block command line pushes that expose my email** - Rejects commits using your personal email
+
+Then configure your local repository:
 
 ```bash
-# Set your GitHub username and email for this repository
+# Set your GitHub username and noreply email for this repository
 git config --local user.name "your-github-username"
 git config --local user.email "your-github-username@users.noreply.github.com"
 
@@ -64,8 +72,9 @@ git config --local user.name
 git config --local user.email
 ```
 
-**Note**: Using GitHub's noreply email (`username@users.noreply.github.com`) links commits to your GitHub account
-without exposing your personal email. This also ensures correct attribution in GitHub's contributor statistics.
+Using the noreply email keeps your personal email hidden from public commit history while ensuring commits are
+properly linked to your GitHub account for contributor statistics. With "Block command line pushes" enabled,
+GitHub will reject any commits that accidentally expose your personal email.
 
 ### 3. Dependency Installation
 
