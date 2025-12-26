@@ -427,6 +427,35 @@ gh issue view #XXX
 - GitHub automatically closed issue via "Closes #X" commit
 - Verification completed with `gh issue view #X`
 
+## Requirement Traceability
+
+All issues and PRs must trace back to product requirements defined in
+[docs/product/requirements.md](../product/requirements.md).
+
+### Issue Creation Requirement Check
+
+**Before creating an issue**:
+
+1. Review [docs/product/requirements.md](../product/requirements.md)
+2. Determine if the issue:
+   - **Fulfills** an existing Planned requirement (note which section)
+   - **Enhances** an existing Implemented requirement (note which section)
+   - **Introduces** a new requirement (add to requirements.md first via separate PR)
+
+### PR Requirement Validation
+
+- Linked issue must specify which requirement(s) it addresses
+- Definition of Done includes: requirement fulfillment verified
+- Update requirement status when work completes (Planned → In Progress → Implemented)
+
+### Requirement Status Updates
+
+When a PR completes work that changes a requirement's status:
+
+1. Include requirement status update in PR (edit requirements.md)
+2. Update from `Planned` → `In Progress` when development starts
+3. Update from `In Progress` → `Implemented` when PR merges
+
 ## Quality Gates
 
 ### Quality Metrics
