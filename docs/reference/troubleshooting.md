@@ -324,6 +324,79 @@ git config --list --show-origin | grep user
 3. **Update existing PR**: Push changes to same branch
 4. **Maintain workflow**: Follow "ONE FEATURE = ONE BRANCH = ONE PR" principle
 
+### Git History Rewriting
+
+#### Force Push Blocked by Branch Protection
+
+**Problem**: `git push --force` fails with "Cannot force-push to this branch"
+
+**Symptoms:**
+
+- Error: `GH006: Protected branch update failed for refs/heads/main`
+- Error: `Cannot force-push to this branch`
+- Occurs when rewriting git history (e.g., fixing commit attribution)
+
+**Root Cause:**
+
+GitHub has branch protection rules that block force pushes to `main`. This project uses both:
+
+- **Repository rulesets** (newer): Settings → Rules
+- **Legacy branch protection** (older): Settings → Branches
+
+Both must allow force pushes for history rewriting to work.
+
+**Solution - Temporarily Disable Protection:**
+
+1. **Go to repository rulesets**: <https://github.com/mikiwiik/instructions-only-claude-coding/settings/rules/>
+2. **Edit the ruleset** protecting `main`
+3. **Remove `main` from Target branches** (this temporarily disables protection)
+4. **Save changes**
+5. **Perform force push**: `git push --force origin main`
+6. **Re-enable protection**: Edit ruleset → Add "Include by pattern": `main`
+7. **Save changes**
+
+**API Alternative** (for automation):
+
+```bash
+# Remove branch protection temporarily
+gh api repos/OWNER/REPO/branches/main/protection -X DELETE
+
+# Perform force push
+git push --force origin main
+
+# Restore branch protection
+gh api repos/OWNER/REPO/branches/main/protection -X PUT --input - <<'EOF'
+{
+  "required_status_checks": {
+    "strict": true,
+    "checks": [{"context": "Build and Test"}]
+  },
+  "enforce_admins": false,
+  "required_pull_request_reviews": {
+    "dismiss_stale_reviews": true,
+    "required_approving_review_count": 1
+  },
+  "restrictions": null,
+  "allow_force_pushes": false,
+  "allow_deletions": false
+}
+EOF
+```
+
+**When This Is Needed:**
+
+- Fixing incorrect commit attribution (email/name)
+- Removing sensitive data from history
+- Squashing commits for cleaner history
+- Rebasing onto a new base
+
+**Post-Operation Checklist:**
+
+- [ ] Branch protection re-enabled
+- [ ] Verify with `gh api repos/OWNER/REPO/branches/main/protection`
+- [ ] Notify collaborators to re-clone or reset their local repos
+- [ ] Clean up stale local branches: `git remote prune origin`
+
 ### Commitlint Parser Bug
 
 #### Bullet List Validation Failures
