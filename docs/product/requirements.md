@@ -177,6 +177,7 @@ and continue development - whether by human developers or through agent-driven d
 
 **Key Capabilities**:
 
+- Product vision and requirements documented as the source of truth
 - Comprehensive documentation covering architecture, workflows, and decisions
 - Architecture Decision Records (ADRs) for all significant technical choices
 - Agent instructions (CLAUDE.md) enabling autonomous AI development
