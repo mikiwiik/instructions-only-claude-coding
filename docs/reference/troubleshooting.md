@@ -289,6 +289,36 @@ git config --list --show-origin | grep user
 - **Environment variables**: Ensure proper environment configuration
 - **Dependency issues**: Verify all dependencies are properly installed
 
+#### Vercel Region Not Changing (Hobby Plan)
+
+**Problem**: Changed `regions` in `vercel.json` but deployment still uses old region
+
+**Symptoms:**
+
+- `vercel.json` has correct region (e.g., `"regions": ["fra1"]`)
+- Deployment completes successfully
+- Vercel Dashboard → Functions → Function Region still shows old region (e.g., `iad1`)
+
+**Root Cause:**
+
+On Vercel Hobby plans, the dashboard region setting **overrides** `vercel.json`. The code configuration is ignored
+in favor of the project-level dashboard setting.
+
+**Solution:**
+
+1. Go to Vercel Dashboard → Project Settings → Functions → Function Region
+2. Expand the target region (e.g., "Europe")
+3. Select the specific region (e.g., "Frankfurt, Germany (West) - fra1")
+4. Remove the previous region selection
+5. Click "Save"
+6. Trigger a new deployment (push to main or use "Redeploy" button)
+
+**Verification:**
+
+After redeployment, check the Functions tab in the deployment details to confirm the new region is active.
+
+**Note:** This limitation only affects Hobby plans. Pro and Enterprise plans respect `vercel.json` region settings.
+
 ### Workflow Violations
 
 #### Auto-merge Without Approval

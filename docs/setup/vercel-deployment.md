@@ -65,9 +65,14 @@ The project also includes a `vercel.json` for API function configuration:
 ```json
 {
   "functions": { "app/api/**/*.ts": { "maxDuration": 10 } },
-  "regions": ["iad1"]
+  "regions": ["fra1"]
 }
 ```
+
+> **⚠️ Hobby Plan Region Limitation**
+>
+> On Vercel Hobby plans, the dashboard region setting overrides `vercel.json`. You must also update the region in
+> the Vercel Dashboard. See [Troubleshooting: Vercel Region Not Changing](../reference/troubleshooting.md#vercel-region-not-changing-hobby-plan).
 
 Environment variables (`UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`) are configured directly in the Vercel
 Dashboard and auto-injected at runtime. See [Upstash Redis Setup Guide](upstash-setup.md) for backend configuration.
