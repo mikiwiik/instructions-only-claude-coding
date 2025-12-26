@@ -1,9 +1,17 @@
 # Test Utilities Reference
 
+This directory contains reusable test utilities for the Todo App test suite.
+
+## Related Documentation
+
+- [Testing Strategy](../../docs/testing/testing-strategy.md) - Philosophy and quality gates
+- [Testing Guidelines](../../docs/testing/testing-guidelines.md) - Patterns and best practices
+- [Accessibility Testing](../../docs/testing/accessibility-testing.md) - WCAG compliance testing
+- [TypeScript Standards](../../docs/guidelines/typescript-standards.md) - Type safety in tests
+
 ## Purpose
 
-This directory contains the test suite for the Todo App, organized with
-reusable utilities to eliminate duplication and ensure consistent testing
+Utilities are organized to eliminate duplication and ensure consistent testing
 patterns. All utilities follow strict TypeScript standards and React Testing
 Library best practices.
 
@@ -374,13 +382,6 @@ render(
 // ✅ GOOD - Use renderTodoItem helper
 const { callbacks } = renderTodoItem(todo);
 ```
-
-## Related Documentation
-
-- **Testing Guidelines**: [docs/testing/testing-guidelines.md](../../docs/testing/testing-guidelines.md)
-- **TypeScript Standards**: [docs/guidelines/typescript-standards.md](../../docs/guidelines/typescript-standards.md)
-- **Accessibility Testing**: [docs/ux/accessibility-requirements.md](../../docs/ux/accessibility-requirements.md)
-- **TDD Approach**: [docs/adr/004-test-driven-development-approach.md](../../docs/adr/004-test-driven-development-approach.md)
 
 ## Contributing
 
