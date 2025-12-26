@@ -3,7 +3,7 @@
  * Extracted from useTodos.ts to reduce function length (ADR-027 compliance)
  */
 
-import { useCallback } from 'react';
+import { useCallback, useRef, useEffect } from 'react';
 import { Todo, TodoState } from '../types/todo';
 
 // Hardcoded list ID for main app (single list for now)
@@ -80,6 +80,108 @@ export function useSyncToBackend(
     },
     [listId]
   );
+}
+
+export interface DebouncedSyncOptions {
+  listId?: string;
+  delay?: number;
+  leading?: boolean;
+}
+
+export interface DebouncedSyncResult {
+  sync: (operation: string, data: unknown) => void;
+  flush: () => void;
+  cancel: () => void;
+}
+
+const DEFAULT_DEBOUNCE_DELAY = 300;
+
+/**
+ * Hook that provides a debounced sync function to prevent rapid-fire API calls.
+ * Useful for operations like drag-and-drop reordering where many updates happen quickly.
+ *
+ * @param options.listId - The list ID to sync to (defaults to MAIN_LIST_ID)
+ * @param options.delay - Debounce delay in ms (defaults to 300ms)
+ * @param options.leading - If true, execute first call immediately (defaults to false)
+ */
+export function useDebouncedSync(
+  options: DebouncedSyncOptions = {}
+): DebouncedSyncResult {
+  const {
+    listId = MAIN_LIST_ID,
+    delay = DEFAULT_DEBOUNCE_DELAY,
+    leading = false,
+  } = options;
+
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingCallRef = useRef<{ operation: string; data: unknown } | null>(
+    null
+  );
+  const hasLeadingCallRef = useRef(false);
+  const syncToBackend = useSyncToBackend(listId);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const executePendingCall = useCallback(async () => {
+    if (pendingCallRef.current) {
+      const { operation, data } = pendingCallRef.current;
+      pendingCallRef.current = null;
+      hasLeadingCallRef.current = false;
+      await syncToBackend(operation, data);
+    }
+  }, [syncToBackend]);
+
+  const sync = useCallback(
+    (operation: string, data: unknown) => {
+      // Clear any existing timeout
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      // Store the latest call
+      pendingCallRef.current = { operation, data };
+
+      // Leading edge: execute first call immediately
+      if (leading && !hasLeadingCallRef.current) {
+        hasLeadingCallRef.current = true;
+        const { operation: op, data: d } = pendingCallRef.current;
+        pendingCallRef.current = null;
+        syncToBackend(op, d);
+        return;
+      }
+
+      // Schedule the debounced execution
+      timeoutRef.current = setTimeout(() => {
+        executePendingCall();
+      }, delay);
+    },
+    [delay, leading, syncToBackend, executePendingCall]
+  );
+
+  const flush = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    executePendingCall();
+  }, [executePendingCall]);
+
+  const cancel = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    pendingCallRef.current = null;
+  }, []);
+
+  return { sync, flush, cancel };
 }
 
 export type SetTodoStateFn = React.Dispatch<React.SetStateAction<TodoState>>;
