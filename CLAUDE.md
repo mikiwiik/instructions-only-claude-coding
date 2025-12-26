@@ -83,6 +83,17 @@ Agent-centric development instructions for instruction-only todo application dev
 4. **Implementation**: Track progress with in_progress/completed status
 5. **Completion**: Ensure all tasks finished before claiming done
 
+## Epic Workflow
+
+For `complexity-complex` or `complexity-epic` issues, propose splitting into an epic with sub-issues:
+
+1. **Recognize scope**: If work spans 3+ related issues or has dependencies, propose an epic structure to the user
+2. **Create sub-issues**: Break into focused, independently-deliverable sub-issues with individual complexity labels
+3. **Document dependencies**: Use "Depends on #X" format in sub-issue descriptions
+4. **Track progress**: Use GitHub Projects sub-issues and Epic Progress view for visibility
+
+See [Working with Epics](docs/development/project-management.md#working-with-epics) for detailed guidance.
+
 ## Quality Standards
 
 **Accessibility Requirements**:
