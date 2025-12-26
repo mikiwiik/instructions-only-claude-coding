@@ -55,14 +55,14 @@ implementations maintain professional accessibility standards and provide inclus
 
 ### Level A (Required)
 
-#### Perceivable
+**Perceivable:**
 
 - **1.1.1 Non-text Content**: All images, icons, and graphical content have text alternatives
 - **1.3.1 Info and Relationships**: Structure and relationships conveyed programmatically
 - **1.3.2 Meaningful Sequence**: Content order makes sense when linearized
 - **1.4.1 Use of Color**: Color not used as only means of conveying information
 
-#### Operable
+**Operable:**
 
 - **2.1.1 Keyboard**: All functionality available via keyboard
 - **2.1.2 No Keyboard Trap**: Focus can move away from all components
@@ -73,20 +73,20 @@ implementations maintain professional accessibility standards and provide inclus
 - **2.5.2 Pointer Cancellation**: Down-event actions can be aborted or undone
 - **2.5.3 Label in Name**: Accessible names match visible labels
 
-#### Understandable
+**Understandable:**
 
 - **3.1.1 Language of Page**: Page language programmatically determined
 - **3.2.1 On Focus**: Focus doesn't trigger unexpected context changes
 - **3.2.2 On Input**: Input doesn't trigger unexpected context changes
 
-#### Robust
+**Robust:**
 
 - **4.1.1 Parsing**: HTML properly formed and validated
 - **4.1.2 Name, Role, Value**: All UI components have proper accessibility attributes
 
 ### Level AA (Required)
 
-#### Perceivable
+**Perceivable:**
 
 - **1.4.3 Contrast (Minimum)**: 4.5:1 for text, 3:1 for large text
 - **1.4.5 Images of Text**: Use actual text instead of text images
@@ -94,7 +94,7 @@ implementations maintain professional accessibility standards and provide inclus
 - **1.4.11 Non-text Contrast**: 3:1 contrast for UI components and graphics
 - **1.4.12 Text Spacing**: Content adapts to increased text spacing
 
-#### Operable
+**Operable:**
 
 - **2.4.5 Multiple Ways**: Multiple navigation methods available
 - **2.4.6 Headings and Labels**: Descriptive headings and labels
@@ -102,7 +102,7 @@ implementations maintain professional accessibility standards and provide inclus
 - **2.5.7 Dragging Movements**: Drag-and-drop has non-dragging alternative (WCAG 2.2)
 - **2.5.8 Target Size (Minimum)**: 24px minimum target size (WCAG 2.2)
 
-#### Understandable
+**Understandable:**
 
 - **3.1.2 Language of Parts**: Language of passages programmatically determined
 - **3.2.3 Consistent Navigation**: Navigation consistent across pages
@@ -110,7 +110,7 @@ implementations maintain professional accessibility standards and provide inclus
 - **3.3.3 Error Suggestion**: Error corrections suggested when possible
 - **3.3.4 Error Prevention**: Submissions checked and reversible
 
-#### Robust
+**Robust:**
 
 - **4.1.3 Status Messages**: Status messages announced to assistive technologies (WCAG 2.1)
 
@@ -220,59 +220,9 @@ implementations maintain professional accessibility standards and provide inclus
 - Clear, actionable error descriptions
 - Visual and programmatic association
 
-## Testing Requirements
+## Testing
 
-### Manual Testing
-
-**Keyboard Navigation:**
-
-- Tab through entire interface
-- Activate all interactive elements with keyboard
-- Verify focus visibility and logical order
-- Test modal focus trapping and restoration
-
-**Screen Reader Testing:**
-
-- Test with at least one major screen reader (NVDA, JAWS, VoiceOver)
-- Verify all content announced correctly
-- Check ARIA labels and descriptions
-- Test dynamic content announcements
-
-**Color Contrast:**
-
-- Use browser DevTools or contrast checkers
-- Verify all text meets minimum ratios
-- Check UI component contrast
-- Test focus indicator contrast
-
-**Touch Target Size:**
-
-- Verify minimum 44px × 44px for interactive elements
-- Check spacing between adjacent targets
-- Test on actual mobile devices
-
-### Automated Testing
-
-**ESLint Integration:**
-
-- **✅ IMPLEMENTED**: `eslint-plugin-jsx-a11y` (v6.10.2) enforces accessibility rules automatically
-- **Configuration**: Plugin configured with recommended ruleset in `.eslintrc.js`
-- **Current State**: Zero accessibility violations across all components
-- **Enforcement**: Pre-commit hooks and CI/CD pipeline validate accessibility compliance
-
-**Jest Testing:**
-
-- React Testing Library for component testing
-- Test keyboard interactions
-- Verify ARIA attributes
-- Check semantic HTML structure
-
-**Optional: jest-axe:**
-
-- Automated accessibility testing in Jest
-- Catches common WCAG violations
-- Integrated into component test suites
-- Reports accessibility issues during development
+For accessibility testing guidance, see [Accessibility Testing](../testing/accessibility-testing.md).
 
 ## Development Workflow Integration
 
@@ -294,56 +244,16 @@ implementations maintain professional accessibility standards and provide inclus
 
 ### During Implementation
 
-**TDD Approach:**
-
-```typescript
-describe('Component Accessibility', () => {
-  it('should meet touch target requirements (44px minimum)', () => {
-    // Test implementation
-  });
-
-  it('should provide complete keyboard navigation', () => {
-    // Test Tab order, Enter/Space activation, Escape handling
-  });
-
-  it('should have proper ARIA implementation', () => {
-    // Test labels, roles, states
-  });
-
-  it('should support screen readers', () => {
-    // Test semantic HTML, announcements
-  });
-});
-```
-
-**Implementation Checklist:**
+**Checklist:**
 
 - [ ] Semantic HTML elements used
 - [ ] ARIA labels and roles added
 - [ ] Keyboard navigation implemented
-- [ ] Touch targets sized appropriately
+- [ ] Touch targets sized appropriately (44px minimum)
 - [ ] Color contrast verified
 - [ ] Focus indicators visible
-- [ ] Screen reader testing completed
 
-### Pre-Commit
-
-**Quality Gates:**
-
-- ESLint accessibility checks pass
-- Manual keyboard testing completed
-- ARIA attributes verified
-- Touch target sizes confirmed
-
-### Code Review
-
-**Accessibility Review:**
-
-- Verify semantic HTML usage
-- Check ARIA implementation
-- Test keyboard navigation
-- Validate color contrast
-- Review touch target sizes
+See [Accessibility Testing](../testing/accessibility-testing.md) for testing patterns and verification steps.
 
 ## Tools and Resources
 
@@ -360,12 +270,6 @@ describe('Component Accessibility', () => {
 - **JAWS**: Professional Windows screen reader
 - **VoiceOver**: Built-in macOS/iOS screen reader
 - **TalkBack**: Built-in Android screen reader
-
-### Testing Libraries
-
-- **React Testing Library**: Accessibility-focused component testing (installed)
-- **jest-axe**: Automated WCAG testing in Jest (recommended for future implementation)
-- **eslint-plugin-jsx-a11y**: JSX accessibility linting (recommended for future implementation)
 
 ### Documentation
 

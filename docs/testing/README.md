@@ -8,6 +8,7 @@ This directory contains all testing-related documentation for the Todo applicati
 | ----------------------------------------------------------- | --------------------------------------------------------- |
 | [Testing Strategy](testing-strategy.md)                     | High-level testing philosophy, pyramid, and quality gates |
 | [Testing Guidelines](testing-guidelines.md)                 | Patterns, utilities, security testing, and best practices |
+| [Accessibility Testing](accessibility-testing.md)           | WCAG compliance testing, ESLint jsx-a11y, manual testing  |
 | [Frontend Testing Checklist](frontend-testing-checklist.md) | Implemented features and tool overview                    |
 | [E2E Testing Guide](e2e-testing-guide.md)                   | Playwright setup, Page Object Model, and CI integration   |
 
