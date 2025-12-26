@@ -50,7 +50,24 @@ node --version  # Should be 22.x or higher
 npm --version   # Should be 10.x or higher
 ```
 
-### 2. Dependency Installation
+### 2. Git User Configuration
+
+Configure your Git identity for this repository to ensure commits are properly attributed to your GitHub account:
+
+```bash
+# Set your GitHub username and email for this repository
+git config --local user.name "your-github-username"
+git config --local user.email "your-github-username@users.noreply.github.com"
+
+# Verify configuration
+git config --local user.name
+git config --local user.email
+```
+
+**Note**: Using GitHub's noreply email (`username@users.noreply.github.com`) links commits to your GitHub account
+without exposing your personal email. This also ensures correct attribution in GitHub's contributor statistics.
+
+### 3. Dependency Installation
 
 ```bash
 # Install project dependencies (uses exact versions from package-lock.json)
@@ -64,7 +81,7 @@ npm install
 - **Team Consistency**: All developers get identical dependency trees
 - **CI/CD Reliability**: Deterministic and predictable builds
 
-### 3. Development Environment Verification
+### 4. Development Environment Verification
 
 ```bash
 # Run type checking
