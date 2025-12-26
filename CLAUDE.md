@@ -111,7 +111,7 @@ Agent-centric development instructions for instruction-only todo application dev
 - **Status Progression**: Icebox → Backlog → In Progress → Done (GitHub Projects)
 - **Label Guide**: [docs/reference/labels-and-priorities.md](docs/reference/labels-and-priorities.md)
 - **Project Management**: [docs/development/project-management.md](docs/development/project-management.md)
-- **GitHub Projects Setup**: [docs/development/github-projects-setup.md](docs/development/github-projects-setup.md)
+- **GitHub Projects Setup**: [docs/setup/github-projects-setup.md](docs/setup/github-projects-setup.md)
 
 ## Reference Documentation
 
