@@ -534,8 +534,51 @@ Parent Epic: "Backend Protection - Rate Limiting and Monitoring"
 
 1. **Create parent issue** with `complexity-epic` or `complexity-complex` label
 2. **Create sub-issues** with individual complexity labels
-3. **Link sub-issues** to parent via GitHub UI (Issue → Add sub-issue)
+3. **Link sub-issues** to parent (see [Linking Sub-Issues via API](#linking-sub-issues-via-api) below)
 4. **Document dependencies** in sub-issue descriptions using "Depends on #X" format
+
+#### Linking Sub-Issues via API
+
+Use the GitHub GraphQL API to link sub-issues to their parent epic:
+
+Step 1 - Get node IDs:
+
+```bash
+gh api graphql -f query='
+{
+  repository(owner: "mikiwiik", name: "instructions-only-claude-coding") {
+    parent: issue(number: 340) { id }
+    sub1: issue(number: 390) { id }
+    sub2: issue(number: 391) { id }
+  }
+}'
+```
+
+Step 2 - Link each sub-issue:
+
+```bash
+gh api graphql -f query='
+mutation {
+  addSubIssue(input: {
+    issueId: "I_kwDOPzdBX87bKyEg",      # Parent epic node ID
+    subIssueId: "I_kwDOPzdBX87gUMDQ"    # Sub-issue node ID
+  }) {
+    issue { number title }
+    subIssue { number title }
+  }
+}'
+```
+
+Key details:
+
+| Aspect   | Value                        |
+| -------- | ---------------------------- |
+| API      | GitHub GraphQL               |
+| Mutation | `addSubIssue`                |
+| Required | Node IDs (not issue numbers) |
+| CLI      | `gh api graphql`             |
+
+**Note**: There's no direct `gh issue` CLI command for sub-issues yet - it requires the GraphQL API.
 
 #### Dependency Management
 
