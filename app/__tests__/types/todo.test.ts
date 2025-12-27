@@ -56,6 +56,27 @@ describe('Todo Types', () => {
     expect(todo.updatedAt).toBeInstanceOf(Date);
   });
 
+  it('should support optional sortOrder field for LexoRank ordering (ADR-033)', () => {
+    const todoWithSortOrder: Todo = {
+      id: '1',
+      text: 'Test todo',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      sortOrder: '0|hzzzzz:',
+    };
+
+    expect(todoWithSortOrder.sortOrder).toBe('0|hzzzzz:');
+
+    const todoWithoutSortOrder: Todo = {
+      id: '2',
+      text: 'Test todo without sort order',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    expect(todoWithoutSortOrder.sortOrder).toBeUndefined();
+  });
+
   it('should define TodoFilter type with correct values', () => {
     const validFilters: TodoFilter[] = ['all', 'active', 'completed'];
 
@@ -228,6 +249,30 @@ describe('Zod Validation Schemas', () => {
 
       expect(() => TodoSchema.parse(invalidTodo)).toThrow('Todo text too long');
     });
+
+    it('should accept optional sortOrder field (ADR-033)', () => {
+      const todoWithSortOrder = {
+        id: TEST_UUIDS.TODO_1,
+        text: 'Valid todo',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
+      };
+
+      const result = TodoSchema.parse(todoWithSortOrder);
+      expect(result.sortOrder).toBe('0|hzzzzz:');
+    });
+
+    it('should accept Todo without sortOrder field (backward compatibility)', () => {
+      const todoWithoutSortOrder = {
+        id: TEST_UUIDS.TODO_1,
+        text: 'Valid todo',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      expect(() => TodoSchema.parse(todoWithoutSortOrder)).not.toThrow();
+    });
   });
 
   describe('SharedTodoSchema', () => {
@@ -277,6 +322,23 @@ describe('Zod Validation Schemas', () => {
       };
 
       expect(() => SharedTodoSchema.parse(invalidSharedTodo)).toThrow();
+    });
+
+    it('should accept optional sortOrder field for SharedTodo (ADR-033)', () => {
+      const sharedTodoWithSortOrder = {
+        id: TEST_UUIDS.TODO_1,
+        text: 'Valid shared todo',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        listId: TEST_UUIDS.LIST_1,
+        authorId: TEST_UUIDS.USER_1,
+        lastModifiedBy: TEST_UUIDS.USER_1,
+        syncVersion: 1,
+        sortOrder: '0|hzzzzz:',
+      };
+
+      const result = SharedTodoSchema.parse(sharedTodoWithSortOrder);
+      expect(result.sortOrder).toBe('0|hzzzzz:');
     });
   });
 
