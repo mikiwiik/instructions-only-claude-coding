@@ -1,17 +1,17 @@
+/**
+ * Sentry configuration for Node.js and Edge runtimes.
+ *
+ * This file is imported by instrumentation.ts for server-side error tracking.
+ * Uses shared config for consistency with client-side monitoring.
+ */
+
 import * as Sentry from '@sentry/nextjs';
+import { sharedSentryConfig } from './sentry.shared';
 
 Sentry.init({
+  // Server-side DSN (not exposed to client)
   dsn: process.env.SENTRY_DSN,
 
-  // Environment for error categorization
-  environment: process.env.NODE_ENV,
-
-  // Sample rates - lower in production for cost optimization
-  tracesSampleRate: process.env.NODE_ENV === 'development' ? 1.0 : 0.1,
-
-  // Disable sending PII - we don't track user data
-  sendDefaultPii: false,
-
-  // Only send errors in production
-  enabled: process.env.NODE_ENV === 'production',
+  // Shared configuration
+  ...sharedSentryConfig,
 });

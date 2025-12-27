@@ -1,26 +1,25 @@
+/**
+ * Sentry configuration for client-side (browser) runtime.
+ *
+ * This file is automatically loaded by Next.js for client-side error tracking.
+ * Extends shared config with client-specific settings like error filtering.
+ */
+
 import * as Sentry from '@sentry/nextjs';
+import { sharedSentryConfig } from './sentry.shared';
 
 Sentry.init({
+  // Client-side DSN (must use NEXT_PUBLIC_ prefix to be available in browser)
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
 
-  // Environment for error categorization
-  environment: process.env.NODE_ENV,
+  // Shared configuration
+  ...sharedSentryConfig,
 
-  // Sample rates - lower in production for cost optimization
-  tracesSampleRate: process.env.NODE_ENV === 'development' ? 1.0 : 0.1,
-
-  // Disable default integrations we don't need for a simple todo app
-  // This keeps the bundle size minimal
+  // Client-specific: Disable replay features to minimize bundle size
   replaysSessionSampleRate: 0,
   replaysOnErrorSampleRate: 0,
 
-  // Disable sending PII - we don't track user data
-  sendDefaultPii: false,
-
-  // Only send errors in production
-  enabled: process.env.NODE_ENV === 'production',
-
-  // Filter out low-value errors
+  // Client-specific: Filter out low-value errors
   beforeSend(event) {
     // Don't send network errors that are likely user connectivity issues
     if (
