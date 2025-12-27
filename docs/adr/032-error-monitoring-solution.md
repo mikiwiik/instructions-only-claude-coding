@@ -24,7 +24,10 @@ This ADR evaluates error monitoring solutions and recommends one for implementat
 4. **Setup complexity** - Prefer low-friction integration
 5. **Privacy considerations** - Avoid excessive user data collection
 6. **Cost at scale** - Understand pricing if project grows
-7. **EU data residency** - Data must be stored in EU (Frankfurt) to match Vercel deployment region
+7. **EU data residency** - Per [Requirements §8](../product/requirements.md#8-security--compliance), all third-party
+   services must store data in EU
+8. **Service co-location** - Per [Requirements §11](../product/requirements.md#11-saas-development-best-practices),
+   services must be co-located in Frankfurt region to minimize latency
 
 ## Options Considered
 
@@ -167,6 +170,7 @@ await redis.ltrim('errors', 0, 999);
 5. **Industry standard**: Skills transfer to other projects
 6. **Vercel integration**: Works well with our deployment pipeline
 7. **EU data residency on free tier**: Frankfurt data center available at no extra cost
+8. **Service co-location**: Frankfurt region matches Vercel and Upstash, minimizing latency
 
 ### Why Not Others
 
@@ -212,14 +216,14 @@ await redis.ltrim('errors', 0, 999);
 
 ## Cost Analysis
 
-| Solution         | Monthly Cost | Annual Cost | EU Data Residency  | Notes                   |
-| ---------------- | ------------ | ----------- | ------------------ | ----------------------- |
-| Sentry (Free)    | $0           | $0          | ✅ Free            | 5K errors/month limit   |
-| Sentry (Team)    | $29          | $348        | ✅ Free            | If free tier exceeded   |
-| LogRocket (Free) | $0           | $0          | ❌ Enterprise only | 1K sessions/month limit |
-| LogRocket (Team) | $99          | $1,188      | ❌ Enterprise only | Much higher than Sentry |
-| Vercel Pro       | $20          | $240        | ✅ Follows region  | Required for Monitoring |
-| Custom Upstash   | $0           | $0          | ✅ Our control     | High dev effort         |
+| Solution         | Monthly | Annual | EU Residency    | Notes                 |
+| ---------------- | ------- | ------ | --------------- | --------------------- |
+| Sentry (Free)    | $0      | $0     | Yes (free)      | 5K errors/month       |
+| Sentry (Team)    | $29     | $348   | Yes (free)      | If free tier exceeded |
+| LogRocket (Free) | $0      | $0     | Enterprise only | 1K sessions/month     |
+| LogRocket (Team) | $99     | $1,188 | Enterprise only | Higher than Sentry    |
+| Vercel Pro       | $20     | $240   | Follows region  | Requires Pro plan     |
+| Custom Upstash   | $0      | $0     | Our control     | High dev effort       |
 
 **Recommendation**: Start with Sentry free tier. Monitor usage and upgrade only if limits are hit.
 
