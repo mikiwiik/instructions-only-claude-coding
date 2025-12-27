@@ -24,6 +24,7 @@ This ADR evaluates error monitoring solutions and recommends one for implementat
 4. **Setup complexity** - Prefer low-friction integration
 5. **Privacy considerations** - Avoid excessive user data collection
 6. **Cost at scale** - Understand pricing if project grows
+7. **EU data residency** - Data must be stored in EU (Frankfurt) to match Vercel deployment region
 
 ## Options Considered
 
@@ -48,6 +49,7 @@ This ADR evaluates error monitoring solutions and recommends one for implementat
 - Source maps support for readable stack traces
 - Release tracking and deployment integration
 - Active development and good documentation
+- **EU data residency available** - Frankfurt data center matches our Vercel region
 
 **Cons**:
 
@@ -80,6 +82,7 @@ This ADR evaluates error monitoring solutions and recommends one for implementat
 - Primary focus is session replay, not error tracking
 - Team plan at $99/month is expensive for this project's scope
 - More user data collection than needed (privacy concern)
+- EU data residency requires Enterprise plan
 
 **Cost at Scale**: Significantly higher than Sentry for similar functionality
 
@@ -163,10 +166,11 @@ await redis.ltrim('errors', 0, 999);
 4. **Low setup complexity**: Single package, environment variables, done
 5. **Industry standard**: Skills transfer to other projects
 6. **Vercel integration**: Works well with our deployment pipeline
+7. **EU data residency on free tier**: Frankfurt data center available at no extra cost
 
 ### Why Not Others
 
-- **LogRocket**: Overkill for our needs, expensive, session-based limits too restrictive
+- **LogRocket**: Overkill for our needs, expensive, session-based limits too restrictive, EU requires Enterprise
 - **Vercel Monitoring**: Requires paid plan upgrade, not focused on error tracking
 - **Custom Upstash**: Development effort not justified when Sentry free tier is sufficient
 
@@ -174,10 +178,11 @@ await redis.ltrim('errors', 0, 999);
 
 ### Phase 1: Basic Setup (Issue #392)
 
-1. Install `@sentry/nextjs` package
-2. Configure via `sentry.client.config.ts` and `sentry.server.config.ts`
-3. Add `SENTRY_DSN` environment variable to Vercel
-4. Verify error capture in Sentry dashboard
+1. Create Sentry organization with **EU region** (Frankfurt data center)
+2. Install `@sentry/nextjs` package
+3. Configure via `sentry.client.config.ts` and `sentry.server.config.ts`
+4. Add `SENTRY_DSN` environment variable to Vercel (EU DSN: `*.ingest.de.sentry.io`)
+5. Verify error capture in Sentry dashboard
 
 ### Phase 2: Custom Events (Issue #392)
 
@@ -207,14 +212,14 @@ await redis.ltrim('errors', 0, 999);
 
 ## Cost Analysis
 
-| Solution         | Monthly Cost | Annual Cost | Notes                        |
-| ---------------- | ------------ | ----------- | ---------------------------- |
-| Sentry (Free)    | $0           | $0          | 5K errors/month limit        |
-| Sentry (Team)    | $29          | $348        | If free tier exceeded        |
-| LogRocket (Free) | $0           | $0          | 1K sessions/month limit      |
-| LogRocket (Team) | $99          | $1,188      | Much higher than Sentry      |
-| Vercel Pro       | $20          | $240        | Required for Monitoring      |
-| Custom Upstash   | $0           | $0          | High dev effort, no features |
+| Solution         | Monthly Cost | Annual Cost | EU Data Residency  | Notes                   |
+| ---------------- | ------------ | ----------- | ------------------ | ----------------------- |
+| Sentry (Free)    | $0           | $0          | ✅ Free            | 5K errors/month limit   |
+| Sentry (Team)    | $29          | $348        | ✅ Free            | If free tier exceeded   |
+| LogRocket (Free) | $0           | $0          | ❌ Enterprise only | 1K sessions/month limit |
+| LogRocket (Team) | $99          | $1,188      | ❌ Enterprise only | Much higher than Sentry |
+| Vercel Pro       | $20          | $240        | ✅ Follows region  | Required for Monitoring |
+| Custom Upstash   | $0           | $0          | ✅ Our control     | High dev effort         |
 
 **Recommendation**: Start with Sentry free tier. Monitor usage and upgrade only if limits are hit.
 
@@ -242,6 +247,7 @@ await redis.ltrim('errors', 0, 999);
 
 - [Sentry Pricing](https://sentry.io/pricing/)
 - [Sentry Next.js SDK](https://docs.sentry.io/platforms/javascript/guides/nextjs/)
+- [Sentry Data Storage Location](https://docs.sentry.io/organization/data-storage-location/)
 - [LogRocket Pricing](https://logrocket.com/pricing)
 - [Vercel Observability](https://vercel.com/products/observability)
 - [Upstash Redis with Next.js](https://upstash.com/docs/redis/tutorials/nextjs_with_redis)
