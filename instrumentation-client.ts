@@ -39,3 +39,9 @@ Sentry.init({
 
 // Export router transition tracking for Next.js App Router
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
+
+// Expose Sentry globally for debugging in browser console
+// Access via: window.Sentry.getClient()?.getDsn()
+if (typeof window !== 'undefined') {
+  (window as unknown as { Sentry: typeof Sentry }).Sentry = Sentry;
+}
