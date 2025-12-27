@@ -9,6 +9,7 @@ export interface Todo {
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
+  // TODO: Make non-optional after #403 (Migration) is complete
   /** LexoRank string for ordering active todos (see ADR-033) */
   sortOrder?: string;
 }
