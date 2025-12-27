@@ -62,10 +62,10 @@ describe('Todo Types', () => {
       text: 'Test todo',
       createdAt: new Date(),
       updatedAt: new Date(),
-      sortOrder: '0|hzzzzz:',
+      sortOrder: '0|0i0000:',
     };
 
-    expect(todoWithSortOrder.sortOrder).toBe('0|hzzzzz:');
+    expect(todoWithSortOrder.sortOrder).toBe('0|0i0000:');
 
     const todoWithoutSortOrder: Todo = {
       id: '2',
@@ -256,11 +256,11 @@ describe('Zod Validation Schemas', () => {
         text: 'Valid todo',
         createdAt: new Date(),
         updatedAt: new Date(),
-        sortOrder: '0|hzzzzz:',
+        sortOrder: '0|0i0000:',
       };
 
       const result = TodoSchema.parse(todoWithSortOrder);
-      expect(result.sortOrder).toBe('0|hzzzzz:');
+      expect(result.sortOrder).toBe('0|0i0000:');
     });
 
     it('should accept Todo without sortOrder field (backward compatibility)', () => {
@@ -334,11 +334,11 @@ describe('Zod Validation Schemas', () => {
         authorId: TEST_UUIDS.USER_1,
         lastModifiedBy: TEST_UUIDS.USER_1,
         syncVersion: 1,
-        sortOrder: '0|hzzzzz:',
+        sortOrder: '0|0i0000:',
       };
 
       const result = SharedTodoSchema.parse(sharedTodoWithSortOrder);
-      expect(result.sortOrder).toBe('0|hzzzzz:');
+      expect(result.sortOrder).toBe('0|0i0000:');
     });
   });
 

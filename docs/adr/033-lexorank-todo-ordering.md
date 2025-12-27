@@ -41,11 +41,16 @@ export interface Todo {
 
 ### Algorithm
 
-LexoRank assigns lexicographically sortable strings that can be inserted between any two existing values:
+LexoRank assigns lexicographically sortable strings that can be inserted between any two existing values.
+The format is `bucket|rank:` (e.g., `0|0i0000:`).
 
-- Initial todo: `"0|hzzzzz:"` (middle of range)
-- Insert at top: `"0|hzzzzx:"` (before existing)
-- Insert between: `"0|hzzzzza:"` (between two items)
+The `lexorank` library provides:
+
+- `LexoRank.middle()` - Initial rank in middle of range (allows insertions before and after)
+- `LexoRank.min()` / `LexoRank.max()` - Boundary ranks
+- `rank1.between(rank2)` - Calculate rank between two existing ranks
+
+> **Note**: Exact rank values depend on library output. Examples below are illustrative.
 
 ### Sorting Semantics
 
@@ -61,7 +66,7 @@ New `'reorder-single'` sync operation sends only the moved todo:
 ```typescript
 {
   operation: 'reorder-single',
-  data: { id: 'todo-id', sortOrder: '0|hzzzzza:' }
+  data: { id: 'todo-id', sortOrder: '0|0i0000:' } // illustrative format
 }
 ```
 
