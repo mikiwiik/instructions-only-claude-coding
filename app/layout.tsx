@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: 'Todo App - Instructions Only Claude Coding',
   description:
     'A Next.js Todo application built using Test-Driven Development (TDD) with Claude Code assistance',
+  icons: {
+    icon: '/icon.svg',
+  },
 };
 
 export const viewport: Viewport = {
