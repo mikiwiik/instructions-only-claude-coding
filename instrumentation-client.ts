@@ -15,6 +15,10 @@ Sentry.init({
   // Shared configuration
   ...sharedSentryConfig,
 
+  // Enable debug mode to diagnose initialization issues
+  // This logs to browser console - disable after confirming Sentry works
+  debug: process.env.NODE_ENV === 'production',
+
   // Client-specific: Disable replay features to minimize bundle size
   replaysSessionSampleRate: 0,
   replaysOnErrorSampleRate: 0,
