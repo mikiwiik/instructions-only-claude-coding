@@ -274,9 +274,12 @@ complete and up-to-date list of all ADRs, see [Architecture Decision Records](..
 
 #### Monitoring and Observability
 
+- **Sentry Error Tracking**: Production error monitoring with EU data residency (Frankfurt)
+- **Custom Event Tracking**: Rate limit events and abuse detection via `app/lib/monitoring.ts`
 - **Vercel Analytics**: Basic traffic and performance metrics
 - **GitHub Integration**: Deployment status in commit history
-- **Error Tracking**: Built-in error monitoring
+
+See [ADR-032](../adr/032-error-monitoring-solution.md) for error monitoring solution details.
 
 ## Environments
 
