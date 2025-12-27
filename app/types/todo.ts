@@ -9,6 +9,8 @@ export interface Todo {
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
+  /** LexoRank string for ordering active todos (see ADR-033) */
+  sortOrder?: string;
 }
 
 export type TodoFilter =
@@ -194,6 +196,7 @@ export const TodoSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   deletedAt: z.date().optional(),
+  sortOrder: z.string().optional(),
 });
 
 /**
@@ -209,6 +212,7 @@ export const SharedTodoSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   deletedAt: z.date().optional(),
+  sortOrder: z.string().optional(),
   listId: UUIDSchema,
   authorId: UUIDSchema,
   lastModifiedBy: UUIDSchema,
