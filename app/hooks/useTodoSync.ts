@@ -98,11 +98,41 @@ const DEFAULT_DEBOUNCE_DELAY = 300;
 
 /**
  * Hook that provides a debounced sync function to prevent rapid-fire API calls.
+ * This is the first line of defense for backend protection (Epic #340).
+ *
  * Useful for operations like drag-and-drop reordering where many updates happen quickly.
  *
  * @param options.listId - The list ID to sync to (defaults to MAIN_LIST_ID)
  * @param options.delay - Debounce delay in ms (defaults to 300ms)
  * @param options.leading - If true, execute first call immediately (defaults to false)
+ *
+ * @returns Object with sync, flush, and cancel methods
+ *
+ * @example
+ * ```typescript
+ * const { sync, flush, cancel } = useDebouncedSync({
+ *   delay: 300,    // Debounce delay in ms (default: 300)
+ *   leading: true, // Execute first call immediately (optional)
+ * });
+ *
+ * sync('update', todoData);  // Debounced - batches rapid calls
+ * flush();                   // Execute pending call immediately
+ * cancel();                  // Discard pending call
+ * ```
+ *
+ * ## Behavior
+ *
+ * - **Trailing debounce** (default): Waits for `delay` ms of inactivity before executing
+ * - **Leading edge** (`leading: true`): First call executes immediately, subsequent rapid calls debounced
+ * - **Cleanup**: Pending calls cancelled on component unmount (no memory leaks)
+ *
+ * ## When to use
+ *
+ * | Scenario                          | Recommended Setting                           |
+ * | --------------------------------- | --------------------------------------------- |
+ * | Drag-and-drop reordering          | `leading: false` (batch all moves)            |
+ * | Single user actions (add, toggle) | `leading: true` (immediate feedback)          |
+ * | Rapid text editing                | `leading: false, delay: 500` (wait for pause) |
  */
 export function useDebouncedSync(
   options: DebouncedSyncOptions = {}

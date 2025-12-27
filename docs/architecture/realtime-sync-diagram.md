@@ -291,42 +291,10 @@ See [ADR-023: Conflict Resolution Strategy](../adr/023-conflict-resolution.md) f
 ### Client-Side
 
 - **EventSource**: Native browser API, efficient SSE handling
-- **Debounced Sync**: `useDebouncedSync` hook prevents rapid-fire API calls (see below)
+- **Debounced Sync**: [`useDebouncedSync`](../../app/hooks/useTodoSync.ts) hook prevents rapid-fire API calls
+  (first line of defense for backend protection, Epic #340)
 - **Sync Queue**: Batches operations with retry logic
 - **Memory**: Single EventSource per list, cleaned up on unmount
-
-#### Client-Side Throttling with useDebouncedSync
-
-The `useDebouncedSync` hook provides client-side throttling to prevent overwhelming the backend with rapid operations
-(e.g., drag-and-drop reordering, rapid clicks):
-
-```typescript
-const { sync, flush, cancel } = useDebouncedSync({
-  delay: 300, // Debounce delay in ms (default: 300)
-  leading: true, // Execute first call immediately (optional)
-});
-
-// Usage
-sync('update', todoData); // Debounced - batches rapid calls
-flush(); // Execute pending call immediately
-cancel(); // Discard pending call
-```
-
-**Behavior:**
-
-- **Trailing debounce** (default): Waits for `delay` ms of inactivity before executing
-- **Leading edge** (`leading: true`): First call executes immediately, subsequent rapid calls debounced
-- **Cleanup**: Pending calls cancelled on component unmount (no memory leaks)
-
-**When to use:**
-
-| Scenario                          | Recommended Setting                           |
-| --------------------------------- | --------------------------------------------- |
-| Drag-and-drop reordering          | `leading: false` (batch all moves)            |
-| Single user actions (add, toggle) | `leading: true` (immediate feedback)          |
-| Rapid text editing                | `leading: false, delay: 500` (wait for pause) |
-
-This is the first line of defense for backend protection (see Epic #340).
 
 ### Server-Side
 
