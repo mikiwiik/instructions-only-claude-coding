@@ -88,6 +88,7 @@ The Todo App follows a component-based architecture with clear separation of con
 - **Optimistic Updates**: Immediate UI feedback with automatic rollback on errors
 - **Sync Queue**: Retry logic with exponential backoff for reliability
 - **Conflict Resolution**: Last-write-wins strategy using server timestamps
+- **Client-Side Throttling**: `useDebouncedSync` hook prevents rapid-fire API calls
 
 For detailed architecture, see [Real-Time Sync Architecture Diagram](realtime-sync-diagram.md).
 
