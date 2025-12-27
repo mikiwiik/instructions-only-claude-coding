@@ -75,36 +75,31 @@ After the project is created:
    - Environment: Select **All** (Production, Preview, Development)
    - Click **"Save"**
 
-   **Optional Variables (for source map uploads in CI):**
-   - `SENTRY_ORG`: Your Sentry organization slug
-   - `SENTRY_PROJECT`: Your Sentry project slug
-   - `SENTRY_AUTH_TOKEN`: Auth token from Sentry (Settings → Auth Tokens)
+   **Optional Variables (for source map uploads - improves stack traces):**
+   - `SENTRY_ORG`: Your organization slug from the URL
+   - `SENTRY_PROJECT`: Your project slug
+   - `SENTRY_AUTH_TOKEN`: Create at Settings → Developer Settings → Organization Tokens
+     - Click "Create New Token"
+     - Scope: `org:ci` (default)
+     - Copy the token value (shown only once)
 
 ### 5. Set Up Local Development
 
-For local development, create or update `.env.local`:
-
-1. In your project root directory:
+1. Copy the example environment file (see [.env.example](../../.env.example)):
 
    ```bash
-   touch .env.local
+   cp .env.example .env.local
    ```
 
-2. Add the environment variables:
+2. Fill in your Sentry DSN values in `.env.local`
 
-   ```bash
-   # Sentry Error Monitoring (EU region)
-   SENTRY_DSN=https://your-key@o123456.ingest.de.sentry.io/1234567
-   NEXT_PUBLIC_SENTRY_DSN=https://your-key@o123456.ingest.de.sentry.io/1234567
-   ```
-
-3. **Important**: `.env.local` is in `.gitignore` - never commit it
-
-4. Restart your development server:
+3. Restart your development server:
 
    ```bash
    npm run dev
    ```
+
+**Note**: `.env.local` is in `.gitignore` - never commit it
 
 ### 6. Verify Error Capture
 
@@ -120,21 +115,24 @@ enabled: true,
 
 #### Production Verification
 
-1. Deploy your changes to Vercel
-2. Open the production app
-3. Trigger a test error (e.g., add a console error in a component)
-4. Go to Sentry Dashboard → Issues
-5. Verify the error appears with:
+**Important**: `console.error()` does NOT send to Sentry. Only uncaught exceptions are captured.
+
+To test Sentry in production:
+
+1. Deploy to Vercel (or use a Preview deployment)
+2. Open browser DevTools console on your deployed app
+3. Trigger a test error by running:
+
+   ```javascript
+   // This sends a test error to Sentry
+   throw new Error('Sentry test error');
+   ```
+
+4. Go to Sentry Dashboard → **Issues**
+5. Verify the error appears (may take 1-2 minutes) with:
    - Stack trace
-   - Environment tag
+   - Environment: `production`
    - Browser/device info
-
-#### Sentry Dashboard Verification
-
-1. Go to [sentry.io](https://sentry.io) → Your organization
-2. Click **"Issues"** in the left sidebar
-3. You should see captured errors with details
-4. Check **"Performance"** for transaction traces
 
 ### 7. Deploy to Production
 
