@@ -153,14 +153,15 @@ export class TodoPage {
    * Get the text content of all todo items in order
    */
   async getTodoTexts(): Promise<string[]> {
-    const items = await this.page.getByRole('listitem').all();
+    // Use todoList to only get actual todo items, not gesture hints
+    const items = await this.todoList.getByRole('listitem').all();
     const texts: string[] = [];
     for (const item of items) {
-      const text = await item.textContent();
+      // Get just the paragraph text, not the button labels
+      const paragraph = item.locator('p').first();
+      const text = await paragraph.textContent();
       if (text) {
-        // Extract just the todo text (first line before timestamps)
-        const match = text.match(/^([^\n]+)/);
-        texts.push(match ? match[1].trim() : text.trim());
+        texts.push(text.trim());
       }
     }
     return texts;
