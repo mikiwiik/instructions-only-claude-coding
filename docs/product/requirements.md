@@ -131,13 +131,15 @@ Enterprise-grade code quality and testing practices.
 - Comprehensive quality standards framework (planned)
 - Automated performance monitoring with Lighthouse CI (planned)
 
-### 8. Security
+### 8. Security & Compliance
 
 **Status**: In Progress
 
-Comprehensive security practices protecting the application and user data.
+Comprehensive security practices and regulatory compliance protecting the application and user data.
 
 **Key Capabilities**:
+
+Security:
 
 - Dependency vulnerability scanning via Dependabot ✓
 - CodeQL static analysis in CI/CD ✓
@@ -147,6 +149,11 @@ Comprehensive security practices protecting the application and user data.
 - Comprehensive security documentation (planned)
 - Security vulnerability reporting process (planned)
 - Unified SARIF security report aggregation (planned)
+
+Compliance:
+
+- EU data residency for all third-party services (Frankfurt region) ✓
+- Error monitoring with EU data storage (Sentry) ✓
 
 ### 9. Authentication
 
