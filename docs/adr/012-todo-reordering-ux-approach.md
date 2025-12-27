@@ -3,10 +3,12 @@
 ## Status
 
 Partially Superseded by ADR-021 (UX approach still valid, technical implementation updated)
+Amended by ADR-033 (ordering data model updated to LexoRank)
 
 > **Note**: The UX approach, accessibility requirements, and interaction patterns defined in this ADR
 > remain active and unchanged. Only the technical implementation (library choice) has been superseded
-> by ADR-021 to enable React 19 compatibility.
+> by ADR-021 to enable React 19 compatibility. The ordering data model has been updated by ADR-033
+> to use LexoRank for efficient single-todo sync operations.
 
 ## Context
 
