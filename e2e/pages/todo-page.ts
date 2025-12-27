@@ -41,7 +41,8 @@ export class TodoPage {
   }
 
   async getTodoItems() {
-    return this.page.getByRole('listitem');
+    // Use the todoList container to only get actual todo items
+    return this.todoList.getByRole('listitem');
   }
 
   async getTodoByText(text: string) {
@@ -111,6 +112,58 @@ export class TodoPage {
 
   async clearLocalStorage() {
     await this.page.evaluate(() => localStorage.clear());
+  }
+
+  /**
+   * Move a todo up in the list
+   * @param text - The text of the todo to move
+   */
+  async moveTodoUp(text: string) {
+    const todoItem = this.page.getByRole('listitem').filter({ hasText: text });
+    const moveUpButton = todoItem.getByRole('button', {
+      name: /move todo up/i,
+    });
+    await moveUpButton.click();
+  }
+
+  /**
+   * Move a todo down in the list
+   * @param text - The text of the todo to move
+   */
+  async moveTodoDown(text: string) {
+    const todoItem = this.page.getByRole('listitem').filter({ hasText: text });
+    const moveDownButton = todoItem.getByRole('button', {
+      name: /move todo down/i,
+    });
+    await moveDownButton.click();
+  }
+
+  /**
+   * Add a todo WITHOUT waiting for network - for testing race conditions
+   * @param text - The todo text to add
+   */
+  async addTodoFast(text: string) {
+    await this.todoInput.fill(text);
+    await this.todoInput.press('Enter');
+    // Only wait for the element to appear in DOM, not for network
+    await this.page.getByRole('listitem').filter({ hasText: text }).waitFor();
+  }
+
+  /**
+   * Get the text content of all todo items in order
+   */
+  async getTodoTexts(): Promise<string[]> {
+    const items = await this.page.getByRole('listitem').all();
+    const texts: string[] = [];
+    for (const item of items) {
+      const text = await item.textContent();
+      if (text) {
+        // Extract just the todo text (first line before timestamps)
+        const match = text.match(/^([^\n]+)/);
+        texts.push(match ? match[1].trim() : text.trim());
+      }
+    }
+    return texts;
   }
 
   /**
