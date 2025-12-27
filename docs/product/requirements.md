@@ -197,7 +197,8 @@ implementation is performed by human developers or AI agents.
 - Semantic versioning and changelog maintenance (planned)
 - Infrastructure as code and reproducible deployments ✓
 - Deployed to scalable, cost-effective infrastructure (Vercel + Upstash) ✓
-- Frontend error detection and monitoring (planned)
+- Service co-location in same region (Frankfurt) to minimize latency ✓
+- Frontend error detection and monitoring via Sentry (planned)
 - Monitoring, logging, and observability foundations (planned)
 
 ### 12. Self-Contained Knowledge Repository
