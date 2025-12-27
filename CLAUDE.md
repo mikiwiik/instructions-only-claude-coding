@@ -31,7 +31,8 @@
      for amendment pattern example
 9. **🚨 DOCUMENT FOR HUMANS**: Always update README.md and relevant markdown files so humans can understand all
    changes and project evolution - this includes updating user flow diagrams ([docs/diagrams/user-flows.md](docs/diagrams/user-flows.md))
-   when interaction patterns change
+   when interaction patterns change and architecture docs ([docs/architecture/](docs/architecture/)) when adding new
+   hooks, components, or system behaviors
 10. **🚨 DOCUMENTATION QUALITY**: Keep all documentation comprehensive, up-to-date, and concise - eliminate outdated
     or verbose content immediately
 11. **🚨 PINNED DEPENDENCIES**: All dependencies must use exact versions without range operators (`^`, `~`) for maximum
