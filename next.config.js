@@ -10,33 +10,31 @@ const nextConfig = {
   // ESLint is run separately via npm run lint
 };
 
-module.exports = withSentryConfig(nextConfig, {
-  // Sentry organization and project (configured via environment variables)
-  org: process.env.SENTRY_ORG,
-  project: process.env.SENTRY_PROJECT,
-
+// Sentry config options - only include source map upload settings if credentials are available
+const sentryOptions = {
   // Suppress logs during local development
   silent: !process.env.CI,
 
-  // Upload source maps for readable stack traces
-  // Auth token is required only in CI for source map upload
-  authToken: process.env.SENTRY_AUTH_TOKEN,
-
-  // Upload larger set of source maps for better stack traces
-  widenClientFileUpload: true,
-
   // Route Sentry requests through a tunnel to avoid ad blockers
-  // This creates a /monitoring endpoint that proxies to Sentry
   tunnelRoute: '/monitoring',
-
-  // Disable Sentry SDK in test and E2E environments
-  disableSDKInProductionForTesting:
-    process.env.NODE_ENV === 'test' ||
-    process.env.USE_IN_MEMORY_STORE === 'true',
 
   // Hide source maps from users
   hideSourceMaps: true,
 
   // Disable telemetry
   telemetry: false,
-});
+};
+
+// Only add source map upload config if all required env vars are present
+if (
+  process.env.SENTRY_ORG &&
+  process.env.SENTRY_PROJECT &&
+  process.env.SENTRY_AUTH_TOKEN
+) {
+  sentryOptions.org = process.env.SENTRY_ORG;
+  sentryOptions.project = process.env.SENTRY_PROJECT;
+  sentryOptions.authToken = process.env.SENTRY_AUTH_TOKEN;
+  sentryOptions.widenClientFileUpload = true;
+}
+
+module.exports = withSentryConfig(nextConfig, sentryOptions);
