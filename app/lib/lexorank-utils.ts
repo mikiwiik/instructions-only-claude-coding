@@ -15,7 +15,7 @@ export function generateInitialSortOrder(items: Todo[]): string {
     return LexoRank.middle().toString();
   }
 
-  const sortedByRank = activeWithRank.toSorted((a, b) =>
+  const sortedByRank = [...activeWithRank].sort((a, b) =>
     a.sortOrder!.localeCompare(b.sortOrder!)
   );
 
