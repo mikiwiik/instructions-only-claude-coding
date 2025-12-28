@@ -24,6 +24,7 @@ export default function HomePage() {
     moveUp,
     moveDown,
     setFilter,
+    rateLimitState,
   } = useTodos();
 
   // Calculate counts for filter display
@@ -60,6 +61,18 @@ export default function HomePage() {
           <span className='font-medium'>Beta:</span> Currently all users share
           one list. Personal lists coming soon.
         </div>
+
+        {/* Rate limit warning - shown when API rate limit exceeded */}
+        {rateLimitState.isRateLimited && (
+          <div
+            className='mb-4 md:mb-6 bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800'
+            role='alert'
+            aria-live='polite'
+          >
+            <span className='font-medium'>Slow down:</span>{' '}
+            {rateLimitState.message}
+          </div>
+        )}
 
         <main
           className='bg-card border-x-0 md:border-x border-y md:rounded-lg p-0 md:p-6 shadow-sm fade-in'
