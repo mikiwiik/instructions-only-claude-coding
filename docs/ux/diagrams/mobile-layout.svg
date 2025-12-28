@@ -71,4 +71,9 @@
   <!-- GestureHint (fixed at bottom of screen) -->
   <rect x="30" y="690" width="340" height="30" fill="#fff9c4" stroke="#f57f17" stroke-width="2"/>
   <text x="200" y="708" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#f57f17">GestureHint (fixed bottom)</text>
+
+  <!-- MarkdownHelpDrawer (overlay - shown when editing) -->
+  <rect x="50" y="540" width="300" height="60" fill="rgba(255,255,255,0.95)" stroke="#00bcd4" stroke-width="3" rx="8"/>
+  <text x="200" y="565" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#00838f">MarkdownHelpDrawer (Overlay)</text>
+  <text x="200" y="585" text-anchor="middle" font-family="monospace" font-size="9" fill="#666">Fixed bottom, 45vh height, when editing</text>
 </svg>
