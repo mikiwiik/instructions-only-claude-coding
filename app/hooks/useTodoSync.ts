@@ -5,6 +5,7 @@
 
 import { useCallback, useRef, useEffect, useState } from 'react';
 import { Todo, TodoState } from '../types/todo';
+import { RATE_LIMIT_DEFAULTS, SYNC_CONFIG } from '../lib/config';
 
 /**
  * Error class for rate limit (429) responses.
@@ -122,19 +123,23 @@ export function useSyncToBackend(
         // Handle rate limit response
         if (response.status === 429) {
           const retryAfter = parseInt(
-            response.headers.get('Retry-After') || '30',
+            response.headers.get('Retry-After') ||
+              String(RATE_LIMIT_DEFAULTS.RETRY_AFTER_SECONDS),
             10
           );
           const limit = parseInt(
-            response.headers.get('X-RateLimit-Limit') || '30',
+            response.headers.get('X-RateLimit-Limit') ||
+              String(RATE_LIMIT_DEFAULTS.LIMIT),
             10
           );
           const remaining = parseInt(
-            response.headers.get('X-RateLimit-Remaining') || '0',
+            response.headers.get('X-RateLimit-Remaining') ||
+              String(RATE_LIMIT_DEFAULTS.REMAINING),
             10
           );
           const reset = parseInt(
-            response.headers.get('X-RateLimit-Reset') || '0',
+            response.headers.get('X-RateLimit-Reset') ||
+              String(RATE_LIMIT_DEFAULTS.RESET),
             10
           );
 
@@ -184,7 +189,7 @@ export interface DebouncedSyncResult {
   clearRateLimitState: () => void;
 }
 
-const DEFAULT_DEBOUNCE_DELAY = 300;
+const DEFAULT_DEBOUNCE_DELAY = SYNC_CONFIG.DEFAULT_DEBOUNCE_DELAY_MS;
 
 /**
  * Hook that provides a debounced sync function to prevent rapid-fire API calls.
