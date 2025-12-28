@@ -35,8 +35,11 @@
    hooks, components, or system behaviors
 10. **🚨 DOCUMENTATION QUALITY**: Keep all documentation comprehensive, up-to-date, and concise - eliminate outdated
     or verbose content immediately
-11. **🚨 PINNED DEPENDENCIES**: All dependencies must use exact versions without range operators (`^`, `~`) for maximum
-    security control, reproducible builds, and clear audit trails - updates via Dependabot PRs only
+11. **🚨 PINNED DEPENDENCIES**: All dependencies must use exact versions - see [ADR-035](docs/adr/035-pinned-dependency-policy.md)
+    - **npm packages**: No `^` or `~` prefixes (e.g., `"react": "19.2.3"` not `"^19.2.3"`)
+    - **GitHub Actions**: SHA-pinned with version comment (e.g., `actions/checkout@abc123 # v4`)
+    - **Enforcement**: Pre-commit hooks and CI validation block violations
+    - **Updates**: Via Dependabot PRs only (manages both npm and github-actions ecosystems)
 12. **🚨 PR APPROVAL PROTOCOL**: After creating PR, enable automerge with `--rebase` (mandatory per Principle #7), then
     report status to user - NEVER use `--admin`, `--force`, or bypass flags without explicit permission - task completion
     means PR merged and verified with `gh issue view #X`, NOT just PR created (see [PR Workflow](docs/core/workflows.md#pull-request-workflow))
