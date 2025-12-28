@@ -85,3 +85,27 @@ updates:
     # Reviewers for dependency PRs (optional)
     # reviewers:
     #   - "username"
+
+  # GitHub Actions ecosystem for SHA-pinned action updates
+  # Aligns with ADR-035 pinned dependency policy
+  - package-ecosystem: "github-actions"
+    directory: "/"
+
+    # Same weekly schedule as npm updates
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+
+    # Limit open PRs to prevent review queue overflow
+    open-pull-requests-limit: 5
+
+    # Commit message configuration (conventional commits)
+    commit-message:
+      prefix: "build(deps)"
+
+    # Labels for dependency PRs
+    labels:
+      - "dependencies"
+      - "category-infrastructure"
