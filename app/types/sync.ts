@@ -2,7 +2,12 @@
  * Real-time synchronization types for shared todo lists
  */
 
-export type SyncOperation = 'create' | 'update' | 'delete' | 'reorder';
+export type SyncOperation =
+  | 'create'
+  | 'update'
+  | 'delete'
+  | 'reorder'
+  | 'reorder-single';
 
 export type SyncStatus = 'pending' | 'syncing' | 'synced' | 'error';
 

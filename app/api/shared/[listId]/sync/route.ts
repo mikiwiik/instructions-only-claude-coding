@@ -63,6 +63,15 @@ export async function POST(
         break;
       }
 
+      case 'reorder-single': {
+        const updatedTodo = data as Todo;
+        const index = updatedTodos.findIndex((t) => t.id === updatedTodo.id);
+        if (index !== -1) {
+          updatedTodos[index] = updatedTodo;
+        }
+        break;
+      }
+
       default:
         return NextResponse.json(
           { error: 'Invalid operation' },

@@ -295,6 +295,167 @@ describe('Sync API Route', () => {
       });
     });
 
+    describe('reorder-single operation', () => {
+      it('should update a single todo sortOrder', async () => {
+        const todosWithSortOrder: Todo[] = [
+          { ...mockTodos[0], sortOrder: '0|0i0000:' },
+          { ...mockTodos[1], sortOrder: '0|0i0001:' },
+        ];
+        const listWithSortOrder: SharedTodoList = {
+          ...mockList,
+          todos: todosWithSortOrder,
+        };
+        mockedKVStore.getList.mockResolvedValue(listWithSortOrder);
+        mockedKVStore.updateTodos.mockResolvedValue(undefined);
+
+        const updatedTodo: Todo = {
+          ...todosWithSortOrder[0],
+          sortOrder: '0|0i0002:',
+        };
+
+        const request = createRequest(
+          'http://localhost/api/shared/list-1/sync',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              operation: 'reorder-single',
+              data: updatedTodo,
+            }),
+          }
+        );
+
+        const response = await POST(request as never, {
+          params: Promise.resolve({ listId: 'list-1' }),
+        });
+        const data = await response.json();
+
+        expect(response.status).toBe(200);
+        expect(data.success).toBe(true);
+        expect(data.todos).toHaveLength(2);
+        expect(mockedKVStore.updateTodos).toHaveBeenCalledWith(
+          'list-1',
+          expect.arrayContaining([
+            expect.objectContaining({ id: 'todo-1', sortOrder: '0|0i0002:' }),
+          ])
+        );
+      });
+
+      it('should be a no-op when todo ID does not exist', async () => {
+        mockedKVStore.getList.mockResolvedValue(mockList);
+        mockedKVStore.updateTodos.mockResolvedValue(undefined);
+
+        const nonExistentTodo: Todo = {
+          id: 'non-existent',
+          text: 'Does not exist',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          sortOrder: '0|0i0000:',
+        };
+
+        const request = createRequest(
+          'http://localhost/api/shared/list-1/sync',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              operation: 'reorder-single',
+              data: nonExistentTodo,
+            }),
+          }
+        );
+
+        const response = await POST(request as never, {
+          params: Promise.resolve({ listId: 'list-1' }),
+        });
+        const data = await response.json();
+
+        expect(response.status).toBe(200);
+        expect(data.success).toBe(true);
+        // Original todos should be unchanged
+        expect(data.todos).toHaveLength(2);
+        expect(data.todos[0].id).toBe('todo-1');
+        expect(data.todos[1].id).toBe('todo-2');
+      });
+
+      it('should preserve other todos when updating one', async () => {
+        const todosWithSortOrder: Todo[] = [
+          { ...mockTodos[0], sortOrder: '0|0i0000:' },
+          { ...mockTodos[1], sortOrder: '0|0i0001:' },
+        ];
+        const listWithSortOrder: SharedTodoList = {
+          ...mockList,
+          todos: todosWithSortOrder,
+        };
+        mockedKVStore.getList.mockResolvedValue(listWithSortOrder);
+        mockedKVStore.updateTodos.mockResolvedValue(undefined);
+
+        const updatedTodo: Todo = {
+          ...todosWithSortOrder[0],
+          sortOrder: '0|0i0002:',
+        };
+
+        const request = createRequest(
+          'http://localhost/api/shared/list-1/sync',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              operation: 'reorder-single',
+              data: updatedTodo,
+            }),
+          }
+        );
+
+        const response = await POST(request as never, {
+          params: Promise.resolve({ listId: 'list-1' }),
+        });
+        const data = await response.json();
+
+        // Verify second todo is preserved unchanged
+        const secondTodo = data.todos.find((t: Todo) => t.id === 'todo-2');
+        expect(secondTodo).toBeDefined();
+        expect(secondTodo.sortOrder).toBe('0|0i0001:');
+        expect(secondTodo.text).toBe('Test todo 2');
+      });
+
+      it('should return updated todos array in response', async () => {
+        const todosWithSortOrder: Todo[] = [
+          { ...mockTodos[0], sortOrder: '0|0i0000:' },
+          { ...mockTodos[1], sortOrder: '0|0i0001:' },
+        ];
+        const listWithSortOrder: SharedTodoList = {
+          ...mockList,
+          todos: todosWithSortOrder,
+        };
+        mockedKVStore.getList.mockResolvedValue(listWithSortOrder);
+        mockedKVStore.updateTodos.mockResolvedValue(undefined);
+
+        const updatedTodo: Todo = {
+          ...todosWithSortOrder[0],
+          sortOrder: '0|0i0002:',
+        };
+
+        const request = createRequest(
+          'http://localhost/api/shared/list-1/sync',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              operation: 'reorder-single',
+              data: updatedTodo,
+            }),
+          }
+        );
+
+        const response = await POST(request as never, {
+          params: Promise.resolve({ listId: 'list-1' }),
+        });
+        const data = await response.json();
+
+        expect(data).toHaveProperty('success', true);
+        expect(data).toHaveProperty('todos');
+        expect(data).toHaveProperty('timestamp');
+        expect(Array.isArray(data.todos)).toBe(true);
+      });
+    });
+
     describe('error handling', () => {
       it('should return 404 for non-existent list on non-create operations', async () => {
         mockedKVStore.getList.mockResolvedValue(null);
