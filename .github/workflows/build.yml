@@ -11,6 +11,20 @@ permissions:
   pull-requests: write
 
 jobs:
+  validate-deps:
+    name: Validate Pinned Dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Validate npm pinned versions
+        run: ./scripts/validate-pinned-deps.sh
+
+      - name: Validate GitHub Actions versions
+        run: ./scripts/validate-action-versions.sh
+
   commitlint:
     name: Commit Lint
     runs-on: ubuntu-latest
@@ -28,6 +42,7 @@ jobs:
           configFile: commitlint.config.mjs
 
   build:
+    needs: validate-deps
     runs-on: ${{ matrix.os }}
 
     strategy:
