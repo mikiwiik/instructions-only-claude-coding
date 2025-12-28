@@ -13,11 +13,14 @@ import { Redis } from '@upstash/redis';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import * as Sentry from '@sentry/nextjs';
+import { RATE_LIMIT_CONFIG } from './app/lib/config';
 
 /**
- * Rate limiter configuration.
+ * Rate limiter instance.
+ *
+ * Configuration values from RATE_LIMIT_CONFIG:
  * - Sliding window algorithm for smooth rate limiting
- * - 30 requests per 30 seconds per IP
+ * - MAX_REQUESTS per WINDOW_DURATION per IP
  * - Analytics enabled for Upstash dashboard visibility
  *
  * Note: In test environments (USE_IN_MEMORY_STORE=true), this will fail
@@ -33,9 +36,12 @@ if (
 ) {
   ratelimit = new Ratelimit({
     redis: Redis.fromEnv(),
-    limiter: Ratelimit.slidingWindow(30, '30 s'),
+    limiter: Ratelimit.slidingWindow(
+      RATE_LIMIT_CONFIG.MAX_REQUESTS,
+      RATE_LIMIT_CONFIG.WINDOW_DURATION
+    ),
     analytics: true,
-    prefix: 'ratelimit:api',
+    prefix: RATE_LIMIT_CONFIG.KEY_PREFIX,
   });
 }
 
