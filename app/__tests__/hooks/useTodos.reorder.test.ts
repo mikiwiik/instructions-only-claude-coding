@@ -100,7 +100,7 @@ describe('useTodos hook - Reordering functionality', () => {
       expect(result.current.todos[2].text).toBe('Second todo');
     });
 
-    it('should sync reordered todos to backend', async () => {
+    it('should sync single todo with reorder-single operation (LexoRank)', async () => {
       const { result } = renderHook(() => useTodos());
 
       await waitFor(() => {
@@ -118,15 +118,53 @@ describe('useTodos hook - Reordering functionality', () => {
         await result.current.reorderTodos(0, 1);
       });
 
-      // Verify fetch was called with POST for reorder
+      // Verify fetch was called with POST for reorder-single
       const postCalls = mockFetch.mock.calls.filter(
         (call: [string, FetchOptions?]) => call[1]?.method === 'POST'
       );
-      expect(postCalls.length).toBeGreaterThan(2); // create x2 + reorder
+      expect(postCalls.length).toBeGreaterThan(2); // create x2 + reorder-single
 
       const lastPostCall = postCalls[postCalls.length - 1];
       const body = JSON.parse(lastPostCall[1]?.body as string);
-      expect(body.operation).toBe('reorder');
+      expect(body.operation).toBe('reorder-single');
+      // Should send single todo with sortOrder, not array
+      expect(body.data).toHaveProperty('id');
+      expect(body.data).toHaveProperty('sortOrder');
+      expect(Array.isArray(body.data)).toBe(false);
+    });
+
+    it('should calculate sortOrder correctly when moving to end', async () => {
+      const { result } = renderHook(() => useTodos());
+
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      // Add three todos (they'll have sortOrders assigned)
+      await act(async () => {
+        await result.current.addTodo('First todo');
+        await result.current.addTodo('Second todo');
+        await result.current.addTodo('Third todo');
+      });
+
+      // Move first item to last position
+      await act(async () => {
+        await result.current.reorderTodos(0, 2);
+      });
+
+      // Verify todos are sorted by sortOrder
+      const todos = result.current.todos;
+      expect(todos[0].sortOrder).toBeDefined();
+      expect(todos[1].sortOrder).toBeDefined();
+      expect(todos[2].sortOrder).toBeDefined();
+
+      // sortOrders should be in ascending order after reorder
+      expect(
+        todos[0].sortOrder!.localeCompare(todos[1].sortOrder!)
+      ).toBeLessThan(0);
+      expect(
+        todos[1].sortOrder!.localeCompare(todos[2].sortOrder!)
+      ).toBeLessThan(0);
     });
 
     it('should handle reordering with same source and destination index', async () => {
@@ -242,6 +280,80 @@ describe('useTodos hook - Reordering functionality', () => {
       expect(movedTodo).toBeDefined();
       expect(!!movedTodo!.completedAt).toBe(true);
       expect(movedTodo!.text).toBe('Second todo');
+    });
+  });
+
+  describe('active-only filtering', () => {
+    it('should only reorder among active todos', async () => {
+      const { result } = renderHook(() => useTodos());
+
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      // Add three todos
+      await act(async () => {
+        await result.current.addTodo('First todo');
+        await result.current.addTodo('Second todo');
+        await result.current.addTodo('Third todo');
+      });
+
+      // Complete the middle todo
+      const middleTodoId = result.current.todos[1].id;
+      await act(async () => {
+        await result.current.toggleTodo(middleTodoId);
+      });
+
+      // Get active todos count
+      const activeTodos = result.current.allTodos.filter(
+        (t) => !t.completedAt && !t.deletedAt
+      );
+      expect(activeTodos).toHaveLength(2);
+
+      // Reorder within active todos (index 0 to 1)
+      await act(async () => {
+        await result.current.reorderTodos(0, 1);
+      });
+
+      // Verify the completed todo is not affected by reorder indices
+      const completedTodo = result.current.allTodos.find(
+        (t) => t.id === middleTodoId
+      );
+      expect(completedTodo?.completedAt).toBeDefined();
+    });
+
+    it('should filter to active todos in moveUp', async () => {
+      const { result } = renderHook(() => useTodos());
+
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      // Add three todos
+      await act(async () => {
+        await result.current.addTodo('First todo');
+        await result.current.addTodo('Second todo');
+        await result.current.addTodo('Third todo');
+      });
+
+      // Complete the first todo (index 0)
+      const firstTodoId = result.current.todos[0].id;
+      await act(async () => {
+        await result.current.toggleTodo(firstTodoId);
+      });
+
+      // Now active todos are: Second, First (from index perspective)
+      // moveUp on what's now visually second active should work
+      const activeTodos = result.current.todos; // filtered by default
+      if (activeTodos.length >= 2) {
+        const secondActiveTodoId = activeTodos[1].id;
+        await act(async () => {
+          await result.current.moveUp(secondActiveTodoId);
+        });
+
+        // Verify the active todo moved up within active list
+        expect(result.current.todos[0].id).toBe(secondActiveTodoId);
+      }
     });
   });
 
