@@ -1,41 +1,21 @@
-/**
- * LexoRank Utility Functions
- *
- * Provides helper functions for generating and managing LexoRank-based
- * sort orders for todo items. See ADR-033 for design decisions.
- *
- * @see docs/adr/033-lexorank-todo-ordering.md
- */
-
 import { LexoRank } from 'lexorank';
 import type { Todo } from '../types/todo';
 
-/**
- * Check if a todo is active (not completed or deleted)
- */
-function isActiveTodo(todo: Todo): boolean {
-  return !todo.completedAt && !todo.deletedAt;
+function isActiveTodo(item: Todo): boolean {
+  return !item.completedAt && !item.deletedAt;
 }
 
-/**
- * Generate a sortOrder for a new todo that will appear at the top of the list.
- *
- * @param todos - Current list of todos (used to find the first active todo's rank)
- * @returns LexoRank string that sorts before all existing active todos
- */
-export function generateInitialSortOrder(todos: Todo[]): string {
-  // Filter to active todos with valid sortOrder
-  const activeTodosWithRank = todos.filter(
-    (todo) => isActiveTodo(todo) && todo.sortOrder
+/** Generate sortOrder for a new item at top of list. */
+export function generateInitialSortOrder(items: Todo[]): string {
+  const activeWithRank = items.filter(
+    (item) => isActiveTodo(item) && item.sortOrder
   );
 
-  if (activeTodosWithRank.length === 0) {
-    // No existing ranked todos, return middle rank
+  if (activeWithRank.length === 0) {
     return LexoRank.middle().toString();
   }
 
-  // Find the minimum (first) sortOrder among active todos
-  const sortedByRank = activeTodosWithRank.sort((a, b) =>
+  const sortedByRank = activeWithRank.sort((a, b) =>
     a.sortOrder!.localeCompare(b.sortOrder!)
   );
 
@@ -43,13 +23,7 @@ export function generateInitialSortOrder(todos: Todo[]): string {
   return firstRank.genPrev().toString();
 }
 
-/**
- * Generate a sortOrder between two existing ranks.
- *
- * @param beforeRank - The rank to insert after (undefined = insert at start)
- * @param afterRank - The rank to insert before (undefined = insert at end)
- * @returns LexoRank string between the two ranks
- */
+/** Generate sortOrder between two existing ranks. */
 export function generateBetweenSortOrder(
   beforeRank: string | undefined,
   afterRank: string | undefined
@@ -77,39 +51,29 @@ export function generateBetweenSortOrder(
   return before.between(after).toString();
 }
 
-/**
- * Assign sortOrder to todos that don't have one (migration utility).
- * Only assigns to active todos. Completed/deleted todos don't need sortOrder.
- *
- * @param todos - Array of todos, some may lack sortOrder
- * @returns New array with sortOrder assigned to active todos that lacked it
- */
-export function assignMissingSortOrders(todos: Todo[]): Todo[] {
-  if (todos.length === 0) {
+/** Assign sortOrder to items lacking one (migration utility). */
+export function assignMissingSortOrders(items: Todo[]): Todo[] {
+  if (items.length === 0) {
     return [];
   }
 
-  // Find max existing rank to start after it
-  const existingRanks = todos
-    .filter((todo) => isActiveTodo(todo) && todo.sortOrder)
-    .map((todo) => LexoRank.parse(todo.sortOrder!));
+  const existingRanks = items
+    .filter((item) => isActiveTodo(item) && item.sortOrder)
+    .map((item) => LexoRank.parse(item.sortOrder!));
 
-  // Start after the max existing rank, or from middle if none exist
   let currentRank =
     existingRanks.length > 0
       ? existingRanks.reduce((max, rank) =>
           rank.compareTo(max) > 0 ? rank : max
         )
-      : LexoRank.middle().genPrev(); // Start before middle so first gets middle
+      : LexoRank.middle().genPrev();
 
-  return todos.map((todo) => {
-    // Skip if already has sortOrder or not active
-    if (todo.sortOrder || !isActiveTodo(todo)) {
-      return todo;
+  return items.map((item) => {
+    if (item.sortOrder || !isActiveTodo(item)) {
+      return item;
     }
 
-    // Advance and assign
     currentRank = currentRank.genNext();
-    return { ...todo, sortOrder: currentRank.toString() };
+    return { ...item, sortOrder: currentRank.toString() };
   });
 }
