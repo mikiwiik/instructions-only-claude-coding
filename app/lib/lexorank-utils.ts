@@ -15,7 +15,7 @@ export function generateInitialSortOrder(items: Todo[]): string {
     return LexoRank.middle().toString();
   }
 
-  const sortedByRank = activeWithRank.sort((a, b) =>
+  const sortedByRank = activeWithRank.toSorted((a, b) =>
     a.sortOrder!.localeCompare(b.sortOrder!)
   );
 
@@ -63,8 +63,9 @@ export function assignMissingSortOrders(items: Todo[]): Todo[] {
 
   let currentRank =
     existingRanks.length > 0
-      ? existingRanks.reduce((max, rank) =>
-          rank.compareTo(max) > 0 ? rank : max
+      ? existingRanks.reduce(
+          (max, rank) => (rank.compareTo(max) > 0 ? rank : max),
+          existingRanks[0]
         )
       : LexoRank.middle().genPrev();
 
