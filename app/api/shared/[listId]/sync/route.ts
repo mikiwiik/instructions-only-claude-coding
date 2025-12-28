@@ -7,6 +7,40 @@ import { KVStore } from '@/lib/kv-store';
 import type { SyncOperation } from '@/types/sync';
 import type { Todo } from '@/types/todo';
 
+type OperationResult =
+  | { success: true; todos: Todo[] }
+  | { success: false; error: string; status: number };
+
+function applyOperation(
+  operation: SyncOperation,
+  todos: Todo[],
+  data: unknown
+): OperationResult {
+  switch (operation) {
+    case 'create': {
+      const newTodo = data as Todo;
+      return { success: true, todos: [newTodo, ...todos] };
+    }
+    case 'update':
+    case 'reorder-single': {
+      const updatedTodo = data as Todo;
+      const updated = todos.map((t) =>
+        t.id === updatedTodo.id ? updatedTodo : t
+      );
+      return { success: true, todos: updated };
+    }
+    case 'delete': {
+      const todoId = data as string;
+      return { success: true, todos: todos.filter((t) => t.id !== todoId) };
+    }
+    case 'reorder': {
+      return { success: true, todos: data as Todo[] };
+    }
+    default:
+      return { success: false, error: 'Invalid operation', status: 400 };
+  }
+}
+
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ listId: string }> }
@@ -22,68 +56,27 @@ export async function POST(
 
     let list = await KVStore.getList(listId);
 
-    // Auto-create list if it doesn't exist and this is a create operation
-    if (!list) {
-      if (operation === 'create') {
-        await KVStore.setList(listId, [], 'anonymous');
-        list = await KVStore.getList(listId);
-      } else {
-        return NextResponse.json({ error: 'List not found' }, { status: 404 });
-      }
+    if (!list && operation === 'create') {
+      await KVStore.setList(listId, [], 'anonymous');
+      list = await KVStore.getList(listId);
+    } else if (!list) {
+      return NextResponse.json({ error: 'List not found' }, { status: 404 });
     }
 
-    let updatedTodos = [...(list?.todos || [])];
+    const result = applyOperation(operation, list?.todos || [], data);
 
-    switch (operation) {
-      case 'create': {
-        const newTodo = data as Todo;
-        // Prepend to maintain newest-first order (consistent with client-side)
-        updatedTodos.unshift(newTodo);
-        break;
-      }
-
-      case 'update': {
-        const updatedTodo = data as Todo;
-        const index = updatedTodos.findIndex((t) => t.id === updatedTodo.id);
-        if (index !== -1) {
-          updatedTodos[index] = updatedTodo;
-        }
-        break;
-      }
-
-      case 'delete': {
-        const todoId = data as string;
-        updatedTodos = updatedTodos.filter((t) => t.id !== todoId);
-        break;
-      }
-
-      case 'reorder': {
-        const reorderedTodos = data as Todo[];
-        updatedTodos = reorderedTodos;
-        break;
-      }
-
-      case 'reorder-single': {
-        const updatedTodo = data as Todo;
-        const index = updatedTodos.findIndex((t) => t.id === updatedTodo.id);
-        if (index !== -1) {
-          updatedTodos[index] = updatedTodo;
-        }
-        break;
-      }
-
-      default:
-        return NextResponse.json(
-          { error: 'Invalid operation' },
-          { status: 400 }
-        );
+    if (!result.success) {
+      return NextResponse.json(
+        { error: result.error },
+        { status: result.status }
+      );
     }
 
-    await KVStore.updateTodos(listId, updatedTodos);
+    await KVStore.updateTodos(listId, result.todos);
 
     return NextResponse.json({
       success: true,
-      todos: updatedTodos,
+      todos: result.todos,
       timestamp: Date.now(),
     });
   } catch (error) {
