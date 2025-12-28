@@ -56,7 +56,7 @@ describe('Todo Types', () => {
     expect(todo.updatedAt).toBeInstanceOf(Date);
   });
 
-  it('should support optional sortOrder field for LexoRank ordering (ADR-033)', () => {
+  it('should support optional sortOrder field for LexoRank ordering (ADR-034)', () => {
     const todoWithSortOrder: Todo = {
       id: '1',
       text: 'Test todo',
@@ -250,7 +250,7 @@ describe('Zod Validation Schemas', () => {
       expect(() => TodoSchema.parse(invalidTodo)).toThrow('Todo text too long');
     });
 
-    it('should accept optional sortOrder field (ADR-033)', () => {
+    it('should accept optional sortOrder field (ADR-034)', () => {
       const todoWithSortOrder = {
         id: TEST_UUIDS.TODO_1,
         text: 'Valid todo',
@@ -324,7 +324,7 @@ describe('Zod Validation Schemas', () => {
       expect(() => SharedTodoSchema.parse(invalidSharedTodo)).toThrow();
     });
 
-    it('should accept optional sortOrder field for SharedTodo (ADR-033)', () => {
+    it('should accept optional sortOrder field for SharedTodo (ADR-034)', () => {
       const sharedTodoWithSortOrder = {
         id: TEST_UUIDS.TODO_1,
         text: 'Valid shared todo',
