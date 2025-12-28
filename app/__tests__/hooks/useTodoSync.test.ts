@@ -3,6 +3,7 @@ import {
   useSyncToBackend,
   useDebouncedSync,
   MAIN_LIST_ID,
+  RateLimitError,
 } from '../../hooks/useTodoSync';
 
 // Mock fetch globally
@@ -22,7 +23,7 @@ describe('useSyncToBackend', () => {
     const { result } = renderHook(() => useSyncToBackend());
 
     await act(async () => {
-      await result.current('update', { id: '123', text: 'test' });
+      await result.current.sync('update', { id: '123', text: 'test' });
     });
 
     expect(mockFetch).toHaveBeenCalledWith(
@@ -42,7 +43,7 @@ describe('useSyncToBackend', () => {
     const { result } = renderHook(() => useSyncToBackend('custom-list'));
 
     await act(async () => {
-      await result.current('update', { id: '123' });
+      await result.current.sync('update', { id: '123' });
     });
 
     expect(mockFetch).toHaveBeenCalledWith(
@@ -61,9 +62,121 @@ describe('useSyncToBackend', () => {
 
     await expect(
       act(async () => {
-        await result.current('update', { id: '123' });
+        await result.current.sync('update', { id: '123' });
       })
     ).rejects.toThrow('Sync failed: Internal Server Error');
+  });
+
+  it('should handle 429 rate limit response', async () => {
+    const mockHeaders = new Map([
+      ['Retry-After', '30'],
+      ['X-RateLimit-Limit', '30'],
+      ['X-RateLimit-Remaining', '0'],
+      ['X-RateLimit-Reset', String(Date.now() + 30000)],
+    ]);
+
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 429,
+      headers: {
+        get: (key: string) => mockHeaders.get(key) ?? null,
+      },
+    });
+
+    const { result } = renderHook(() => useSyncToBackend());
+
+    // Call sync and catch the expected error
+    let caughtError: Error | undefined;
+    await act(async () => {
+      try {
+        await result.current.sync('update', { id: '123' });
+      } catch (e) {
+        caughtError = e as Error;
+      }
+    });
+
+    expect(caughtError).toBeInstanceOf(RateLimitError);
+    // Should update rate limit state
+    expect(result.current.rateLimitState.isRateLimited).toBe(true);
+    expect(result.current.rateLimitState.retryAfter).toBe(30);
+  });
+
+  it('should clear rate limit state after retry period', async () => {
+    jest.useFakeTimers();
+
+    const mockHeaders = new Map([
+      ['Retry-After', '5'],
+      ['X-RateLimit-Limit', '30'],
+      ['X-RateLimit-Remaining', '0'],
+      ['X-RateLimit-Reset', String(Date.now() + 5000)],
+    ]);
+
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 429,
+      headers: {
+        get: (key: string) => mockHeaders.get(key) ?? null,
+      },
+    });
+
+    const { result } = renderHook(() => useSyncToBackend());
+
+    // Call sync and catch the expected error
+    await act(async () => {
+      try {
+        await result.current.sync('update', { id: '123' });
+      } catch {
+        // Expected
+      }
+    });
+
+    expect(result.current.rateLimitState.isRateLimited).toBe(true);
+
+    // Advance time past retry period
+    act(() => {
+      jest.advanceTimersByTime(6000);
+    });
+
+    expect(result.current.rateLimitState.isRateLimited).toBe(false);
+
+    jest.useRealTimers();
+  });
+
+  it('should provide clearRateLimitState function', async () => {
+    const mockHeaders = new Map([
+      ['Retry-After', '30'],
+      ['X-RateLimit-Limit', '30'],
+      ['X-RateLimit-Remaining', '0'],
+      ['X-RateLimit-Reset', String(Date.now() + 30000)],
+    ]);
+
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 429,
+      headers: {
+        get: (key: string) => mockHeaders.get(key) ?? null,
+      },
+    });
+
+    const { result } = renderHook(() => useSyncToBackend());
+
+    // Call sync and catch the expected error
+    await act(async () => {
+      try {
+        await result.current.sync('update', { id: '123' });
+      } catch {
+        // Expected
+      }
+    });
+
+    expect(result.current.rateLimitState.isRateLimited).toBe(true);
+
+    // Clear manually
+    act(() => {
+      result.current.clearRateLimitState();
+    });
+
+    expect(result.current.rateLimitState.isRateLimited).toBe(false);
   });
 });
 
