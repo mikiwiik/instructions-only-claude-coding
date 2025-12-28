@@ -1,7 +1,7 @@
 # Layout and Spacing Reference
 
 **Status**: Living Document
-**Last Updated**: 2025-10-04
+**Last Updated**: 2025-12-28
 **Purpose**: Complete visual and technical reference for UI components, layout, and spacing
 **Related**: [Mobile UX Guidelines](mobile-ux-guidelines.md), [Accessibility
 Requirements](accessibility-requirements.md)
@@ -96,6 +96,13 @@ graph TB
 | **GestureHint**        | Fixed banner showing swipe/long-press hints | `app/components/GestureHint.tsx`        | Mobile only           |
 | **MarkdownHelpDrawer** | Bottom overlay for markdown reference       | `app/components/MarkdownHelpDrawer.tsx` | Mobile (during edit)  |
 | **MarkdownHelpBox**    | Inline collapsible markdown reference       | `app/components/MarkdownHelpBox.tsx`    | Desktop (during edit) |
+
+### Status Banners
+
+| Component             | Description                              | File Location  | Visibility        |
+| --------------------- | ---------------------------------------- | -------------- | ----------------- |
+| **Beta Notice**       | Blue info banner for beta status         | `app/page.tsx` | Always visible    |
+| **Rate Limit Banner** | Amber warning banner for 429 rate limits | `app/page.tsx` | Conditional (429) |
 
 ---
 
@@ -423,6 +430,53 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 | Internal spacing | `mt-2` (8px)     | (same)           |
 
 **Structure**: Two-paragraph layout (attribution + repository link)
+
+### 9. Status Banners
+
+**File**: `app/page.tsx`
+
+Reusable banner pattern for status messages, placed between Header and Main Card.
+
+| Variant             | Background    | Border             | Text             | Use Case                    |
+| ------------------- | ------------- | ------------------ | ---------------- | --------------------------- |
+| **Info (Blue)**     | `bg-blue-50`  | `border-blue-200`  | `text-blue-800`  | Beta notices, announcements |
+| **Warning (Amber)** | `bg-amber-50` | `border-amber-200` | `text-amber-800` | Rate limits, slow downs     |
+| **Error (Red)**     | `bg-red-50`   | `border-red-200`   | `text-red-800`   | Errors, failures (future)   |
+| **Success (Green)** | `bg-green-50` | `border-green-200` | `text-green-800` | Confirmations (future)      |
+
+**Common Properties**:
+
+| Property      | Value          | Notes                                     |
+| ------------- | -------------- | ----------------------------------------- |
+| Bottom margin | `mb-4 md:mb-6` | 16px mobile, 24px desktop                 |
+| Border radius | `rounded-lg`   | Consistent with card styling              |
+| Padding       | `p-3`          | 12px all sides                            |
+| Font size     | `text-sm`      | 14px for compact messaging                |
+| Label weight  | `font-medium`  | Bold prefix (e.g., "Beta:", "Slow down:") |
+
+**Accessibility**:
+
+| Attribute    | Value               | Purpose                                      |
+| ------------ | ------------------- | -------------------------------------------- |
+| `role`       | `alert` or `status` | `alert` for warnings, `status` for info      |
+| `aria-live`  | `polite`            | Screen reader announces without interrupting |
+| `aria-label` | Descriptive         | For info banners (e.g., "Beta notice")       |
+
+**Example Pattern** (Warning Banner):
+
+```tsx
+{
+  condition && (
+    <div
+      className='mb-4 md:mb-6 bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800'
+      role='alert'
+      aria-live='polite'
+    >
+      <span className='font-medium'>Warning Label:</span> {dynamicMessage}
+    </div>
+  );
+}
+```
 
 ---
 
