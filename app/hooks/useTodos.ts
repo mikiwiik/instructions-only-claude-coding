@@ -25,7 +25,11 @@ export function useTodos() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const syncToBackend = useSyncToBackend(MAIN_LIST_ID);
+  const {
+    sync: syncToBackend,
+    rateLimitState,
+    clearRateLimitState,
+  } = useSyncToBackend(MAIN_LIST_ID);
 
   // Fetch todos from backend on mount
   useEffect(() => {
@@ -98,6 +102,8 @@ export function useTodos() {
     isLoading,
     isInitialized,
     setFilter,
+    rateLimitState,
+    clearRateLimitState,
     ...operations,
   };
 }

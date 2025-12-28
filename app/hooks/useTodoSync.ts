@@ -3,8 +3,33 @@
  * Extracted from useTodos.ts to reduce function length (ADR-027 compliance)
  */
 
-import { useCallback, useRef, useEffect } from 'react';
+import { useCallback, useRef, useEffect, useState } from 'react';
 import { Todo, TodoState } from '../types/todo';
+
+/**
+ * Error class for rate limit (429) responses.
+ * Contains retry timing information from the server.
+ */
+export class RateLimitError extends Error {
+  readonly retryAfter: number;
+  readonly limit: number;
+  readonly remaining: number;
+  readonly reset: number;
+
+  constructor(
+    retryAfter: number,
+    limit: number,
+    remaining: number,
+    reset: number
+  ) {
+    super('Rate limit exceeded. Please try again later.');
+    this.name = 'RateLimitError';
+    this.retryAfter = retryAfter;
+    this.limit = limit;
+    this.remaining = remaining;
+    this.reset = reset;
+  }
+}
 
 // Hardcoded list ID for main app (single list for now)
 // Future: unique per-user list IDs (separate issue)
@@ -52,13 +77,40 @@ export type SyncToBackendFn = (
   data: unknown
 ) => Promise<unknown>;
 
+export interface RateLimitState {
+  isRateLimited: boolean;
+  retryAfter: number;
+  message: string;
+}
+
+export interface SyncToBackendResult {
+  sync: SyncToBackendFn;
+  rateLimitState: RateLimitState;
+  clearRateLimitState: () => void;
+}
+
 /**
- * Hook that provides the sync function for backend communication
+ * Hook that provides the sync function for backend communication.
+ * Handles 429 rate limit responses gracefully with retry information.
  */
 export function useSyncToBackend(
   listId: string = MAIN_LIST_ID
-): SyncToBackendFn {
-  return useCallback(
+): SyncToBackendResult {
+  const [rateLimitState, setRateLimitState] = useState<RateLimitState>({
+    isRateLimited: false,
+    retryAfter: 0,
+    message: '',
+  });
+
+  const clearRateLimitState = useCallback(() => {
+    setRateLimitState({
+      isRateLimited: false,
+      retryAfter: 0,
+      message: '',
+    });
+  }, []);
+
+  const sync = useCallback(
     async (operation: string, data: unknown) => {
       try {
         const response = await fetch(`/api/shared/${listId}/sync`, {
@@ -66,6 +118,40 @@ export function useSyncToBackend(
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ operation, data }),
         });
+
+        // Handle rate limit response
+        if (response.status === 429) {
+          const retryAfter = parseInt(
+            response.headers.get('Retry-After') || '30',
+            10
+          );
+          const limit = parseInt(
+            response.headers.get('X-RateLimit-Limit') || '30',
+            10
+          );
+          const remaining = parseInt(
+            response.headers.get('X-RateLimit-Remaining') || '0',
+            10
+          );
+          const reset = parseInt(
+            response.headers.get('X-RateLimit-Reset') || '0',
+            10
+          );
+
+          // Update state for UI display
+          setRateLimitState({
+            isRateLimited: true,
+            retryAfter,
+            message: `Too many requests. Please wait ${retryAfter} seconds.`,
+          });
+
+          // Auto-clear after retry period
+          setTimeout(() => {
+            clearRateLimitState();
+          }, retryAfter * 1000);
+
+          throw new RateLimitError(retryAfter, limit, remaining, reset);
+        }
 
         if (!response.ok) {
           throw new Error(`Sync failed: ${response.statusText}`);
@@ -78,8 +164,10 @@ export function useSyncToBackend(
         throw error;
       }
     },
-    [listId]
+    [listId, clearRateLimitState]
   );
+
+  return { sync, rateLimitState, clearRateLimitState };
 }
 
 export interface DebouncedSyncOptions {
@@ -92,6 +180,8 @@ export interface DebouncedSyncResult {
   sync: (operation: string, data: unknown) => void;
   flush: () => void;
   cancel: () => void;
+  rateLimitState: RateLimitState;
+  clearRateLimitState: () => void;
 }
 
 const DEFAULT_DEBOUNCE_DELAY = 300;
@@ -148,7 +238,11 @@ export function useDebouncedSync(
     null
   );
   const hasLeadingCallRef = useRef(false);
-  const syncToBackend = useSyncToBackend(listId);
+  const {
+    sync: syncToBackend,
+    rateLimitState,
+    clearRateLimitState,
+  } = useSyncToBackend(listId);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -211,7 +305,7 @@ export function useDebouncedSync(
     pendingCallRef.current = null;
   }, []);
 
-  return { sync, flush, cancel };
+  return { sync, flush, cancel, rateLimitState, clearRateLimitState };
 }
 
 export type SetTodoStateFn = React.Dispatch<React.SetStateAction<TodoState>>;

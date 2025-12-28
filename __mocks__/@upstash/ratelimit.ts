@@ -22,9 +22,16 @@ const mockLimit = jest.fn<Promise<LimitResponse>, [string]>(() =>
   })
 );
 
+interface MockRatelimitClass {
+  (): { limit: typeof mockLimit };
+  slidingWindow: jest.Mock;
+  fixedWindow: jest.Mock;
+  tokenBucket: jest.Mock;
+}
+
 const MockRatelimit = jest.fn(() => ({
   limit: mockLimit,
-}));
+})) as unknown as MockRatelimitClass;
 
 // Static methods that return limiter configs
 MockRatelimit.slidingWindow = jest.fn(
