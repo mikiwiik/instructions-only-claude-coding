@@ -281,6 +281,25 @@ complete and up-to-date list of all ADRs, see [Architecture Decision Records](..
 
 See [ADR-032](../adr/032-error-monitoring-solution.md) for error monitoring solution details.
 
+#### API Rate Limiting
+
+The backend is protected by server-side rate limiting using Upstash Redis:
+
+- **Algorithm**: Sliding window (smoother than fixed window)
+- **Limit**: 30 requests per 30 seconds per IP
+- **Scope**: All `/api/*` routes via Next.js Edge Middleware
+- **Response Headers**: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`
+- **Rate Limited Response**: HTTP 429 with `Retry-After` header
+- **Monitoring**: Rate limit events tracked in Sentry
+
+Client-side handling:
+
+- `useSyncToBackend` hook exposes `rateLimitState` for UI feedback
+- Auto-retry after `Retry-After` period expires
+- Graceful degradation with user-friendly error messages
+
+See [ADR-033](../adr/033-rate-limiting-strategy.md) for the rate limiting architecture decision.
+
 ## Environments
 
 The application uses environment variables to determine storage backend:
