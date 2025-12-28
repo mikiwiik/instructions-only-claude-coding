@@ -465,11 +465,12 @@ Current project maintains the following quality targets:
 - **TypeScript Coverage**: 100% (strict mode, no `any` types)
 - **Test Coverage**: 80%+ line coverage, 100% for critical paths
 - **ESLint**: Zero warnings or errors policy
+- **SonarCloud**: Quality gate passing (bugs, code smells, security vulnerabilities)
 - **Accessibility**: WCAG 2.2 AA compliance (see [docs/ux/accessibility-requirements.md](../ux/accessibility-requirements.md))
 - **Code Complexity**: ADR-027 compliance (cognitive ≤15, nesting ≤4, cyclomatic ≤15)
 - **Performance**: Optimal React patterns and bundle size management
 
-These metrics are enforced through pre-commit hooks, CI/CD pipelines, and manual code review.
+These metrics are enforced through pre-commit hooks, CI/CD pipelines, SonarCloud analysis, and manual code review.
 
 ### Code Quality Standards
 
@@ -527,6 +528,7 @@ These metrics are enforced through pre-commit hooks, CI/CD pipelines, and manual
 
 - All automated CI checks passing
 - All tests passing on remote branch
+- **SonarCloud quality gate passing** (no new bugs, code smells, or security issues)
 - Required reviewer approval (GitHub enforcement)
 - Branch up to date with main
 - No merge conflicts
