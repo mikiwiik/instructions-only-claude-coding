@@ -1,1 +1,14 @@
+# Run lint-staged for code formatting
 npx lint-staged
+
+# Validate pinned dependencies when package.json is staged
+if git diff --cached --name-only | grep -q "^package\.json$"; then
+  echo "Validating pinned npm dependencies..."
+  ./scripts/validate-pinned-deps.sh
+fi
+
+# Validate GitHub Actions versions when workflow files are staged
+if git diff --cached --name-only | grep -q "^\.github/workflows/"; then
+  echo "Validating GitHub Actions versions..."
+  ./scripts/validate-action-versions.sh
+fi
