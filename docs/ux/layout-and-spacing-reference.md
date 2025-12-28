@@ -39,8 +39,12 @@ Requirements](accessibility-requirements.md)
 ```mermaid
 graph TB
     A[Page Container<br/>px-0 py-6 md:px-6 md:py-8] --> B[Header<br/>mb-6 md:mb-8]
+    A --> S[Status Banners<br/>mb-4 md:mb-6]
     A --> C[Main Card Container<br/>p-0 md:p-6]
     A --> D[Footer<br/>mt-6 md:mt-8]
+
+    S --> S1[Beta Notice<br/>bg-blue-50, always]
+    S --> S2[Rate Limit Warning<br/>bg-amber-50, conditional]
 
     C --> E[TodoForm<br/>mb-4 md:mb-6]
     C --> F[TodoFilter<br/>mb-4]
@@ -60,6 +64,7 @@ graph TB
     I --> I4[Action Buttons<br/>p-1.5 md:p-2, 44x44px each]
 
     style A fill:#e3f2fd
+    style S fill:#fff9c4
     style C fill:#f3e5f5
     style E fill:#e8f5e9
     style F fill:#fff3e0
