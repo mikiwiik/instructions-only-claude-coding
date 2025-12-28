@@ -1,7 +1,7 @@
 # Development Workflows
 
 > **Strategic Context**: [Development Principles](principles.md) | [Framework](framework.md) |
-> [Operational Guide](../development/workflow.md)
+> [Quality Standards](quality-standards.md) | [Operational Guide](../development/workflow.md)
 
 ## Git and Branch Management
 
@@ -457,6 +457,9 @@ When a PR completes work that changes a requirement's status:
 3. Update from `In Progress` → `Implemented` when PR merges
 
 ## Quality Gates
+
+> **Comprehensive Reference**: See [Quality Standards](quality-standards.md) for the authoritative guide to all quality
+> requirements, metrics, thresholds, and enforcement mechanisms.
 
 ### Quality Metrics
 

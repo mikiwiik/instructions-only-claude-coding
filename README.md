@@ -196,7 +196,8 @@ See [Development Workflow](docs/development/workflow.md) for complete branch str
 - **[docs/diagrams/](docs/diagrams/)** - Visual diagrams for architecture and user flows
 - **[docs/adr/](docs/adr/)** - Architecture Decision Records
 - **[docs/guidelines/](docs/guidelines/)** - Process guidelines and standards
-- **[CLAUDE.md](CLAUDE.md)** - Essential 10-line framework for instruction-only development
+- **[docs/core/quality-standards.md](docs/core/quality-standards.md)** - Comprehensive quality standards reference
+- **[CLAUDE.md](CLAUDE.md)** - Essential guiding principles for instruction-only development
 
 ## Contributing
 
@@ -245,6 +246,9 @@ This project demonstrates professional development practices:
 - **Code Quality**: Automated linting, formatting, and testing
 - **Documentation**: Comprehensive project documentation
 - **CI/CD**: Automated quality assurance and deployment
+
+> **Quality Principle**: All behavior is explicit, documented, and verified through traceability:
+> Requirement → Issue → PR → Code → Test. See [Quality Standards](docs/core/quality-standards.md).
 
 ## Support and Resources
 

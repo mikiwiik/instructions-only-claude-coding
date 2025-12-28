@@ -105,6 +105,9 @@ See [Working with Epics](docs/development/project-management.md#working-with-epi
 
 ## Quality Standards
 
+**Comprehensive Guide**: [docs/core/quality-standards.md](docs/core/quality-standards.md) - authoritative reference for all
+quality requirements, metrics, and enforcement.
+
 **Accessibility Requirements**:
 
 - **🚨 WCAG 2.2 AA Compliance**: All implementations must meet WCAG 2.2 AA standards
