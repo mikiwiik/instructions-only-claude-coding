@@ -6,6 +6,7 @@
  * Sync operations for shared todo lists.
  *
  * - `reorder`: Legacy full-array sync (sends all todos, ~15KB for 100 items)
+ *   TODO: Remove after #412 (Post-Migration Cleanup) - kept for backward compatibility
  * - `reorder-single`: LexoRank optimized (sends 1 todo with updated sortOrder, ~200B)
  *
  * @see ADR-034 for LexoRank decision
