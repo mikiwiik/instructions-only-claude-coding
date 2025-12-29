@@ -16,6 +16,7 @@ import {
   useSyncToBackend,
 } from './useTodoSync';
 import { useTodoOperations } from './useTodoOperations';
+import { migrateToLexoRank } from '../lib/migration-utils';
 
 export function useTodos() {
   const [state, setState] = useState<TodoState>({
@@ -31,9 +32,9 @@ export function useTodos() {
     clearRateLimitState,
   } = useSyncToBackend(MAIN_LIST_ID);
 
-  // Fetch todos from backend on mount
+  // Fetch todos from backend on mount and run migration if needed
   useEffect(() => {
-    const fetchTodos = async () => {
+    const fetchAndMigrateTodos = async () => {
       try {
         const response = await fetch(`/api/shared/${MAIN_LIST_ID}/sync`);
 
@@ -41,8 +42,14 @@ export function useTodos() {
           const data = await response.json();
           const todosWithDates = (data.todos || []).map(convertTodoDates);
 
+          // Run LexoRank migration if needed (assigns sortOrder to legacy todos)
+          const migratedTodos = await migrateToLexoRank(
+            todosWithDates,
+            syncToBackend
+          );
+
           setState({
-            todos: todosWithDates,
+            todos: migratedTodos,
             filter: 'active',
           });
         } else if (response.status === 404) {
@@ -59,7 +66,8 @@ export function useTodos() {
       }
     };
 
-    fetchTodos();
+    fetchAndMigrateTodos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Get all CRUD operations from extracted hook

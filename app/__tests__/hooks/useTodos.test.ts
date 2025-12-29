@@ -1001,4 +1001,119 @@ describe('useTodos hook', () => {
       expect(result.current.todos[2].text).toBe('No sortOrder');
     });
   });
+
+  describe('addTodo sortOrder (LexoRank)', () => {
+    it('should include sortOrder when adding a new todo', async () => {
+      const { result } = renderHook(() => useTodos());
+
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('New todo with sortOrder');
+      });
+
+      expect(result.current.todos[0].sortOrder).toBeDefined();
+      expect(typeof result.current.todos[0].sortOrder).toBe('string');
+    });
+
+    it('should assign sortOrder that places new todo at top', async () => {
+      const existingTodos = [
+        {
+          id: 'existing-1',
+          text: 'Existing todo',
+          sortOrder: '0|hzzzzz:',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      ];
+
+      mockFetch.mockImplementation((url: string, options?: FetchOptions) => {
+        if (options?.method === 'POST') {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({ success: true }),
+          });
+        }
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ todos: existingTodos }),
+        });
+      });
+
+      const { result } = renderHook(() => useTodos());
+
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('New todo at top');
+      });
+
+      // New todo should be at top (index 0)
+      expect(result.current.todos[0].text).toBe('New todo at top');
+      expect(result.current.todos[1].text).toBe('Existing todo');
+
+      // New todo's sortOrder should be lexicographically smaller
+      const newSortOrder = result.current.todos[0].sortOrder!;
+      const existingSortOrder = result.current.todos[1].sortOrder!;
+      expect(newSortOrder.localeCompare(existingSortOrder)).toBeLessThan(0);
+    });
+
+    it('should sync sortOrder to backend when creating todo', async () => {
+      const { result } = renderHook(() => useTodos());
+
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      await act(async () => {
+        await result.current.addTodo('Todo with sortOrder sync');
+      });
+
+      // Find the create POST call
+      const postCalls = mockFetch.mock.calls.filter(
+        (call: [string, FetchOptions?]) => call[1]?.method === 'POST'
+      );
+      expect(postCalls.length).toBeGreaterThan(0);
+
+      const lastPostCall = postCalls[postCalls.length - 1];
+      const body = JSON.parse(lastPostCall[1]?.body as string);
+
+      expect(body.operation).toBe('create');
+      expect(body.data.sortOrder).toBeDefined();
+      expect(typeof body.data.sortOrder).toBe('string');
+    });
+
+    it('should handle multiple new todos with correct sortOrder hierarchy', async () => {
+      const { result } = renderHook(() => useTodos());
+
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      // Add todos sequentially with separate act() calls to ensure state updates
+      await act(async () => {
+        await result.current.addTodo('First added');
+      });
+      await act(async () => {
+        await result.current.addTodo('Second added');
+      });
+      await act(async () => {
+        await result.current.addTodo('Third added');
+      });
+
+      // Each new todo should appear at top with lower sortOrder
+      expect(result.current.todos[0].text).toBe('Third added');
+      expect(result.current.todos[1].text).toBe('Second added');
+      expect(result.current.todos[2].text).toBe('First added');
+
+      // sortOrders should be in ascending order (matching display order)
+      const sortOrders = result.current.todos.map((t) => t.sortOrder!);
+      expect(sortOrders[0].localeCompare(sortOrders[1])).toBeLessThan(0);
+      expect(sortOrders[1].localeCompare(sortOrders[2])).toBeLessThan(0);
+    });
+  });
 });

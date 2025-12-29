@@ -75,6 +75,33 @@ The Todo App follows a component-based architecture with clear separation of con
 - **Custom Hooks**: `useTodos` hook for todo state management
 - **Local Storage**: Client-side persistence for todo data
 - **React State**: Component-level state for UI interactions
+- **LexoRank Ordering**: Efficient todo ordering with minimal sync payload (see below)
+
+#### Todo Ordering with LexoRank
+
+Active todos support manual reordering using [LexoRank](https://www.npmjs.com/package/lexorank), a string-based
+ranking algorithm that enables efficient single-item sync:
+
+| Aspect                 | Details                                                               |
+| ---------------------- | --------------------------------------------------------------------- |
+| **Algorithm**          | LexoRank generates lexicographically sortable strings                 |
+| **Payload Efficiency** | Reorder syncs single todo (~200B) vs full array (~15KB for 100 items) |
+| **Conflict-Free**      | Multiple users can reorder simultaneously without conflicts           |
+| **Migration**          | Legacy todos automatically receive sortOrder on first load            |
+
+**Sorting Rules**:
+
+- **Active todos**: Sorted by `sortOrder` ascending
+- **Completed todos**: Sorted by `completedAt` descending (most recent first)
+- **Deleted todos**: Sorted by `deletedAt` descending (most recent first)
+
+**Related Files**:
+
+- `app/lib/lexorank-utils.ts` - Rank generation utilities
+- `app/lib/migration-utils.ts` - Legacy todo migration
+- `app/hooks/useTodoReorder.ts` - Reordering hook
+
+See [ADR-034](../adr/034-lexorank-todo-ordering.md) for the architectural decision.
 
 #### Testing Layer
 
@@ -139,12 +166,14 @@ On app load (no active list):
 
 ```typescript
 // Core Todo interface
-interface TodoItem {
+interface Todo {
   id: string;
   text: string;
-  completed: boolean;
   createdAt: Date;
+  updatedAt: Date;
   completedAt?: Date;
+  deletedAt?: Date;
+  sortOrder?: string; // LexoRank for ordering (assigned to all active todos)
 }
 
 // Todo operations interface
@@ -152,7 +181,9 @@ interface TodoOperations {
   addTodo: (text: string) => void;
   toggleTodo: (id: string) => void;
   deleteTodo: (id: string) => void;
-  clearCompleted: () => void;
+  reorderTodos: (sourceIndex: number, destIndex: number) => void;
+  moveUp: (todoId: string) => void;
+  moveDown: (todoId: string) => void;
 }
 ```
 

@@ -12,6 +12,7 @@ import {
   createOptimisticUpdate,
 } from './useTodoSync';
 import { useTodoReorder } from './useTodoReorder';
+import { generateInitialSortOrder } from '../lib/lexorank-utils';
 
 interface UseTodoOperationsProps {
   state: TodoState;
@@ -36,12 +37,14 @@ export function useTodoOperations({
       const trimmedText = text.trim();
       if (!trimmedText) return;
       const now = new Date();
+      const sortOrder = generateInitialSortOrder(state.todos);
       const newTodo: Todo = {
         id: generateId(),
         text: trimmedText,
         completedAt: undefined,
         createdAt: now,
         updatedAt: now,
+        sortOrder,
       };
       setState((prev) => ({ ...prev, todos: [newTodo, ...prev.todos] }));
       try {
@@ -53,7 +56,7 @@ export function useTodoOperations({
         }));
       }
     },
-    [setState, syncToBackend]
+    [state.todos, setState, syncToBackend]
   );
 
   const toggleTodo = useCallback(

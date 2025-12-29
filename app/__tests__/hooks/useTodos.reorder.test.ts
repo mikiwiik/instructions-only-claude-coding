@@ -140,10 +140,14 @@ describe('useTodos hook - Reordering functionality', () => {
         expect(result.current.isInitialized).toBe(true);
       });
 
-      // Add three todos (they'll have sortOrders assigned)
+      // Add todos sequentially to ensure unique sortOrders
       await act(async () => {
         await result.current.addTodo('First todo');
+      });
+      await act(async () => {
         await result.current.addTodo('Second todo');
+      });
+      await act(async () => {
         await result.current.addTodo('Third todo');
       });
 
@@ -413,10 +417,14 @@ describe('useTodos hook - Reordering functionality', () => {
         expect(result.current.isInitialized).toBe(true);
       });
 
-      // Add three todos
+      // Add todos sequentially to ensure unique sortOrders
       await act(async () => {
         await result.current.addTodo('First todo');
+      });
+      await act(async () => {
         await result.current.addTodo('Second todo');
+      });
+      await act(async () => {
         await result.current.addTodo('Third todo');
       });
 
