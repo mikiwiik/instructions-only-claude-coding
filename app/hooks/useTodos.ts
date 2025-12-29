@@ -69,26 +69,26 @@ export function useTodos() {
     syncToBackend,
   });
 
-  // Sort active todos by sortOrder (ascending), todos without sortOrder go last
-  const sortBySortOrder = (todos: typeof state.todos) => {
-    return [...todos].sort((a, b) => {
-      if (!a.sortOrder && !b.sortOrder) return 0;
-      if (!a.sortOrder) return 1;
-      if (!b.sortOrder) return -1;
-      return a.sortOrder.localeCompare(b.sortOrder);
-    });
-  };
-
-  // Sort by timestamp descending (most recent first)
-  const sortByTimestampDesc = (
-    todos: typeof state.todos,
-    getTime: (t: (typeof state.todos)[0]) => number
-  ) => {
-    return [...todos].sort((a, b) => getTime(b) - getTime(a));
-  };
-
   // Filter and sort todos based on current filter
   const getFilteredTodos = useCallback(() => {
+    // Sort by sortOrder ascending (todos without sortOrder go last)
+    const sortBySortOrder = (todos: typeof state.todos) => {
+      return [...todos].sort((a, b) => {
+        if (!a.sortOrder && !b.sortOrder) return 0;
+        if (!a.sortOrder) return 1;
+        if (!b.sortOrder) return -1;
+        return a.sortOrder.localeCompare(b.sortOrder);
+      });
+    };
+
+    // Sort by timestamp descending (most recent first)
+    const sortByTimestampDesc = (
+      todos: typeof state.todos,
+      getTime: (t: (typeof state.todos)[0]) => number
+    ) => {
+      return [...todos].sort((a, b) => getTime(b) - getTime(a));
+    };
+
     switch (state.filter) {
       case 'active': {
         const active = state.todos.filter(
