@@ -69,22 +69,59 @@ export function useTodos() {
     syncToBackend,
   });
 
-  // Filter todos based on current filter
+  // Sort active todos by sortOrder (ascending), todos without sortOrder go last
+  const sortBySortOrder = (todos: typeof state.todos) => {
+    return [...todos].sort((a, b) => {
+      if (!a.sortOrder && !b.sortOrder) return 0;
+      if (!a.sortOrder) return 1;
+      if (!b.sortOrder) return -1;
+      return a.sortOrder.localeCompare(b.sortOrder);
+    });
+  };
+
+  // Sort by timestamp descending (most recent first)
+  const sortByTimestampDesc = (
+    todos: typeof state.todos,
+    getTime: (t: (typeof state.todos)[0]) => number
+  ) => {
+    return [...todos].sort((a, b) => getTime(b) - getTime(a));
+  };
+
+  // Filter and sort todos based on current filter
   const getFilteredTodos = useCallback(() => {
     switch (state.filter) {
-      case 'active':
-        return state.todos.filter(
+      case 'active': {
+        const active = state.todos.filter(
           (todo) => !todo.completedAt && !todo.deletedAt
         );
-      case 'completed':
-        return state.todos.filter(
+        return sortBySortOrder(active);
+      }
+      case 'completed': {
+        const completed = state.todos.filter(
           (todo) => todo.completedAt && !todo.deletedAt
         );
-      case 'recently-deleted':
-        return state.todos.filter((todo) => todo.deletedAt);
+        return sortByTimestampDesc(
+          completed,
+          (t) => t.completedAt?.getTime() || 0
+        );
+      }
+      case 'recently-deleted': {
+        const deleted = state.todos.filter((todo) => todo.deletedAt);
+        return sortByTimestampDesc(deleted, (t) => t.deletedAt?.getTime() || 0);
+      }
       case 'all':
-      default:
-        return state.todos.filter((todo) => !todo.deletedAt);
+      default: {
+        const nonDeleted = state.todos.filter((todo) => !todo.deletedAt);
+        const active = nonDeleted.filter((todo) => !todo.completedAt);
+        const completed = nonDeleted.filter((todo) => todo.completedAt);
+        return [
+          ...sortBySortOrder(active),
+          ...sortByTimestampDesc(
+            completed,
+            (t) => t.completedAt?.getTime() || 0
+          ),
+        ];
+      }
     }
   }, [state.filter, state.todos]);
 

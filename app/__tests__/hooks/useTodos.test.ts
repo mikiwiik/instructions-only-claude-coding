@@ -733,4 +733,272 @@ describe('useTodos hook', () => {
       expect(result.current.todos[2].text).toBe('Edited third todo');
     });
   });
+
+  describe('Sorting by filter (LexoRank)', () => {
+    it('should sort active todos by sortOrder ascending', async () => {
+      const todosWithSortOrder = [
+        {
+          id: 'todo-1',
+          text: 'Third by sortOrder',
+          sortOrder: '0|0i0002:',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'todo-2',
+          text: 'First by sortOrder',
+          sortOrder: '0|0i0000:',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'todo-3',
+          text: 'Second by sortOrder',
+          sortOrder: '0|0i0001:',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      ];
+
+      mockFetch.mockImplementation((url: string, options?: FetchOptions) => {
+        if (options?.method === 'POST') {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({ success: true }),
+          });
+        }
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ todos: todosWithSortOrder }),
+        });
+      });
+
+      const { result } = renderHook(() => useTodos());
+
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      // Active filter should sort by sortOrder ascending
+      expect(result.current.todos[0].text).toBe('First by sortOrder');
+      expect(result.current.todos[1].text).toBe('Second by sortOrder');
+      expect(result.current.todos[2].text).toBe('Third by sortOrder');
+    });
+
+    it('should sort completed todos by completedAt descending', async () => {
+      const completedTodos = [
+        {
+          id: 'todo-1',
+          text: 'Completed first',
+          completedAt: new Date('2024-01-01').toISOString(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'todo-2',
+          text: 'Completed last',
+          completedAt: new Date('2024-01-03').toISOString(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'todo-3',
+          text: 'Completed middle',
+          completedAt: new Date('2024-01-02').toISOString(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      ];
+
+      mockFetch.mockImplementation((url: string, options?: FetchOptions) => {
+        if (options?.method === 'POST') {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({ success: true }),
+          });
+        }
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ todos: completedTodos }),
+        });
+      });
+
+      const { result } = renderHook(() => useTodos());
+
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      // Switch to completed filter
+      await act(async () => {
+        result.current.setFilter('completed');
+      });
+
+      // Completed filter should sort by completedAt descending (most recent first)
+      expect(result.current.todos[0].text).toBe('Completed last');
+      expect(result.current.todos[1].text).toBe('Completed middle');
+      expect(result.current.todos[2].text).toBe('Completed first');
+    });
+
+    it('should sort deleted todos by deletedAt descending', async () => {
+      const deletedTodos = [
+        {
+          id: 'todo-1',
+          text: 'Deleted first',
+          deletedAt: new Date('2024-01-01').toISOString(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'todo-2',
+          text: 'Deleted last',
+          deletedAt: new Date('2024-01-03').toISOString(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'todo-3',
+          text: 'Deleted middle',
+          deletedAt: new Date('2024-01-02').toISOString(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      ];
+
+      mockFetch.mockImplementation((url: string, options?: FetchOptions) => {
+        if (options?.method === 'POST') {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({ success: true }),
+          });
+        }
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ todos: deletedTodos }),
+        });
+      });
+
+      const { result } = renderHook(() => useTodos());
+
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      // Switch to recently-deleted filter
+      await act(async () => {
+        result.current.setFilter('recently-deleted');
+      });
+
+      // Deleted filter should sort by deletedAt descending (most recent first)
+      expect(result.current.todos[0].text).toBe('Deleted last');
+      expect(result.current.todos[1].text).toBe('Deleted middle');
+      expect(result.current.todos[2].text).toBe('Deleted first');
+    });
+
+    it('should show active todos first in all filter, then completed', async () => {
+      const mixedTodos = [
+        {
+          id: 'completed-1',
+          text: 'Completed todo',
+          completedAt: new Date('2024-01-02').toISOString(),
+          sortOrder: '0|0i0000:',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'active-1',
+          text: 'Active todo B',
+          sortOrder: '0|0i0001:',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'active-2',
+          text: 'Active todo A',
+          sortOrder: '0|0i0000:',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      ];
+
+      mockFetch.mockImplementation((url: string, options?: FetchOptions) => {
+        if (options?.method === 'POST') {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({ success: true }),
+          });
+        }
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ todos: mixedTodos }),
+        });
+      });
+
+      const { result } = renderHook(() => useTodos());
+
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      // Switch to all filter
+      await act(async () => {
+        result.current.setFilter('all');
+      });
+
+      // All filter: active first (by sortOrder), then completed (by completedAt)
+      expect(result.current.todos[0].text).toBe('Active todo A');
+      expect(result.current.todos[1].text).toBe('Active todo B');
+      expect(result.current.todos[2].text).toBe('Completed todo');
+    });
+
+    it('should put todos without sortOrder last among active', async () => {
+      const todosWithMixedSortOrder = [
+        {
+          id: 'todo-1',
+          text: 'Has sortOrder',
+          sortOrder: '0|0i0000:',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'todo-2',
+          text: 'No sortOrder',
+          // No sortOrder field
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'todo-3',
+          text: 'Also has sortOrder',
+          sortOrder: '0|0i0001:',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      ];
+
+      mockFetch.mockImplementation((url: string, options?: FetchOptions) => {
+        if (options?.method === 'POST') {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({ success: true }),
+          });
+        }
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ todos: todosWithMixedSortOrder }),
+        });
+      });
+
+      const { result } = renderHook(() => useTodos());
+
+      await waitFor(() => {
+        expect(result.current.isInitialized).toBe(true);
+      });
+
+      // Active todos: those with sortOrder first (ascending), then without
+      expect(result.current.todos[0].text).toBe('Has sortOrder');
+      expect(result.current.todos[1].text).toBe('Also has sortOrder');
+      expect(result.current.todos[2].text).toBe('No sortOrder');
+    });
+  });
 });
