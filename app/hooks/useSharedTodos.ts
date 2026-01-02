@@ -110,12 +110,6 @@ export function useSharedTodos({
     [todos, updateTodo]
   );
 
-  const reorderTodos = useCallback(async (reorderedTodos: Todo[]) => {
-    // For shared lists, we still need to send all todos for now
-    // TODO: Migrate to reorder-single once SharedTodoList supports LexoRank
-    setTodos(reorderedTodos);
-  }, []);
-
   // Fetch initial todos
   useEffect(() => {
     const fetchTodos = async () => {
@@ -142,7 +136,6 @@ export function useSharedTodos({
     updateTodo,
     deleteTodo,
     toggleTodo,
-    reorderTodos,
     syncState,
     isConnected,
     queueStatus: syncQueue.getStatus(),

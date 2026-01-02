@@ -234,57 +234,6 @@ describe('useSharedTodos', () => {
     });
   });
 
-  describe('reorderTodos', () => {
-    it('should reorder todos', async () => {
-      const todos: Todo[] = [
-        {
-          id: 'todo-1',
-          text: 'First',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          sortOrder: '0|hzzzzz:',
-        },
-        {
-          id: 'todo-2',
-          text: 'Second',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          sortOrder: '0|i00007:',
-        },
-      ];
-
-      // Mock fetch to return the todos
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({ todos }),
-      });
-
-      const { result } = renderHook(() =>
-        useSharedTodos({
-          listId: 'list-1',
-          userId: 'user-1',
-          initialTodos: todos,
-        })
-      );
-
-      // Wait for initial fetch to complete
-      await waitFor(() => {
-        expect(global.fetch).toHaveBeenCalled();
-      });
-
-      const reordered = [result.current.todos[1], result.current.todos[0]];
-
-      await act(async () => {
-        await result.current.reorderTodos(reordered);
-      });
-
-      expect(result.current.todos[0].id).toBe('todo-2');
-      expect(result.current.todos[0].text).toBe('Second');
-      expect(result.current.todos[1].id).toBe('todo-1');
-      expect(result.current.todos[1].text).toBe('First');
-    });
-  });
-
   it('should expose sync state', () => {
     const { result } = renderHook(() =>
       useSharedTodos({
