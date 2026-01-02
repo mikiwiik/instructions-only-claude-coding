@@ -25,7 +25,7 @@ Adopt **LexoRank** algorithm for todo ordering with the following implementation
 
 ### Data Model Changes
 
-Add `sortOrder?: string` field to `Todo` and `SharedTodo` interfaces:
+Add `sortOrder: string` field to `Todo` and `SharedTodo` interfaces:
 
 ```typescript
 export interface Todo {
@@ -35,7 +35,7 @@ export interface Todo {
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
-  sortOrder?: string; // LexoRank string for ordering
+  sortOrder: string; // LexoRank for ordering
 }
 ```
 
@@ -97,7 +97,6 @@ Use `lexorank` npm package (version 1.0.5):
 
 ### Neutral
 
-- **Optional field**: sortOrder is optional for backward compatibility
 - **Learning curve**: Team needs to understand LexoRank concept
 
 ## Alternatives Considered

@@ -98,7 +98,6 @@ ranking algorithm that enables efficient single-item sync:
 **Related Files**:
 
 - `app/lib/lexorank-utils.ts` - Rank generation utilities
-- `app/lib/migration-utils.ts` - Legacy todo migration
 - `app/hooks/useTodoReorder.ts` - Reordering hook
 
 See [ADR-034](../adr/034-lexorank-todo-ordering.md) for the architectural decision.
@@ -173,7 +172,7 @@ interface Todo {
   updatedAt: Date;
   completedAt?: Date;
   deletedAt?: Date;
-  sortOrder?: string; // LexoRank for ordering (assigned to all active todos)
+  sortOrder: string; // LexoRank for ordering
 }
 
 // Todo operations interface
