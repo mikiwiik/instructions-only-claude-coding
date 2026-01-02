@@ -44,7 +44,6 @@ const browserConfig: pino.LoggerOptions = {
             // Future: integrate with Sentry or other error tracking
             // For now, errors are captured by Sentry's global handler
             if (isDev) {
-              // eslint-disable-next-line no-console
               console.log('[Logger Transmit]', logEvent);
             }
           },

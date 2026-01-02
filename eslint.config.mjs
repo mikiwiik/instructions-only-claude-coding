@@ -138,7 +138,7 @@ const eslintConfig = [
       'max-statements': ['warn', { max: 30 }], // Statement count per function
 
       // General rules
-      'no-console': 'warn',
+      'no-console': 'error', // Use app/lib/logger.ts instead (ADR-036)
       'no-debugger': 'error',
       'prefer-const': 'error',
       'no-var': 'error',
@@ -165,6 +165,14 @@ const eslintConfig = [
       'max-lines-per-function': 'off', // Test files often have long test suites
       'max-statements': 'off', // Test assertions can be numerous
       '@typescript-eslint/no-require-imports': 'off', // Allow require() for Jest mocks
+    },
+  },
+
+  // Configuration for logger.ts - allowed to use console for transmit fallback
+  {
+    files: ['app/lib/logger.ts'],
+    rules: {
+      'no-console': 'off', // Logger module needs console for browser fallback
     },
   },
 
