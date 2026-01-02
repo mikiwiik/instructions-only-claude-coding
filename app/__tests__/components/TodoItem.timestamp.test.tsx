@@ -1,18 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import TodoItem from '../../components/TodoItem';
-import { Todo } from '../../types/todo';
-
-// Enhanced Todo interface for testing
-interface EnhancedTodo {
-  id: string;
-  text: string;
-  completedAt?: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt?: Date;
-  sortOrder: string;
-}
+import type { Todo } from '../../types/todo';
 
 // Mock the timestamp utilities that will be implemented
 jest.mock('../../utils/timestamp', () => ({
@@ -37,7 +26,7 @@ jest.mock('../../utils/timestamp', () => ({
       year: 'numeric',
     })}`;
   }),
-  getContextualTimestamp: jest.fn((todo: EnhancedTodo) => {
+  getContextualTimestamp: jest.fn((todo: Todo) => {
     // Use the formatRelativeTime logic for consistency
     const formatRelativeTime = (date: Date, action: string) => {
       const now = new Date();
@@ -80,7 +69,7 @@ jest.mock('../../utils/timestamp', () => ({
     }
     return `Created recently`;
   }),
-  getFullTimestamp: jest.fn((todo: EnhancedTodo) => {
+  getFullTimestamp: jest.fn((todo: Todo) => {
     let relevantDate: Date;
     let action: string;
 
@@ -113,8 +102,8 @@ jest.mock('../../utils/timestamp', () => ({
 }));
 
 const createMockTodo = (
-  overrides: Partial<EnhancedTodo & { completed?: boolean }> = {}
-): EnhancedTodo => {
+  overrides: Partial<Todo & { completed?: boolean }> = {}
+): Todo => {
   const base = {
     id: '1',
     text: 'Test todo',
