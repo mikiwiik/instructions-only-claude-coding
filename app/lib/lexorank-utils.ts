@@ -16,10 +16,10 @@ export function generateInitialSortOrder(items: Todo[]): string {
   }
 
   const sortedByRank = [...activeWithRank].sort((a, b) =>
-    a.sortOrder!.localeCompare(b.sortOrder!)
+    a.sortOrder.localeCompare(b.sortOrder)
   );
 
-  const firstRank = LexoRank.parse(sortedByRank[0].sortOrder!);
+  const firstRank = LexoRank.parse(sortedByRank[0].sortOrder);
   return firstRank.genPrev().toString();
 }
 
