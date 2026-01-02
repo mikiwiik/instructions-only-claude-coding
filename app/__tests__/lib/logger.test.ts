@@ -62,7 +62,39 @@ describe('logger module', () => {
     it('should generate UUID format when crypto.randomUUID is available', () => {
       const id = generateRequestId();
       // UUID format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-      expect(id).toMatch(/^[a-f0-9-]{36}$|^req-\d+-[a-z0-9]+$/);
+      expect(id).toMatch(/^[a-f0-9-]{36}$/);
+    });
+
+    it('should fallback to getRandomValues when randomUUID unavailable', () => {
+      const originalRandomUUID = crypto.randomUUID;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (crypto as any).randomUUID = undefined;
+
+      try {
+        const id = generateRequestId();
+        // Should be 32 hex characters (16 bytes * 2)
+        expect(id).toMatch(/^[a-f0-9]{32}$/);
+      } finally {
+        crypto.randomUUID = originalRandomUUID;
+      }
+    });
+
+    it('should fallback to performance.now when crypto methods unavailable', () => {
+      const originalRandomUUID = crypto.randomUUID;
+      const originalGetRandomValues = crypto.getRandomValues;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (crypto as any).randomUUID = undefined;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (crypto as any).getRandomValues = undefined;
+
+      try {
+        const id = generateRequestId();
+        // Should match req-timestamp-base36 format
+        expect(id).toMatch(/^req-\d+-[a-z0-9.]+$/);
+      } finally {
+        crypto.randomUUID = originalRandomUUID;
+        crypto.getRandomValues = originalGetRandomValues;
+      }
     });
   });
 
