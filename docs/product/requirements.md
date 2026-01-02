@@ -200,6 +200,8 @@ implementation is performed by human developers or AI agents.
 - Service co-location in same region (Frankfurt) to minimize latency ✓
 - Frontend error detection and monitoring via Sentry ✓
 - Monitoring, logging, and observability foundations (planned)
+- Rolling upgrades with zero-downtime deployments ✓
+- Backward-compatible data migrations (no service outages) ✓
 
 ### 12. Self-Contained Knowledge Repository
 
