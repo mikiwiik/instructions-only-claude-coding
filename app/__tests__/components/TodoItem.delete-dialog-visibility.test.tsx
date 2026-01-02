@@ -16,6 +16,7 @@ describe('TodoItem Delete Dialog Visibility', () => {
     completedAt: undefined,
     createdAt: new Date(),
     updatedAt: new Date(),
+    sortOrder: '0|hzzzzz:',
   });
 
   const createDeletedLongTextTodo = (): Todo => ({
@@ -25,6 +26,7 @@ describe('TodoItem Delete Dialog Visibility', () => {
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: new Date(),
+    sortOrder: '0|hzzzzz:',
   });
 
   const mockOnDelete = jest.fn();
@@ -192,6 +194,7 @@ describe('TodoItem Delete Dialog Visibility', () => {
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
       };
 
       render(
@@ -226,6 +229,7 @@ describe('TodoItem Delete Dialog Visibility', () => {
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
       };
 
       render(

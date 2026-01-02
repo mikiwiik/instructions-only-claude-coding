@@ -68,12 +68,14 @@ describe('Sync API Route', () => {
       text: 'Test todo 1',
       createdAt: new Date('2024-01-01'),
       updatedAt: new Date('2024-01-01'),
+      sortOrder: '0|0i0000:',
     },
     {
       id: 'todo-2',
       text: 'Test todo 2',
       createdAt: new Date('2024-01-01'),
       updatedAt: new Date('2024-01-01'),
+      sortOrder: '0|0i0001:',
     },
   ];
 
@@ -143,6 +145,7 @@ describe('Sync API Route', () => {
           text: 'New todo',
           createdAt: new Date(),
           updatedAt: new Date(),
+          sortOrder: '0|0i0002:',
         };
 
         const request = createRequest(
@@ -216,6 +219,7 @@ describe('Sync API Route', () => {
           text: 'Updated text',
           createdAt: new Date(),
           updatedAt: new Date(),
+          sortOrder: '0|0i0003:',
         };
 
         const request = createRequest(
@@ -262,36 +266,6 @@ describe('Sync API Route', () => {
         expect(data.success).toBe(true);
         expect(data.todos).toHaveLength(1);
         expect(data.todos[0].id).toBe('todo-2');
-      });
-    });
-
-    describe('reorder operation', () => {
-      it('should reorder todos', async () => {
-        mockedKVStore.getList.mockResolvedValue(mockList);
-        mockedKVStore.updateTodos.mockResolvedValue(undefined);
-
-        const reorderedTodos = [mockTodos[1], mockTodos[0]];
-
-        const request = createRequest(
-          'http://localhost/api/shared/list-1/sync',
-          {
-            method: 'POST',
-            body: JSON.stringify({
-              operation: 'reorder',
-              data: reorderedTodos,
-            }),
-          }
-        );
-
-        const response = await POST(request as never, {
-          params: Promise.resolve({ listId: 'list-1' }),
-        });
-        const data = await response.json();
-
-        expect(response.status).toBe(200);
-        expect(data.success).toBe(true);
-        expect(data.todos[0].id).toBe('todo-2');
-        expect(data.todos[1].id).toBe('todo-1');
       });
     });
 

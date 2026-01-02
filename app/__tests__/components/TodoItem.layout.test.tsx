@@ -9,6 +9,7 @@ const mockTodo: Todo = {
   completedAt: undefined,
   createdAt: new Date('2023-01-01'),
   updatedAt: new Date('2023-01-01'),
+  sortOrder: '0|hzzzzz:',
 };
 
 const defaultProps = {

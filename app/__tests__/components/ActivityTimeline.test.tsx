@@ -23,6 +23,7 @@ describe('ActivityTimeline', () => {
     text: `Todo ${id}`,
     createdAt: new Date(MOCK_NOW.getTime() - 24 * 60 * 60 * 1000), // 1 day ago
     updatedAt: new Date(MOCK_NOW.getTime() - 24 * 60 * 60 * 1000), // same as created
+    sortOrder: '0|hzzzzz:',
     ...overrides,
   });
 

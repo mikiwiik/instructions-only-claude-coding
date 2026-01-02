@@ -29,6 +29,7 @@ describe('generateTodoActivities', () => {
     text: 'Test todo',
     createdAt: new Date(MOCK_NOW.getTime() - 24 * 60 * 60 * 1000), // 1 day ago
     updatedAt: new Date(MOCK_NOW.getTime() - 24 * 60 * 60 * 1000), // same as created
+    sortOrder: '0|hzzzzz:',
     ...overrides,
   });
 
@@ -131,6 +132,7 @@ describe('generateActivityTimeline', () => {
     text: `Todo ${id}`,
     createdAt: new Date(MOCK_NOW.getTime() - 24 * 60 * 60 * 1000),
     updatedAt: new Date(MOCK_NOW.getTime() - 24 * 60 * 60 * 1000),
+    sortOrder: '0|hzzzzz:',
     ...overrides,
   });
 
@@ -372,6 +374,7 @@ describe('getActivityCount', () => {
     text: `Todo ${id}`,
     createdAt: new Date(MOCK_NOW.getTime() - 24 * 60 * 60 * 1000),
     updatedAt: new Date(MOCK_NOW.getTime() - 24 * 60 * 60 * 1000),
+    sortOrder: '0|hzzzzz:',
     ...overrides,
   });
 
@@ -434,6 +437,7 @@ describe('Edge cases and performance', () => {
         text: 'Test',
         createdAt: new Date('invalid'),
         updatedAt: new Date('invalid'),
+        sortOrder: '0|hzzzzz:',
       },
     ];
 
@@ -447,6 +451,7 @@ describe('Edge cases and performance', () => {
       text: `Todo ${i}`,
       createdAt: new Date(MOCK_NOW.getTime() - i * 60 * 1000),
       updatedAt: new Date(MOCK_NOW.getTime() - i * 60 * 1000),
+      sortOrder: `0|${i.toString().padStart(6, '0')}:`,
     }));
 
     const start = performance.now();
@@ -467,6 +472,7 @@ describe('Edge cases and performance', () => {
       text: 'Test todo',
       createdAt: new Date(),
       updatedAt: new Date(),
+      sortOrder: '0|hzzzzz:',
     };
 
     const activities = generateTodoActivities(todo);

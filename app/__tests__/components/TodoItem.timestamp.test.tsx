@@ -11,6 +11,7 @@ interface EnhancedTodo {
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
+  sortOrder: string;
 }
 
 // Mock the timestamp utilities that will be implemented
@@ -121,6 +122,7 @@ const createMockTodo = (
     createdAt: new Date(Date.now() - 60000), // 1 minute ago
     updatedAt: new Date(Date.now() - 60000), // 1 minute ago
     deletedAt: undefined,
+    sortOrder: '0|hzzzzz:',
   };
 
   // Handle legacy completed boolean for backward compatibility
@@ -577,6 +579,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
         completed: false,
         createdAt: new Date(),
         updatedAt: new Date(), // Include required updatedAt field
+        sortOrder: '0|hzzzzz:',
       } as Todo;
 
       expect(() => {

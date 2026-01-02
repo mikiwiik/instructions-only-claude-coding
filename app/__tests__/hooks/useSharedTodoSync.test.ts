@@ -67,6 +67,7 @@ describe('useSharedTodoSync', () => {
       text: 'Test todo',
       createdAt: new Date(),
       updatedAt: new Date(),
+      sortOrder: '0|hzzzzz:',
     },
   ];
 

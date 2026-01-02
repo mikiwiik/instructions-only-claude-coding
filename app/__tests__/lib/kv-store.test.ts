@@ -23,12 +23,14 @@ describe('KVStore', () => {
       text: 'Test todo 1',
       createdAt: new Date('2024-01-01'),
       updatedAt: new Date('2024-01-01'),
+      sortOrder: '0|hzzzzz:',
     },
     {
       id: 'todo-2',
       text: 'Test todo 2',
       createdAt: new Date('2024-01-01'),
       updatedAt: new Date('2024-01-01'),
+      sortOrder: '0|i00007:',
     },
   ];
 
@@ -120,6 +122,7 @@ describe('KVStore', () => {
           text: 'New todo',
           createdAt: new Date(),
           updatedAt: new Date(),
+          sortOrder: '0|hzzzzz:',
         },
       ];
 

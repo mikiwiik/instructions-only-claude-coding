@@ -201,6 +201,7 @@ describe('getContextualTimestamp', () => {
       createdAt: new Date(MOCK_NOW.getTime() - 24 * 60 * 60 * 1000), // 1 day ago
       updatedAt: new Date(MOCK_NOW.getTime() - 24 * 60 * 60 * 1000), // 1 day ago (same as created)
       deletedAt: undefined,
+      sortOrder: '0|hzzzzz:',
     };
 
     // Handle legacy completed boolean for backward compatibility

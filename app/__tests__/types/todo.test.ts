@@ -41,6 +41,7 @@ describe('Todo Types', () => {
       completedAt: undefined,
       createdAt: new Date(),
       updatedAt: new Date(),
+      sortOrder: '0|hzzzzz:',
     };
 
     expect(todo).toHaveProperty('id');
@@ -56,7 +57,7 @@ describe('Todo Types', () => {
     expect(todo.updatedAt).toBeInstanceOf(Date);
   });
 
-  it('should support optional sortOrder field for LexoRank ordering (ADR-034)', () => {
+  it('should require sortOrder field for LexoRank ordering (ADR-034)', () => {
     const todoWithSortOrder: Todo = {
       id: '1',
       text: 'Test todo',
@@ -66,15 +67,6 @@ describe('Todo Types', () => {
     };
 
     expect(todoWithSortOrder.sortOrder).toBe('0|0i0000:');
-
-    const todoWithoutSortOrder: Todo = {
-      id: '2',
-      text: 'Test todo without sort order',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    expect(todoWithoutSortOrder.sortOrder).toBeUndefined();
   });
 
   it('should define TodoFilter type with correct values', () => {
@@ -94,6 +86,7 @@ describe('Todo Types', () => {
           completedAt: undefined,
           createdAt: new Date(),
           updatedAt: new Date(),
+          sortOrder: '0|hzzzzz:',
         },
       ],
       filter: 'all',
@@ -175,6 +168,7 @@ describe('Shared List Interfaces', () => {
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
         listId: TEST_UUIDS.LIST_1,
         authorId: TEST_UUIDS.USER_1,
         lastModifiedBy: TEST_UUIDS.USER_1,
@@ -210,6 +204,7 @@ describe('Zod Validation Schemas', () => {
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
       };
 
       expect(() => TodoSchema.parse(validTodo)).not.toThrow();
@@ -221,6 +216,7 @@ describe('Zod Validation Schemas', () => {
         text: 'Invalid todo',
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
       };
 
       expect(() => TodoSchema.parse(invalidTodo)).toThrow();
@@ -232,6 +228,7 @@ describe('Zod Validation Schemas', () => {
         text: '',
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
       };
 
       expect(() => TodoSchema.parse(invalidTodo)).toThrow(
@@ -245,12 +242,13 @@ describe('Zod Validation Schemas', () => {
         text: 'a'.repeat(501),
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
       };
 
       expect(() => TodoSchema.parse(invalidTodo)).toThrow('Todo text too long');
     });
 
-    it('should accept optional sortOrder field (ADR-034)', () => {
+    it('should require sortOrder field (ADR-034)', () => {
       const todoWithSortOrder = {
         id: TEST_UUIDS.TODO_1,
         text: 'Valid todo',
@@ -263,7 +261,7 @@ describe('Zod Validation Schemas', () => {
       expect(result.sortOrder).toBe('0|0i0000:');
     });
 
-    it('should accept Todo without sortOrder field (backward compatibility)', () => {
+    it('should reject Todo without sortOrder field', () => {
       const todoWithoutSortOrder = {
         id: TEST_UUIDS.TODO_1,
         text: 'Valid todo',
@@ -271,7 +269,7 @@ describe('Zod Validation Schemas', () => {
         updatedAt: new Date(),
       };
 
-      expect(() => TodoSchema.parse(todoWithoutSortOrder)).not.toThrow();
+      expect(() => TodoSchema.parse(todoWithoutSortOrder)).toThrow();
     });
   });
 
@@ -283,6 +281,7 @@ describe('Zod Validation Schemas', () => {
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
         listId: TEST_UUIDS.LIST_1,
         authorId: TEST_UUIDS.USER_1,
         lastModifiedBy: TEST_UUIDS.USER_1,
@@ -298,6 +297,7 @@ describe('Zod Validation Schemas', () => {
         text: 'Invalid shared todo',
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
         listId: 'invalid-uuid',
         authorId: TEST_UUIDS.USER_1,
         lastModifiedBy: TEST_UUIDS.USER_1,
@@ -315,6 +315,7 @@ describe('Zod Validation Schemas', () => {
         text: 'Invalid shared todo',
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
         listId: TEST_UUIDS.LIST_1,
         authorId: TEST_UUIDS.USER_1,
         lastModifiedBy: TEST_UUIDS.USER_1,
@@ -324,7 +325,7 @@ describe('Zod Validation Schemas', () => {
       expect(() => SharedTodoSchema.parse(invalidSharedTodo)).toThrow();
     });
 
-    it('should accept optional sortOrder field for SharedTodo (ADR-034)', () => {
+    it('should require sortOrder field for SharedTodo (ADR-034)', () => {
       const sharedTodoWithSortOrder = {
         id: TEST_UUIDS.TODO_1,
         text: 'Valid shared todo',
@@ -339,6 +340,23 @@ describe('Zod Validation Schemas', () => {
 
       const result = SharedTodoSchema.parse(sharedTodoWithSortOrder);
       expect(result.sortOrder).toBe('0|0i0000:');
+    });
+
+    it('should reject SharedTodo without sortOrder field', () => {
+      const sharedTodoWithoutSortOrder = {
+        id: TEST_UUIDS.TODO_1,
+        text: 'Valid shared todo',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        listId: TEST_UUIDS.LIST_1,
+        authorId: TEST_UUIDS.USER_1,
+        lastModifiedBy: TEST_UUIDS.USER_1,
+        syncVersion: 1,
+      };
+
+      expect(() =>
+        SharedTodoSchema.parse(sharedTodoWithoutSortOrder)
+      ).toThrow();
     });
   });
 
@@ -438,6 +456,7 @@ describe('Zod Validation Schemas', () => {
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
         listId: TEST_UUIDS.LIST_1,
         authorId: TEST_UUIDS.USER_1,
         lastModifiedBy: TEST_UUIDS.USER_1,
@@ -462,6 +481,7 @@ describe('Zod Validation Schemas', () => {
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
         listId: TEST_UUIDS.LIST_1,
         authorId: TEST_UUIDS.USER_1,
         lastModifiedBy: TEST_UUIDS.USER_1,
@@ -490,6 +510,7 @@ describe('Type Guards', () => {
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
         listId: TEST_UUIDS.LIST_1,
         authorId: TEST_UUIDS.USER_1,
         lastModifiedBy: TEST_UUIDS.USER_1,
@@ -506,6 +527,7 @@ describe('Type Guards', () => {
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
       };
 
       expect(isSharedTodo(todo)).toBe(false);
@@ -520,6 +542,7 @@ describe('Type Guards', () => {
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
       };
 
       expect(isLocalTodo(todo)).toBe(true);
@@ -532,6 +555,7 @@ describe('Type Guards', () => {
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
         listId: TEST_UUIDS.LIST_1,
         authorId: TEST_UUIDS.USER_1,
         lastModifiedBy: TEST_UUIDS.USER_1,
@@ -580,6 +604,7 @@ describe('Type Guards', () => {
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
         listId: TEST_UUIDS.LIST_1,
         authorId: TEST_UUIDS.USER_1,
         lastModifiedBy: TEST_UUIDS.USER_1,
@@ -620,6 +645,7 @@ describe('Validation Utilities', () => {
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
       };
 
       const result = validateTodo(validTodo);
@@ -632,6 +658,7 @@ describe('Validation Utilities', () => {
         text: 'Invalid todo',
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
       };
 
       expect(() => validateTodo(invalidTodo)).toThrow();
@@ -646,6 +673,7 @@ describe('Validation Utilities', () => {
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
         listId: TEST_UUIDS.LIST_1,
         authorId: TEST_UUIDS.USER_1,
         lastModifiedBy: TEST_UUIDS.USER_1,
@@ -662,6 +690,7 @@ describe('Validation Utilities', () => {
         text: 'Invalid shared todo',
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
         listId: 'invalid',
         authorId: 'invalid',
         lastModifiedBy: 'invalid',
@@ -694,6 +723,7 @@ describe('Validation Utilities', () => {
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
       };
 
       const result = safeParseTodo(validTodo);
@@ -709,6 +739,7 @@ describe('Validation Utilities', () => {
         text: 'Invalid todo',
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
       };
 
       const result = safeParseTodo(invalidTodo);
@@ -727,6 +758,7 @@ describe('Validation Utilities', () => {
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
         listId: TEST_UUIDS.LIST_1,
         authorId: TEST_UUIDS.USER_1,
         lastModifiedBy: TEST_UUIDS.USER_1,
@@ -746,6 +778,7 @@ describe('Validation Utilities', () => {
         text: 'Invalid shared todo',
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
         listId: 'invalid',
         authorId: 'invalid',
         lastModifiedBy: 'invalid',
@@ -772,6 +805,7 @@ describe('API Request/Response Types', () => {
             completedAt: undefined,
             createdAt: new Date(),
             updatedAt: new Date(),
+            sortOrder: '0|hzzzzz:',
           },
         ],
       };

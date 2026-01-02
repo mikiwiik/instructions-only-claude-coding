@@ -16,7 +16,6 @@ import {
   useSyncToBackend,
 } from './useTodoSync';
 import { useTodoOperations } from './useTodoOperations';
-import { migrateToLexoRank } from '../lib/migration-utils';
 
 export function useTodos() {
   const [state, setState] = useState<TodoState>({
@@ -32,9 +31,9 @@ export function useTodos() {
     clearRateLimitState,
   } = useSyncToBackend(MAIN_LIST_ID);
 
-  // Fetch todos from backend on mount and run migration if needed
+  // Fetch todos from backend on mount
   useEffect(() => {
-    const fetchAndMigrateTodos = async () => {
+    const fetchTodos = async () => {
       try {
         const response = await fetch(`/api/shared/${MAIN_LIST_ID}/sync`);
 
@@ -42,14 +41,8 @@ export function useTodos() {
           const data = await response.json();
           const todosWithDates = (data.todos || []).map(convertTodoDates);
 
-          // Run LexoRank migration if needed (assigns sortOrder to legacy todos)
-          const migratedTodos = await migrateToLexoRank(
-            todosWithDates,
-            syncToBackend
-          );
-
           setState({
-            todos: migratedTodos,
+            todos: todosWithDates,
             filter: 'active',
           });
         } else if (response.status === 404) {
@@ -66,8 +59,7 @@ export function useTodos() {
       }
     };
 
-    fetchAndMigrateTodos();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchTodos();
   }, []);
 
   // Get all CRUD operations from extracted hook
@@ -79,14 +71,9 @@ export function useTodos() {
 
   // Filter and sort todos based on current filter
   const getFilteredTodos = useCallback(() => {
-    // Sort by sortOrder ascending (todos without sortOrder go last)
+    // Sort by sortOrder ascending
     const sortBySortOrder = (todos: Todo[]) => {
-      return [...todos].sort((a, b) => {
-        if (!a.sortOrder && !b.sortOrder) return 0;
-        if (!a.sortOrder) return 1;
-        if (!b.sortOrder) return -1;
-        return a.sortOrder.localeCompare(b.sortOrder);
-      });
+      return [...todos].sort((a, b) => a.sortOrder.localeCompare(b.sortOrder));
     };
 
     // Sort by timestamp descending (most recent first)

@@ -27,6 +27,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
         completedAt: undefined,
         createdAt: new Date('2024-01-01T10:00:00Z'),
         updatedAt: new Date('2024-01-01T10:00:00Z'),
+        sortOrder: '0|hzzzzz:',
         // deletedAt is optional
       };
 
@@ -51,6 +52,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
         completedAt: undefined,
         createdAt: new Date('2024-01-01T10:00:00Z'),
         updatedAt: new Date('2024-01-01T11:00:00Z'),
+        sortOrder: '0|hzzzzz:',
         deletedAt: new Date('2024-01-01T12:00:00Z'),
       };
 
@@ -69,6 +71,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
         completedAt: new Date('2024-01-01T11:00:00Z'),
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
       };
 
       const enhancedTodo: EnhancedTodo = baseTodo;
@@ -93,6 +96,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
             completedAt: undefined,
             createdAt: new Date('2024-01-01T10:00:00Z'),
             updatedAt: new Date('2024-01-01T10:00:00Z'),
+            sortOrder: '0|hzzzzz:',
           },
           expectedState: 'active',
         },
@@ -104,6 +108,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
             completedAt: new Date('2024-01-01T11:00:00Z'),
             createdAt: new Date('2024-01-01T10:00:00Z'),
             updatedAt: new Date('2024-01-01T11:00:00Z'),
+            sortOrder: '0|hzzzzz:',
           },
           expectedState: 'completed',
         },
@@ -115,6 +120,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
             completedAt: undefined,
             createdAt: new Date('2024-01-01T10:00:00Z'),
             updatedAt: new Date('2024-01-01T11:00:00Z'),
+            sortOrder: '0|hzzzzz:',
             deletedAt: new Date('2024-01-01T12:00:00Z'),
           },
           expectedState: 'deleted',
@@ -127,6 +133,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
             completedAt: new Date('2024-01-01T11:00:00Z'),
             createdAt: new Date('2024-01-01T10:00:00Z'),
             updatedAt: new Date('2024-01-01T11:00:00Z'),
+            sortOrder: '0|hzzzzz:',
             deletedAt: new Date('2024-01-01T12:00:00Z'),
           },
           expectedState: 'deleted',
@@ -240,6 +247,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
           completedAt: undefined,
           createdAt: new Date('2024-01-01T10:00:00Z'),
           updatedAt: new Date('2024-01-01T10:00:00Z'),
+          sortOrder: '0|hzzzzz:',
         },
         {
           id: '2',
@@ -247,6 +255,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
           completedAt: new Date('2024-01-01T11:00:00Z'),
           createdAt: new Date('2024-01-01T10:00:00Z'),
           updatedAt: new Date('2024-01-01T11:00:00Z'),
+          sortOrder: '0|hzzzzz:',
         },
         {
           id: '3',
@@ -254,6 +263,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
           completedAt: undefined,
           createdAt: new Date('2024-01-01T10:00:00Z'),
           updatedAt: new Date('2024-01-01T11:00:00Z'),
+          sortOrder: '0|hzzzzz:',
           deletedAt: new Date('2024-01-01T12:00:00Z'),
         },
       ];
@@ -281,6 +291,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
           completedAt: undefined,
           createdAt: new Date(),
           updatedAt: new Date(),
+          sortOrder: '0|hzzzzz:',
         },
         {
           id: '2',
@@ -288,6 +299,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
           completedAt: new Date('2024-01-01T11:00:00Z'),
           createdAt: new Date(),
           updatedAt: new Date(),
+          sortOrder: '0|hzzzzz:',
         },
       ];
 
@@ -315,6 +327,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
         completedAt: undefined,
         createdAt: new Date('2024-01-01T10:00:00Z'),
         updatedAt: new Date('2024-01-01T11:00:00Z'),
+        sortOrder: '0|hzzzzz:',
         deletedAt: new Date('2024-01-01T12:00:00Z'),
       };
 
@@ -356,6 +369,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
         completedAt: undefined,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
         // deletedAt is intentionally omitted
       };
 
@@ -380,6 +394,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
           completedAt: undefined,
           createdAt: new Date('2024-01-01T10:00:00Z'),
           updatedAt: new Date('2024-01-01T10:00:00Z'),
+          sortOrder: '0|hzzzzz:',
         },
         {
           id: '2',
@@ -387,6 +402,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
           completedAt: new Date('2024-01-01T11:00:00Z'),
           createdAt: new Date('2024-01-01T10:00:00Z'),
           updatedAt: new Date('2024-01-01T11:00:00Z'),
+          sortOrder: '0|hzzzzz:',
         },
         {
           id: '3',
@@ -394,6 +410,7 @@ describe('Enhanced Todo Types with Soft Delete Support', () => {
           completedAt: undefined,
           createdAt: new Date('2024-01-01T10:00:00Z'),
           updatedAt: new Date('2024-01-01T11:00:00Z'),
+          sortOrder: '0|hzzzzz:',
           deletedAt: new Date('2024-01-01T12:00:00Z'),
         },
       ];
