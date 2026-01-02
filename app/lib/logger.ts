@@ -89,13 +89,20 @@ export function createChildLogger(bindings: pino.Bindings): Logger {
 
 /**
  * Generate a unique request ID for tracing
- * Uses crypto.randomUUID when available, falls back to timestamp-based ID
+ * Uses crypto.randomUUID when available, falls back to crypto.getRandomValues
  */
 export function generateRequestId(): string {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
     return crypto.randomUUID();
   }
-  return `req-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+  // Fallback using crypto.getRandomValues (more widely supported than randomUUID)
+  if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+    const array = new Uint8Array(16);
+    crypto.getRandomValues(array);
+    return Array.from(array, (b) => b.toString(16).padStart(2, '0')).join('');
+  }
+  // Last resort fallback for environments without crypto
+  return `req-${Date.now()}-${performance.now().toString(36)}`;
 }
 
 /**
