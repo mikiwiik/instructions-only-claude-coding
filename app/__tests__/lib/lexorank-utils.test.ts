@@ -3,7 +3,6 @@ import type { Todo } from '../../types/todo';
 import {
   generateInitialSortOrder,
   generateBetweenSortOrder,
-  assignMissingSortOrders,
 } from '../../lib/lexorank-utils';
 
 // Helper to create mock todos for testing
@@ -13,6 +12,7 @@ function createMockTodo(overrides: Partial<Todo> = {}): Todo {
     text: 'Test todo',
     createdAt: new Date(),
     updatedAt: new Date(),
+    sortOrder: LexoRank.middle().toString(),
     ...overrides,
   };
 }
@@ -97,73 +97,6 @@ describe('lexorank-utils', () => {
 
       expect(typeof rank).toBe('string');
       expect(() => LexoRank.parse(rank)).not.toThrow();
-    });
-  });
-
-  describe('assignMissingSortOrders', () => {
-    it('should assign sortOrder to todos without one', () => {
-      const todos: Todo[] = [
-        createMockTodo({ id: '1' }),
-        createMockTodo({ id: '2' }),
-        createMockTodo({ id: '3' }),
-      ];
-
-      const result = assignMissingSortOrders(todos);
-
-      expect(result).toHaveLength(3);
-      result.forEach((todo) => {
-        expect(todo.sortOrder).toBeDefined();
-        expect(() => LexoRank.parse(todo.sortOrder!)).not.toThrow();
-      });
-    });
-
-    it('should preserve existing sortOrder values', () => {
-      const existingRank = LexoRank.middle().toString();
-      const todos: Todo[] = [
-        createMockTodo({ id: '1', sortOrder: existingRank }),
-        createMockTodo({ id: '2' }), // no sortOrder
-      ];
-
-      const result = assignMissingSortOrders(todos);
-
-      expect(result[0].sortOrder).toBe(existingRank);
-      expect(result[1].sortOrder).toBeDefined();
-      expect(result[1].sortOrder).not.toBe(existingRank);
-    });
-
-    it('should maintain relative order based on array position', () => {
-      const todos: Todo[] = [
-        createMockTodo({ id: 'first' }),
-        createMockTodo({ id: 'second' }),
-        createMockTodo({ id: 'third' }),
-      ];
-
-      const result = assignMissingSortOrders(todos);
-
-      // First should come before second, second before third
-      expect(result[0].sortOrder! < result[1].sortOrder!).toBe(true);
-      expect(result[1].sortOrder! < result[2].sortOrder!).toBe(true);
-    });
-
-    it('should return empty array for empty input', () => {
-      const result = assignMissingSortOrders([]);
-
-      expect(result).toEqual([]);
-    });
-
-    it('should skip completed and deleted todos', () => {
-      const todos: Todo[] = [
-        createMockTodo({ id: '1' }), // active, no sortOrder
-        createMockTodo({ id: '2', completedAt: new Date() }), // completed
-        createMockTodo({ id: '3', deletedAt: new Date() }), // deleted
-      ];
-
-      const result = assignMissingSortOrders(todos);
-
-      // Only first todo should have sortOrder assigned
-      expect(result[0].sortOrder).toBeDefined();
-      expect(result[1].sortOrder).toBeUndefined();
-      expect(result[2].sortOrder).toBeUndefined();
     });
   });
 });

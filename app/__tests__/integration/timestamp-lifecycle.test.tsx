@@ -271,6 +271,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
             completed: false,
             createdAt: new Date(Date.now() - 5 * 60000), // 5 minutes ago
             updatedAt: new Date(Date.now() - 5 * 60000), // Same as created
+            sortOrder: '0|hzzzzz:',
           },
           expectedText: /created 5 minutes ago/i,
         },
@@ -282,6 +283,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
             completed: false,
             createdAt: new Date(Date.now() - 60 * 60000), // 1 hour ago
             updatedAt: new Date(Date.now() - 30 * 60000), // 30 minutes ago
+            sortOrder: '0|hzzzzz:',
           },
           expectedText: /updated 30 minutes ago/i,
         },
@@ -293,6 +295,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
             completed: true,
             createdAt: new Date(Date.now() - 120 * 60000), // 2 hours ago
             updatedAt: new Date(Date.now() - 15 * 60000), // 15 minutes ago
+            sortOrder: '0|hzzzzz:',
           },
           expectedText: /completed 15 minutes ago/i,
         },
@@ -416,6 +419,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
         completed: false,
         createdAt: new Date(Date.now() - 30 * 60000),
         updatedAt: new Date(Date.now() - 30 * 60000),
+        sortOrder: '0|hzzzzz:',
       };
 
       const TestComponent = () => {
@@ -532,6 +536,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
         completed: false,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: '0|hzzzzz:',
       };
 
       // Component should not crash even if timestamp utilities fail
@@ -577,6 +582,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
         completed: false,
         createdAt: new Date(Date.now() - 35 * 24 * 60 * 60 * 1000), // 35 days ago
         updatedAt: new Date(Date.now() - 35 * 24 * 60 * 60 * 1000),
+        sortOrder: '0|hzzzzz:',
       };
 
       renderTodoItem(todo);
@@ -597,6 +603,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
         completed: false,
         createdAt: new Date(Date.now() - 30 * 60000), // 30 minutes ago
         updatedAt: new Date(Date.now() - 30 * 60000),
+        sortOrder: '0|hzzzzz:',
       };
 
       renderTodoItem(todo);
@@ -619,6 +626,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
         completed: false,
         createdAt: new Date(Date.now() - 60 * 60000),
         updatedAt: new Date(Date.now() - 30 * 60000),
+        sortOrder: '0|hzzzzz:',
       };
 
       renderTodoItem(todo);

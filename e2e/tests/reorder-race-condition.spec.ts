@@ -2,18 +2,17 @@ import { test, expect } from '@playwright/test';
 import { TodoPage } from '../pages/todo-page';
 
 /**
- * Bug Reproduction Attempt: New Todos Don't React to Initial Reorder Request
+ * Regression Tests: Todo Reorder Race Conditions
  *
- * Issue: #405 (part of Epic #397 - LexoRank Optimization)
+ * Originally created as part of Issue #405 (Epic #397 - LexoRank Optimization)
+ * to reproduce a production bug where newly added todos didn't respond to
+ * initial reorder button clicks.
  *
- * This test suite attempts to reproduce the production bug where newly added
- * todos don't respond to initial reorder button clicks.
+ * The bug was fixed by the LexoRank implementation which assigns sortOrder
+ * on todo creation, eliminating stale closure issues. These tests now serve
+ * as regression tests to ensure the fix continues to work.
  *
- * Root cause hypothesis: Stale closure in React hooks - the moveUp/moveDown
- * callbacks reference an old todos array until React re-renders.
- *
- * Strategy: Use network throttling and API latency to widen the race window
- * between optimistic UI update and React re-render with fresh callbacks.
+ * @see ADR-034 for LexoRank decision
  */
 test.describe('Reorder Race Condition (#405)', () => {
   let todoPage: TodoPage;
@@ -157,9 +156,9 @@ test.describe('Reorder Race Condition (#405)', () => {
 });
 
 /**
- * Tests with simulated network latency to widen the race condition window.
- * These tests add artificial delays to API responses to simulate production
- * network conditions where the bug is observed.
+ * Regression tests with simulated network latency.
+ * These tests add artificial delays to API responses to ensure the LexoRank
+ * fix handles network latency gracefully.
  */
 test.describe('Reorder Race Condition - With Network Latency (#405)', () => {
   let todoPage: TodoPage;
@@ -256,14 +255,8 @@ test.describe('Reorder Race Condition - With Network Latency (#405)', () => {
 });
 
 /**
- * CDP network throttling tests removed - caused test hangs.
- * The API latency tests provide similar coverage.
- */
-
-/**
- * Tests that directly invoke the reorder via JavaScript to bypass React's
- * event handling timing. This tests if the underlying callback logic works
- * regardless of DOM event timing.
+ * Regression tests that directly invoke the reorder via JavaScript to bypass
+ * React's event handling timing. Verifies callback logic works correctly.
  */
 test.describe('Reorder Race Condition - Direct Invocation (#405)', () => {
   let todoPage: TodoPage;

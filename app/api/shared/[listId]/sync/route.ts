@@ -33,9 +33,6 @@ function applyOperation(
       const todoId = data as string;
       return { success: true, todos: todos.filter((t) => t.id !== todoId) };
     }
-    case 'reorder': {
-      return { success: true, todos: data as Todo[] };
-    }
     default:
       return { success: false, error: 'Invalid operation', status: 400 };
   }

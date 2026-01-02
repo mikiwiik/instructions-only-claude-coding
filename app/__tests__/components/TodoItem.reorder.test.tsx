@@ -55,6 +55,7 @@ const createMockTodo = (overrides: Partial<Todo> = {}): Todo => ({
   completedAt: undefined,
   createdAt: new Date('2025-01-01T00:00:00.000Z'),
   updatedAt: new Date('2025-01-01T00:00:00.000Z'),
+  sortOrder: '0|hzzzzz:',
   ...overrides,
 });
 

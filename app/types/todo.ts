@@ -9,9 +9,8 @@ export interface Todo {
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
-  // TODO: Make non-optional after #403 (Migration) is complete
   /** LexoRank string for ordering active todos (see ADR-034) */
-  sortOrder?: string;
+  sortOrder: string;
 }
 
 export type TodoFilter =
@@ -197,7 +196,7 @@ export const TodoSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   deletedAt: z.date().optional(),
-  sortOrder: z.string().optional(),
+  sortOrder: z.string(),
 });
 
 /**
@@ -213,7 +212,7 @@ export const SharedTodoSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   deletedAt: z.date().optional(),
-  sortOrder: z.string().optional(),
+  sortOrder: z.string(),
   listId: UUIDSchema,
   authorId: UUIDSchema,
   lastModifiedBy: UUIDSchema,

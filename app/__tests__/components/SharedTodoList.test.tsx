@@ -50,6 +50,7 @@ describe('SharedTodoList', () => {
       text: 'Test todo 1',
       createdAt: new Date(),
       updatedAt: new Date(),
+      sortOrder: '0|hzzzzz:',
     },
     {
       id: 'todo-2',
@@ -57,6 +58,7 @@ describe('SharedTodoList', () => {
       completedAt: new Date(),
       createdAt: new Date(),
       updatedAt: new Date(),
+      sortOrder: '0|hzzzzz:',
     },
   ];
 

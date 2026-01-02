@@ -29,6 +29,7 @@ describe('TodoItem Gesture Integration', () => {
     completedAt: undefined,
     createdAt: new Date(),
     updatedAt: new Date(),
+    sortOrder: '0|hzzzzz:',
   };
 
   const mockProps = {

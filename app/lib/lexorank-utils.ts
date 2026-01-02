@@ -50,31 +50,3 @@ export function generateBetweenSortOrder(
   const after = LexoRank.parse(afterRank);
   return before.between(after).toString();
 }
-
-/** Assign sortOrder to items lacking one (migration utility). */
-export function assignMissingSortOrders(items: Todo[]): Todo[] {
-  if (items.length === 0) {
-    return [];
-  }
-
-  const existingRanks = items
-    .filter((item) => isActiveTodo(item) && item.sortOrder)
-    .map((item) => LexoRank.parse(item.sortOrder!));
-
-  let currentRank =
-    existingRanks.length > 0
-      ? existingRanks.reduce(
-          (max, rank) => (rank.compareTo(max) > 0 ? rank : max),
-          existingRanks[0]
-        )
-      : LexoRank.middle().genPrev();
-
-  return items.map((item) => {
-    if (item.sortOrder || !isActiveTodo(item)) {
-      return item;
-    }
-
-    currentRank = currentRank.genNext();
-    return { ...item, sortOrder: currentRank.toString() };
-  });
-}

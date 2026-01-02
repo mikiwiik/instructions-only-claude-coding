@@ -75,6 +75,7 @@ export const createMockTodo = (
     createdAt: Date;
     updatedAt: Date;
     deletedAt?: Date;
+    sortOrder?: string;
   }> = {}
 ) => {
   const base = {
@@ -84,6 +85,7 @@ export const createMockTodo = (
     createdAt: new Date('2023-01-01'),
     updatedAt: new Date('2023-01-01'),
     deletedAt: undefined,
+    sortOrder: '0|hzzzzz:',
   };
 
   // Handle legacy completed boolean for backward compatibility
@@ -176,6 +178,7 @@ describe('Test Utils', () => {
     expect(todo).toHaveProperty('id', '1');
     expect(todo).toHaveProperty('text', 'Test todo');
     expect(todo).toHaveProperty('completedAt', undefined);
+    expect(todo).toHaveProperty('sortOrder', '0|hzzzzz:');
   });
 
   it('should create mock todo with overrides', () => {

@@ -6,8 +6,10 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import type { Todo } from '../types/todo';
+import type { SyncOperation } from '../types/sync';
 import { SyncQueue } from '../lib/sync-queue';
 import { useSharedTodoSync } from './useSharedTodoSync';
+import { generateInitialSortOrder } from '../lib/lexorank-utils';
 
 interface UseSharedTodosOptions {
   listId: string;
@@ -39,7 +41,7 @@ export function useSharedTodos({
   // Optimistic update helper
   const optimisticUpdate = useCallback(
     async (
-      operation: 'create' | 'update' | 'delete' | 'reorder',
+      operation: SyncOperation,
       updater: (todos: Todo[]) => Todo[],
       data: unknown
     ) => {
@@ -59,11 +61,16 @@ export function useSharedTodos({
         text,
         createdAt: new Date(),
         updatedAt: new Date(),
+        sortOrder: generateInitialSortOrder(todos),
       };
 
-      await optimisticUpdate('create', (todos) => [...todos, newTodo], newTodo);
+      await optimisticUpdate(
+        'create',
+        (currentTodos) => [newTodo, ...currentTodos],
+        newTodo
+      );
     },
-    [optimisticUpdate]
+    [optimisticUpdate, todos]
   );
 
   const updateTodo = useCallback(
@@ -103,12 +110,11 @@ export function useSharedTodos({
     [todos, updateTodo]
   );
 
-  const reorderTodos = useCallback(
-    async (reorderedTodos: Todo[]) => {
-      await optimisticUpdate('reorder', () => reorderedTodos, reorderedTodos);
-    },
-    [optimisticUpdate]
-  );
+  const reorderTodos = useCallback(async (reorderedTodos: Todo[]) => {
+    // For shared lists, we still need to send all todos for now
+    // TODO: Migrate to reorder-single once SharedTodoList supports LexoRank
+    setTodos(reorderedTodos);
+  }, []);
 
   // Fetch initial todos
   useEffect(() => {

@@ -951,55 +951,8 @@ describe('useTodos hook', () => {
       expect(result.current.todos[2].text).toBe('Completed todo');
     });
 
-    it('should put todos without sortOrder last among active', async () => {
-      const todosWithMixedSortOrder = [
-        {
-          id: 'todo-1',
-          text: 'Has sortOrder',
-          sortOrder: '0|0i0000:',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-        {
-          id: 'todo-2',
-          text: 'No sortOrder',
-          // No sortOrder field
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-        {
-          id: 'todo-3',
-          text: 'Also has sortOrder',
-          sortOrder: '0|0i0001:',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-      ];
-
-      mockFetch.mockImplementation((url: string, options?: FetchOptions) => {
-        if (options?.method === 'POST') {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve({ success: true }),
-          });
-        }
-        return Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve({ todos: todosWithMixedSortOrder }),
-        });
-      });
-
-      const { result } = renderHook(() => useTodos());
-
-      await waitFor(() => {
-        expect(result.current.isInitialized).toBe(true);
-      });
-
-      // Active todos: those with sortOrder first (ascending), then without
-      expect(result.current.todos[0].text).toBe('Has sortOrder');
-      expect(result.current.todos[1].text).toBe('Also has sortOrder');
-      expect(result.current.todos[2].text).toBe('No sortOrder');
-    });
+    // Note: Test for "todos without sortOrder" removed as part of post-migration cleanup
+    // (Issue #412). Since sortOrder is now required on all todos, this scenario no longer exists.
   });
 
   describe('addTodo sortOrder (LexoRank)', () => {

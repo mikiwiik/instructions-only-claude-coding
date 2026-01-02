@@ -67,6 +67,7 @@ describe('useSharedTodos', () => {
       text: 'Test todo 1',
       createdAt: new Date(),
       updatedAt: new Date(),
+      sortOrder: '0|hzzzzz:',
     },
   ];
 
@@ -241,12 +242,14 @@ describe('useSharedTodos', () => {
           text: 'First',
           createdAt: new Date(),
           updatedAt: new Date(),
+          sortOrder: '0|hzzzzz:',
         },
         {
           id: 'todo-2',
           text: 'Second',
           createdAt: new Date(),
           updatedAt: new Date(),
+          sortOrder: '0|i00007:',
         },
       ];
 

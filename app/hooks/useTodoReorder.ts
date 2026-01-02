@@ -7,10 +7,7 @@
 import { useCallback } from 'react';
 import { Todo } from '../types/todo';
 import { SyncToBackendFn, SetTodoStateFn } from './useTodoSync';
-import {
-  generateBetweenSortOrder,
-  assignMissingSortOrders,
-} from '../lib/lexorank-utils';
+import { generateBetweenSortOrder } from '../lib/lexorank-utils';
 
 interface UseTodoReorderProps {
   todos: Todo[];
@@ -40,14 +37,11 @@ export function useTodoReorder({
         sourceIndex === destinationIndex;
       if (isInvalid) return;
 
-      // Ensure all active todos have sortOrders (migration support)
-      const todosWithSortOrder = assignMissingSortOrders(activeTodos);
-
       // Work with current visual order (will be sorted by sortOrder in #402)
-      const movedTodo = todosWithSortOrder[sourceIndex];
+      const movedTodo = activeTodos[sourceIndex];
 
       // Build the reordered array to get correct neighbors
-      const reorderedActive = [...todosWithSortOrder];
+      const reorderedActive = [...activeTodos];
       reorderedActive.splice(sourceIndex, 1);
       reorderedActive.splice(destinationIndex, 0, movedTodo);
 

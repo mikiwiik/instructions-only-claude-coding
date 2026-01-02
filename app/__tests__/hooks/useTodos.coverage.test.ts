@@ -284,12 +284,14 @@ describe('useTodos hook - coverage tests', () => {
           text: 'First todo',
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
+          sortOrder: '0|hzzzzz:',
         },
         {
           id: 'todo-2',
           text: 'Second todo',
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
+          sortOrder: '0|i00007:',
         },
       ];
 
