@@ -8,6 +8,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import type { Todo } from '../types/todo';
 import type { SyncState } from '../types/sync';
+import { logger } from '../lib/logger';
 
 interface UseSharedTodoSyncOptions {
   listId: string;
@@ -53,8 +54,7 @@ export function useSharedTodoSync({
           lastSyncTime: data.lastModified,
         }));
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Failed to parse sync event:', error);
+        logger.error({ error }, 'Failed to parse sync event');
       }
     },
     [onSync]

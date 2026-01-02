@@ -10,6 +10,7 @@
  */
 
 import * as Sentry from '@sentry/nextjs';
+import { logger } from './logger';
 
 /**
  * Rate limit event types for categorization in Sentry
@@ -56,10 +57,9 @@ export function trackRateLimitEvent(
     process.env.NODE_ENV !== 'production' ||
     process.env.USE_IN_MEMORY_STORE === 'true'
   ) {
-    // Log to console in development for debugging
+    // Log in development for debugging
     if (process.env.NODE_ENV === 'development') {
-      // eslint-disable-next-line no-console
-      console.info(`[Rate Limit ${type}]`, metadata);
+      logger.info({ type, ...metadata }, `Rate limit ${type}`);
     }
     return;
   }
@@ -95,9 +95,8 @@ export function captureError(
   error: unknown,
   context?: Record<string, unknown>
 ): void {
-  // Always log to console for development visibility
-  // eslint-disable-next-line no-console
-  console.error('[App Error]', error, context);
+  // Always log for development visibility
+  logger.error({ error, ...context }, '[App Error]');
 
   // Don't send to Sentry in non-production
   if (
