@@ -9,7 +9,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import { TodoState, TodoFilter } from '../types/todo';
+import { Todo, TodoState, TodoFilter } from '../types/todo';
 import {
   MAIN_LIST_ID,
   convertTodoDates,
@@ -80,7 +80,7 @@ export function useTodos() {
   // Filter and sort todos based on current filter
   const getFilteredTodos = useCallback(() => {
     // Sort by sortOrder ascending (todos without sortOrder go last)
-    const sortBySortOrder = (todos: typeof state.todos) => {
+    const sortBySortOrder = (todos: Todo[]) => {
       return [...todos].sort((a, b) => {
         if (!a.sortOrder && !b.sortOrder) return 0;
         if (!a.sortOrder) return 1;
@@ -91,8 +91,8 @@ export function useTodos() {
 
     // Sort by timestamp descending (most recent first)
     const sortByTimestampDesc = (
-      todos: typeof state.todos,
-      getTime: (t: (typeof state.todos)[0]) => number
+      todos: Todo[],
+      getTime: (t: Todo) => number
     ) => {
       return [...todos].sort((a, b) => getTime(b) - getTime(a));
     };
