@@ -8,6 +8,7 @@ import { useState, useCallback, useEffect } from 'react';
 import type { Todo } from '../types/todo';
 import { SyncQueue } from '../lib/sync-queue';
 import { useSharedTodoSync } from './useSharedTodoSync';
+import { logger } from '../lib/logger';
 
 interface UseSharedTodosOptions {
   listId: string;
@@ -120,8 +121,7 @@ export function useSharedTodos({
           setTodos(data.todos);
         }
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Failed to fetch todos:', error);
+        logger.error({ error, listId }, 'Failed to fetch todos');
       }
     };
 

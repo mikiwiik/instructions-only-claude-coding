@@ -3,6 +3,7 @@
  */
 
 import type { SyncQueueItem, SyncOperation } from '../types/sync';
+import { logger } from './logger';
 
 export class SyncQueue {
   private queue: SyncQueueItem[] = [];
@@ -79,8 +80,15 @@ export class SyncQueue {
     if (item.retryCount >= item.maxRetries) {
       // Max retries reached, remove from queue
       this.queue.shift();
-      // eslint-disable-next-line no-console
-      console.error('Sync failed after max retries:', error);
+      logger.error(
+        {
+          error,
+          todoId: item.todoId,
+          operation: item.operation,
+          retryCount: item.retryCount,
+        },
+        'Sync failed after max retries'
+      );
       return;
     }
 

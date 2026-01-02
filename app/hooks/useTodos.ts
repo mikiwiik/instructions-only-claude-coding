@@ -17,6 +17,7 @@ import {
 } from './useTodoSync';
 import { useTodoOperations } from './useTodoOperations';
 import { migrateToLexoRank } from '../lib/migration-utils';
+import { logger } from '../lib/logger';
 
 export function useTodos() {
   const [state, setState] = useState<TodoState>({
@@ -57,8 +58,7 @@ export function useTodos() {
           setState({ todos: [], filter: 'active' });
         }
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Failed to load todos from backend:', error);
+        logger.error({ error }, 'Failed to load todos from backend');
         setState({ todos: [], filter: 'active' });
       } finally {
         setIsLoading(false);
