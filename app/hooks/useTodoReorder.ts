@@ -37,7 +37,6 @@ export function useTodoReorder({
         sourceIndex === destinationIndex;
       if (isInvalid) return;
 
-      // Work with current visual order (will be sorted by sortOrder in #402)
       const movedTodo = activeTodos[sourceIndex];
 
       // Build the reordered array to get correct neighbors
