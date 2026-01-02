@@ -6,6 +6,7 @@
 import { useCallback, useRef, useEffect, useState } from 'react';
 import { Todo, TodoState } from '../types/todo';
 import { RATE_LIMIT_DEFAULTS, SYNC_CONFIG } from '../lib/config';
+import { logger } from '../lib/logger';
 
 /**
  * Error class for rate limit (429) responses.
@@ -164,8 +165,7 @@ export function useSyncToBackend(
 
         return await response.json();
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Failed to sync to backend:', error);
+        logger.error({ error, listId, operation }, 'Failed to sync to backend');
         throw error;
       }
     },

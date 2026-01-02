@@ -4,6 +4,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { KVStore } from '@/lib/kv-store';
+import { logger } from '@/lib/logger';
 import type { SyncOperation } from '@/types/sync';
 import type { Todo } from '@/types/todo';
 
@@ -77,8 +78,7 @@ export async function POST(
       timestamp: Date.now(),
     });
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Sync error:', error);
+    logger.error({ error, listId }, 'Sync error');
     return NextResponse.json(
       { error: 'Sync operation failed' },
       { status: 500 }
@@ -104,8 +104,7 @@ export async function GET(
       lastModified: list.lastModified,
     });
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Get list error:', error);
+    logger.error({ error, listId }, 'Get list error');
     return NextResponse.json(
       { error: 'Failed to fetch list' },
       { status: 500 }
