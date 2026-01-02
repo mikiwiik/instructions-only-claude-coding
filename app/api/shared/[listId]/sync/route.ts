@@ -4,7 +4,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { KVStore } from '@/lib/kv-store';
-import { logger } from '@/lib/logger';
+import { createChildLogger, generateRequestId } from '@/lib/logger';
 import type { SyncOperation } from '@/types/sync';
 import type { Todo } from '@/types/todo';
 
@@ -44,6 +44,9 @@ export async function POST(
   { params }: { params: Promise<{ listId: string }> }
 ) {
   const { listId } = await params;
+  const requestId = generateRequestId();
+  const log = createChildLogger({ requestId, listId, method: 'POST' });
+  const startTime = Date.now();
 
   try {
     const body = await request.json();
@@ -51,6 +54,7 @@ export async function POST(
       operation: SyncOperation;
       data: unknown;
     };
+    log.debug({ operation }, 'Processing sync operation');
 
     let list = await KVStore.getList(listId);
 
@@ -72,13 +76,17 @@ export async function POST(
 
     await KVStore.updateTodos(listId, result.todos);
 
+    const duration = Date.now() - startTime;
+    log.info({ duration, todoCount: result.todos.length }, 'Sync completed');
+
     return NextResponse.json({
       success: true,
       todos: result.todos,
       timestamp: Date.now(),
     });
   } catch (error) {
-    logger.error({ error, listId }, 'Sync error');
+    const duration = Date.now() - startTime;
+    log.error({ error, duration }, 'Sync error');
     return NextResponse.json(
       { error: 'Sync operation failed' },
       { status: 500 }
@@ -91,20 +99,28 @@ export async function GET(
   { params }: { params: Promise<{ listId: string }> }
 ) {
   const { listId } = await params;
+  const requestId = generateRequestId();
+  const log = createChildLogger({ requestId, listId, method: 'GET' });
+  const startTime = Date.now();
 
   try {
     const list = await KVStore.getList(listId);
 
     if (!list) {
+      log.debug('List not found');
       return NextResponse.json({ error: 'List not found' }, { status: 404 });
     }
+
+    const duration = Date.now() - startTime;
+    log.info({ duration, todoCount: list.todos.length }, 'Get list completed');
 
     return NextResponse.json({
       todos: list.todos,
       lastModified: list.lastModified,
     });
   } catch (error) {
-    logger.error({ error, listId }, 'Get list error');
+    const duration = Date.now() - startTime;
+    log.error({ error, duration }, 'Get list error');
     return NextResponse.json(
       { error: 'Failed to fetch list' },
       { status: 500 }
