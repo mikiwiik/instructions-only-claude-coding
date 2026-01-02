@@ -8,6 +8,7 @@
 import type { Todo } from '../types/todo';
 import { SyncToBackendFn } from '../hooks/useTodoSync';
 import { assignMissingSortOrders } from './lexorank-utils';
+import { logger } from './logger';
 
 function isActiveTodo(todo: Todo): boolean {
   return !todo.completedAt && !todo.deletedAt;
@@ -59,8 +60,7 @@ export async function migrateToLexoRank(
         await syncToBackend('update', todo);
       } catch {
         // Log but don't fail migration - sortOrder will be synced next edit
-        // eslint-disable-next-line no-console
-        console.warn(`Failed to sync migrated todo ${todo.id}`);
+        logger.warn({ todoId: todo.id }, 'Failed to sync migrated todo');
       }
     })
   );

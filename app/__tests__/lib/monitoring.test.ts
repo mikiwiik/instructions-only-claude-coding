@@ -13,12 +13,21 @@ import {
   setUserContext,
   type RateLimitMetadata,
 } from '../../lib/monitoring';
+import { logger } from '../../lib/logger';
 
 // Mock Sentry
 jest.mock('@sentry/nextjs', () => ({
   captureMessage: jest.fn(),
   captureException: jest.fn(),
   setUser: jest.fn(),
+}));
+
+// Mock logger
+jest.mock('../../lib/logger', () => ({
+  logger: {
+    info: jest.fn(),
+    error: jest.fn(),
+  },
 }));
 
 // Helper to set environment variables safely for testing
@@ -31,15 +40,12 @@ describe('monitoring', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.spyOn(console, 'info').mockImplementation(() => {});
-    jest.spyOn(console, 'error').mockImplementation(() => {});
     // Reset environment
     process.env = { ...originalEnv };
   });
 
   afterEach(() => {
     process.env = originalEnv;
-    jest.restoreAllMocks();
   });
 
   describe('trackRateLimitEvent', () => {
@@ -134,14 +140,13 @@ describe('monitoring', () => {
         expect(Sentry.captureMessage).not.toHaveBeenCalled();
       });
 
-      it('should log to console', () => {
+      it('should log with logger', () => {
         const metadata = { listId: 'test', remaining: 5 };
         trackRateLimitEvent('warning', metadata);
 
-        // eslint-disable-next-line no-console
-        expect(console.info).toHaveBeenCalledWith(
-          '[Rate Limit warning]',
-          metadata
+        expect(logger.info).toHaveBeenCalledWith(
+          { type: 'warning', ...metadata },
+          'Rate limit warning'
         );
       });
     });
@@ -157,11 +162,10 @@ describe('monitoring', () => {
         expect(Sentry.captureMessage).not.toHaveBeenCalled();
       });
 
-      it('should not log to console', () => {
+      it('should not log with logger', () => {
         trackRateLimitEvent('warning', { listId: 'test' });
 
-        // eslint-disable-next-line no-console
-        expect(console.info).not.toHaveBeenCalled();
+        expect(logger.info).not.toHaveBeenCalled();
       });
     });
 
@@ -202,17 +206,15 @@ describe('monitoring', () => {
         );
       });
 
-      it('should log to console', () => {
+      it('should log with logger', () => {
         const error = new Error('Test error');
         const context = { key: 'value' };
 
         captureError(error, context);
 
-        // eslint-disable-next-line no-console
-        expect(console.error).toHaveBeenCalledWith(
-          '[App Error]',
-          error,
-          context
+        expect(logger.error).toHaveBeenCalledWith(
+          { error, ...context },
+          '[App Error]'
         );
       });
 
@@ -243,16 +245,11 @@ describe('monitoring', () => {
         expect(Sentry.captureException).not.toHaveBeenCalled();
       });
 
-      it('should still log to console', () => {
+      it('should still log with logger', () => {
         const error = new Error('Dev error');
         captureError(error);
 
-        // eslint-disable-next-line no-console
-        expect(console.error).toHaveBeenCalledWith(
-          '[App Error]',
-          error,
-          undefined
-        );
+        expect(logger.error).toHaveBeenCalledWith({ error }, '[App Error]');
       });
     });
 

@@ -126,6 +126,12 @@ UPSTASH_REDIS_REST_TOKEN=your-token-here
 
 For detailed instructions, see [Upstash Setup Guide](upstash-setup.md).
 
+## Optional Environment Variables
+
+| Variable    | Default                       | Description                                                                       |
+| ----------- | ----------------------------- | --------------------------------------------------------------------------------- |
+| `LOG_LEVEL` | `debug` (dev) / `info` (prod) | Logging verbosity (see [Logging Guidelines](../guidelines/logging-guidelines.md)) |
+
 ## Development Tools and Quality Assurance
 
 ### Pre-commit Hooks

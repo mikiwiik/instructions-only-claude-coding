@@ -10,6 +10,7 @@
 
 import { Redis } from '@upstash/redis';
 import type { Todo } from '@/types/todo';
+import { logger } from './logger';
 
 export interface SharedTodoList {
   id: string;
@@ -42,21 +43,16 @@ function shouldUseInMemoryStore(): boolean {
 // istanbul ignore next -- E2E tested
 function getRedis(): Redis | null {
   const useInMemory = shouldUseInMemoryStore();
-  // eslint-disable-next-line no-console
-  console.log(
-    '[KVStore] getRedis called, useInMemory:',
-    useInMemory,
-    'existing redis:',
-    !!redis
+  logger.debug(
+    { useInMemory, hasExistingRedis: !!redis },
+    '[KVStore] getRedis called'
   );
   if (useInMemory) {
-    // eslint-disable-next-line no-console
-    console.log('[KVStore] Using in-memory store');
+    logger.debug('[KVStore] Using in-memory store');
     return null;
   }
   if (!redis) {
-    // eslint-disable-next-line no-console
-    console.log('[KVStore] Creating Redis client');
+    logger.debug('[KVStore] Creating Redis client');
     redis = new Redis({
       url: process.env.UPSTASH_REDIS_REST_URL!,
       token: process.env.UPSTASH_REDIS_REST_TOKEN!,
@@ -106,8 +102,7 @@ export function resetInMemoryStore(): void {
   // Check env directly in case module was loaded before env was set
   if (process.env.USE_IN_MEMORY_STORE === 'true') {
     inMemoryStore.clear();
-    // eslint-disable-next-line no-console
-    console.log('[KVStore] In-memory store reset');
+    logger.debug('[KVStore] In-memory store reset');
   }
 }
 
