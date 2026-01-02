@@ -17,8 +17,6 @@ const mockReturnValue = {
   toggleTodo: mockToggleTodo,
   deleteTodo: mockDeleteTodo,
   updateTodo: jest.fn(),
-  reorderTodos: jest.fn(),
-  refreshTodos: jest.fn(),
   syncState: {
     status: 'synced' as const,
     pendingCount: 0,
