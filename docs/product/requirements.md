@@ -194,6 +194,8 @@ implementation is performed by human developers or AI agents.
 - Continuous Integration/Continuous Deployment (CI/CD) ✓
 - Automated testing at all levels (unit, integration, E2E) ✓
 - Security scanning and dependency management ✓
+- Pinned dependency versions for reproducibility and security ([ADR-035](../adr/035-pinned-dependency-policy.md)) ✓
+- Automated dependency updates via Dependabot (npm + GitHub Actions) ✓
 - Semantic versioning and changelog maintenance (planned)
 - Infrastructure as code and reproducible deployments ✓
 - Deployed to scalable, cost-effective infrastructure (Vercel + Upstash) ✓
