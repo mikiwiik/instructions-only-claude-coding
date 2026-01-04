@@ -189,17 +189,26 @@ npm run type-check   # TypeScript type checking
 
 ### Adding Dependencies
 
+**Always use the latest stable version** when adding new dependencies:
+
 ```bash
-# Add production dependency
+# 1. Check the latest stable version
+npm view package-name version
+
+# 2. Add production dependency (uses latest by default)
 npm install package-name
 
-# Add development dependency
+# 3. Or add development dependency
 npm install --save-dev package-name
 
-# Always commit both package.json and package-lock.json
+# 4. Verify package.json has exact version (no ^ or ~)
+# 5. Always commit both package.json and package-lock.json
 git add package.json package-lock.json
 git commit -m "feat: add package-name dependency"
 ```
+
+**Note**: npm install adds `^` prefixes by default. The pre-commit hook will block commits with
+non-pinned versions. Manually remove `^` or `~` prefixes from package.json before committing.
 
 ## Troubleshooting Common Issues
 

@@ -36,6 +36,7 @@
 10. **🚨 DOCUMENTATION QUALITY**: Keep all documentation comprehensive, up-to-date, and concise - eliminate outdated
     or verbose content immediately
 11. **🚨 PINNED DEPENDENCIES**: All dependencies must use exact versions - see [ADR-035](docs/adr/035-pinned-dependency-policy.md)
+    - **New Dependencies**: Always use latest stable version (`npm view <pkg> version` to check)
     - **npm packages**: No `^` or `~` prefixes (e.g., `"react": "19.2.3"` not `"^19.2.3"`)
     - **GitHub Actions**: SHA-pinned with version comment (e.g., `actions/checkout@abc123 # v4`)
     - **Enforcement**: Pre-commit hooks and CI validation block violations
