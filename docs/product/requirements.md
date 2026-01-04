@@ -201,7 +201,8 @@ implementation is performed by human developers or AI agents.
 - Deployed to scalable, cost-effective infrastructure (Vercel + Upstash) ✓
 - Service co-location in same region (Frankfurt) to minimize latency ✓
 - Frontend error detection and monitoring via Sentry ✓
-- Monitoring, logging, and observability foundations (planned)
+- Structured logging with Pino for production observability ([ADR-036](../adr/036-system-logging-pino.md)) ✓
+- Monitoring and advanced observability (planned)
 - Rolling upgrades with zero-downtime deployments ✓
 - Backward-compatible data migrations (no service outages) ✓
 
