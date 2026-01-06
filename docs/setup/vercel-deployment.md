@@ -166,9 +166,25 @@ Vercel executes the following steps for each deployment:
 
 - **Deployment History**: View all deployments and their status
 - **Build Logs**: Detailed logs for troubleshooting build failures
+- **Runtime Logs**: View application logs from API routes and serverless functions
 - **Performance Metrics**: Basic traffic and performance analytics
 - **Domain Management**: Configure custom domains and SSL
 - **Environment Variables**: Manage configuration across environments
+
+### Log Correlation
+
+The application uses Vercel's `x-vercel-id` header for log correlation (see [ADR-036](../adr/036-system-logging-pino.md)).
+This enables tracing requests across:
+
+- Vercel's edge network logs
+- Application structured logs (Pino)
+- Sentry error reports (via breadcrumbs)
+
+To view correlated logs:
+
+1. Go to Vercel Dashboard → Project → Logs
+2. Filter by request ID or search for specific operations
+3. Use the `requestId` field to trace requests across log entries
 
 ### GitHub Integration
 
