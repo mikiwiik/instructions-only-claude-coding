@@ -88,6 +88,26 @@ the log trail leading up to the error, providing valuable debugging context.
 - Automatic context for all captured errors
 - Log entries preserved even if error occurs later
 
+### Vercel Request ID Correlation
+
+API routes automatically extract Vercel's `x-vercel-id` header for log correlation:
+
+```typescript
+import { createChildLogger, getVercelRequestId } from '@/lib/logger';
+
+export async function GET(request: NextRequest) {
+  const requestId = getVercelRequestId(request.headers);
+  const log = createChildLogger({ requestId, listId, method: 'GET' });
+  // All logs now include the Vercel request ID
+}
+```
+
+This enables:
+
+- Correlation between Vercel logs and application logs
+- Request tracing across the Vercel edge network
+- Fallback to generated UUID when running locally
+
 ### Log Levels
 
 | Level | Usage                        | Example                      |

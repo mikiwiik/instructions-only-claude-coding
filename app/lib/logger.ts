@@ -152,3 +152,13 @@ export type LogLevel = 'fatal' | 'error' | 'warn' | 'info' | 'debug' | 'trace';
 export function isLogLevelEnabled(level: LogLevel): boolean {
   return logger.isLevelEnabled(level);
 }
+
+/**
+ * Extract Vercel request ID from headers for log correlation
+ * Returns the x-vercel-id header if present, otherwise generates a local ID
+ *
+ * @see https://vercel.com/docs/headers/request-headers
+ */
+export function getVercelRequestId(headers?: Headers): string {
+  return headers?.get('x-vercel-id') || generateRequestId();
+}

@@ -4,7 +4,7 @@
 
 import { NextRequest } from 'next/server';
 import { KVStore } from '@/lib/kv-store';
-import { logger } from '@/lib/logger';
+import { createChildLogger, getVercelRequestId } from '@/lib/logger';
 
 export const runtime = 'edge';
 
@@ -14,6 +14,8 @@ export async function GET(
 ) {
   const { listId } = await params;
   const userId = request.headers.get('x-user-id') || 'anonymous';
+  const requestId = getVercelRequestId(request.headers);
+  const log = createChildLogger({ requestId, listId, userId, method: 'SSE' });
 
   // Create SSE stream
   const stream = new ReadableStream({
@@ -28,7 +30,7 @@ export async function GET(
       try {
         await KVStore.addSubscriber(listId, userId);
       } catch (error) {
-        logger.error({ error, listId, userId }, 'Failed to add subscriber');
+        log.error({ error }, 'Failed to add subscriber');
       }
 
       // Set up periodic ping to keep connection alive
@@ -58,7 +60,7 @@ export async function GET(
 
           controller.enqueue(encoder.encode(syncEvent));
         } catch (error) {
-          logger.error({ error, listId }, 'Polling error');
+          log.error({ error }, 'Polling error');
         }
       }, 2000); // 2 seconds
 
@@ -69,10 +71,7 @@ export async function GET(
         try {
           await KVStore.removeSubscriber(listId, userId);
         } catch (error) {
-          logger.error(
-            { error, listId, userId },
-            'Failed to remove subscriber'
-          );
+          log.error({ error }, 'Failed to remove subscriber');
         }
         controller.close();
       });
