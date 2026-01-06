@@ -73,7 +73,7 @@ const browserConfig: pino.LoggerOptions = {
             Sentry.addBreadcrumb({
               category: 'log',
               message,
-              level: mapLevelToSentry(level.label),
+              level: mapLevelToSentry(level),
               data: logEvent.bindings,
             });
           },
