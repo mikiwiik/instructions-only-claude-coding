@@ -7,10 +7,12 @@
  * - Pretty-printed output for development
  * - Browser-compatible logging
  * - Child loggers for component context
+ * - Sentry breadcrumb integration for error context
  *
  * @see ADR-036 for logging strategy details
  */
 
+import * as Sentry from '@sentry/nextjs';
 import pino, { Logger } from 'pino';
 
 const isServer = typeof globalThis.window === 'undefined';
@@ -28,24 +30,52 @@ const baseConfig: pino.LoggerOptions = {
 };
 
 /**
+ * Map Pino log levels to Sentry breadcrumb severity
+ */
+function mapLevelToSentry(
+  level: string
+): 'fatal' | 'error' | 'warning' | 'info' | 'debug' {
+  switch (level) {
+    case 'fatal':
+      return 'fatal';
+    case 'error':
+      return 'error';
+    case 'warn':
+      return 'warning';
+    case 'info':
+      return 'info';
+    default:
+      return 'debug';
+  }
+}
+
+/**
  * Browser-specific configuration
  * Logs as structured objects for consistency
+ * Integrates with Sentry for breadcrumb tracking
  */
 const browserConfig: pino.LoggerOptions = {
   ...baseConfig,
   browser: {
     asObject: true,
-    // In production, only transmit errors to reduce noise
+    // In production, capture warn and error logs as Sentry breadcrumbs
     transmit: isDev
       ? undefined
       : {
-          level: 'error',
-          send: (_level, logEvent) => {
-            // Future: integrate with Sentry or other error tracking
-            // For now, errors are captured by Sentry's global handler
-            if (isDev) {
-              console.log('[Logger Transmit]', logEvent);
-            }
+          level: 'warn',
+          send: (level, logEvent) => {
+            // Add log entries as Sentry breadcrumbs for error context
+            const message =
+              typeof logEvent.messages[0] === 'string'
+                ? logEvent.messages[0]
+                : JSON.stringify(logEvent.messages[0]);
+
+            Sentry.addBreadcrumb({
+              category: 'log',
+              message,
+              level: mapLevelToSentry(level.label),
+              data: logEvent.bindings,
+            });
           },
         },
   },
