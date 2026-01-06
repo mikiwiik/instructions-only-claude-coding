@@ -9,6 +9,7 @@ import {
   createChildLogger,
   generateRequestId,
   isLogLevelEnabled,
+  getVercelRequestId,
 } from '../../lib/logger';
 
 describe('logger module', () => {
@@ -95,6 +96,28 @@ describe('logger module', () => {
         crypto.randomUUID = originalRandomUUID;
         crypto.getRandomValues = originalGetRandomValues;
       }
+    });
+  });
+
+  describe('getVercelRequestId', () => {
+    it('should return x-vercel-id header when present', () => {
+      const headers = new Headers({ 'x-vercel-id': 'iad1::abc123' });
+      const id = getVercelRequestId(headers);
+      expect(id).toBe('iad1::abc123');
+    });
+
+    it('should generate ID when x-vercel-id header missing', () => {
+      const headers = new Headers();
+      const id = getVercelRequestId(headers);
+      expect(id).toBeDefined();
+      expect(typeof id).toBe('string');
+      expect(id.length).toBeGreaterThan(0);
+    });
+
+    it('should generate ID when headers undefined', () => {
+      const id = getVercelRequestId(undefined);
+      expect(id).toBeDefined();
+      expect(typeof id).toBe('string');
     });
   });
 

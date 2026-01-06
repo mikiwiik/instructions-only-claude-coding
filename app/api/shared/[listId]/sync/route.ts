@@ -4,7 +4,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { KVStore } from '@/lib/kv-store';
-import { createChildLogger, generateRequestId } from '@/lib/logger';
+import { createChildLogger, getVercelRequestId } from '@/lib/logger';
 import type { SyncOperation } from '@/types/sync';
 import type { Todo } from '@/types/todo';
 
@@ -44,7 +44,7 @@ export async function POST(
   { params }: { params: Promise<{ listId: string }> }
 ) {
   const { listId } = await params;
-  const requestId = generateRequestId();
+  const requestId = getVercelRequestId(request.headers);
   const log = createChildLogger({ requestId, listId, method: 'POST' });
   const startTime = Date.now();
 
@@ -99,7 +99,7 @@ export async function GET(
   { params }: { params: Promise<{ listId: string }> }
 ) {
   const { listId } = await params;
-  const requestId = generateRequestId();
+  const requestId = getVercelRequestId(request.headers);
   const log = createChildLogger({ requestId, listId, method: 'GET' });
   const startTime = Date.now();
 
