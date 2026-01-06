@@ -153,7 +153,7 @@ Security:
 Compliance:
 
 - EU data residency for all third-party services (Frankfurt region) ✓
-- Error monitoring with EU data storage (Sentry) ✓
+- Error monitoring with EU data storage (Sentry) with log breadcrumbs ✓
 
 ### 9. Authentication
 

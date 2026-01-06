@@ -41,21 +41,30 @@ Adopt **Pino** as the system logging library with the following configuration:
 
 ```typescript
 // app/lib/logger.ts
+import * as Sentry from '@sentry/nextjs';
 import pino from 'pino';
 
-const isServer = typeof window === 'undefined';
+const isServer = typeof globalThis.window === 'undefined';
 const isDev = process.env.NODE_ENV === 'development';
 
 export const logger = pino({
   level: process.env.LOG_LEVEL || (isDev ? 'debug' : 'info'),
   browser: {
     asObject: true,
-    transmit: {
-      level: 'error',
-      send: (level, logEvent) => {
-        // Future: Send to error tracking service
-      },
-    },
+    transmit: isDev
+      ? undefined
+      : {
+          level: 'warn',
+          send: (level, logEvent) => {
+            // Add as Sentry breadcrumb for error context
+            Sentry.addBreadcrumb({
+              category: 'log',
+              message: logEvent.messages[0],
+              level: mapLevelToSentry(level.label),
+              data: logEvent.bindings,
+            });
+          },
+        },
   },
   ...(isServer &&
     isDev && {
@@ -66,6 +75,18 @@ export const logger = pino({
     }),
 });
 ```
+
+### Sentry Breadcrumb Integration
+
+In production browser environments, warn and error log entries are automatically
+added as Sentry breadcrumbs. When an error occurs, Sentry error reports include
+the log trail leading up to the error, providing valuable debugging context.
+
+**Benefits:**
+
+- No additional Sentry quota usage (breadcrumbs are included with errors)
+- Automatic context for all captured errors
+- Log entries preserved even if error occurs later
 
 ### Log Levels
 
