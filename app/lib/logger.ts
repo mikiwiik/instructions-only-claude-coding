@@ -15,7 +15,7 @@
 import * as Sentry from '@sentry/nextjs';
 import pino, { Logger } from 'pino';
 
-const isServer = typeof globalThis.window === 'undefined';
+const isServer = globalThis.window === undefined;
 const isDev = process.env.NODE_ENV === 'development';
 
 /**
