@@ -72,8 +72,8 @@ const browserConfig: pino.LoggerOptions = {
       ? undefined
       : {
           level: 'warn',
+          /* istanbul ignore next -- browser-only production callback, inputs tested separately */
           send: (level, logEvent) => {
-            // Add log entries as Sentry breadcrumbs for error context
             Sentry.addBreadcrumb({
               category: 'log',
               message: formatLogMessage(logEvent.messages[0]),
