@@ -31,8 +31,9 @@ const baseConfig: pino.LoggerOptions = {
 
 /**
  * Map Pino log levels to Sentry breadcrumb severity
+ * Exported for testing
  */
-function mapLevelToSentry(
+export function mapLevelToSentry(
   level: string
 ): 'fatal' | 'error' | 'warning' | 'info' | 'debug' {
   switch (level) {
@@ -47,6 +48,14 @@ function mapLevelToSentry(
     default:
       return 'debug';
   }
+}
+
+/**
+ * Format log message for Sentry breadcrumb
+ * Exported for testing
+ */
+export function formatLogMessage(message: unknown): string {
+  return typeof message === 'string' ? message : JSON.stringify(message);
 }
 
 /**
@@ -65,14 +74,9 @@ const browserConfig: pino.LoggerOptions = {
           level: 'warn',
           send: (level, logEvent) => {
             // Add log entries as Sentry breadcrumbs for error context
-            const message =
-              typeof logEvent.messages[0] === 'string'
-                ? logEvent.messages[0]
-                : JSON.stringify(logEvent.messages[0]);
-
             Sentry.addBreadcrumb({
               category: 'log',
-              message,
+              message: formatLogMessage(logEvent.messages[0]),
               level: mapLevelToSentry(level),
               data: logEvent.bindings,
             });

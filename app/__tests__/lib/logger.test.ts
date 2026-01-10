@@ -10,6 +10,8 @@ import {
   generateRequestId,
   isLogLevelEnabled,
   getVercelRequestId,
+  mapLevelToSentry,
+  formatLogMessage,
 } from '../../lib/logger';
 
 describe('logger module', () => {
@@ -147,6 +149,52 @@ describe('logger module', () => {
         'silent',
       ];
       expect(validLevels).toContain(logger.level);
+    });
+  });
+
+  describe('mapLevelToSentry', () => {
+    it('should map fatal to fatal', () => {
+      expect(mapLevelToSentry('fatal')).toBe('fatal');
+    });
+
+    it('should map error to error', () => {
+      expect(mapLevelToSentry('error')).toBe('error');
+    });
+
+    it('should map warn to warning', () => {
+      expect(mapLevelToSentry('warn')).toBe('warning');
+    });
+
+    it('should map info to info', () => {
+      expect(mapLevelToSentry('info')).toBe('info');
+    });
+
+    it('should map debug and unknown levels to debug', () => {
+      expect(mapLevelToSentry('debug')).toBe('debug');
+      expect(mapLevelToSentry('trace')).toBe('debug');
+      expect(mapLevelToSentry('unknown')).toBe('debug');
+    });
+  });
+
+  describe('formatLogMessage', () => {
+    it('should return string messages as-is', () => {
+      expect(formatLogMessage('test message')).toBe('test message');
+    });
+
+    it('should stringify object messages', () => {
+      expect(formatLogMessage({ key: 'value' })).toBe('{"key":"value"}');
+    });
+
+    it('should stringify arrays', () => {
+      expect(formatLogMessage([1, 2, 3])).toBe('[1,2,3]');
+    });
+
+    it('should stringify numbers', () => {
+      expect(formatLogMessage(42)).toBe('42');
+    });
+
+    it('should stringify null', () => {
+      expect(formatLogMessage(null)).toBe('null');
     });
   });
 });
