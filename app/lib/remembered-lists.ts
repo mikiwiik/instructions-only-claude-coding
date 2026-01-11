@@ -12,12 +12,10 @@ export interface RememberedList {
   isOwner: boolean;
 }
 
-interface StoredRememberedList {
-  listId: string;
-  name?: string;
+// Storage format uses ISO string for date serialization
+type StoredRememberedList = Omit<RememberedList, 'lastAccessed'> & {
   lastAccessed: string;
-  isOwner: boolean;
-}
+};
 
 const STORAGE_KEY = 'remembered-lists';
 const MAX_LISTS = 50;
