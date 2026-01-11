@@ -17,6 +17,9 @@ global.fetch = mockFetch;
 // Type for fetch options
 type FetchOptions = { method?: string; body?: string };
 
+// Test list ID for shared mode tests
+const TEST_LIST_ID = 'test-list';
+
 // Mock timestamp utilities
 jest.mock('../../utils/timestamp', () => ({
   formatRelativeTime: jest.fn((date: Date, action: string) => {
@@ -104,7 +107,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
 
   describe('complete todo lifecycle with timestamps', () => {
     it('should track timestamps through full todo lifecycle: create → edit → complete → restore → delete', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -180,7 +183,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
     });
 
     it('should maintain timestamp consistency across backend persistence', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -230,7 +233,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       });
 
       // Create new hook instance (simulates page reload)
-      const { result: result2 } = renderHook(() => useTodos());
+      const { result: result2 } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result2.current.isInitialized).toBe(true);
@@ -327,7 +330,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
 
     it('should update timestamp display when todo is modified through interactions', async () => {
       const user = userEvent.setup();
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -382,7 +385,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
 
   describe('performance and efficiency', () => {
     it('should handle multiple todos with different timestamps efficiently', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -451,7 +454,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
         return Promise.reject(new Error('Network error'));
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -506,7 +509,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
         });
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -554,7 +557,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       new Date('2024-01-15T12:00:00Z'); // UTC
       new Date('2024-01-15T12:00:00'); // Local
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);

@@ -6,6 +6,7 @@ import TodoList from './components/TodoList';
 import TodoFilter from './components/TodoFilter';
 import ActivityTimeline from './components/ActivityTimeline';
 import { useTodos } from './hooks/useTodos';
+import { MAIN_LIST_ID } from './hooks/useTodoSync';
 import { getActivityCount } from './utils/activity';
 
 export default function HomePage() {
@@ -25,7 +26,7 @@ export default function HomePage() {
     moveDown,
     setFilter,
     rateLimitState,
-  } = useTodos();
+  } = useTodos(MAIN_LIST_ID);
 
   // Calculate counts for filter display
   const activeTodosCount = allTodos.filter(

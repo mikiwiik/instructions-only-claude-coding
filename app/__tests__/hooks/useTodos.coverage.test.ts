@@ -13,6 +13,9 @@ global.fetch = mockFetch;
 // Type for fetch options
 type FetchOptions = { method?: string; body?: string };
 
+// Test list ID for shared mode tests
+const TEST_LIST_ID = 'test-list';
+
 describe('useTodos hook - coverage tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -43,7 +46,7 @@ describe('useTodos hook - coverage tests', () => {
         });
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -82,7 +85,7 @@ describe('useTodos hook - coverage tests', () => {
         });
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -119,7 +122,7 @@ describe('useTodos hook - coverage tests', () => {
         });
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -179,7 +182,7 @@ describe('useTodos hook - coverage tests', () => {
         });
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -246,7 +249,7 @@ describe('useTodos hook - coverage tests', () => {
         });
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -305,7 +308,7 @@ describe('useTodos hook - coverage tests', () => {
         });
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -346,7 +349,7 @@ describe('useTodos hook - coverage tests', () => {
         });
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -401,7 +404,7 @@ describe('useTodos hook - coverage tests', () => {
         })
       );
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
