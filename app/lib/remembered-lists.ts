@@ -107,10 +107,9 @@ export function addRememberedList(
 
     // Enforce max limit by removing oldest
     if (lists.length > MAX_LISTS) {
-      const sorted = lists.sort(
+      const sorted = [...lists].sort(
         (a, b) => b.lastAccessed.getTime() - a.lastAccessed.getTime()
       );
-      lists.length = MAX_LISTS;
       lists.splice(0, lists.length, ...sorted.slice(0, MAX_LISTS));
     }
   }
