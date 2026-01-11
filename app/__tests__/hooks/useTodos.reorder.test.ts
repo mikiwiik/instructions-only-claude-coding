@@ -8,6 +8,9 @@ global.fetch = mockFetch;
 // Type for fetch options
 type FetchOptions = { method?: string; body?: string };
 
+// Test list ID for shared mode tests
+const TEST_LIST_ID = 'test-list';
+
 describe('useTodos hook - Reordering functionality', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -35,7 +38,7 @@ describe('useTodos hook - Reordering functionality', () => {
 
   describe('reorderTodos', () => {
     it('should have reorderTodos function available', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -46,7 +49,7 @@ describe('useTodos hook - Reordering functionality', () => {
     });
 
     it('should reorder todos when moving item from index 0 to index 2', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -76,7 +79,7 @@ describe('useTodos hook - Reordering functionality', () => {
     });
 
     it('should reorder todos when moving item from index 2 to index 0', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -101,7 +104,7 @@ describe('useTodos hook - Reordering functionality', () => {
     });
 
     it('should sync single todo with reorder-single operation (LexoRank)', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -134,7 +137,7 @@ describe('useTodos hook - Reordering functionality', () => {
     });
 
     it('should calculate sortOrder correctly when moving to end', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -172,7 +175,7 @@ describe('useTodos hook - Reordering functionality', () => {
     });
 
     it('should handle reordering with same source and destination index', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -196,7 +199,7 @@ describe('useTodos hook - Reordering functionality', () => {
     });
 
     it('should handle invalid indices gracefully', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -233,7 +236,7 @@ describe('useTodos hook - Reordering functionality', () => {
     });
 
     it('should handle reordering empty todo list', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -250,7 +253,7 @@ describe('useTodos hook - Reordering functionality', () => {
     });
 
     it('should maintain todo properties when reordering', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -289,7 +292,7 @@ describe('useTodos hook - Reordering functionality', () => {
 
   describe('active-only filtering', () => {
     it('should only reorder among active todos', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -327,7 +330,7 @@ describe('useTodos hook - Reordering functionality', () => {
     });
 
     it('should filter to active todos in moveUp', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -363,7 +366,7 @@ describe('useTodos hook - Reordering functionality', () => {
 
   describe('moveUp and moveDown helper functions', () => {
     it('should have moveUp function available', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -374,7 +377,7 @@ describe('useTodos hook - Reordering functionality', () => {
     });
 
     it('should have moveDown function available', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -385,7 +388,7 @@ describe('useTodos hook - Reordering functionality', () => {
     });
 
     it('should move todo up when moveUp is called', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -411,7 +414,7 @@ describe('useTodos hook - Reordering functionality', () => {
     });
 
     it('should move todo down when moveDown is called', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -441,7 +444,7 @@ describe('useTodos hook - Reordering functionality', () => {
     });
 
     it('should not move todo up if already at top', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -466,7 +469,7 @@ describe('useTodos hook - Reordering functionality', () => {
     });
 
     it('should not move todo down if already at bottom', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -491,7 +494,7 @@ describe('useTodos hook - Reordering functionality', () => {
     });
 
     it('should handle moveUp with invalid todo id', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -513,7 +516,7 @@ describe('useTodos hook - Reordering functionality', () => {
     });
 
     it('should handle moveDown with invalid todo id', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);

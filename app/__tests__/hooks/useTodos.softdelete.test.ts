@@ -8,6 +8,9 @@ global.fetch = mockFetch;
 // Type for fetch options
 type FetchOptions = { method?: string; body?: string };
 
+// Test list ID for shared mode tests
+const TEST_LIST_ID = 'test-list';
+
 describe('useTodos Hook - Soft Delete Functionality', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -30,7 +33,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
   describe('soft delete functionality', () => {
     it('should implement soft delete instead of permanent deletion', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -56,7 +59,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
     });
 
     it('should filter out soft-deleted todos from default todos view', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -84,7 +87,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
     });
 
     it('should provide access to deleted todos via filter', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -113,7 +116,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
     });
 
     it('should provide restoreDeletedTodo function for recovering soft-deleted todos', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -147,7 +150,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
     });
 
     it('should provide permanentlyDeleteTodo function for actual removal', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -177,7 +180,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
   describe('soft delete workflow', () => {
     it('should set deletedAt timestamp when soft deleting', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -206,7 +209,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
     });
 
     it('should restore soft-deleted todo and clear deletedAt', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -238,7 +241,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
     });
 
     it('should permanently delete todo when using permanentlyDeleteTodo', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -264,7 +267,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
   describe('filtering with soft delete', () => {
     it('should filter todos correctly based on deletion status', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -281,7 +284,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
     });
 
     it('should handle mixed completion and deletion states', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -327,7 +330,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
   describe('backend integration with soft delete', () => {
     it('should sync soft-deleted todos to backend', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -379,7 +382,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
         });
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -425,7 +428,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
         });
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -446,7 +449,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
   describe('timestamp management with soft delete', () => {
     it('should set deletedAt timestamp when soft deleting', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -469,7 +472,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
     });
 
     it('should preserve original timestamps when soft deleting', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -497,7 +500,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
     });
 
     it('should clear deletedAt when restoring soft-deleted todo', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -525,7 +528,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
     });
 
     it('should update updatedAt when restoring soft-deleted todo', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -557,7 +560,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
   describe('error handling and edge cases', () => {
     it('should handle soft deleting non-existent todo gracefully', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -574,7 +577,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
     });
 
     it('should handle restoring non-existent deleted todo gracefully', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -594,7 +597,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
         return Promise.reject(new Error('Network error'));
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -626,7 +629,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
         });
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);

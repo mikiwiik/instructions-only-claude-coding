@@ -1,42 +1,78 @@
 /**
- * Main todos hook - uses Vercel KV backend for persistence
+ * Main todos hook - supports both local (in-memory) and shared (backend-synced) modes
  * Refactored for ADR-027 compliance (max 150 lines per function)
  *
  * Architecture:
  * - useTodoSync.ts: Backend sync utilities and optimistic update helpers
  * - useTodoOperations.ts: CRUD operations with optimistic updates
  * - useTodos.ts: Main coordinator (this file)
+ *
+ * Usage:
+ * - useTodos() - Local mode: in-memory only, no API calls
+ * - useTodos('list-123') - Shared mode: syncs with backend via API
  */
 
 import { useState, useEffect, useCallback } from 'react';
 import { Todo, TodoState, TodoFilter } from '../types/todo';
 import {
-  MAIN_LIST_ID,
   convertTodoDates,
   useSyncToBackend,
+  SyncToBackendFn,
+  RateLimitState,
 } from './useTodoSync';
 import { useTodoOperations } from './useTodoOperations';
 import { logger } from '../lib/logger';
 
-export function useTodos() {
+/** No-op sync function for local mode - performs no API calls */
+const noOpSync: SyncToBackendFn = async () => undefined;
+
+/** Default rate limit state for local mode */
+const defaultRateLimitState: RateLimitState = {
+  isRateLimited: false,
+  retryAfter: 0,
+  message: '',
+};
+
+/**
+ * Main todos hook with dynamic listId support
+ * @param listId - Optional list ID. If provided, syncs with backend. If omitted, operates in local mode.
+ */
+export function useTodos(listId?: string) {
+  const isSharedMode = listId !== undefined;
+
   const [state, setState] = useState<TodoState>({
     todos: [],
     filter: 'active',
   });
-  const [isInitialized, setIsInitialized] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialized, setIsInitialized] = useState(!isSharedMode);
+  const [isLoading, setIsLoading] = useState(isSharedMode);
 
+  // Only use backend sync in shared mode
   const {
-    sync: syncToBackend,
-    rateLimitState,
-    clearRateLimitState,
-  } = useSyncToBackend(MAIN_LIST_ID);
+    sync: backendSync,
+    rateLimitState: backendRateLimitState,
+    clearRateLimitState: backendClearRateLimitState,
+  } = useSyncToBackend(listId ?? 'unused');
 
-  // Fetch todos from backend on mount
+  // Use no-op sync for local mode, backend sync for shared mode
+  const syncToBackend = isSharedMode ? backendSync : noOpSync;
+  const rateLimitState = isSharedMode
+    ? backendRateLimitState
+    : defaultRateLimitState;
+  const clearRateLimitState = isSharedMode
+    ? backendClearRateLimitState
+    : () => {};
+
+  // Fetch todos from backend on mount (only in shared mode)
   useEffect(() => {
+    if (!isSharedMode) {
+      // Local mode: already initialized, no fetch needed
+      return;
+    }
+
     const fetchTodos = async () => {
       try {
-        const response = await fetch(`/api/shared/${MAIN_LIST_ID}/sync`);
+        const response = await fetch(`/api/shared/${listId}/sync`);
 
         if (response.ok) {
           const data = await response.json();
@@ -60,7 +96,7 @@ export function useTodos() {
     };
 
     fetchTodos();
-  }, []);
+  }, [listId, isSharedMode]);
 
   // Get all CRUD operations from extracted hook
   const operations = useTodoOperations({

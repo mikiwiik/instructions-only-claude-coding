@@ -8,6 +8,220 @@ global.fetch = mockFetch;
 // Type for fetch options
 type FetchOptions = { method?: string; body?: string };
 
+describe('useTodos hook - local mode (no listId)', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it('should not call fetch API on mount when no listId provided', async () => {
+    const { result } = renderHook(() => useTodos());
+
+    // Wait for initialization
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
+    });
+
+    // Should NOT have called fetch - local mode has no API calls
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it('should return isInitialized: true immediately in local mode', async () => {
+    const { result } = renderHook(() => useTodos());
+
+    // In local mode, should initialize immediately without waiting for API
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
+    });
+
+    expect(result.current.isLoading).toBe(false);
+  });
+
+  it('should perform CRUD operations in-memory only without API calls', async () => {
+    const { result } = renderHook(() => useTodos());
+
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
+    });
+
+    // Add todo
+    await act(async () => {
+      await result.current.addTodo('Local todo');
+    });
+
+    expect(result.current.todos).toHaveLength(1);
+    expect(result.current.todos[0].text).toBe('Local todo');
+
+    // No API calls should have been made
+    expect(mockFetch).not.toHaveBeenCalled();
+
+    // Toggle todo
+    const todoId = result.current.todos[0].id;
+    await act(async () => {
+      await result.current.toggleTodo(todoId);
+    });
+
+    // Still no API calls
+    expect(mockFetch).not.toHaveBeenCalled();
+
+    // Delete todo
+    await act(async () => {
+      await result.current.deleteTodo(todoId);
+    });
+
+    // Still no API calls
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it('should support edit operations in local mode without API calls', async () => {
+    const { result } = renderHook(() => useTodos());
+
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
+    });
+
+    await act(async () => {
+      await result.current.addTodo('Original text');
+    });
+
+    const todoId = result.current.todos[0].id;
+
+    await act(async () => {
+      await result.current.editTodo(todoId, 'Edited text');
+    });
+
+    expect(result.current.todos[0].text).toBe('Edited text');
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+});
+
+describe('useTodos hook - shared mode (with listId)', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.useFakeTimers();
+
+    // Default mock: empty list, successful responses
+    mockFetch.mockImplementation((url: string, options?: FetchOptions) => {
+      if (options?.method === 'POST') {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ success: true }),
+        });
+      }
+      // GET request - return empty list
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ todos: [] }),
+      });
+    });
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it('should call fetch API with correct listId on mount', async () => {
+    const listId = 'test-list-123';
+    const { result } = renderHook(() => useTodos(listId));
+
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
+    });
+
+    // Should have called fetch with the correct listId
+    expect(mockFetch).toHaveBeenCalledWith(`/api/shared/${listId}/sync`);
+  });
+
+  it('should sync CRUD operations to backend with listId', async () => {
+    const listId = 'sync-test-list';
+    const { result } = renderHook(() => useTodos(listId));
+
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
+    });
+
+    // Add todo
+    await act(async () => {
+      await result.current.addTodo('Synced todo');
+    });
+
+    // Should have called POST with the correct listId
+    const postCalls = mockFetch.mock.calls.filter(
+      (call: [string, FetchOptions?]) => call[1]?.method === 'POST'
+    );
+    expect(postCalls.length).toBeGreaterThan(0);
+    expect(postCalls[0][0]).toBe(`/api/shared/${listId}/sync`);
+  });
+
+  it('should handle 404 (new list) gracefully', async () => {
+    mockFetch.mockImplementation((url: string, options?: FetchOptions) => {
+      if (options?.method === 'POST') {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ success: true }),
+        });
+      }
+      // GET request - return 404 for new list
+      return Promise.resolve({
+        ok: false,
+        status: 404,
+        json: () => Promise.resolve({ error: 'List not found' }),
+      });
+    });
+
+    const { result } = renderHook(() => useTodos('new-list-id'));
+
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
+    });
+
+    // Should start with empty list on 404
+    expect(result.current.todos).toEqual([]);
+    expect(result.current.isLoading).toBe(false);
+  });
+
+  it('should load existing todos from backend', async () => {
+    const existingTodos = [
+      {
+        id: 'existing-1',
+        text: 'Existing shared todo',
+        sortOrder: '0|hzzzzz:',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    ];
+
+    mockFetch.mockImplementation((url: string, options?: FetchOptions) => {
+      if (options?.method === 'POST') {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ success: true }),
+        });
+      }
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ todos: existingTodos }),
+      });
+    });
+
+    const { result } = renderHook(() => useTodos('shared-list-id'));
+
+    await waitFor(() => {
+      expect(result.current.isInitialized).toBe(true);
+    });
+
+    expect(result.current.todos).toHaveLength(1);
+    expect(result.current.todos[0].text).toBe('Existing shared todo');
+  });
+});
+
+// Test list ID for shared mode tests
+const TEST_LIST_ID = 'main-list';
+
 describe('useTodos hook', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -35,7 +249,7 @@ describe('useTodos hook', () => {
   });
 
   it('should initialize with empty todos array', async () => {
-    const { result } = renderHook(() => useTodos());
+    const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
     // Wait for initialization to complete
     await waitFor(() => {
@@ -47,7 +261,7 @@ describe('useTodos hook', () => {
   });
 
   it('should add a new todo', async () => {
-    const { result } = renderHook(() => useTodos());
+    const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
     await waitFor(() => {
       expect(result.current.isInitialized).toBe(true);
@@ -68,7 +282,7 @@ describe('useTodos hook', () => {
   });
 
   it('should generate unique IDs for each todo', async () => {
-    const { result } = renderHook(() => useTodos());
+    const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
     await waitFor(() => {
       expect(result.current.isInitialized).toBe(true);
@@ -84,7 +298,7 @@ describe('useTodos hook', () => {
   });
 
   it('should set createdAt and updatedAt timestamps', async () => {
-    const { result } = renderHook(() => useTodos());
+    const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
     await waitFor(() => {
       expect(result.current.isInitialized).toBe(true);
@@ -109,7 +323,7 @@ describe('useTodos hook', () => {
   });
 
   it('should add todos to the beginning of the list', async () => {
-    const { result } = renderHook(() => useTodos());
+    const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
     await waitFor(() => {
       expect(result.current.isInitialized).toBe(true);
@@ -125,7 +339,7 @@ describe('useTodos hook', () => {
   });
 
   it('should sync todos to backend when adding', async () => {
-    const { result } = renderHook(() => useTodos());
+    const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
     await waitFor(() => {
       expect(result.current.isInitialized).toBe(true);
@@ -171,7 +385,7 @@ describe('useTodos hook', () => {
       });
     });
 
-    const { result } = renderHook(() => useTodos());
+    const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
     await waitFor(() => {
       expect(result.current.isInitialized).toBe(true);
@@ -188,7 +402,7 @@ describe('useTodos hook', () => {
       return Promise.reject(new Error('Network error'));
     });
 
-    const { result } = renderHook(() => useTodos());
+    const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
     await waitFor(() => {
       expect(result.current.isInitialized).toBe(true);
@@ -198,7 +412,7 @@ describe('useTodos hook', () => {
   });
 
   it('should not add empty or whitespace-only todos', async () => {
-    const { result } = renderHook(() => useTodos());
+    const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
     await waitFor(() => {
       expect(result.current.isInitialized).toBe(true);
@@ -214,7 +428,7 @@ describe('useTodos hook', () => {
   });
 
   it('should trim whitespace from todo text', async () => {
-    const { result } = renderHook(() => useTodos());
+    const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
     await waitFor(() => {
       expect(result.current.isInitialized).toBe(true);
@@ -229,7 +443,7 @@ describe('useTodos hook', () => {
 
   describe('toggleTodo', () => {
     it('should toggle a todo from incomplete to complete', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -254,7 +468,7 @@ describe('useTodos hook', () => {
     });
 
     it('should toggle a todo from complete to incomplete', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -280,7 +494,7 @@ describe('useTodos hook', () => {
     });
 
     it('should not affect other todos when toggling', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -312,7 +526,7 @@ describe('useTodos hook', () => {
     });
 
     it('should handle toggling non-existent todo gracefully', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -332,7 +546,7 @@ describe('useTodos hook', () => {
     });
 
     it('should sync todo state to backend when toggling', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -363,7 +577,7 @@ describe('useTodos hook', () => {
 
   describe('deleteTodo', () => {
     it('should soft delete todo (hide from filtered view but keep in allTodos)', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -392,7 +606,7 @@ describe('useTodos hook', () => {
     });
 
     it('should handle deleting non-existent todo gracefully', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -412,7 +626,7 @@ describe('useTodos hook', () => {
     });
 
     it('should not affect other todos when one is soft deleted', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -441,7 +655,7 @@ describe('useTodos hook', () => {
     });
 
     it('should work with both completed and incomplete todos', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -476,7 +690,7 @@ describe('useTodos hook', () => {
     });
 
     it('should sync updated todo to backend when deleting', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -506,7 +720,7 @@ describe('useTodos hook', () => {
     });
 
     it('should handle soft deleting all todos (kept in allTodos with deletedAt)', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -531,7 +745,7 @@ describe('useTodos hook', () => {
 
   describe('Edit Functionality', () => {
     it('should edit todo text when editTodo is called', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -555,7 +769,7 @@ describe('useTodos hook', () => {
     });
 
     it('should preserve completion status when editing', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -586,7 +800,7 @@ describe('useTodos hook', () => {
     });
 
     it('should update updatedAt timestamp when editing', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -613,7 +827,7 @@ describe('useTodos hook', () => {
     });
 
     it('should sync edited todos to backend', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -643,7 +857,7 @@ describe('useTodos hook', () => {
     });
 
     it('should handle editing non-existent todo gracefully', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -665,7 +879,7 @@ describe('useTodos hook', () => {
     });
 
     it('should handle empty text edit gracefully', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -688,7 +902,7 @@ describe('useTodos hook', () => {
     });
 
     it('should trim whitespace from edited text', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -708,7 +922,7 @@ describe('useTodos hook', () => {
     });
 
     it('should handle editing multiple todos independently', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -773,7 +987,7 @@ describe('useTodos hook', () => {
         });
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -823,7 +1037,7 @@ describe('useTodos hook', () => {
         });
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -878,7 +1092,7 @@ describe('useTodos hook', () => {
         });
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -934,7 +1148,7 @@ describe('useTodos hook', () => {
         });
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -957,7 +1171,7 @@ describe('useTodos hook', () => {
 
   describe('addTodo sortOrder (LexoRank)', () => {
     it('should include sortOrder when adding a new todo', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -995,7 +1209,7 @@ describe('useTodos hook', () => {
         });
       });
 
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -1016,7 +1230,7 @@ describe('useTodos hook', () => {
     });
 
     it('should sync sortOrder to backend when creating todo', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
@@ -1041,7 +1255,7 @@ describe('useTodos hook', () => {
     });
 
     it('should handle multiple new todos with correct sortOrder hierarchy', async () => {
-      const { result } = renderHook(() => useTodos());
+      const { result } = renderHook(() => useTodos(TEST_LIST_ID));
 
       await waitFor(() => {
         expect(result.current.isInitialized).toBe(true);
