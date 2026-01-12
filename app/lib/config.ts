@@ -85,3 +85,21 @@ export const SYNC_CONFIG = {
    */
   DEFAULT_DEBOUNCE_DELAY_MS: 300,
 } as const;
+
+/**
+ * Remembered lists configuration.
+ *
+ * Controls localStorage tracking of visited shared lists.
+ */
+export const REMEMBERED_LISTS_CONFIG = {
+  /**
+   * localStorage key for storing remembered lists.
+   */
+  STORAGE_KEY: 'remembered-lists',
+
+  /**
+   * Maximum number of lists to remember.
+   * Oldest lists are removed when limit is reached.
+   */
+  MAX_LISTS: 50,
+} as const;
