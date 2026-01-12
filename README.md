@@ -250,12 +250,23 @@ This project demonstrates professional development practices:
 > **Quality Principle**: All behavior is explicit, documented, and verified through traceability:
 > Requirement → Issue → PR → Code → Test. See [Quality Standards](docs/core/quality-standards.md).
 
+## Security
+
+We take security seriously. This project implements:
+
+- **Dependency Scanning**: Automated vulnerability detection via Dependabot
+- **Static Analysis**: CodeQL security scanning in CI/CD
+- **XSS Protection**: Safe rendering of user-generated content
+
+**Report a Vulnerability**: See [SECURITY.md](SECURITY.md) for responsible disclosure guidelines.
+
 ## Support and Resources
 
 - **Project Issues**: [GitHub Issues](https://github.com/mikiwiik/instructions-only-claude-coding/issues)
 - **Architecture Decisions**: [ADR Index](docs/adr/README.md)
 - **Claude Code Documentation**: [Official Docs](https://docs.claude.com/en/docs/claude-code/)
 - **Development Guidelines**: [CLAUDE.md](CLAUDE.md) - 10 essential guiding principles for instruction-only development
+- **Security Policy**: [SECURITY.md](SECURITY.md) - Vulnerability reporting and security practices
 
 ---
 
