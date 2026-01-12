@@ -2,8 +2,10 @@
  * Remembered lists localStorage management
  *
  * Tracks shared lists the user has visited for easy access.
- * Stores up to 50 lists, sorted by last accessed time.
+ * Stores up to MAX_LISTS lists, sorted by last accessed time.
  */
+
+import { REMEMBERED_LISTS_CONFIG } from './config';
 
 export interface RememberedList {
   listId: string;
@@ -14,11 +16,10 @@ export interface RememberedList {
 
 // Storage format uses ISO string for date serialization
 type StoredRememberedList = Omit<RememberedList, 'lastAccessed'> & {
-  lastAccessed: string;
+  lastAccessedString: string;
 };
 
-const STORAGE_KEY = 'remembered-lists';
-const MAX_LISTS = 50;
+const { STORAGE_KEY, MAX_LISTS } = REMEMBERED_LISTS_CONFIG;
 
 /**
  * Safely access localStorage with error handling
@@ -43,8 +44,10 @@ function parseStoredLists(storage: Storage): RememberedList[] {
 
     const parsed = JSON.parse(stored) as StoredRememberedList[];
     return parsed.map((item) => ({
-      ...item,
-      lastAccessed: new Date(item.lastAccessed),
+      listId: item.listId,
+      name: item.name,
+      lastAccessed: new Date(item.lastAccessedString),
+      isOwner: item.isOwner,
     }));
   } catch {
     return [];
@@ -56,8 +59,10 @@ function parseStoredLists(storage: Storage): RememberedList[] {
  */
 function saveToStorage(storage: Storage, lists: RememberedList[]): void {
   const toStore: StoredRememberedList[] = lists.map((item) => ({
-    ...item,
-    lastAccessed: item.lastAccessed.toISOString(),
+    listId: item.listId,
+    name: item.name,
+    lastAccessedString: item.lastAccessed.toISOString(),
+    isOwner: item.isOwner,
   }));
   storage.setItem(STORAGE_KEY, JSON.stringify(toStore));
 }

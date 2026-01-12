@@ -71,8 +71,10 @@ describe('remembered-lists', () => {
         'remembered-lists',
         JSON.stringify(
           lists.map((l) => ({
-            ...l,
-            lastAccessed: l.lastAccessed.toISOString(),
+            listId: l.listId,
+            name: l.name,
+            lastAccessedString: l.lastAccessed.toISOString(),
+            isOwner: l.isOwner,
           }))
         )
       );
@@ -88,7 +90,7 @@ describe('remembered-lists', () => {
     it('parses ISO date strings to Date objects', () => {
       const isoDate = '2024-06-15T10:30:00.000Z';
       const lists = [
-        { listId: 'list-1', lastAccessed: isoDate, isOwner: true },
+        { listId: 'list-1', lastAccessedString: isoDate, isOwner: true },
       ];
       localStorageMock.setItem('remembered-lists', JSON.stringify(lists));
 
