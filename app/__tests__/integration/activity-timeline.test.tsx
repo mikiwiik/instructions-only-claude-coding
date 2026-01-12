@@ -25,6 +25,9 @@ describe('Activity Timeline Integration', () => {
     it('should show activity filter tab with correct count', async () => {
       render(<HomePage />);
 
+      // Wait for loading to complete
+      await screen.findByLabelText(/add new todo/i);
+
       // Initially should show activity count of 0
       const activityTab = screen.getByRole('tab', { name: /activity.*0/i });
       expect(activityTab).toBeInTheDocument();
@@ -109,6 +112,9 @@ describe('Activity Timeline Integration', () => {
       expect(() => {
         render(<HomePage />);
       }).not.toThrow();
+
+      // Wait for loading to complete
+      await screen.findByLabelText(/add new todo/i);
 
       // Should show empty state
       const activityTab = screen.getByRole('tab', { name: /activity.*0/i });
