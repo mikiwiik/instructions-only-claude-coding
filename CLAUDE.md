@@ -137,6 +137,16 @@ quality requirements, metrics, and enforcement.
 - **Project Management**: [docs/development/project-management.md](docs/development/project-management.md)
 - **GitHub Projects Setup**: [docs/setup/github-projects-setup.md](docs/setup/github-projects-setup.md)
 
+## Security Workflow
+
+When AI agents encounter potential security issues:
+
+1. **Do not commit** code containing vulnerabilities
+2. **Flag immediately** to the human maintainer
+3. **Document** the issue privately before proceeding
+
+For vulnerability reports and security incidents, see [Security Workflow](docs/reference/security-workflow.md).
+
 ## Reference Documentation
 
 - **Product Requirements**: [docs/product/requirements.md](docs/product/requirements.md)
@@ -147,6 +157,7 @@ quality requirements, metrics, and enforcement.
 - **Architecture Flow**: [docs/diagrams/architecture-flow.md](docs/diagrams/architecture-flow.md)
 - **Development Workflow**: [docs/diagrams/development-workflow.md](docs/diagrams/development-workflow.md)
 - **Troubleshooting**: [docs/reference/troubleshooting.md](docs/reference/troubleshooting.md)
+- **Security Workflow**: [docs/reference/security-workflow.md](docs/reference/security-workflow.md)
 - **AI Attribution Strategy**: [docs/adr/015-ai-agent-attribution-strategy.md](docs/adr/015-ai-agent-attribution-strategy.md)
 - **GitHub Projects Adoption**: [docs/adr/024-github-projects-adoption.md](docs/adr/024-github-projects-adoption.md)
 
