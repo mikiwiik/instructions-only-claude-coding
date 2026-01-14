@@ -90,7 +90,7 @@ export default function TodoPageLayout({
   moveDown,
   setFilter,
   notice,
-}: TodoPageLayoutProps) {
+}: Readonly<TodoPageLayoutProps>) {
   const activeTodosCount = allTodos.filter(
     (todo) => !todo.completedAt && !todo.deletedAt
   ).length;
@@ -105,9 +105,8 @@ export default function TodoPageLayout({
       <div className='min-h-screen bg-background safe-area-inset'>
         <div className='max-w-sm md:max-w-2xl lg:max-w-4xl mx-auto px-0 md:px-6 py-6 md:py-8'>
           <PageHeader />
-          <div
+          <output
             className='flex items-center justify-center py-12'
-            role='status'
             aria-label='Loading todos'
           >
             <Loader2
@@ -115,7 +114,7 @@ export default function TodoPageLayout({
               aria-hidden='true'
             />
             <span className='sr-only'>Loading todos...</span>
-          </div>
+          </output>
         </div>
       </div>
     );
