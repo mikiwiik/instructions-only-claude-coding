@@ -8,7 +8,7 @@ interface ListPageProps {
   params: Promise<{ listId: string }>;
 }
 
-export default function ListPage({ params }: ListPageProps) {
+export default function ListPage({ params }: Readonly<ListPageProps>) {
   const { listId } = use(params);
   const todoState = useTodos(listId);
 
