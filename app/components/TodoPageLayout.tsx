@@ -158,19 +158,17 @@ export default function TodoPageLayout({
           role='main'
           aria-label='Todo application'
         >
-          <div className='flex flex-col md:flex-row md:items-end gap-4 mb-4'>
-            <div className='flex-1'>
-              <TodoForm onAddTodo={addTodo} />
-            </div>
-            {shareAction?.enabled && (
-              <div className='px-4 md:px-0 pb-4 md:pb-0'>
+          <TodoForm
+            onAddTodo={addTodo}
+            shareButton={
+              shareAction?.enabled ? (
                 <ShareButton
                   todos={allTodos.filter((t) => !t.deletedAt)}
                   onShared={shareAction.onShared}
                 />
-              </div>
-            )}
-          </div>
+              ) : undefined
+            }
+          />
           <TodoFilter
             currentFilter={filter}
             onFilterChange={setFilter}
