@@ -18,5 +18,11 @@ export default function HomePage() {
     </div>
   );
 
-  return <TodoPageLayout {...todoState} notice={betaNotice} />;
+  return (
+    <TodoPageLayout
+      {...todoState}
+      notice={betaNotice}
+      shareAction={{ enabled: true }}
+    />
+  );
 }
