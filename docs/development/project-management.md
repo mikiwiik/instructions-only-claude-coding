@@ -279,6 +279,10 @@ and completion (via PR merge). No manual status updates needed - workflow is ful
   - [ ] Error handling comprehensive (network failures, conflicts)
   - [ ] Sync status indicators in UI (connection state, pending operations)
 - [ ] Comprehensive test coverage provided (including accessibility and sync tests)
+- [ ] **🧪 E2E test requirements (for user-facing features)**:
+  - [ ] E2E test verifies feature is **visible** on the page
+  - [ ] E2E test verifies feature is **functional** (basic happy path)
+  - [ ] Checklist question: "Can the user see or interact with this?" → If YES, E2E test required
 - [ ] **Test isolation verified** ([docs/guidelines/typescript-standards.md#test-isolation-and-mock-cleanup](../guidelines/typescript-standards.md#test-isolation-and-mock-cleanup)):
   - [ ] Global object mocks properly restored in `afterAll()` hooks
   - [ ] Mocks marked as `configurable: true` for cleanup

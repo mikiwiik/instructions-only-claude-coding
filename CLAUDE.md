@@ -17,6 +17,9 @@
    (see [Troubleshooting Guide](docs/reference/troubleshooting.md#commitlint-parser-bug))
 6. **🚨 TDD + QUALITY GATES**: Tests first (unit, integration, E2E for user flows), zero ESLint warnings, strict
    TypeScript, comprehensive coverage before completion
+   - **E2E-First for User-Facing Features**: Write E2E visibility test BEFORE implementing UI components
+   - Prevents "integration gap" where components exist but aren't rendered on the page
+   - See [E2E Feature Template](docs/testing/e2e-feature-template.md) for the pattern
 7. **🚨 FEATURE BRANCH + PR WORKFLOW**: All work via feature branches and PRs with MANDATORY automerge using `--rebase`
    to preserve atomic commits - NEVER direct commits to main - only claim completion AFTER PR merged and verified with
    `gh issue view #X`

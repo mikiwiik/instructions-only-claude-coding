@@ -93,6 +93,36 @@ Query priority follows React Testing Library recommendations:
 
 See [E2E Testing Guide](e2e-testing-guide.md) for details.
 
+### The Integration Gap Anti-Pattern
+
+**Problem**: Unit tests pass but the feature doesn't appear on the page.
+
+A component can have 100% test coverage but never be imported or rendered in the page
+component. Unit tests verify components in isolation and cannot detect when a component
+exists but isn't integrated into the application.
+
+**Example from Issue #377**: ShareButton and ShareDialog had passing unit tests, but
+the button never appeared on the page because `page.tsx` didn't pass the `shareAction`
+prop to render it. This wasn't caught until manual testing in the Vercel preview.
+
+**Prevention - Outside-In TDD**:
+
+1. **Write E2E visibility test BEFORE implementing the component**
+2. Test should fail initially (element not found)
+3. Implement component and integrate into page
+4. E2E test passes when feature is visible
+5. Add functional E2E tests for interactions
+
+```typescript
+// Write this FIRST, before implementing the component
+test('share button is visible on main page', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('button', { name: /share/i })).toBeVisible();
+});
+```
+
+See [E2E Feature Template](e2e-feature-template.md) for the full pattern.
+
 ## Coverage Requirements
 
 | Metric           | Threshold       | Enforcement             |
