@@ -34,6 +34,10 @@ function applyOperation(
       const todoId = data as string;
       return { success: true, todos: todos.filter((t) => t.id !== todoId) };
     }
+    case 'replace-all': {
+      const newTodos = data as Todo[];
+      return { success: true, todos: newTodos };
+    }
     default:
       return { success: false, error: 'Invalid operation', status: 400 };
   }
@@ -58,7 +62,7 @@ export async function POST(
 
     let list = await KVStore.getList(listId);
 
-    if (!list && operation === 'create') {
+    if (!list && (operation === 'create' || operation === 'replace-all')) {
       await KVStore.setList(listId, [], 'anonymous');
       list = await KVStore.getList(listId);
     } else if (!list) {
