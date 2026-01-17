@@ -68,6 +68,10 @@ function PageFooter() {
           View on GitHub
         </a>
       </p>
+      <p className='mt-2 text-muted-foreground/70'>
+        Educational project - no warranties. Use at your own risk. Contributions
+        welcome!
+      </p>
     </footer>
   );
 }
