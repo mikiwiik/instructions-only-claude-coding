@@ -65,6 +65,7 @@ describe('list-manager', () => {
         id: 'todo-1',
         text: 'Test todo',
         createdAt: new Date('2024-01-01'),
+        updatedAt: new Date('2024-01-01'),
         sortOrder: 'a',
       },
     ];
