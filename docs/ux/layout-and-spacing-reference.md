@@ -1,7 +1,7 @@
 # Layout and Spacing Reference
 
 **Status**: Living Document
-**Last Updated**: 2025-12-28
+**Last Updated**: 2026-01-17
 **Purpose**: Complete visual and technical reference for UI components, layout, and spacing
 **Related**: [Mobile UX Guidelines](mobile-ux-guidelines.md), [Accessibility
 Requirements](accessibility-requirements.md)
@@ -50,8 +50,10 @@ graph TB
     C --> F[TodoFilter<br/>mb-4]
     C --> G[TodoList/ActivityTimeline]
 
-    E --> E1[Textarea<br/>px-3 md:px-4 py-3]
-    E --> E2[Button<br/>px-4 md:px-6 py-3]
+    E --> E1[Textarea<br/>full width, px-3 md:px-4 py-3]
+    E --> E3[Button Row<br/>below textarea]
+    E3 --> E2[Add Todo Button<br/>px-4 md:px-6 py-3]
+    E3 --> E4[Share Button<br/>optional, same styling]
 
     F --> F1[Filter Buttons<br/>px-2 md:px-3 py-2, gap-2]
 
@@ -191,11 +193,11 @@ we maintain mobile layout from 0-767px, then switch directly to desktop layout a
 │ ▒│ CARD BORDER ┌────────────────────────────────────────┐   │▒│
 │ ▒│             │ ░░░░░ 0px (p-0) ░░░░░░░░░░░░░░░░░░░░░░░│   │▒│ Card
 │ ▒│             │ ░┌────────────────────────────────────┐░│   │▒│ Padding
-│ ▒│             │ ░│ TodoForm                           │░│   │▒│ EDGE-TO-EDGE
+│ ▒│             │ ░│ TodoForm (stacked layout)          │░│   │▒│ EDGE-TO-EDGE
 │ ▒│             │ ░│ ┌────────────────────────────────┐ │░│   │▒│
-│ ▒│             │ ░│ │ 12px (px-3) → Textarea ← 12px  │ │░│   │▒│ Form
+│ ▒│             │ ░│ │ Textarea (full width)          │ │░│   │▒│ Form
 │ ▒│             │ ░│ └────────────────────────────────┘ │░│   │▒│ Textarea
-│ ▒│             │ ░│            [Add Todo Button]       │░│   │▒│ Padding
+│ ▒│             │ ░│ [Add] [Share List] (below, stack) │░│   │▒│ Buttons
 │ ▒│             │ ░└────────────────────────────────────┘░│   │▒│
 │ ▒│             │ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░│   │▒│
 │ ▒│             │              16px (mb-4)               │   │▒│ Form
@@ -266,11 +268,11 @@ Legend:
 │ ▒│ CARD BORDER ┌────────────────────────────────────────────┐   │▒│
 │ ▒│  (rounded)  │ ░░░░░░░░ 20px (p-5) ░░░░░░░░░░░░░░░░░░░░░░│   │▒│ Card
 │ ▒│             │ ░┌────────────────────────────────────────┐░│   │▒│ Padding
-│ ▒│             │ ░│ TodoForm                               │░│   │▒│ (contained)
+│ ▒│             │ ░│ TodoForm (stacked layout)               │░│   │▒│ (contained)
 │ ▒│             │ ░│ ┌──────────────────────────────────┐   │░│   │▒│
-│ ▒│             │ ░│ │ 16px (px-4) → Textarea ← 16px    │   │░│   │▒│ Form
+│ ▒│             │ ░│ │ Textarea (full width)            │   │░│   │▒│ Form
 │ ▒│             │ ░│ └──────────────────────────────────┘   │░│   │▒│ Textarea
-│ ▒│             │ ░│          [Add Todo Button]             │░│   │▒│ Padding
+│ ▒│             │ ░│ [Add Todo] [Share List] (side by side) │░│   │▒│ Buttons
 │ ▒│             │ ░└────────────────────────────────────────┘░│   │▒│
 │ ▒│             │ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░│   │▒│
 │ ▒│             │              24px (mb-6)                   │   │▒│ Form
@@ -392,13 +394,22 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 **File**: `app/components/TodoForm.tsx`
 
-| Property             | Mobile (default) | Desktop (≥768px) |
-| -------------------- | ---------------- | ---------------- |
-| Container margin     | `mb-4` (16px)    | `mb-6` (24px)    |
-| Textarea padding (H) | `px-3` (12px)    | `px-4` (16px)    |
-| Textarea padding (V) | `py-3` (12px)    | (same)           |
-| Button padding (H)   | `px-4` (16px)    | `px-6` (24px)    |
-| Button padding (V)   | `py-3` (12px)    | (same)           |
+**Layout**: Stacked (textarea full width, buttons below)
+
+- **Row 1**: Textarea (full width on all screen sizes)
+- **Row 2**: Add Todo button + optional Share List button (side by side on sm+, stacked on mobile)
+
+| Property             | Mobile (default)     | Desktop (≥768px) |
+| -------------------- | -------------------- | ---------------- |
+| Container margin     | `mb-4` (16px)        | `mb-6` (24px)    |
+| Textarea padding (H) | `px-3` (12px)        | `px-4` (16px)    |
+| Textarea padding (V) | `py-3` (12px)        | (same)           |
+| Button row layout    | Stacked (full width) | Side by side     |
+| Button padding (H)   | `px-4` (16px)        | `px-6` (24px)    |
+| Button padding (V)   | `py-3` (12px)        | (same)           |
+| Button row gap       | `gap-2` (8px)        | `gap-3` (12px)   |
+
+**Share Button**: Optional, passed as `shareButton` prop. Same styling as Add button.
 
 ### 5. TodoFilter
 
