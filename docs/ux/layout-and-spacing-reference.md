@@ -446,7 +446,7 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 ### 8. Footer
 
-**File**: `app/page.tsx`
+**File**: `app/components/TodoPageLayout.tsx` (PageFooter component)
 
 | Property         | Mobile (default) | Desktop (≥768px) |
 | ---------------- | ---------------- | ---------------- |

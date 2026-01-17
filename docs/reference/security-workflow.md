@@ -2,100 +2,41 @@
 
 Internal documentation for handling security vulnerabilities and incidents in the todo application.
 
-## Security Incident Response
+This is a hobby project maintained on a best-effort basis. The workflow below describes the general
+approach, not guaranteed timelines or commitments.
 
-### Step 1: Triage
+## Handling Security Reports
 
-When a security report is received:
+When a security report is received, the general approach is:
 
-1. **Acknowledge** within 48 hours via the reporting channel
-2. **Assess severity** using the CVSS framework or simplified categorization:
-   - **Critical**: Remote code execution, authentication bypass, data breach
-   - **High**: Privilege escalation, sensitive data exposure, XSS with significant impact
-   - **Medium**: Information disclosure, CSRF, limited XSS
-   - **Low**: Minor information leakage, theoretical vulnerabilities
-3. **Assign owner** responsible for fix development and communication
-4. **Create private tracking** via GitHub Security Advisory (draft)
+### Triage
 
-### Step 2: Investigation
+- Assess severity using simplified categorization:
+  - **Critical**: Remote code execution, authentication bypass, data breach
+  - **High**: Privilege escalation, sensitive data exposure, XSS with significant impact
+  - **Medium**: Information disclosure, CSRF, limited XSS
+  - **Low**: Minor information leakage, theoretical vulnerabilities
+- Create private tracking via GitHub Security Advisory (draft) if appropriate
 
-1. **Reproduce the issue** in a local development environment
-2. **Identify root cause** and affected code paths
-3. **Assess blast radius**: What data/users could be affected?
-4. **Document findings** in the private advisory
+### Investigation
 
-### Step 3: Fix Development
+- Reproduce the issue in a local development environment
+- Identify root cause and affected code paths
+- Assess impact: What data/users could be affected?
 
-1. **Create private branch** for fix development (do not use public branches)
-2. **Write tests** that verify the vulnerability is fixed
-3. **Implement fix** following project code standards
-4. **Peer review** by at least one other maintainer
-5. **Verify fix** doesn't introduce regressions
+### Fix Development
 
-### Step 4: Disclosure Coordination
+- Create private branch for fix development (do not use public branches)
+- Write tests that verify the vulnerability is fixed
+- Implement fix following project code standards
+- Verify fix doesn't introduce regressions
 
-1. **Contact reporter** with fix timeline and credit preferences
-2. **Prepare advisory** with vulnerability details and mitigation
-3. **Coordinate release timing** (typically give 7-day notice)
-4. **Prepare changelog entry** for the release
+### Release
 
-### Step 5: Release
-
-1. **Merge fix** to main branch
-2. **Deploy** to production
-3. **Publish security advisory** on GitHub
-4. **Update CHANGELOG** if maintained
-5. **Notify reporter** of publication
-
-### Step 6: Post-Incident
-
-1. **Retrospective**: What could have prevented this?
-2. **Documentation**: Update security docs if process gaps found
-3. **Monitoring**: Watch for exploitation attempts
-4. **Credit**: Acknowledge reporter per their preferences
-
-## Communication Templates
-
-### Acknowledgment Template
-
-```markdown
-Thank you for reporting this security issue. We take all security reports seriously.
-
-We have received your report regarding [brief description] and are currently investigating.
-You can expect an initial assessment within 7 days.
-
-Please let us know if you have any additional information that might help our investigation.
-```
-
-### Status Update Template
-
-```markdown
-This is an update on the security issue you reported on [date].
-
-Current Status: [Investigating / Fix in Progress / Fix Ready]
-Expected Resolution: [Timeline]
-Next Update: [Date]
-
-[Additional context if appropriate]
-```
-
-### Resolution Template
-
-```markdown
-The security issue you reported has been resolved.
-
-Fix Details:
-
-- Vulnerability: [Description]
-- Severity: [Critical/High/Medium/Low]
-- Fix: [Brief description of fix]
-- Release: [Version or deployment date]
-
-Would you like to be credited in our security advisory? If so, please provide your preferred
-name/handle and any links you'd like included.
-
-Thank you for helping improve the security of this project.
-```
+- Merge fix to main branch
+- Deploy to production
+- Publish security advisory on GitHub if appropriate
+- Credit reporter (unless they prefer anonymity)
 
 ## AI Agent Security Guidelines
 
