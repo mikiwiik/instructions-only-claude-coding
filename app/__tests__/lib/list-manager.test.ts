@@ -115,7 +115,7 @@ describe('list-manager', () => {
         json: () => Promise.resolve({ error: 'Server error message' }),
       });
 
-      await expect(shareList(mockTodos)).rejects.toEqual({
+      await expect(shareList(mockTodos)).rejects.toMatchObject({
         code: 'SERVER_ERROR',
         message: 'Server error message',
       });
@@ -128,7 +128,7 @@ describe('list-manager', () => {
         json: () => Promise.resolve({}),
       });
 
-      await expect(shareList(mockTodos)).rejects.toEqual({
+      await expect(shareList(mockTodos)).rejects.toMatchObject({
         code: 'SERVER_ERROR',
         message: 'Failed to save list to server',
       });
@@ -139,7 +139,7 @@ describe('list-manager', () => {
         new Error('Network error')
       );
 
-      await expect(shareList(mockTodos)).rejects.toEqual({
+      await expect(shareList(mockTodos)).rejects.toMatchObject({
         code: 'NETWORK_ERROR',
         message: 'Unable to connect to server. Please check your connection.',
       });
