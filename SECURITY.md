@@ -1,5 +1,12 @@
 # Security Policy
 
+## Disclaimer
+
+This is a hobby project created for educational purposes. It is provided "as-is" without any warranties
+or guarantees of any kind. Use is entirely at your own risk. Security issues are addressed on a
+best-effort basis as time and resources allow. That said, the goal is to make this project as robust
+as resources permit, and all contributions are greatly appreciated and will be credited appropriately.
+
 ## Supported Versions
 
 This project currently maintains security support for the latest deployed version only. As a demonstration project
