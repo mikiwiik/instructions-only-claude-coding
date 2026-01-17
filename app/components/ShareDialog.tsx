@@ -149,11 +149,11 @@ export default function ShareDialog({
     }
   }, [isSharing, error, shareUrl]);
 
-  // Keyboard event handlers
+  // Keyboard event handlers - wrap async handleCopy to return void
   useDialogKeyboard({
     isOpen,
     onClose,
-    onConfirm: handleCopy,
+    onConfirm: () => void handleCopy(),
     dialogRef,
     isLoading: isSharing,
     isConfirmDisabled: isSharing || !!error,
