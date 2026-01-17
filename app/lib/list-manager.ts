@@ -13,9 +13,17 @@ export interface ShareListResult {
   url: string;
 }
 
-export interface ShareListError {
+export class ShareListError extends Error {
   code: 'NETWORK_ERROR' | 'SERVER_ERROR' | 'UNKNOWN_ERROR';
-  message: string;
+
+  constructor(
+    code: 'NETWORK_ERROR' | 'SERVER_ERROR' | 'UNKNOWN_ERROR',
+    message: string
+  ) {
+    super(message);
+    this.name = 'ShareListError';
+    this.code = code;
+  }
 }
 
 /**
@@ -29,8 +37,8 @@ export function generateListId(): string {
  * Build the shareable URL for a list
  */
 export function buildListUrl(listId: string): string {
-  // Use window.location.origin for client-side, fallback to relative URL
-  const origin = typeof window !== 'undefined' ? window.location.origin : '';
+  // Use globalThis.window for client-side, fallback to relative URL
+  const origin = globalThis.window?.location?.origin ?? '';
   return `${origin}/list/${listId}`;
 }
 
@@ -64,10 +72,10 @@ export async function shareList(
         'Failed to share list'
       );
 
-      throw {
-        code: 'SERVER_ERROR',
-        message: errorData.error || 'Failed to save list to server',
-      } as ShareListError;
+      throw new ShareListError(
+        'SERVER_ERROR',
+        errorData.error || 'Failed to save list to server'
+      );
     }
 
     logger.info(
@@ -77,15 +85,15 @@ export async function shareList(
 
     return { listId: id, url };
   } catch (error) {
-    if ((error as ShareListError).code) {
+    if (error instanceof ShareListError) {
       throw error;
     }
 
     logger.error({ error, listId: id }, 'Network error while sharing list');
-    throw {
-      code: 'NETWORK_ERROR',
-      message: 'Unable to connect to server. Please check your connection.',
-    } as ShareListError;
+    throw new ShareListError(
+      'NETWORK_ERROR',
+      'Unable to connect to server. Please check your connection.'
+    );
   }
 }
 
@@ -94,12 +102,12 @@ export async function shareList(
  */
 export async function copyToClipboard(text: string): Promise<boolean> {
   try {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
+    if (navigator.clipboard?.writeText) {
       await navigator.clipboard.writeText(text);
       return true;
     }
 
-    // Fallback for older browsers
+    // Fallback for older browsers (execCommand is deprecated but needed for compatibility)
     const textArea = document.createElement('textarea');
     textArea.value = text;
     textArea.style.position = 'fixed';
@@ -110,7 +118,7 @@ export async function copyToClipboard(text: string): Promise<boolean> {
     textArea.select();
 
     const result = document.execCommand('copy');
-    document.body.removeChild(textArea);
+    textArea.remove();
     return result;
   } catch {
     logger.error('Failed to copy to clipboard');
