@@ -1,11 +1,19 @@
 import { test, expect } from '@playwright/test';
+import { TodoPage } from '../pages/todo-page';
 
 test.describe('Share List', () => {
+  let todoPage: TodoPage;
+
   test.beforeEach(async ({ page }) => {
-    // Navigate to the app
-    await page.goto('/');
-    // Wait for the app to load
-    await expect(page.getByRole('heading', { name: 'TODO' })).toBeVisible();
+    todoPage = new TodoPage(page);
+    await todoPage.goto();
+    // Wait for initial page load to complete before resetting
+    await page.waitForLoadState('networkidle');
+    await todoPage.resetTestData(); // Clear server-side data
+    await todoPage.clearLocalStorage(); // Clear client-side data
+    await page.reload();
+    // Wait for clean state after reload
+    await page.waitForLoadState('networkidle');
   });
 
   test('share button is visible on main page', async ({ page }) => {
@@ -15,9 +23,7 @@ test.describe('Share List', () => {
 
   test('share button opens dialog when clicked', async ({ page }) => {
     // Add a todo first so the button is enabled
-    const input = page.getByPlaceholder('What needs to be done?');
-    await input.fill('Test todo for sharing');
-    await page.getByRole('button', { name: /add todo/i }).click();
+    await todoPage.addTodo('Test todo for sharing');
 
     // Wait for todo to appear
     await expect(page.getByText('Test todo for sharing')).toBeVisible();
@@ -36,9 +42,7 @@ test.describe('Share List', () => {
 
   test('share dialog shows URL on success', async ({ page }) => {
     // Add a todo first
-    const input = page.getByPlaceholder('What needs to be done?');
-    await input.fill('Todo for share test');
-    await page.getByRole('button', { name: /add todo/i }).click();
+    await todoPage.addTodo('Todo for share test');
     await expect(page.getByText('Todo for share test')).toBeVisible();
 
     // Click share button
@@ -64,9 +68,7 @@ test.describe('Share List', () => {
 
   test('share dialog can be closed', async ({ page }) => {
     // Add a todo
-    const input = page.getByPlaceholder('What needs to be done?');
-    await input.fill('Closable dialog test');
-    await page.getByRole('button', { name: /add todo/i }).click();
+    await todoPage.addTodo('Closable dialog test');
     await expect(page.getByText('Closable dialog test')).toBeVisible();
 
     // Open share dialog
