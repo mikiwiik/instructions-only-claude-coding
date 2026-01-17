@@ -260,6 +260,8 @@ We take security seriously. This project implements:
 
 **Report a Vulnerability**: See [SECURITY.md](SECURITY.md) for responsible disclosure guidelines.
 
+**Disclaimer**: Educational project - no warranties. Use at your own risk. Contributions welcome!
+
 ## Support and Resources
 
 - **Project Issues**: [GitHub Issues](https://github.com/mikiwiik/instructions-only-claude-coding/issues)

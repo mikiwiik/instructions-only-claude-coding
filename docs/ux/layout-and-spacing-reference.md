@@ -63,6 +63,10 @@ graph TB
     I --> I3[Content Area<br/>flex-1]
     I --> I4[Action Buttons<br/>p-1.5 md:p-2, 44x44px each]
 
+    D --> D1[Attribution<br/>Claude Code link]
+    D --> D2[Repository Link<br/>GitHub link]
+    D --> D3[Disclaimer<br/>text-muted-foreground/70]
+
     style A fill:#e3f2fd
     style S fill:#fff9c4
     style C fill:#f3e5f5
@@ -70,6 +74,7 @@ graph TB
     style F fill:#fff3e0
     style G fill:#fce4ec
     style I fill:#e0f2f1
+    style D fill:#f5f5f5
 ```
 
 ---
@@ -448,7 +453,13 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 | Top margin       | `mt-6` (24px)    | `mt-8` (32px)    |
 | Internal spacing | `mt-2` (8px)     | (same)           |
 
-**Structure**: Two-paragraph layout (attribution + repository link)
+**Structure**: Three-paragraph layout (attribution + repository link + disclaimer)
+
+| Element         | Content                                           | Styling                        |
+| --------------- | ------------------------------------------------- | ------------------------------ |
+| Attribution     | "100% agent implemented..." with Claude Code link | `text-muted-foreground`        |
+| Repository link | "View on GitHub" link                             | `text-primary hover:underline` |
+| Disclaimer      | "Educational project - no warranties..."          | `text-muted-foreground/70`     |
 
 ### 9. Status Banners
 
