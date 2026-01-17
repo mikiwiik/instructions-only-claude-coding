@@ -385,7 +385,8 @@ describe('TodoForm', () => {
       const form = textarea.closest('form');
       expect(form).toBeInTheDocument();
 
-      const flexContainer = form?.querySelector('.flex.flex-col.md\\:flex-row');
+      // Form uses stacked layout: textarea on top, buttons below
+      const flexContainer = form?.querySelector('.flex.flex-col');
       expect(flexContainer).toBeInTheDocument();
       expect(flexContainer).toHaveClass('gap-3');
 
@@ -403,8 +404,8 @@ describe('TodoForm', () => {
       const submitButton = screen.getByRole('button', { name: /add todo/i });
 
       // Verify responsive text elements are present
-      const fullText = submitButton.querySelector('.hidden.md\\:inline');
-      const shortText = submitButton.querySelector('.md\\:hidden');
+      const fullText = submitButton.querySelector('.hidden.sm\\:inline');
+      const shortText = submitButton.querySelector('.sm\\:hidden');
 
       expect(fullText).toBeInTheDocument();
       expect(fullText).toHaveTextContent('Add Todo');
