@@ -3,9 +3,14 @@ import { Plus } from 'lucide-react';
 
 interface TodoFormProps {
   onAddTodo: (text: string) => void;
+  /** Optional share button to render inline with add button */
+  shareButton?: React.ReactNode;
 }
 
-export default function TodoForm({ onAddTodo }: TodoFormProps) {
+export default function TodoForm({
+  onAddTodo,
+  shareButton,
+}: Readonly<TodoFormProps>) {
   const [text, setText] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -66,16 +71,19 @@ export default function TodoForm({ onAddTodo }: TodoFormProps) {
             rows={1}
           />
         </div>
-        <button
-          type='submit'
-          disabled={isSubmitDisabled}
-          className='inline-flex items-center justify-center gap-2 px-4 md:px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[3rem] text-sm md:text-base whitespace-nowrap'
-          aria-label='Add todo'
-        >
-          <Plus className='h-4 w-4' />
-          <span className='hidden md:inline'>Add Todo</span>
-          <span className='md:hidden'>Add</span>
-        </button>
+        <div className='flex flex-col md:flex-row gap-2 md:gap-3 w-full md:w-auto'>
+          <button
+            type='submit'
+            disabled={isSubmitDisabled}
+            className='inline-flex items-center justify-center gap-2 px-4 md:px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[3rem] text-sm md:text-base whitespace-nowrap'
+            aria-label='Add todo'
+          >
+            <Plus className='h-4 w-4' />
+            <span className='hidden md:inline'>Add Todo</span>
+            <span className='md:hidden'>Add</span>
+          </button>
+          {shareButton}
+        </div>
       </div>
     </form>
   );
