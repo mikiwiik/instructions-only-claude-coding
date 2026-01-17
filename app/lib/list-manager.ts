@@ -62,7 +62,7 @@ export async function shareList(
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ todos }),
+      body: JSON.stringify({ operation: 'replace-all', data: todos }),
     });
 
     if (!response.ok) {
