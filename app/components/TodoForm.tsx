@@ -54,24 +54,22 @@ export default function TodoForm({
 
   return (
     <form onSubmit={handleSubmit} className='mb-4 md:mb-6'>
-      <div className='flex flex-col md:flex-row md:items-start gap-3'>
-        <div className='flex-1'>
-          <label htmlFor='todo-input' className='sr-only'>
-            Add new todo
-          </label>
-          <textarea
-            ref={textareaRef}
-            id='todo-input'
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder='What needs to be done?'
-            className='w-full px-3 md:px-4 py-3 border border-input bg-background rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground resize-none overflow-hidden min-h-[3rem] text-base'
-            aria-label='Add new todo'
-            rows={1}
-          />
-        </div>
-        <div className='flex flex-col md:flex-row gap-2 md:gap-3 w-full md:w-auto'>
+      <div className='flex flex-col gap-3'>
+        <label htmlFor='todo-input' className='sr-only'>
+          Add new todo
+        </label>
+        <textarea
+          ref={textareaRef}
+          id='todo-input'
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder='What needs to be done?'
+          className='w-full px-3 md:px-4 py-3 border border-input bg-background rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground resize-none overflow-hidden min-h-[3rem] text-base'
+          aria-label='Add new todo'
+          rows={1}
+        />
+        <div className='flex flex-col sm:flex-row gap-2 sm:gap-3'>
           <button
             type='submit'
             disabled={isSubmitDisabled}
@@ -79,8 +77,8 @@ export default function TodoForm({
             aria-label='Add todo'
           >
             <Plus className='h-4 w-4' />
-            <span className='hidden md:inline'>Add Todo</span>
-            <span className='md:hidden'>Add</span>
+            <span className='hidden sm:inline'>Add Todo</span>
+            <span className='sm:hidden'>Add</span>
           </button>
           {shareButton}
         </div>
