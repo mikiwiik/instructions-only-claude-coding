@@ -5,9 +5,17 @@ import TodoForm from './TodoForm';
 import TodoList from './TodoList';
 import TodoFilter from './TodoFilter';
 import ActivityTimeline from './ActivityTimeline';
+import ShareButton from './ShareButton';
 import { Todo, TodoFilter as TodoFilterType } from '../types/todo';
 import { RateLimitState } from '../hooks/useTodoSync';
 import { getActivityCount } from '../utils/activity';
+
+interface ShareActionConfig {
+  /** Whether sharing is enabled for this page */
+  enabled: boolean;
+  /** Callback when list is successfully shared */
+  onShared?: (listId: string, url: string) => void;
+}
 
 interface TodoPageLayoutProps {
   todos: Todo[];
@@ -28,6 +36,8 @@ interface TodoPageLayoutProps {
   setFilter: (filter: TodoFilterType) => void;
   /** Optional notice to display above the main content */
   notice?: React.ReactNode;
+  /** Share action configuration - when provided, shows share button */
+  shareAction?: ShareActionConfig;
 }
 
 function PageHeader() {
@@ -94,6 +104,7 @@ export default function TodoPageLayout({
   moveDown,
   setFilter,
   notice,
+  shareAction,
 }: Readonly<TodoPageLayoutProps>) {
   const activeTodosCount = allTodos.filter(
     (todo) => !todo.completedAt && !todo.deletedAt
@@ -147,7 +158,19 @@ export default function TodoPageLayout({
           role='main'
           aria-label='Todo application'
         >
-          <TodoForm onAddTodo={addTodo} />
+          <div className='flex flex-col md:flex-row md:items-end gap-4 mb-4'>
+            <div className='flex-1'>
+              <TodoForm onAddTodo={addTodo} />
+            </div>
+            {shareAction?.enabled && (
+              <div className='px-4 md:px-0 pb-4 md:pb-0'>
+                <ShareButton
+                  todos={allTodos.filter((t) => !t.deletedAt)}
+                  onShared={shareAction.onShared}
+                />
+              </div>
+            )}
+          </div>
           <TodoFilter
             currentFilter={filter}
             onFilterChange={setFilter}
