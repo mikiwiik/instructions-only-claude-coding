@@ -43,25 +43,14 @@ Please include as much of the following information as possible:
 - **Proof of Concept**: Code snippets or screenshots demonstrating the vulnerability (if available)
 - **Suggested Fix**: Any recommendations for remediation (optional)
 
-### Response Timeline
+## How We Handle Reports
 
-| Phase              | Timeline        |
-| ------------------ | --------------- |
-| Acknowledgment     | Within 48 hours |
-| Initial Assessment | Within 7 days   |
-| Status Update      | Every 7 days    |
-| Fix (Critical)     | Within 7 days   |
-| Fix (High)         | Within 30 days  |
-| Fix (Medium/Low)   | Within 90 days  |
+When a vulnerability is reported, the general approach is:
 
-## Security Response Process
-
-1. **Acknowledgment**: We acknowledge receipt of your report within 48 hours
-2. **Assessment**: We assess the vulnerability severity and scope
-3. **Development**: We develop and test a fix in a private branch
-4. **Disclosure**: We coordinate disclosure timing with the reporter
-5. **Release**: We release the fix and publish a security advisory
-6. **Credit**: We credit the reporter in the advisory (unless anonymity is requested)
+1. Assess the severity and scope
+2. Develop and test a fix
+3. Release the fix and publish a security advisory
+4. Credit the reporter (unless they prefer anonymity)
 
 ## Out of Scope
 
