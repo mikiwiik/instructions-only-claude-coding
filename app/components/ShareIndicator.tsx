@@ -23,9 +23,8 @@ export default function ShareIndicator({
   }, [shareUrl]);
 
   return (
-    <div
+    <output
       className='flex items-center gap-2 text-sm text-muted-foreground bg-blue-50 border border-blue-200 rounded-lg px-3 py-2'
-      role='status'
       aria-label='Shared list indicator'
     >
       <Link2
@@ -53,6 +52,6 @@ export default function ShareIndicator({
           </>
         )}
       </button>
-    </div>
+    </output>
   );
 }

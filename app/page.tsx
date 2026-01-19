@@ -8,8 +8,8 @@ export default function HomePage() {
   const todoState = useTodos(MAIN_LIST_ID);
 
   // Don't pass shareInfo to layout - main page has beta notice instead
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { shareInfo, ...layoutProps } = todoState;
-  void shareInfo; // Intentionally unused - main page uses beta notice
 
   const betaNotice = (
     <div
