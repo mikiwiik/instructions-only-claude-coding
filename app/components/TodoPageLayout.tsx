@@ -148,7 +148,7 @@ export default function TodoPageLayout({
         {notice}
 
         {shareInfo && (
-          <div className='mb-4 md:mb-6 px-4 md:px-0'>
+          <div className='mb-4 md:mb-6'>
             <ShareIndicator shareUrl={shareInfo.url} />
           </div>
         )}
