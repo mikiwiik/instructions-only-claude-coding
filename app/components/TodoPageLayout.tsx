@@ -6,8 +6,10 @@ import TodoList from './TodoList';
 import TodoFilter from './TodoFilter';
 import ActivityTimeline from './ActivityTimeline';
 import ShareButton from './ShareButton';
+import ShareIndicator from './ShareIndicator';
 import { Todo, TodoFilter as TodoFilterType } from '../types/todo';
 import { RateLimitState } from '../hooks/useTodoSync';
+import { ShareInfo } from '../hooks/useTodos';
 import { getActivityCount } from '../utils/activity';
 
 interface ShareActionConfig {
@@ -38,6 +40,8 @@ interface TodoPageLayoutProps {
   notice?: React.ReactNode;
   /** Share action configuration - when provided, shows share button */
   shareAction?: ShareActionConfig;
+  /** Share info for shared lists - when provided, shows share indicator */
+  shareInfo?: ShareInfo;
 }
 
 function PageHeader() {
@@ -105,6 +109,7 @@ export default function TodoPageLayout({
   setFilter,
   notice,
   shareAction,
+  shareInfo,
 }: Readonly<TodoPageLayoutProps>) {
   const activeTodosCount = allTodos.filter(
     (todo) => !todo.completedAt && !todo.deletedAt
@@ -141,6 +146,12 @@ export default function TodoPageLayout({
         <PageHeader />
 
         {notice}
+
+        {shareInfo && (
+          <div className='mb-4 md:mb-6'>
+            <ShareIndicator shareUrl={shareInfo.url} />
+          </div>
+        )}
 
         {rateLimitState.isRateLimited && (
           <div

@@ -21,7 +21,14 @@ import {
   RateLimitState,
 } from './useTodoSync';
 import { useTodoOperations } from './useTodoOperations';
+import { buildListUrl } from '../lib/list-manager';
 import { logger } from '../lib/logger';
+
+/** Share info for shared lists */
+export interface ShareInfo {
+  url: string;
+  listId: string;
+}
 
 /** No-op sync function for local mode - performs no API calls */
 const noOpSync: SyncToBackendFn = async () => undefined;
@@ -163,12 +170,18 @@ export function useTodos(listId?: string) {
     }));
   }, []);
 
+  // Build share info for shared mode
+  const shareInfo: ShareInfo | undefined =
+    isSharedMode && listId ? { url: buildListUrl(listId), listId } : undefined;
+
   return {
     todos: getFilteredTodos(),
     allTodos: state.todos,
     filter: state.filter,
     isLoading,
     isInitialized,
+    isShared: isSharedMode,
+    shareInfo,
     setFilter,
     rateLimitState,
     clearRateLimitState,
