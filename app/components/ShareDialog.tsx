@@ -172,10 +172,10 @@ export default function ShareDialog({
     (event: React.KeyboardEvent) => {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
-        handleBackdropClick(event as unknown as React.MouseEvent);
+        onClose();
       }
     },
-    [handleBackdropClick]
+    [onClose]
   );
 
   if (!isOpen) return null;

@@ -120,8 +120,8 @@ export async function copyToClipboard(text: string): Promise<boolean> {
     const result = document.execCommand('copy');
     textArea.remove();
     return result;
-  } catch {
-    logger.error('Failed to copy to clipboard');
+  } catch (error) {
+    logger.error({ error }, 'Failed to copy to clipboard');
     return false;
   }
 }
