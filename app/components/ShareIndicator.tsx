@@ -46,9 +46,7 @@ export default function ShareIndicator({
         ) : (
           <>
             <Copy className='h-4 w-4 text-blue-600' aria-hidden='true' />
-            <span className='text-blue-700 text-xs hidden sm:inline'>
-              Copy URL
-            </span>
+            <span className='text-blue-700 text-xs'>Copy URL</span>
           </>
         )}
       </button>
