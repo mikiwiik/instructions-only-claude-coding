@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import { Share2 } from 'lucide-react';
 import ShareDialog from './ShareDialog';
-import { shareList, ShareListError } from '../lib/list-manager';
+import { shareList } from '../lib/list-manager';
 import { addRememberedList } from '../lib/remembered-lists';
 import type { Todo } from '../types/todo';
 
@@ -47,8 +47,15 @@ export default function ShareButton({
       setShareUrl(result.url);
       onShared?.(result.listId, result.url);
     } catch (err) {
-      const shareError = err as ShareListError;
-      setError(shareError.message || 'An unexpected error occurred');
+      // Check for ShareListError-like structure (has code and message)
+      const errorObj = err as { code?: string; message?: string };
+      if (errorObj.code && errorObj.message) {
+        setError(errorObj.message);
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unexpected error occurred');
+      }
     } finally {
       setIsSharing(false);
     }
