@@ -44,7 +44,7 @@ jobs:
     needs: validate-deps
     runs-on: ${{ matrix.os }}
     permissions:
-      contents: read
+      contents: read      # Must re-declare: job-level permissions replace workflow-level
       pull-requests: write
 
     strategy:
@@ -65,11 +65,13 @@ jobs:
         cache: 'npm'
 
     - name: Security Audit
+      if: matrix.os == 'ubuntu-latest'
       run: npm audit --audit-level=critical
 
     - name: Install dependencies
       run: npm ci
       env:
+        # Defense-in-depth: duplicates .npmrc ignore-scripts in case it's modified
         NPM_CONFIG_IGNORE_SCRIPTS: 'true'
 
     - name: Generate Security Audit Report
@@ -79,7 +81,16 @@ jobs:
         npm audit --json > reports/audit-report.json || true
         echo "## NPM Audit Report" > reports/audit-summary.md
         echo "" >> reports/audit-summary.md
-        npm audit >> reports/audit-summary.md || true
+        node -e "
+          const r = JSON.parse(require('fs').readFileSync('reports/audit-report.json'));
+          const v = r.metadata?.vulnerabilities || {};
+          const total = Object.values(v).reduce((a, b) => a + b, 0);
+          console.log('Total: ' + total + ' vulnerabilities');
+          console.log('Critical: ' + (v.critical || 0));
+          console.log('High: ' + (v.high || 0));
+          console.log('Moderate: ' + (v.moderate || 0));
+          console.log('Low: ' + (v.low || 0));
+        " >> reports/audit-summary.md
 
     - name: Upload Security Audit Report
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
@@ -183,6 +194,7 @@ jobs:
     - name: Install dependencies
       run: npm ci
       env:
+        # Defense-in-depth: duplicates .npmrc ignore-scripts in case it's modified
         NPM_CONFIG_IGNORE_SCRIPTS: 'true'
 
     - name: Install Playwright Browsers
