@@ -144,7 +144,7 @@ Follow [Slash Command Best Practices](../development/slash-command-best-practice
 **Solutions:**
 
 - **Check env var**: Ensure `GITHUB_PERSONAL_ACCESS_TOKEN` is set in your shell environment
-- **Verify token**: Run `echo $GITHUB_PERSONAL_ACCESS_TOKEN | head -c 20` to confirm the variable is populated
+- **Verify token is set**: Run `[ -n "$GITHUB_PERSONAL_ACCESS_TOKEN" ] && echo "Token set (${#GITHUB_PERSONAL_ACCESS_TOKEN} chars)" || echo "Token NOT set"`
 - **Restart Claude Code**: MCP servers connect on startup; restart after setting the env var
 - **Check `.mcp.json`**: Verify the file exists in the repo root and contains valid JSON
 - **Token expiration**: Fine-grained PATs expire; regenerate at
