@@ -5,13 +5,8 @@ from the start.
 
 ## Why This Template Exists
 
-Unit tests verify components in isolation but cannot catch when a component exists but isn't
-rendered on the page. This "integration gap" allows bugs to reach production despite 100%
-unit test coverage.
-
-**Example from Issue #377**: ShareButton and ShareDialog had passing unit tests, but the
-button never appeared on the page because `page.tsx` didn't pass the required prop. This
-wasn't caught until manual testing in the Vercel preview.
+This template prevents the [Integration Gap Anti-Pattern](testing-strategy.md#the-integration-gap-anti-pattern)
+where components have 100% unit test coverage but aren't rendered on the page.
 
 ## The Pattern: Outside-In TDD
 
