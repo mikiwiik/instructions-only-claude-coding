@@ -64,13 +64,7 @@ New to the project? Start here:
 
 ### Auto-Merge Workflow
 
-**[auto-merge-workflow.md](auto-merge-workflow.md)** - Automated PR approval and merge process
-
-- Automatic PR approval workflow
-- Auto-merge configuration and requirements
-- CI validation and quality gates
-- Branch protection rules
-- Streamlined development process
+See [Git Workflows - Auto-Merge Protocol](../core/workflows.md#auto-merge-protocol) for the auto-merge process.
 
 **Key Features:**
 
@@ -142,12 +136,12 @@ New to the project? Start here:
 
 1. [project-management.md](project-management.md) - Understand issue lifecycle
 2. [workflow.md](workflow.md) - Follow TDD and commit practices
-3. [auto-merge-workflow.md](auto-merge-workflow.md) - Create and merge PRs
+3. [Git Workflows](../core/workflows.md#auto-merge-protocol) - Create and merge PRs
 
 **Creating a Pull Request:**
 
 1. [workflow.md](workflow.md) - Review PR requirements and automerge protocol
-2. [auto-merge-workflow.md](auto-merge-workflow.md) - Understand automatic approval
+2. [Git Workflows](../core/workflows.md#auto-merge-protocol) - Understand automatic approval
 3. [project-management.md](project-management.md) - Verify issue closure
 
 ## Related Documentation

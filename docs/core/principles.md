@@ -295,7 +295,7 @@ The result: **Human provides strategic instruction, automation handles all tacti
 - Automatic PR approval when CI passes
 - Rebase merge strategy (preserves atomic commits)
 - Automatic branch cleanup after merge
-- See [../development/auto-merge-workflow.md](../development/auto-merge-workflow.md)
+- See [workflows.md](workflows.md#auto-merge-protocol)
 
 #### Layer 4: GitHub Projects Automation
 
@@ -320,7 +320,6 @@ The result: **Human provides strategic instruction, automation handles all tacti
 - **Operational**:
   - [workflows.md](workflows.md#auto-merge-protocol) - Auto-merge workflow
   - [workflows.md](workflows.md#quality-gates) - Quality gate integration
-  - [../development/auto-merge-workflow.md](../development/auto-merge-workflow.md) - Detailed auto-merge setup
   - [../setup/github-projects-setup.md](../setup/github-projects-setup.md) - Projects automation
 
 **Related Principles**:
