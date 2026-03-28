@@ -1,7 +1,7 @@
 # Development Workflows
 
 > **Strategic Context**: [Development Principles](principles.md) | [Framework](framework.md) |
-> [Quality Standards](quality-standards.md) | [Operational Guide](../development/workflow.md)
+> [Quality Standards](quality-standards.md)
 
 ## Git and Branch Management
 

@@ -388,7 +388,7 @@ Changes apply automatically to all projects via symlinks.
 After completing installation:
 
 1. **Review Architecture**: Check [`docs/architecture/overview.md`](../architecture/overview.md) for project structure
-2. **Development Workflow**: Read [`docs/development/workflow.md`](../development/workflow.md) for coding standards
+2. **Development Workflow**: Read [`docs/core/workflows.md`](../core/workflows.md) for coding standards
 3. **Project Management**: See [`docs/development/project-management.md`](../development/project-management.md) for issue
    workflow
 4. **GitHub Projects Setup**: See [github-projects-setup.md](github-projects-setup.md) for project board configuration
