@@ -135,6 +135,46 @@ Follow [Slash Command Best Practices](../development/slash-command-best-practice
 - Measuring token consumption
 - Related issues and implementation examples
 
+### GitHub MCP Server Issues
+
+#### MCP Server Not Connecting
+
+**Problem**: Claude Code doesn't show GitHub MCP tools or reports MCP connection failure
+
+**Solutions:**
+
+- **Check env var**: Ensure `GITHUB_PERSONAL_ACCESS_TOKEN` is set in your shell environment
+- **Verify token**: Run `echo $GITHUB_PERSONAL_ACCESS_TOKEN | head -c 20` to confirm the variable is populated
+- **Restart Claude Code**: MCP servers connect on startup; restart after setting the env var
+- **Check `.mcp.json`**: Verify the file exists in the repo root and contains valid JSON
+- **Token expiration**: Fine-grained PATs expire; regenerate at
+  [GitHub Settings](https://github.com/settings/personal-access-tokens)
+
+#### MCP Tool Returns Permission Error
+
+**Problem**: MCP tool call fails with 403 or insufficient permissions
+
+**Solutions:**
+
+- **Check token scopes**: Ensure PAT has required permissions (Contents read, Issues read/write,
+  Pull requests read/write, Projects read/write)
+- **Check repository access**: Fine-grained PATs are scoped to specific repos; verify this repo is included
+- **Organization permissions**: Projects access requires org-level permission grant
+
+#### MCP vs `gh` CLI — When to Use Which
+
+**Context**: During MCP migration, both patterns coexist. Use this guide:
+
+| Scenario | Use MCP | Use `gh` CLI |
+|---|---|---|
+| Claude Code slash commands/skills | Yes | Migrating away |
+| GitHub Actions workflows | No | Yes (CI environment) |
+| Standalone shell scripts | No | Yes (runs outside Claude Code) |
+| Ad-hoc GitHub queries in Claude Code | Yes | Fallback if MCP unavailable |
+| `gh pr merge --auto --rebase` | Validate first | Fallback if MCP doesn't support |
+
+See [ADR-037](../adr/037-github-mcp-server.md) for the full decision record.
+
 ### Quality Gate Failures
 
 #### ESLint Errors
