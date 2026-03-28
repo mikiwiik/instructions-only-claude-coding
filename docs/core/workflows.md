@@ -186,31 +186,14 @@ git commit -m "feat: handle edge cases in feature X (#issue)"
 
 **🚨 REQUIRED**: For features that add visible UI elements, write E2E visibility test BEFORE implementation.
 
-**Why**: Unit tests verify components in isolation but cannot catch when a component exists but isn't
-rendered on the page. This "integration gap" allows bugs to reach production despite 100% unit test coverage.
-
-**Process**:
-
-1. **Write E2E visibility test first** (should FAIL - feature doesn't exist)
-
-   ```typescript
-   test('share button is visible on main page', async ({ page }) => {
-     await page.goto('/');
-     await expect(page.getByRole('button', { name: /share/i })).toBeVisible();
-   });
-   ```
-
-2. **Run test** - Confirm it fails (element not found)
-3. **Implement feature** - Component, unit tests, integration
-4. **Run E2E test again** - Should PASS when feature is visible
-5. **Add functional E2E tests** - Test user interactions
+This prevents the [Integration Gap Anti-Pattern](../testing/testing-strategy.md#the-integration-gap-anti-pattern)
+where components have 100% unit test coverage but aren't rendered on the page.
 
 **Checklist Question**: "Can the user see or interact with this feature?"
 
 - If YES → E2E visibility test required before implementation begins
 
-See [Testing Strategy - Integration Gap](../testing/testing-strategy.md#the-integration-gap-anti-pattern)
-and [E2E Feature Template](../testing/e2e-feature-template.md) for details.
+See [E2E Feature Template](../testing/e2e-feature-template.md) for the full pattern and code examples.
 
 ## Pull Request Protocol
 
