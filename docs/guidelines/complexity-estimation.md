@@ -204,7 +204,7 @@ issue management.
 
 ### Related Documentation
 
-- **Priority System**: [`priority-system.md`](priority-system.md)
+- **Priority System**: [`labels-and-priorities.md`](../reference/labels-and-priorities.md)
 - **Claude-Workflow Labels**: [`claude-workflow-labels.md`](claude-workflow-labels.md)
 - **Project Management**: [`../development/project-management.md`](../development/project-management.md)
 

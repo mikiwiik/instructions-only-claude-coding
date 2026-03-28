@@ -301,7 +301,7 @@ If yes to any, add the claude-workflow label.
 
 ## Related Documentation
 
-- **Priority System**: [docs/guidelines/priority-system.md](priority-system.md)
+- **Priority System**: [docs/reference/labels-and-priorities.md](../reference/labels-and-priorities.md)
 - **Complexity Estimation**: [docs/guidelines/complexity-estimation.md](complexity-estimation.md)
 - **Project Management**: [docs/development/project-management.md](../development/project-management.md)
 - **Claude Instructions**: [CLAUDE.md](../../CLAUDE.md)
