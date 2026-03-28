@@ -10,7 +10,7 @@ WHY we work the way we do and HOW they support the instruction-only development 
 - **This Document (principles.md)**: WHY - Philosophy and strategic importance
 - **[framework.md](framework.md)**: WHAT - Methodology, roles, and agent coordination
 - **[workflows.md](workflows.md)**: HOW - Git workflow, commit strategy, PR protocol
-- **[../development/workflow.md](../development/workflow.md)**: HOW - Code quality, testing, daily practices
+- **[workflows.md](workflows.md)**: HOW - Code quality, testing, daily practices
 - **[../adr/](../adr/)**: DECISIONS - Specific technical choices with rationale
 
 ## The Five Core Principles
@@ -46,7 +46,7 @@ authoritative breakdown of human vs. AI responsibilities.
 
 - **Role Definition**: [../../README.md](../../README.md#-role-definition-and-boundaries) - Authoritative role boundaries
 - **Strategic**: [framework.md](framework.md) - Complete methodology and agent coordination
-- **Operational**: [../development/workflow.md](../development/workflow.md) - Daily development practices
+- **Operational**: [workflows.md](workflows.md) - Daily development practices
 - **Visual**: [../diagrams/development-workflow.md](../diagrams/development-workflow.md) - Process visualization
 
 **Related Principles**: This is the WHY for all other principles. Without instruction-only development:
@@ -233,7 +233,7 @@ enterprise-level quality** without manual human intervention in implementation.
   - [../adr/004-test-driven-development.md](../adr/004-test-driven-development.md)
   - [../adr/027-code-complexity-standards.md](../adr/027-code-complexity-standards.md)
   - [../adr/022-strict-typescript-type-safety.md](../adr/022-strict-typescript-type-safety.md)
-- **Operational**: [../development/workflow.md](../development/workflow.md#quality-gates) - Quality gates and commands
+- **Operational**: [workflows.md](workflows.md#quality-gates) - Quality gates and commands
 - **Guidelines**:
   - [../testing/testing-guidelines.md](../testing/testing-guidelines.md) - Comprehensive testing practices
   - [../guidelines/code-complexity-guidelines.md](../guidelines/code-complexity-guidelines.md) - Refactoring patterns
@@ -425,7 +425,7 @@ This is not theoretical - this entire codebase proves it works in practice.
 
 ### Operational Documentation
 
-- **[../development/workflow.md](../development/workflow.md)** - Code quality standards and daily practices
+- **[workflows.md](workflows.md)** - Code quality standards and daily practices
 - **[../development/project-management.md](../development/project-management.md)** - Issue tracking workflow
 - **[../development/README.md](../development/README.md)** - Development documentation overview
 

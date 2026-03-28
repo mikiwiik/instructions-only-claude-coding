@@ -1,7 +1,6 @@
 # Agentic Coding Framework
 
-> **Related Documentation**: [Development Principles](principles.md) | [Git Workflows](workflows.md) |
-> [Operational Guide](../development/workflow.md)
+> **Related Documentation**: [Development Principles](principles.md) | [Git Workflows](workflows.md)
 
 ## Core Methodology
 

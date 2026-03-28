@@ -194,4 +194,4 @@ The SonarCloud integration will enhance existing quality assurance without repla
 ## Related Documentation
 
 - **[SonarLint IDE Setup](sonarlint-ide-setup.md)** - Configure SonarLint for real-time code quality feedback in your IDE
-- **[Development Workflow](../development/workflow.md)** - Project coding standards and practices
+- **[Development Workflows](../core/workflows.md)** - Project coding standards and practices

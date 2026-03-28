@@ -22,26 +22,9 @@ New to the project? Start here:
 
 ## Core Documentation
 
-### Development Workflow and Standards
+### Development Workflows
 
-**[workflow.md](workflow.md)** - Complete development workflow and code quality standards
-
-- Branch-based development with pull requests
-- Atomic commit strategy and conventional commit format
-- TDD methodology (Red → Green → Refactor)
-- Pre-commit hooks and quality gates
-- Code complexity standards (ADR-027)
-- TypeScript strict mode requirements
-- Testing requirements and coverage thresholds
-- Mermaid diagram guidelines
-
-**Key Sections:**
-
-- Development workflow overview
-- Atomic commit strategy with AI attribution
-- Test-driven development practices
-- Code quality standards and enforcement
-- Development commands reference
+See **[Git Workflows](../core/workflows.md)** for branch strategy, atomic commits, PR protocol, quality gates, and TDD practices.
 
 ### Project Management
 
@@ -111,7 +94,7 @@ See [Git Workflows - Auto-Merge Protocol](../core/workflows.md#auto-merge-protoc
 
 **For Developers:**
 
-1. [workflow.md](workflow.md) - Daily development practices
+1. [Git Workflows](../core/workflows.md) - Daily development practices
 2. [project-management.md](project-management.md) - Issue tracking workflow
 3. [Installation Guide](../setup/local-dev-setup.md) - Local setup
 
@@ -121,7 +104,7 @@ See [Git Workflows - Auto-Merge Protocol](../core/workflows.md#auto-merge-protoc
 
 **For AI Agents:**
 
-1. [workflow.md](workflow.md) - Development standards and quality gates
+1. [Git Workflows](../core/workflows.md) - Development standards and quality gates
 2. [project-management.md](project-management.md) - Issue workflow and status updates
 3. [slash-command-best-practices.md](slash-command-best-practices.md) - Command development
 
@@ -130,17 +113,17 @@ See [Git Workflows - Auto-Merge Protocol](../core/workflows.md#auto-merge-protoc
 **Setting Up a New Development Environment:**
 
 1. [Installation Guide](../setup/local-dev-setup.md) - Configure development environment and Claude Code settings
-2. [workflow.md](workflow.md) - Review development workflow
+2. [Git Workflows](../core/workflows.md) - Review development workflow
 
 **Starting Work on an Issue:**
 
 1. [project-management.md](project-management.md) - Understand issue lifecycle
-2. [workflow.md](workflow.md) - Follow TDD and commit practices
+2. [Git Workflows](../core/workflows.md) - Follow TDD and commit practices
 3. [Git Workflows](../core/workflows.md#auto-merge-protocol) - Create and merge PRs
 
 **Creating a Pull Request:**
 
-1. [workflow.md](workflow.md) - Review PR requirements and automerge protocol
+1. [Git Workflows](../core/workflows.md) - Review PR requirements and automerge protocol
 2. [Git Workflows](../core/workflows.md#auto-merge-protocol) - Understand automatic approval
 3. [project-management.md](project-management.md) - Verify issue closure
 
@@ -167,10 +150,10 @@ See [Git Workflows - Auto-Merge Protocol](../core/workflows.md#auto-merge-protoc
 ## Contributing
 
 All development follows the instruction-only methodology documented in [CLAUDE.md](../../CLAUDE.md). See
-[workflow.md](workflow.md) for detailed contribution guidelines and quality standards.
+[Git Workflows](../core/workflows.md) for detailed contribution guidelines and quality standards.
 
 ## Questions?
 
 - Check the [Troubleshooting Guide](../reference/troubleshooting.md) for common issues
-- Review [workflow.md](workflow.md) for development standards
+- Review [Git Workflows](../core/workflows.md) for development standards
 - See [Development Workflow Diagram](../diagrams/development-workflow.md) for visual process overview

@@ -128,7 +128,7 @@ npm run dev
 
 Visit `http://localhost:3000` to see the application.
 
-**Development Commands**: See [Development Workflow](docs/development/workflow.md) for all available npm commands, quality
+**Development Commands**: See [Development Workflows](docs/core/workflows.md) for all available npm commands, quality
 checks, and testing scripts.
 
 ## Technology Stack
@@ -169,7 +169,7 @@ The app targets modern evergreen browsers. See [Platform Support](docs/architect
 **Current Workflow**: Branch-based development with automated PR workflow. All features developed on separate branches
 with required approvals, automated merging, and continuous deployment.
 
-See [Development Workflow](docs/development/workflow.md) for complete branch strategy, PR requirements, and CI/CD details.
+See [Development Workflows](docs/core/workflows.md) for complete branch strategy, PR requirements, and CI/CD details.
 
 ## Documentation
 
@@ -179,7 +179,7 @@ See [Development Workflow](docs/development/workflow.md) for complete branch str
 - **📦 [Vercel Deployment Guide](docs/setup/vercel-deployment.md)** - Production deployment with Vercel
 - **🔍 [SonarCloud Setup](docs/setup/sonarcloud-setup.md)** - Code quality analysis integration
 - **💡 [SonarLint IDE Setup](docs/setup/sonarlint-ide-setup.md)** - Real-time code quality feedback in your IDE
-- **⚙️ [Development Workflow](docs/development/workflow.md)** - Coding standards and practices
+- **⚙️ [Development Workflows](docs/core/workflows.md)** - Coding standards and practices
 - **🧪 [E2E Testing Guide](docs/testing/e2e-testing-guide.md)** - Playwright E2E testing documentation
 - **📊 [Project Management](docs/development/project-management.md)** - Issue tracking and planning
 - **🏗️ [Architecture Overview](docs/architecture/overview.md)** - Technical architecture and decisions
@@ -202,7 +202,7 @@ See [Development Workflow](docs/development/workflow.md) for complete branch str
 ## Contributing
 
 **Quick Start**: Review [installation guide](docs/setup/local-dev-setup.md), understand the
-[development workflow](docs/development/workflow.md), browse [GitHub issues](https://github.com/mikiwiik/instructions-only-claude-coding/issues),
+[development workflows](docs/core/workflows.md), browse [GitHub issues](https://github.com/mikiwiik/instructions-only-claude-coding/issues),
 and follow TDD with branch-based development.
 
 **Issue Management**: Priority labels (🔴 critical → 🟢 low) and complexity labels (🟢 minimal → 🔴 epic) guide
