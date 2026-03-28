@@ -64,9 +64,75 @@ determine their current status and visibility in different views.
 
 ## State Transitions
 
-### Allowed Transitions
+### State Transition Diagram
 
-See [todo-states-diagram.md](todo-states-diagram.md) for visual state transition diagrams and comprehensive state visualization.
+```mermaid
+stateDiagram-v2
+    [*] --> Active : create todo
+
+    Active --> Completed : toggle/complete
+    Completed --> Active : toggle/reopen
+
+    Active --> DeletedActive : soft delete
+    Completed --> DeletedCompleted : soft delete
+
+    DeletedActive --> Active : restore
+    DeletedCompleted --> Completed : restore
+
+    DeletedActive --> [*] : permanent delete
+    DeletedCompleted --> [*] : permanent delete
+
+    Active --> Active : edit text
+    Completed --> Completed : edit text
+
+    note right of Active
+        State: !completedAt && !deletedAt
+        Visible: All, Active filters
+        Actions: Complete, Edit, Delete
+    end note
+
+    note right of Completed
+        State: completedAt && !deletedAt
+        Visible: All, Completed filters
+        Actions: Reopen, Edit, Delete
+    end note
+
+    note right of DeletedActive
+        State: !completedAt && deletedAt
+        Visible: Recently Deleted filter
+        Actions: Restore, Permanent Delete
+    end note
+
+    note right of DeletedCompleted
+        State: completedAt && deletedAt
+        Visible: Recently Deleted filter
+        Actions: Restore, Permanent Delete
+    end note
+```
+
+### State Matrix Visualization
+
+```mermaid
+graph TD
+    subgraph "Todo State Matrix"
+        A["undefined completedAt<br/>undefined deletedAt<br/><strong>ACTIVE</strong>"]
+        B["Date completedAt<br/>undefined deletedAt<br/><strong>COMPLETED</strong>"]
+        C["undefined completedAt<br/>Date deletedAt<br/><strong>DELETED (was active)</strong>"]
+        D["Date completedAt<br/>Date deletedAt<br/><strong>DELETED (was completed)</strong>"]
+    end
+
+    A -->|toggle/complete| B
+    B -->|toggle/reopen| A
+    A -->|delete| C
+    B -->|delete| D
+    C -->|restore| A
+    D -->|restore| B
+
+    style A fill:#e1f5fe
+    style B fill:#e8f5e8
+    style C fill:#fff3e0
+    style D fill:#fff3e0
+```
 
 ### Transition Actions
 
