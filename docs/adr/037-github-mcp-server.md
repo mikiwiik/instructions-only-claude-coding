@@ -38,7 +38,7 @@ invoke directly.
 ### MCP Server Options Evaluated
 
 | Server | Maintainer | Status | Notes |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `github/github-mcp-server` | GitHub (official) | Active | Canonical choice, Go binary, HTTP and Docker transport |
 | `@modelcontextprotocol/server-github` | MCP org | Deprecated | Development moved to official repo |
 | `cyanheads/git-mcp-server` | Community | Active | Local git operations only, complementary |
