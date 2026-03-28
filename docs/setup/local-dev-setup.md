@@ -9,6 +9,7 @@ practices, see [Development Documentation](../development/README.md).
 - **npm**: Version 10.x or higher
 - **Git**: For version control
 - **jq**: JSON processor used by Claude commands ([installation](#jq-installation))
+- **GitHub PAT**: Personal Access Token for MCP server ([setup](#github-mcp-server-setup))
 - **Modern Browser**: For development and testing
 
 ## Claude Code Setup
@@ -35,6 +36,45 @@ claude
 
 **Optional**: For shared settings across multiple projects, see
 [Claude Code Settings Management](#claude-code-settings-management-optional).
+
+## GitHub MCP Server Setup
+
+This project uses GitHub's official MCP server for native GitHub API integration in Claude Code. The project-scope
+configuration is in `.mcp.json` (shared via git).
+
+### 1. Create a GitHub Personal Access Token
+
+1. Go to [GitHub Settings > Developer settings > Fine-grained tokens](https://github.com/settings/personal-access-tokens/new)
+2. Set a descriptive name (e.g., "Claude Code MCP - instructions-only-claude-coding")
+3. Set expiration as appropriate for your security policy
+4. Under **Repository access**, select "Only select repositories" and choose this repo
+5. Under **Permissions**, grant:
+   - **Repository permissions**: Contents (Read), Issues (Read and write), Pull requests (Read and write),
+     Metadata (Read)
+   - **Organization permissions**: Projects (Read and write) — required for GitHub Projects integration
+6. Click "Generate token" and copy the token value
+
+### 2. Set the Environment Variable
+
+Add the token to your shell profile (`~/.zshrc`, `~/.bashrc`, or equivalent):
+
+```bash
+export GITHUB_PERSONAL_ACCESS_TOKEN="github_pat_your_token_here"
+```
+
+Reload your shell: `source ~/.zshrc`
+
+### 3. Verify MCP Connectivity
+
+After setting the env var, restart Claude Code. The MCP server should connect automatically. You can verify
+by checking that GitHub MCP tools appear when Claude Code starts (look for "github" in the MCP server list).
+
+If you encounter issues, see [MCP Troubleshooting](../reference/troubleshooting.md#github-mcp-server-issues).
+
+**Note**: The `.mcp.json` config uses `${GITHUB_PERSONAL_ACCESS_TOKEN}` env var expansion — the token is never
+stored in the repository.
+
+See [ADR-037](../adr/037-github-mcp-server.md) for the architectural decision.
 
 ## Project Setup
 
