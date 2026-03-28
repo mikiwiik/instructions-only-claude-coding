@@ -26,6 +26,8 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        env:
+          NPM_CONFIG_IGNORE_SCRIPTS: 'true'
 
       - name: Run security audit
         id: audit
@@ -43,7 +45,7 @@ jobs:
           echo "# Security Audit Report - $(date '+%Y-%m-%d')" > reports/audit-summary.md
           echo "" >> reports/audit-summary.md
           echo "## Summary" >> reports/audit-summary.md
-          npm audit || true >> reports/audit-summary.md
+          npm audit >> reports/audit-summary.md || true
 
           # Parse JSON for severity counts
           if [ -f reports/audit-report.json ]; then

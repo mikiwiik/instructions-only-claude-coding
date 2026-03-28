@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: read
-  pull-requests: write
 
 jobs:
   validate-deps:
@@ -44,6 +43,9 @@ jobs:
   build:
     needs: validate-deps
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+      pull-requests: write
 
     strategy:
       matrix:
@@ -62,12 +64,13 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
+    - name: Security Audit
+      run: npm audit --audit-level=critical
+
     - name: Install dependencies
       run: npm ci
-
-    - name: Security Audit
-      run: npm audit --audit-level=moderate
-      continue-on-error: true
+      env:
+        NPM_CONFIG_IGNORE_SCRIPTS: 'true'
 
     - name: Generate Security Audit Report
       if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
@@ -136,7 +139,7 @@ jobs:
       if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
 
     - name: SonarCloud Analysis
-      uses: SonarSource/sonarqube-scan-action@0303d6b62e310685c0e34d0b9cde218036885c4d
+      uses: SonarSource/sonarqube-scan-action@0303d6b62e310685c0e34d0b9cde218036885c4d # v4.2.4
       if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x' && github.actor != 'dependabot[bot]'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -179,6 +182,8 @@ jobs:
 
     - name: Install dependencies
       run: npm ci
+      env:
+        NPM_CONFIG_IGNORE_SCRIPTS: 'true'
 
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps chromium
