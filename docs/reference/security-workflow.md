@@ -73,8 +73,24 @@ AI agents should flag issues that might indicate:
 - **Primary**: Repository maintainers via GitHub
 - **Escalation**: Use GitHub Security Advisories for confidential reporting
 
+## Supply Chain Hardening
+
+The CI/CD pipeline includes supply chain attack mitigations (see
+[ADR-037](../adr/037-supply-chain-hardening.md)):
+
+- **Lifecycle scripts blocked**: `NPM_CONFIG_IGNORE_SCRIPTS=true` prevents arbitrary code execution
+  during `npm ci` in all CI jobs
+- **Audit gate**: `npm audit --audit-level=critical` fails builds on critical vulnerabilities
+  (to be tightened to `high` once transitive dependency advisories are resolved)
+- **Local parity**: `.npmrc` enforces `ignore-scripts=true` and `engine-strict=true` locally
+- **Least-privilege permissions**: Workflow permissions scoped to minimum required per job
+
+If a dependency requires lifecycle scripts, see the exception process in ADR-037.
+
 ## Related Documentation
 
 - [SECURITY.md](../../SECURITY.md) - Public security policy
 - [Security Assessment](../security/shared-lists-security-assessment.md) - Architecture security review
 - [Quality Standards](../core/quality-standards.md) - Code quality requirements
+- [ADR-026: Security Scanning](../adr/026-security-scanning-ci-cd-pipeline.md) - CI/CD security scanning
+- [ADR-037: Supply Chain Hardening](../adr/037-supply-chain-hardening.md) - Lifecycle script blocking and audit gates
