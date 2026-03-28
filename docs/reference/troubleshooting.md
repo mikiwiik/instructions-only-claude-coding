@@ -166,7 +166,7 @@ Follow [Slash Command Best Practices](../development/slash-command-best-practice
 **Context**: During MCP migration, both patterns coexist. Use this guide:
 
 | Scenario | Use MCP | Use `gh` CLI |
-|---|---|---|
+| --- | --- | --- |
 | Claude Code slash commands/skills | Yes | Migrating away |
 | GitHub Actions workflows | No | Yes (CI environment) |
 | Standalone shell scripts | No | Yes (runs outside Claude Code) |
