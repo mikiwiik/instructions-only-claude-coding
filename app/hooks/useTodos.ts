@@ -111,14 +111,12 @@ export function useTodos(listId?: string) {
     syncToBackend,
   });
 
-  // Filter and sort todos based on current filter
-  const getFilteredTodos = useCallback(() => {
-    // Sort by sortOrder ascending
+  // Filter and sort todos based on current filter, memoized for stable references
+  const filteredTodos = useMemo(() => {
     const sortBySortOrder = (todos: Todo[]) => {
       return [...todos].sort((a, b) => a.sortOrder.localeCompare(b.sortOrder));
     };
 
-    // Sort by timestamp descending (most recent first)
     const sortByTimestampDesc = (
       todos: Todo[],
       getTime: (t: Todo) => number
@@ -177,7 +175,7 @@ export function useTodos(listId?: string) {
   );
 
   return {
-    todos: getFilteredTodos(),
+    todos: filteredTodos,
     allTodos: state.todos,
     filter: state.filter,
     isLoading,
