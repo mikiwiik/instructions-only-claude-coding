@@ -21,16 +21,18 @@ const defaultMockReturn = {
   filter: 'active' as const,
   isLoading: false,
   isInitialized: true,
-  addTodo: jest.fn(),
-  toggleTodo: jest.fn(),
-  restoreTodo: jest.fn(),
-  deleteTodo: jest.fn(),
-  permanentlyDeleteTodo: jest.fn(),
-  restoreDeletedTodo: jest.fn(),
-  editTodo: jest.fn(),
-  reorderTodos: jest.fn(),
-  moveUp: jest.fn(),
-  moveDown: jest.fn(),
+  todoActions: {
+    addTodo: jest.fn(),
+    toggleTodo: jest.fn(),
+    restoreTodo: jest.fn(),
+    deleteTodo: jest.fn(),
+    permanentlyDeleteTodo: jest.fn(),
+    restoreDeletedTodo: jest.fn(),
+    editTodo: jest.fn(),
+    reorderTodos: jest.fn(),
+    moveUp: jest.fn(),
+    moveDown: jest.fn(),
+  },
   setFilter: jest.fn(),
   rateLimitState: {
     isRateLimited: false,
@@ -141,7 +143,7 @@ describe('ListPage (/list/[listId])', () => {
     const addTodoMock = jest.fn();
     mockUseTodos.mockReturnValue({
       ...defaultMockReturn,
-      addTodo: addTodoMock,
+      todoActions: { ...defaultMockReturn.todoActions, addTodo: addTodoMock },
     });
 
     const user = userEvent.setup();

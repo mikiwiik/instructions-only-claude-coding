@@ -44,8 +44,8 @@ describe('useTodos hook - Reordering functionality', () => {
         expect(result.current.isInitialized).toBe(true);
       });
 
-      expect(result.current.reorderTodos).toBeDefined();
-      expect(typeof result.current.reorderTodos).toBe('function');
+      expect(result.current.todoActions.reorderTodos).toBeDefined();
+      expect(typeof result.current.todoActions.reorderTodos).toBe('function');
     });
 
     it('should reorder todos when moving item from index 0 to index 2', async () => {
@@ -57,9 +57,9 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Add three todos
       await act(async () => {
-        await result.current.addTodo('First todo');
-        await result.current.addTodo('Second todo');
-        await result.current.addTodo('Third todo');
+        await result.current.todoActions.addTodo('First todo');
+        await result.current.todoActions.addTodo('Second todo');
+        await result.current.todoActions.addTodo('Third todo');
       });
 
       // Should be in reverse order (newest first)
@@ -69,7 +69,7 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Move first item (Third todo) to position 2
       await act(async () => {
-        await result.current.reorderTodos(0, 2);
+        await result.current.todoActions.reorderTodos(0, 2);
       });
 
       // Should reorder: Second, First, Third
@@ -87,14 +87,14 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Add three todos
       await act(async () => {
-        await result.current.addTodo('First todo');
-        await result.current.addTodo('Second todo');
-        await result.current.addTodo('Third todo');
+        await result.current.todoActions.addTodo('First todo');
+        await result.current.todoActions.addTodo('Second todo');
+        await result.current.todoActions.addTodo('Third todo');
       });
 
       // Move last item (First todo) to position 0
       await act(async () => {
-        await result.current.reorderTodos(2, 0);
+        await result.current.todoActions.reorderTodos(2, 0);
       });
 
       // Should reorder: First, Third, Second
@@ -112,13 +112,13 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Add two todos
       await act(async () => {
-        await result.current.addTodo('First todo');
-        await result.current.addTodo('Second todo');
+        await result.current.todoActions.addTodo('First todo');
+        await result.current.todoActions.addTodo('Second todo');
       });
 
       // Reorder
       await act(async () => {
-        await result.current.reorderTodos(0, 1);
+        await result.current.todoActions.reorderTodos(0, 1);
       });
 
       // Verify fetch was called with POST for reorder-single
@@ -145,18 +145,18 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Add todos sequentially to ensure unique sortOrders
       await act(async () => {
-        await result.current.addTodo('First todo');
+        await result.current.todoActions.addTodo('First todo');
       });
       await act(async () => {
-        await result.current.addTodo('Second todo');
+        await result.current.todoActions.addTodo('Second todo');
       });
       await act(async () => {
-        await result.current.addTodo('Third todo');
+        await result.current.todoActions.addTodo('Third todo');
       });
 
       // Move first item to last position
       await act(async () => {
-        await result.current.reorderTodos(0, 2);
+        await result.current.todoActions.reorderTodos(0, 2);
       });
 
       // Verify todos are sorted by sortOrder
@@ -183,15 +183,15 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Add two todos
       await act(async () => {
-        await result.current.addTodo('First todo');
-        await result.current.addTodo('Second todo');
+        await result.current.todoActions.addTodo('First todo');
+        await result.current.todoActions.addTodo('Second todo');
       });
 
       const originalTodos = [...result.current.todos];
 
       // Try to reorder to same position
       await act(async () => {
-        await result.current.reorderTodos(0, 0);
+        await result.current.todoActions.reorderTodos(0, 0);
       });
 
       // Should remain unchanged
@@ -207,29 +207,29 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Add two todos
       await act(async () => {
-        await result.current.addTodo('First todo');
-        await result.current.addTodo('Second todo');
+        await result.current.todoActions.addTodo('First todo');
+        await result.current.todoActions.addTodo('Second todo');
       });
 
       const originalTodos = [...result.current.todos];
 
       // Try invalid source index
       await act(async () => {
-        await result.current.reorderTodos(5, 0);
+        await result.current.todoActions.reorderTodos(5, 0);
       });
 
       expect(result.current.todos).toEqual(originalTodos);
 
       // Try invalid destination index
       await act(async () => {
-        await result.current.reorderTodos(0, 5);
+        await result.current.todoActions.reorderTodos(0, 5);
       });
 
       expect(result.current.todos).toEqual(originalTodos);
 
       // Try negative indices
       await act(async () => {
-        await result.current.reorderTodos(-1, 0);
+        await result.current.todoActions.reorderTodos(-1, 0);
       });
 
       expect(result.current.todos).toEqual(originalTodos);
@@ -246,7 +246,7 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Try to reorder empty list
       await act(async () => {
-        await result.current.reorderTodos(0, 1);
+        await result.current.todoActions.reorderTodos(0, 1);
       });
 
       expect(result.current.todos).toHaveLength(0);
@@ -261,15 +261,15 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Add and modify todos
       await act(async () => {
-        await result.current.addTodo('First todo');
-        await result.current.addTodo('Second todo');
+        await result.current.todoActions.addTodo('First todo');
+        await result.current.todoActions.addTodo('Second todo');
       });
 
       const secondTodoId = result.current.todos[0].id;
 
       // Toggle second todo
       await act(async () => {
-        await result.current.toggleTodo(secondTodoId);
+        await result.current.todoActions.toggleTodo(secondTodoId);
       });
 
       // Use allTodos to access completed todos since default filter is now "active"
@@ -277,7 +277,7 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Reorder (works on allTodos internally)
       await act(async () => {
-        await result.current.reorderTodos(0, 1);
+        await result.current.todoActions.reorderTodos(0, 1);
       });
 
       // Find the moved todo and verify its properties are preserved
@@ -300,15 +300,15 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Add three todos
       await act(async () => {
-        await result.current.addTodo('First todo');
-        await result.current.addTodo('Second todo');
-        await result.current.addTodo('Third todo');
+        await result.current.todoActions.addTodo('First todo');
+        await result.current.todoActions.addTodo('Second todo');
+        await result.current.todoActions.addTodo('Third todo');
       });
 
       // Complete the middle todo
       const middleTodoId = result.current.todos[1].id;
       await act(async () => {
-        await result.current.toggleTodo(middleTodoId);
+        await result.current.todoActions.toggleTodo(middleTodoId);
       });
 
       // Get active todos count
@@ -319,7 +319,7 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Reorder within active todos (index 0 to 1)
       await act(async () => {
-        await result.current.reorderTodos(0, 1);
+        await result.current.todoActions.reorderTodos(0, 1);
       });
 
       // Verify the completed todo is not affected by reorder indices
@@ -338,15 +338,15 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Add three todos
       await act(async () => {
-        await result.current.addTodo('First todo');
-        await result.current.addTodo('Second todo');
-        await result.current.addTodo('Third todo');
+        await result.current.todoActions.addTodo('First todo');
+        await result.current.todoActions.addTodo('Second todo');
+        await result.current.todoActions.addTodo('Third todo');
       });
 
       // Complete the first todo (index 0)
       const firstTodoId = result.current.todos[0].id;
       await act(async () => {
-        await result.current.toggleTodo(firstTodoId);
+        await result.current.todoActions.toggleTodo(firstTodoId);
       });
 
       // Now active todos are: Second, First (from index perspective)
@@ -355,7 +355,7 @@ describe('useTodos hook - Reordering functionality', () => {
       if (activeTodos.length >= 2) {
         const secondActiveTodoId = activeTodos[1].id;
         await act(async () => {
-          await result.current.moveUp(secondActiveTodoId);
+          await result.current.todoActions.moveUp(secondActiveTodoId);
         });
 
         // Verify the active todo moved up within active list
@@ -372,8 +372,8 @@ describe('useTodos hook - Reordering functionality', () => {
         expect(result.current.isInitialized).toBe(true);
       });
 
-      expect(result.current.moveUp).toBeDefined();
-      expect(typeof result.current.moveUp).toBe('function');
+      expect(result.current.todoActions.moveUp).toBeDefined();
+      expect(typeof result.current.todoActions.moveUp).toBe('function');
     });
 
     it('should have moveDown function available', async () => {
@@ -383,8 +383,8 @@ describe('useTodos hook - Reordering functionality', () => {
         expect(result.current.isInitialized).toBe(true);
       });
 
-      expect(result.current.moveDown).toBeDefined();
-      expect(typeof result.current.moveDown).toBe('function');
+      expect(result.current.todoActions.moveDown).toBeDefined();
+      expect(typeof result.current.todoActions.moveDown).toBe('function');
     });
 
     it('should move todo up when moveUp is called', async () => {
@@ -396,16 +396,16 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Add three todos
       await act(async () => {
-        await result.current.addTodo('First todo');
-        await result.current.addTodo('Second todo');
-        await result.current.addTodo('Third todo');
+        await result.current.todoActions.addTodo('First todo');
+        await result.current.todoActions.addTodo('Second todo');
+        await result.current.todoActions.addTodo('Third todo');
       });
 
       const secondTodoId = result.current.todos[1].id; // "Second todo"
 
       // Move second todo up
       await act(async () => {
-        await result.current.moveUp(secondTodoId);
+        await result.current.todoActions.moveUp(secondTodoId);
       });
 
       // Second todo should now be at index 0
@@ -422,20 +422,20 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Add todos sequentially to ensure unique sortOrders
       await act(async () => {
-        await result.current.addTodo('First todo');
+        await result.current.todoActions.addTodo('First todo');
       });
       await act(async () => {
-        await result.current.addTodo('Second todo');
+        await result.current.todoActions.addTodo('Second todo');
       });
       await act(async () => {
-        await result.current.addTodo('Third todo');
+        await result.current.todoActions.addTodo('Third todo');
       });
 
       const firstTodoId = result.current.todos[0].id; // "Third todo"
 
       // Move first todo down
       await act(async () => {
-        await result.current.moveDown(firstTodoId);
+        await result.current.todoActions.moveDown(firstTodoId);
       });
 
       // Third todo should now be at index 1
@@ -452,8 +452,8 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Add two todos
       await act(async () => {
-        await result.current.addTodo('First todo');
-        await result.current.addTodo('Second todo');
+        await result.current.todoActions.addTodo('First todo');
+        await result.current.todoActions.addTodo('Second todo');
       });
 
       const topTodoId = result.current.todos[0].id;
@@ -461,7 +461,7 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Try to move top todo up
       await act(async () => {
-        await result.current.moveUp(topTodoId);
+        await result.current.todoActions.moveUp(topTodoId);
       });
 
       // Order should remain unchanged
@@ -477,8 +477,8 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Add two todos
       await act(async () => {
-        await result.current.addTodo('First todo');
-        await result.current.addTodo('Second todo');
+        await result.current.todoActions.addTodo('First todo');
+        await result.current.todoActions.addTodo('Second todo');
       });
 
       const bottomTodoId = result.current.todos[1].id;
@@ -486,7 +486,7 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Try to move bottom todo down
       await act(async () => {
-        await result.current.moveDown(bottomTodoId);
+        await result.current.todoActions.moveDown(bottomTodoId);
       });
 
       // Order should remain unchanged
@@ -502,14 +502,14 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Add one todo
       await act(async () => {
-        await result.current.addTodo('Single todo');
+        await result.current.todoActions.addTodo('Single todo');
       });
 
       const originalOrder = [...result.current.todos];
 
       // Try to move non-existent todo
       await act(async () => {
-        await result.current.moveUp('invalid-id');
+        await result.current.todoActions.moveUp('invalid-id');
       });
 
       expect(result.current.todos).toEqual(originalOrder);
@@ -524,14 +524,14 @@ describe('useTodos hook - Reordering functionality', () => {
 
       // Add one todo
       await act(async () => {
-        await result.current.addTodo('Single todo');
+        await result.current.todoActions.addTodo('Single todo');
       });
 
       const originalOrder = [...result.current.todos];
 
       // Try to move non-existent todo
       await act(async () => {
-        await result.current.moveDown('invalid-id');
+        await result.current.todoActions.moveDown('invalid-id');
       });
 
       expect(result.current.todos).toEqual(originalOrder);
