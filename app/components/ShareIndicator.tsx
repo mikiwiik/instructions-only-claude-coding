@@ -40,7 +40,8 @@ export default function ShareIndicator({
       <span className='text-blue-800 font-medium'>Shared</span>
       <button
         onClick={handleCopy}
-        className='ml-auto flex items-center gap-1 px-2 py-1 rounded hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-colors min-w-[44px] min-h-[44px] justify-center'
+        className='ml-auto flex items-center gap-1 px-2 py-1 rounded hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-colors justify-center'
+        style={{ minWidth: 44, minHeight: 44 }}
         type='button'
         aria-label={copied ? 'URL copied' : 'Copy share URL'}
       >

@@ -150,8 +150,9 @@ describe('ShareIndicator', () => {
     it('meets minimum touch target size (44px)', () => {
       render(<ShareIndicator {...defaultProps} />);
       const copyButton = screen.getByRole('button', { name: /copy.*url/i });
-      // Check for min-w-[44px] and min-h-[44px] classes
-      expect(copyButton.className).toMatch(/min-[wh]-\[44px\]/);
+      const styles = window.getComputedStyle(copyButton);
+      expect(parseFloat(styles.minWidth)).toBeGreaterThanOrEqual(44);
+      expect(parseFloat(styles.minHeight)).toBeGreaterThanOrEqual(44);
     });
   });
 });
