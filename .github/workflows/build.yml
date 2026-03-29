@@ -76,21 +76,7 @@ jobs:
 
     - name: Generate Security Audit Report
       if: matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
-      run: |
-        mkdir -p reports
-        npm audit --json > reports/audit-report.json || true
-        echo "## NPM Audit Report" > reports/audit-summary.md
-        echo "" >> reports/audit-summary.md
-        node -e "
-          const r = JSON.parse(require('fs').readFileSync('reports/audit-report.json'));
-          const v = r.metadata?.vulnerabilities || {};
-          const total = Object.values(v).reduce((a, b) => a + b, 0);
-          console.log('Total: ' + total + ' vulnerabilities');
-          console.log('Critical: ' + (v.critical || 0));
-          console.log('High: ' + (v.high || 0));
-          console.log('Moderate: ' + (v.moderate || 0));
-          console.log('Low: ' + (v.low || 0));
-        " >> reports/audit-summary.md
+      run: ./scripts/generate-audit-report.sh --audit-level=critical
 
     - name: Upload Security Audit Report
       uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
