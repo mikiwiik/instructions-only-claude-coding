@@ -89,10 +89,10 @@ read/write), then set it in your shell profile:
 export GITHUB_PERSONAL_ACCESS_TOKEN="github_pat_your_token_here"
 ```
 
-This overrides the SessionStart hook's `gh auth token` derivation. See [ADR-037](../adr/037-github-mcp-server.md)
+This overrides the SessionStart hook's `gh auth token` derivation. See [ADR-038](../adr/038-github-mcp-server.md)
 for the security trade-off discussion.
 
-See [ADR-037](../adr/037-github-mcp-server.md) for the architectural decision.
+See [ADR-038](../adr/038-github-mcp-server.md) for the architectural decision.
 
 ## Project Setup
 
