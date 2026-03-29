@@ -50,39 +50,43 @@ configuration is in `.mcp.json` (shared via git).
    gh auth login
    ```
 
-2. **Add the token to your shell profile** (`~/.zshrc` or `~/.bashrc`):
-
-   ```bash
-   export GITHUB_PERSONAL_ACCESS_TOKEN="$(gh auth token)"
-   ```
-
-3. **Source it** (or open a new terminal):
-
-   ```bash
-   source ~/.zshrc
-   ```
-
-4. **Verify scopes** — required: `repo`. For GitHub Projects, also add `project`:
+2. **Verify scopes** — required: `repo`. For GitHub Projects, also add `project`:
 
    ```bash
    gh auth status
    gh auth refresh --hostname github.com --scopes project  # if needed
    ```
 
-5. **Restart Claude Code** — MCP servers connect on startup.
+3. **Add a Claude alias** to your shell profile (`~/.zshrc` or `~/.bashrc`):
 
-After restart, GitHub MCP tools should be available. If not, see
+   ```bash
+   alias claude='GITHUB_PERSONAL_ACCESS_TOKEN="$(gh auth token)" claude'
+   ```
+
+   This passes the token only to the Claude Code process — it's not exposed to other shell sessions.
+   The token is evaluated fresh on each invocation, so it stays current if `gh` re-authenticates.
+
+4. **Source and launch**:
+
+   ```bash
+   source ~/.zshrc
+   claude
+   ```
+
+After launch, GitHub MCP tools should be available. If not, see
 [MCP Troubleshooting](../reference/troubleshooting.md#github-mcp-server-issues).
+
+> **Note**: This alias applies to CLI usage. If launching Claude Code from an IDE extension or desktop
+> app, set `GITHUB_PERSONAL_ACCESS_TOKEN` in your shell profile as a global export instead.
 
 ### Alternative: Fine-Grained PAT
 
 For tighter security (e.g., team environments), use a fine-grained PAT instead. Create one at
 [GitHub Settings > Fine-grained tokens](https://github.com/settings/personal-access-tokens/new) with
-Contents read, Issues read/write, Pull requests read/write, Projects read/write, then set it in your
-shell profile:
+Contents read, Issues read/write, Pull requests read/write, Projects read/write, then use it in the alias:
 
 ```bash
-export GITHUB_PERSONAL_ACCESS_TOKEN="github_pat_your_token_here"
+alias claude='GITHUB_PERSONAL_ACCESS_TOKEN="github_pat_your_token_here" claude'
 ```
 
 See [ADR-038](../adr/038-github-mcp-server.md) for the architectural decision.

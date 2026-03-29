@@ -67,7 +67,7 @@ See [ADR-030](docs/adr/030-claude-code-environment-hooks.md) for details.
 This project uses GitHub's official MCP server for native GitHub API integration in Claude Code. The configuration
 is in `.mcp.json` (project scope, shared via git).
 
-**Setup**: Requires `GITHUB_PERSONAL_ACCESS_TOKEN` in your shell profile (derived from `gh auth token`).
+**Setup**: Token is passed via a shell alias (`claude` → `GITHUB_PERSONAL_ACCESS_TOKEN="$(gh auth token)" claude`).
 See [Local Dev Setup](docs/setup/local-dev-setup.md#github-mcp-server-setup) for details.
 
 See [ADR-038](docs/adr/038-github-mcp-server.md) for the decision record.
