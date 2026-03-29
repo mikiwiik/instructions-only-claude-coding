@@ -97,8 +97,7 @@ This project serves as a **template and reference** for:
 - **Innovation in Software Development**: Pushing boundaries of what's possible with current AI capabilities
 
 > **Deep Dive**: See [Development Principles](docs/core/principles.md) for the strategic philosophy behind
-> instruction-only development, and [Agentic Coding Framework](docs/core/framework.md) for comprehensive methodology
-> details.
+> instruction-only development.
 
 ## Quick Start
 
