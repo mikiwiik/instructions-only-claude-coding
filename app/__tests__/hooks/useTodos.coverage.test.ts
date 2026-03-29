@@ -93,7 +93,7 @@ describe('useTodos hook - coverage tests', () => {
 
       // addTodo should handle the sync failure and rollback
       await act(async () => {
-        await result.current.addTodo('Test todo');
+        await result.current.todoActions.addTodo('Test todo');
       });
 
       // Todo should be rolled back (removed) since sync failed
@@ -137,7 +137,7 @@ describe('useTodos hook - coverage tests', () => {
       const initialLength = result.current.todos.length;
 
       await act(async () => {
-        await result.current.addTodo('New todo that will fail');
+        await result.current.todoActions.addTodo('New todo that will fail');
       });
 
       // Should rollback to original state
@@ -151,7 +151,7 @@ describe('useTodos hook - coverage tests', () => {
       const originalCompletedAt = result.current.todos[0].completedAt;
 
       await act(async () => {
-        await result.current.toggleTodo(todoId);
+        await result.current.todoActions.toggleTodo(todoId);
       });
 
       // Should rollback to original completed state
@@ -191,7 +191,7 @@ describe('useTodos hook - coverage tests', () => {
       const todoId = result.current.allTodos[0].id;
 
       await act(async () => {
-        await result.current.restoreTodo(todoId);
+        await result.current.todoActions.restoreTodo(todoId);
       });
 
       // Should rollback - todo should still be completed
@@ -204,7 +204,7 @@ describe('useTodos hook - coverage tests', () => {
       const todoId = result.current.todos[0].id;
 
       await act(async () => {
-        await result.current.deleteTodo(todoId);
+        await result.current.todoActions.deleteTodo(todoId);
       });
 
       // Should rollback - todo should not have deletedAt
@@ -218,7 +218,7 @@ describe('useTodos hook - coverage tests', () => {
       const originalText = result.current.todos[0].text;
 
       await act(async () => {
-        await result.current.permanentlyDeleteTodo(todoId);
+        await result.current.todoActions.permanentlyDeleteTodo(todoId);
       });
 
       // Should rollback - todo should be added back
@@ -258,7 +258,7 @@ describe('useTodos hook - coverage tests', () => {
       const todoId = result.current.allTodos[0].id;
 
       await act(async () => {
-        await result.current.restoreDeletedTodo(todoId);
+        await result.current.todoActions.restoreDeletedTodo(todoId);
       });
 
       // Should rollback - todo should still have deletedAt
@@ -272,7 +272,10 @@ describe('useTodos hook - coverage tests', () => {
       const originalText = result.current.todos[0].text;
 
       await act(async () => {
-        await result.current.editTodo(todoId, 'New text that will fail');
+        await result.current.todoActions.editTodo(
+          todoId,
+          'New text that will fail'
+        );
       });
 
       // Should rollback to original text
@@ -315,7 +318,7 @@ describe('useTodos hook - coverage tests', () => {
       });
 
       await act(async () => {
-        await result.current.reorderTodos(0, 1);
+        await result.current.todoActions.reorderTodos(0, 1);
       });
 
       // Should rollback to original order
@@ -356,7 +359,7 @@ describe('useTodos hook - coverage tests', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Todo with fallback ID');
+        await result.current.todoActions.addTodo('Todo with fallback ID');
       });
 
       // Check that todo was created with fallback ID format

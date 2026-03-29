@@ -41,7 +41,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
       // Add a todo
       await act(async () => {
-        await result.current.addTodo('Test todo to delete');
+        await result.current.todoActions.addTodo('Test todo to delete');
       });
 
       expect(result.current.todos).toHaveLength(1);
@@ -49,7 +49,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
       // Soft delete sets deletedAt but keeps todo in allTodos
       await act(async () => {
-        await result.current.deleteTodo(todoId);
+        await result.current.todoActions.deleteTodo(todoId);
       });
 
       // After soft delete: hidden from filtered view but still in allTodos
@@ -66,8 +66,8 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Active todo');
-        await result.current.addTodo('Todo to delete');
+        await result.current.todoActions.addTodo('Active todo');
+        await result.current.todoActions.addTodo('Todo to delete');
       });
 
       expect(result.current.todos).toHaveLength(2);
@@ -75,7 +75,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       const todoToDeleteId = result.current.todos[0].id; // 'Todo to delete' is most recent (index 0)
 
       await act(async () => {
-        await result.current.deleteTodo(todoToDeleteId);
+        await result.current.todoActions.deleteTodo(todoToDeleteId);
       });
 
       // Default todos view excludes deleted todos
@@ -94,13 +94,13 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Todo to delete');
+        await result.current.todoActions.addTodo('Todo to delete');
       });
 
       const todoId = result.current.todos[0].id;
 
       await act(async () => {
-        await result.current.deleteTodo(todoId);
+        await result.current.todoActions.deleteTodo(todoId);
       });
 
       // Default filter hides deleted todos
@@ -123,26 +123,28 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       // Current implementation has both functions
-      expect(result.current.restoreTodo).toBeDefined(); // For unchecking completed todos
-      expect(result.current.restoreDeletedTodo).toBeDefined(); // For restoring deleted todos
-      expect(typeof result.current.restoreDeletedTodo).toBe('function');
+      expect(result.current.todoActions.restoreTodo).toBeDefined(); // For unchecking completed todos
+      expect(result.current.todoActions.restoreDeletedTodo).toBeDefined(); // For restoring deleted todos
+      expect(typeof result.current.todoActions.restoreDeletedTodo).toBe(
+        'function'
+      );
 
       await act(async () => {
-        await result.current.addTodo('Todo to restore');
+        await result.current.todoActions.addTodo('Todo to restore');
       });
 
       const todoId = result.current.todos[0].id;
 
       // Soft delete
       await act(async () => {
-        await result.current.deleteTodo(todoId);
+        await result.current.todoActions.deleteTodo(todoId);
       });
 
       expect(result.current.todos).toHaveLength(0);
 
       // Restore
       await act(async () => {
-        await result.current.restoreDeletedTodo(todoId);
+        await result.current.todoActions.restoreDeletedTodo(todoId);
       });
 
       expect(result.current.todos).toHaveLength(1);
@@ -157,19 +159,21 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       // Function exists and works
-      expect(result.current.permanentlyDeleteTodo).toBeDefined();
-      expect(typeof result.current.permanentlyDeleteTodo).toBe('function');
-      expect(result.current.deleteTodo).toBeDefined();
-      expect(typeof result.current.deleteTodo).toBe('function');
+      expect(result.current.todoActions.permanentlyDeleteTodo).toBeDefined();
+      expect(typeof result.current.todoActions.permanentlyDeleteTodo).toBe(
+        'function'
+      );
+      expect(result.current.todoActions.deleteTodo).toBeDefined();
+      expect(typeof result.current.todoActions.deleteTodo).toBe('function');
 
       await act(async () => {
-        await result.current.addTodo('Todo to permanently delete');
+        await result.current.todoActions.addTodo('Todo to permanently delete');
       });
 
       const todoId = result.current.todos[0].id;
 
       await act(async () => {
-        await result.current.permanentlyDeleteTodo(todoId);
+        await result.current.todoActions.permanentlyDeleteTodo(todoId);
       });
 
       // Actually removed from both filtered and all todos
@@ -187,14 +191,14 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Todo to soft delete');
+        await result.current.todoActions.addTodo('Todo to soft delete');
       });
 
       const todoId = result.current.todos[0].id;
       const beforeDelete = new Date();
 
       await act(async () => {
-        await result.current.deleteTodo(todoId); // Performs soft delete
+        await result.current.todoActions.deleteTodo(todoId); // Performs soft delete
       });
 
       // Soft delete: hidden from default filter but kept in allTodos with timestamp
@@ -216,14 +220,14 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Todo to restore');
+        await result.current.todoActions.addTodo('Todo to restore');
       });
 
       const todoId = result.current.todos[0].id;
 
       // Soft delete
       await act(async () => {
-        await result.current.deleteTodo(todoId);
+        await result.current.todoActions.deleteTodo(todoId);
       });
 
       expect(result.current.todos).toHaveLength(0); // Hidden from default filter
@@ -232,7 +236,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
       // Restore
       await act(async () => {
-        await result.current.restoreDeletedTodo(todoId);
+        await result.current.todoActions.restoreDeletedTodo(todoId);
       });
 
       expect(result.current.todos).toHaveLength(1); // Visible again
@@ -248,7 +252,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Todo to permanently delete');
+        await result.current.todoActions.addTodo('Todo to permanently delete');
       });
 
       expect(result.current.todos).toHaveLength(1);
@@ -257,7 +261,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
       // Permanent deletion removes from both filtered and allTodos
       await act(async () => {
-        await result.current.permanentlyDeleteTodo(todoId);
+        await result.current.todoActions.permanentlyDeleteTodo(todoId);
       });
 
       expect(result.current.todos).toHaveLength(0);
@@ -275,9 +279,9 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
       // Add multiple todos
       await act(async () => {
-        await result.current.addTodo('Active todo');
-        await result.current.addTodo('Todo to delete');
-        await result.current.addTodo('Another active todo');
+        await result.current.todoActions.addTodo('Active todo');
+        await result.current.todoActions.addTodo('Todo to delete');
+        await result.current.todoActions.addTodo('Another active todo');
       });
 
       expect(result.current.todos).toHaveLength(3);
@@ -291,21 +295,21 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Active todo');
-        await result.current.addTodo('Todo to complete');
-        await result.current.addTodo('Todo to delete');
+        await result.current.todoActions.addTodo('Active todo');
+        await result.current.todoActions.addTodo('Todo to complete');
+        await result.current.todoActions.addTodo('Todo to delete');
       });
 
       const [, todoToComplete, todoToDelete] = result.current.todos;
 
       // Complete one todo
       await act(async () => {
-        await result.current.toggleTodo(todoToComplete.id);
+        await result.current.todoActions.toggleTodo(todoToComplete.id);
       });
 
       // Soft delete another todo
       await act(async () => {
-        await result.current.deleteTodo(todoToDelete.id);
+        await result.current.todoActions.deleteTodo(todoToDelete.id);
       });
 
       // Default filter is 'active', so only shows active todos, not completed or deleted
@@ -337,14 +341,16 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Todo to soft delete and persist');
+        await result.current.todoActions.addTodo(
+          'Todo to soft delete and persist'
+        );
       });
 
       const todoId = result.current.todos[0].id;
 
       // Test soft delete backend sync
       await act(async () => {
-        await result.current.deleteTodo(todoId); // Soft delete
+        await result.current.todoActions.deleteTodo(todoId); // Soft delete
       });
 
       // Verify fetch was called with POST to sync the soft delete
@@ -456,13 +462,13 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Test timestamp setting');
+        await result.current.todoActions.addTodo('Test timestamp setting');
       });
 
       const todoId = result.current.todos[0].id;
 
       await act(async () => {
-        await result.current.deleteTodo(todoId);
+        await result.current.todoActions.deleteTodo(todoId);
       });
 
       // Soft delete: hidden from filtered view but in allTodos with deletedAt
@@ -479,7 +485,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Test timestamp preservation');
+        await result.current.todoActions.addTodo('Test timestamp preservation');
       });
 
       const originalTodo = result.current.todos[0];
@@ -489,7 +495,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       expect(originalTodo.updatedAt).toBeDefined();
 
       await act(async () => {
-        await result.current.deleteTodo(originalTodo.id);
+        await result.current.todoActions.deleteTodo(originalTodo.id);
       });
 
       // Soft delete preserves createdAt
@@ -507,21 +513,21 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Test restoration');
+        await result.current.todoActions.addTodo('Test restoration');
       });
 
       const todoId = result.current.todos[0].id;
 
       // Soft delete
       await act(async () => {
-        await result.current.deleteTodo(todoId);
+        await result.current.todoActions.deleteTodo(todoId);
       });
 
       expect(result.current.allTodos[0].deletedAt).toBeInstanceOf(Date);
 
       // Restore
       await act(async () => {
-        await result.current.restoreDeletedTodo(todoId);
+        await result.current.todoActions.restoreDeletedTodo(todoId);
       });
 
       expect(result.current.todos[0].deletedAt).toBeUndefined();
@@ -535,7 +541,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Test updatedAt on restore');
+        await result.current.todoActions.addTodo('Test updatedAt on restore');
       });
 
       const todoId = result.current.todos[0].id;
@@ -543,12 +549,12 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
 
       // Soft delete
       await act(async () => {
-        await result.current.deleteTodo(todoId);
+        await result.current.todoActions.deleteTodo(todoId);
       });
 
       // Restore
       await act(async () => {
-        await result.current.restoreDeletedTodo(todoId);
+        await result.current.todoActions.restoreDeletedTodo(todoId);
       });
 
       // updatedAt should be updated on restore
@@ -569,7 +575,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       // No error when deleting non-existent todo
       await expect(
         act(async () => {
-          await result.current.deleteTodo('non-existent-id');
+          await result.current.todoActions.deleteTodo('non-existent-id');
         })
       ).resolves.not.toThrow();
 
@@ -586,7 +592,7 @@ describe('useTodos Hook - Soft Delete Functionality', () => {
       // No error when restoring non-existent todo
       await expect(
         act(async () => {
-          await result.current.restoreTodo('non-existent-id');
+          await result.current.todoActions.restoreTodo('non-existent-id');
         })
       ).resolves.not.toThrow();
     });
