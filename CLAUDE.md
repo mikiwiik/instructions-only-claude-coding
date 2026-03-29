@@ -70,7 +70,7 @@ is in `.mcp.json` (project scope, shared via git).
 **Setup**: The token is automatically derived from `gh auth token` via the SessionStart hook — no separate PAT
 needed. See [Local Dev Setup](docs/setup/local-dev-setup.md#github-mcp-server-setup) for details.
 
-See [ADR-037](docs/adr/037-github-mcp-server.md) for the decision record.
+See [ADR-038](docs/adr/038-github-mcp-server.md) for the decision record.
 
 ---
 

@@ -1,4 +1,4 @@
-# ADR-037: GitHub MCP Server Adoption
+# ADR-038: GitHub MCP Server Adoption
 
 ## Status
 

@@ -144,7 +144,7 @@ checks, and testing scripts.
 - **Mobile**: Touch gestures with accessibility-first design (WCAG 2.2 AA compliant)
 - **Real-Time**: Server-Sent Events (SSE) for live synchronization
 - **GitHub Integration**: [GitHub MCP Server](https://github.com/github/github-mcp-server) for native API access
-  in Claude Code, authenticated via `gh` CLI ([ADR-037](docs/adr/037-github-mcp-server.md))
+  in Claude Code, authenticated via `gh` CLI ([ADR-038](docs/adr/038-github-mcp-server.md))
 - **Deployment**: Vercel with GitHub Actions CI/CD
 
 ## Design & UX
