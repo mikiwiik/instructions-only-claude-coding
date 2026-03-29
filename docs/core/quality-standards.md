@@ -92,6 +92,12 @@ Quality standards are prioritized by impact and enforcement level:
 | Touch target size    | ≥44px                  | Manual + tests      |
 | CI pass rate         | 95%+                   | GitHub Actions      |
 
+### SonarCloud Analysis
+
+SonarCloud runs on every PR and provides continuous quality feedback:
+code smells, security hotspots, duplication detection, and coverage tracking.
+See [SonarCloud Setup](../setup/sonarcloud-setup.md) for configuration.
+
 ## Quality Enforcement
 
 Pre-commit hooks (Husky + lint-staged) enforce ESLint, Prettier, TypeScript, and complexity rules.
