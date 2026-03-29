@@ -107,6 +107,8 @@ This project serves as a **template and reference** for:
 - Node.js 22.x or higher
 - npm 10.x or higher
 - Claude Code Pro subscription
+- GitHub CLI (`gh auth login`) — also provides authentication for the
+  [GitHub MCP Server](docs/setup/local-dev-setup.md#github-mcp-server-setup)
 
 **Local Development Setup**: See [Local Dev Setup Guide](docs/setup/local-dev-setup.md) for Node.js, dependencies, and
 environment configuration.
@@ -141,6 +143,8 @@ checks, and testing scripts.
 - **Code Quality**: SonarCloud for automated analysis
 - **Mobile**: Touch gestures with accessibility-first design (WCAG 2.2 AA compliant)
 - **Real-Time**: Server-Sent Events (SSE) for live synchronization
+- **GitHub Integration**: [GitHub MCP Server](https://github.com/github/github-mcp-server) for native API access
+  in Claude Code, authenticated via `gh` CLI ([ADR-037](docs/adr/037-github-mcp-server.md))
 - **Deployment**: Vercel with GitHub Actions CI/CD
 
 ## Design & UX
