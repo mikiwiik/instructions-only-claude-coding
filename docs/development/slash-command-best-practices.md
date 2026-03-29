@@ -184,6 +184,58 @@ Applied same optimization pattern:
 - Result: 94% reduction
 ```
 
+## MCP Query Patterns
+
+With the GitHub MCP server ([ADR-040](../adr/040-github-mcp-server.md)), slash commands can use MCP tools instead of
+`gh` CLI + `jq` pipelines. MCP returns structured data natively, eliminating shell parsing entirely.
+
+### ✅ Pattern 5: Use MCP Tools for Structured Data
+
+**Problem:** Shelling out to `gh` CLI and parsing with `jq`
+
+```bash
+# ❌ OLD: CLI + jq pipeline
+gh issue list --state closed --json number,title,labels --limit 100 | \
+  jq '[.[] | {number, title, labels: [.labels[].name]}]'
+```
+
+**Solution:** Use MCP tools that return structured data directly
+
+```text
+# ✅ NEW: MCP structured response — no shell, no jq
+mcp__github__list_issues(owner, repo, state: CLOSED, perPage: 100)
+→ Returns structured JSON with number, title, labels, etc.
+```
+
+**Benefits:**
+
+- No `jq` pipelines to maintain or debug
+- No shell escaping issues
+- Structured data available immediately for analysis
+- Reduces token waste from CLI output formatting
+
+### ✅ Pattern 6: Document MCP Limitations and Fallbacks
+
+Not all `gh` CLI functionality has MCP equivalents. Always document:
+
+1. **What's covered**: Which MCP tool replaces which CLI command
+2. **What's missing**: Features with no MCP equivalent (e.g., `gh project item-list`, `gh auth status`)
+3. **Fallback path**: Include the original `gh` CLI command as a documented fallback
+
+```markdown
+> **Fallback**: If MCP call fails, use `gh issue list --state closed ...`
+```
+
+### MCP vs CLI Coverage
+
+| Capability | MCP Tool | `gh` CLI Fallback |
+| --- | --- | --- |
+| Get authenticated user | `get_me` | `gh api user` |
+| List/search issues | `list_issues`, `search_issues` | `gh issue list` |
+| Read single issue | `issue_read` | `gh issue view` |
+| Project items (status, lifecycle) | ❌ Not available | `gh project item-list` |
+| Auth status/scopes | ❌ Not available | `gh auth status` |
+
 ## Troubleshooting
 
 If you encounter token limit errors at runtime, see [Troubleshooting Guide - Token Limit
