@@ -15,16 +15,16 @@ import { useTodoReorder } from './useTodoReorder';
 import { generateInitialSortOrder } from '../lib/lexorank-utils';
 
 export interface TodoActions {
-  addTodo: (text: string) => void;
-  toggleTodo: (id: string) => void;
-  restoreTodo: (id: string) => void;
-  deleteTodo: (id: string) => void;
-  permanentlyDeleteTodo: (id: string) => void;
-  restoreDeletedTodo: (id: string) => void;
-  editTodo: (id: string, text: string) => void;
-  reorderTodos: (sourceIndex: number, destinationIndex: number) => void;
-  moveUp: (id: string) => void;
-  moveDown: (id: string) => void;
+  addTodo: (text: string) => Promise<void>;
+  toggleTodo: (id: string) => Promise<void>;
+  restoreTodo: (id: string) => Promise<void>;
+  deleteTodo: (id: string) => Promise<void>;
+  permanentlyDeleteTodo: (id: string) => Promise<void>;
+  restoreDeletedTodo: (id: string) => Promise<void>;
+  editTodo: (id: string, text: string) => Promise<void>;
+  reorderTodos: (sourceIndex: number, destinationIndex: number) => Promise<void>;
+  moveUp: (id: string) => Promise<void>;
+  moveDown: (id: string) => Promise<void>;
 }
 
 interface UseTodoOperationsProps {
