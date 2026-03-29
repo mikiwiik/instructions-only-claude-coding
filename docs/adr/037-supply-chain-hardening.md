@@ -28,16 +28,14 @@ several gaps remain:
 Set this environment variable on all `npm ci` steps across build, e2e-tests, and security-scan
 workflows. This prevents any package from executing code during installation.
 
-### 2. Fail builds on critical audit findings
+### 2. Fail builds on high/critical audit findings
 
 Change the npm audit step from `continue-on-error: true` with `--audit-level=moderate` to a
-hard-failing step with `--audit-level=critical`. This blocks builds when critical vulnerabilities
-are present while allowing high-severity transitive dependency issues (which often require upstream
-fixes) to pass. The weekly security scan retains `--audit-level=moderate` for full visibility.
+hard-failing step with `--audit-level=high`. This blocks builds when high or critical vulnerabilities
+are present. The weekly security scan retains `--audit-level=moderate` for full visibility.
 
 The audit step runs **before** `npm ci` so vulnerabilities are detected before packages are
-downloaded. The goal is to tighten to `--audit-level=high` once existing transitive dependency
-advisories are resolved.
+downloaded.
 
 ### 3. Add `.npmrc` with security defaults
 
@@ -58,8 +56,7 @@ build job that posts coverage comments. Other workflows already have properly sc
 
 - **Eliminates install-time code execution** — compromised packages cannot run arbitrary code during
   `npm ci`
-- **Critical vulnerabilities block merges** — forces resolution before code reaches main (to be
-  tightened to high once transitive dependency advisories are resolved)
+- **High/critical vulnerabilities block merges** — forces resolution before code reaches main
 - **Consistent security posture** — `.npmrc` ensures local development matches CI defaults
 - **Reduced blast radius** — least-privilege permissions limit damage from token compromise
 
@@ -68,9 +65,8 @@ build job that posts coverage comments. Other workflows already have properly sc
 - **Packages requiring postinstall scripts** — any dependency that legitimately needs lifecycle
   scripts (e.g., native modules with node-gyp, esbuild binary downloads) will need explicit
   handling. Currently verified that no project dependencies require this
-- **Audit false positives** — `--audit-level=critical` (and eventually `--audit-level=high`) may
-  occasionally block builds on disputed or not-yet-patched advisories. Run `npm audit` locally to
-  verify before investigating
+- **Audit false positives** — `--audit-level=high` may occasionally block builds on disputed or
+  not-yet-patched advisories. Run `npm audit` locally to verify before investigating
 
 ### Exception Process
 

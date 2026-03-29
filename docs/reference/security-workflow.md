@@ -80,8 +80,7 @@ The CI/CD pipeline includes supply chain attack mitigations (see
 
 - **Lifecycle scripts blocked**: `NPM_CONFIG_IGNORE_SCRIPTS=true` prevents arbitrary code execution
   during `npm ci` in all CI jobs
-- **Audit gate**: `npm audit --audit-level=critical` fails builds on critical vulnerabilities
-  (to be tightened to `high` once transitive dependency advisories are resolved)
+- **Audit gate**: `npm audit --audit-level=high` fails builds on high/critical vulnerabilities
 - **Local parity**: `.npmrc` enforces `ignore-scripts=true` and `engine-strict=true` locally
 - **Least-privilege permissions**: Workflow permissions scoped to minimum required per job
 
