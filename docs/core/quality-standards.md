@@ -80,6 +80,18 @@ Quality standards are prioritized by impact and enforcement level:
 | Performance | Optimal patterns | Code review  | Manual review |
 | Bundle size | Reasonable       | Manual check | Manual review |
 
+## Quality Metrics
+
+| Metric               | Target                 | Tool                |
+| -------------------- | ---------------------- | ------------------- |
+| Test line coverage   | 80%+                   | Jest                |
+| Test branch coverage | 75%+                   | Jest                |
+| Cognitive complexity | ≤15 per function       | SonarCloud + ESLint |
+| Technical debt       | ≤30 min/issue          | SonarCloud          |
+| Color contrast       | 4.5:1 (text), 3:1 (UI) | axe DevTools        |
+| Touch target size    | ≥44px                  | Manual + tests      |
+| CI pass rate         | 95%+                   | GitHub Actions      |
+
 ## Quality Enforcement
 
 Pre-commit hooks (Husky + lint-staged) enforce ESLint, Prettier, TypeScript, and complexity rules.
