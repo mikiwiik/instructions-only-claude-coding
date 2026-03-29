@@ -2,24 +2,30 @@
 description: Find and prioritize quick win issues (high priority + simple complexity)
 ---
 
-Find quick win opportunities from triaged, ready-to-work GitHub issues:
+Find quick win opportunities from open, triaged GitHub issues:
 
-1. **Fetch Backlog/Active Issues**: Get issues from Backlog or Active lifecycle states (excludes Icebox)
-   - Use optimized command to get project items (strips issue bodies for 94% token reduction):
+1. **Fetch Open Issues (via MCP)**: Use the `mcp__github__list_issues` tool to retrieve open issues:
 
-     ```bash
-     gh project item-list 1 --owner mikiwiik --format json | \
-       jq '{items: [.items[] | {content: {number: .content.number}, title: .title, labels: .labels, lifecycle: .lifecycle, status: .status}]}'
-     ```
+   - `owner`: `mikiwiik`
+   - `repo`: `instructions-only-claude-coding`
+   - `state`: `OPEN`
+   - `orderBy`: `UPDATED_AT`, `direction`: `DESC`
+   - `perPage`: `100` (paginate with `after` cursor if more results)
 
-   - Filter for `(.lifecycle == "Backlog" OR .lifecycle == "Active") AND .status != "Done"`
-   - Verify GitHub issue state is OPEN to exclude closed issues
-   - Extract issue details from filtered project items
-   - **Token Optimization**: Only metadata needed for analysis (not full issue bodies)
+   The MCP tool returns structured data with number, title, labels, state, and assignees — no `jq` pipeline needed.
 
-2. **Filter for Quick Wins**: Identify issues that are:
+   > **Note**: MCP has no project-level tools, so project Status/Lifecycle fields are not available. Use issue
+   > labels and state (OPEN) as filtering criteria instead. Issues labeled `icebox` or `blocked` are excluded.
+
+   > **Fallback**: If MCP call fails, use `gh project item-list 1 --owner mikiwiik --format json |
+   > jq '{items: [.items[] | {content: {number: .content.number}, title: .title, labels: .labels,
+   > lifecycle: .lifecycle, status: .status}]}'`.
+
+2. **Filter for Quick Wins**: From the structured MCP response, identify issues that are:
    - High priority (priority-2-high) + Simple complexity (complexity-simple or complexity-minimal)
    - Medium priority (priority-3-medium) + Minimal complexity (complexity-minimal)
+   - Not assigned (available for work)
+   - Not labeled `icebox` or `blocked`
 3. **Impact Analysis**: Assess which quick wins provide maximum value
 4. **Implementation Estimate**: Provide time estimates for each quick win
 
@@ -29,14 +35,6 @@ Find quick win opportunities from triaged, ready-to-work GitHub issues:
 - High user or developer value
 - Low risk of introducing bugs
 - Clear requirements and scope
-
-**Lifecycle Filtering Rationale**:
-
-Quick wins come from triaged, ready-to-work issues (Backlog/Active). Icebox items are excluded
-as they haven't been refined yet and may lack proper requirements or complexity assessment.
-
-**Status Filtering**: Also excludes items where Status="Done" even if Lifecycle is stale, ensuring
-only active open issues are considered.
 
 **Output Format**:
 
