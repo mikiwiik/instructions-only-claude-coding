@@ -119,36 +119,13 @@ See [Working with Epics](docs/development/project-management.md#working-with-epi
 
 ## Quality Standards
 
-**Comprehensive Guide**: [docs/core/quality-standards.md](docs/core/quality-standards.md) - authoritative reference for all
-quality requirements, metrics, and enforcement.
-
-**Accessibility Requirements**:
-
-- **🚨 WCAG 2.2 AA Compliance**: All implementations must meet WCAG 2.2 AA standards
-- **Comprehensive Guide**: [docs/ux/accessibility-requirements.md](docs/ux/accessibility-requirements.md)
-- **Key Requirements**: 44px touch targets, proper ARIA, keyboard navigation, screen reader support
-- **Testing**: Accessibility tests required for all interactive components
-- **Definition of Done**: Accessibility checklist mandatory in [project-management.md](docs/development/project-management.md)
-
-**Code Complexity Standards**:
-
-- **🚨 ADR-028 Compliance**: All code must meet complexity thresholds defined in [ADR-028](docs/adr/028-code-complexity-standards.md)
-- **Cognitive Complexity**: ≤15 per function (enforced by ESLint + SonarCloud)
-- **Nesting Depth**: ≤4 levels (enforced by ESLint `max-depth`)
-- **Cyclomatic Complexity**: ≤15 per function (enforced by ESLint `complexity`)
-- **Refactoring Patterns**: [docs/guidelines/code-complexity-guidelines.md](docs/guidelines/code-complexity-guidelines.md)
-- **Pre-commit Enforcement**: ESLint blocks commits with complexity violations
-- **Definition of Done**: Zero complexity ESLint errors required for PR approval
-
-**Issue Management**:
-
-- **Priority Labels**: priority-1-critical through priority-4-low
-- **Complexity Labels**: complexity-minimal through complexity-epic
-- **Category Labels**: category-feature, category-infrastructure, category-documentation, category-dx
-- **Status Progression**: Icebox → Backlog → In Progress → Done (GitHub Projects)
-- **Label Guide**: [docs/reference/labels-and-priorities.md](docs/reference/labels-and-priorities.md)
-- **Project Management**: [docs/development/project-management.md](docs/development/project-management.md)
-- **GitHub Projects Setup**: [docs/setup/github-projects-setup.md](docs/setup/github-projects-setup.md)
+- **🚨 All Standards**: [docs/core/quality-standards.md](docs/core/quality-standards.md) — thresholds, enforcement, and
+  definition of done
+- **🚨 Accessibility**: WCAG 2.2 AA required — [docs/ux/accessibility-requirements.md](docs/ux/accessibility-requirements.md)
+- **🚨 Code Complexity**: ADR-028 thresholds enforced by ESLint + SonarCloud —
+  [docs/adr/028-code-complexity-standards.md](docs/adr/028-code-complexity-standards.md)
+- **Issue Management**: [docs/reference/labels-and-priorities.md](docs/reference/labels-and-priorities.md) |
+  [docs/development/project-management.md](docs/development/project-management.md)
 
 ## Security Workflow
 
