@@ -180,7 +180,6 @@ export function useTodos(listId?: string) {
     filter: state.filter,
     isLoading,
     isInitialized,
-    isShared: isSharedMode,
     shareInfo,
     setFilter,
     rateLimitState,
