@@ -143,12 +143,11 @@ Follow [Slash Command Best Practices](../development/slash-command-best-practice
 
 **Solutions:**
 
-- **Check env var**: Ensure `GITHUB_PERSONAL_ACCESS_TOKEN` is set in your shell environment
+- **Check `gh` auth**: Run `gh auth status` — the SessionStart hook derives the MCP token from `gh auth token`
 - **Verify token is set**: Run `[ -n "$GITHUB_PERSONAL_ACCESS_TOKEN" ] && echo "Token set (${#GITHUB_PERSONAL_ACCESS_TOKEN} chars)" || echo "Token NOT set"`
-- **Restart Claude Code**: MCP servers connect on startup; restart after setting the env var
+- **Restart Claude Code**: MCP servers connect on startup; the SessionStart hook runs `gh auth token` at start
 - **Check `.mcp.json`**: Verify the file exists in the repo root and contains valid JSON
-- **Token expiration**: Fine-grained PATs expire; regenerate at
-  [GitHub Settings](https://github.com/settings/personal-access-tokens)
+- **Re-authenticate**: If `gh auth token` returns nothing, run `gh auth login`
 
 #### MCP Tool Returns Permission Error
 
@@ -156,10 +155,9 @@ Follow [Slash Command Best Practices](../development/slash-command-best-practice
 
 **Solutions:**
 
-- **Check token scopes**: Ensure PAT has required permissions (Contents read, Issues read/write,
-  Pull requests read/write, Projects read/write)
-- **Check repository access**: Fine-grained PATs are scoped to specific repos; verify this repo is included
-- **Organization permissions**: Projects access requires org-level permission grant
+- **Check token scopes**: Run `gh auth status` and verify `repo` scope is present
+- **Add project scope**: Run `gh auth refresh --hostname github.com --scopes project` for GitHub Projects access
+- **Restart Claude Code**: After changing scopes, restart so the hook picks up the new token
 
 #### MCP vs `gh` CLI — When to Use Which
 
