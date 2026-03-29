@@ -9,7 +9,7 @@ import ShareButton from './ShareButton';
 import ShareIndicator from './ShareIndicator';
 import { Todo, TodoFilter as TodoFilterType } from '../types/todo';
 import { RateLimitState } from '../hooks/useTodoSync';
-import { ShareInfo } from '../hooks/useTodos';
+import { ShareInfo, TodoActions } from '../hooks/useTodos';
 import { getActivityCount } from '../utils/activity';
 
 interface ShareActionConfig {
@@ -25,16 +25,7 @@ interface TodoPageLayoutProps {
   filter: TodoFilterType;
   isLoading?: boolean;
   rateLimitState: RateLimitState;
-  addTodo: (text: string) => void;
-  toggleTodo: (id: string) => void;
-  restoreTodo: (id: string) => void;
-  deleteTodo: (id: string) => void;
-  permanentlyDeleteTodo: (id: string) => void;
-  restoreDeletedTodo: (id: string) => void;
-  editTodo: (id: string, text: string) => void;
-  reorderTodos: (sourceIndex: number, destinationIndex: number) => void;
-  moveUp: (id: string) => void;
-  moveDown: (id: string) => void;
+  todoActions: TodoActions;
   setFilter: (filter: TodoFilterType) => void;
   /** Optional notice to display above the main content */
   notice?: React.ReactNode;
@@ -96,21 +87,24 @@ export default function TodoPageLayout({
   filter,
   isLoading = false,
   rateLimitState,
-  addTodo,
-  toggleTodo,
-  restoreTodo,
-  deleteTodo,
-  permanentlyDeleteTodo,
-  restoreDeletedTodo,
-  editTodo,
-  reorderTodos,
-  moveUp,
-  moveDown,
+  todoActions,
   setFilter,
   notice,
   shareAction,
   shareInfo,
 }: Readonly<TodoPageLayoutProps>) {
+  const {
+    addTodo,
+    toggleTodo,
+    restoreTodo,
+    deleteTodo,
+    permanentlyDeleteTodo,
+    restoreDeletedTodo,
+    editTodo,
+    reorderTodos,
+    moveUp,
+    moveDown,
+  } = todoActions;
   const activeTodosCount = allTodos.filter(
     (todo) => !todo.completedAt && !todo.deletedAt
   ).length;
@@ -148,10 +142,7 @@ export default function TodoPageLayout({
         {notice}
 
         {shareInfo && (
-          <ShareIndicator
-            shareUrl={shareInfo.url}
-            className='mb-4 md:mb-6'
-          />
+          <ShareIndicator shareUrl={shareInfo.url} className='mb-4 md:mb-6' />
         )}
 
         {rateLimitState.isRateLimited && (
