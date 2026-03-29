@@ -14,6 +14,19 @@ import {
 import { useTodoReorder } from './useTodoReorder';
 import { generateInitialSortOrder } from '../lib/lexorank-utils';
 
+export interface TodoActions {
+  addTodo: (text: string) => void;
+  toggleTodo: (id: string) => void;
+  restoreTodo: (id: string) => void;
+  deleteTodo: (id: string) => void;
+  permanentlyDeleteTodo: (id: string) => void;
+  restoreDeletedTodo: (id: string) => void;
+  editTodo: (id: string, text: string) => void;
+  reorderTodos: (sourceIndex: number, destinationIndex: number) => void;
+  moveUp: (id: string) => void;
+  moveDown: (id: string) => void;
+}
+
 interface UseTodoOperationsProps {
   state: TodoState;
   setState: SetTodoStateFn;
@@ -24,7 +37,7 @@ export function useTodoOperations({
   state,
   setState,
   syncToBackend,
-}: UseTodoOperationsProps) {
+}: UseTodoOperationsProps): TodoActions {
   const optimisticUpdate = createOptimisticUpdate(setState, syncToBackend);
   const reorderOps = useTodoReorder({
     todos: state.todos,
