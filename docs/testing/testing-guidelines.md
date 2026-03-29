@@ -17,42 +17,22 @@ and quality gates that ensure reliable, maintainable test code.
 
 ## Core Principles
 
-### 1. Test-Driven Development (TDD)
+For TDD philosophy, testing pyramid, and coverage thresholds, see
+[Testing Strategy](testing-strategy.md).
 
-**Write tests before implementation**. This ensures:
-
-- Clear requirements understanding
-- Testable code design
-- Comprehensive coverage from the start
-- Faster feedback loops
-
-**TDD Cycle**:
-
-1. **Red**: Write a failing test
-2. **Green**: Write minimal code to pass
-3. **Refactor**: Improve code while keeping tests green
-
-### 2. React Testing Library Philosophy
+### React Testing Library Philosophy
 
 **Test user behavior, not implementation details**:
 
 ```typescript
-// ❌ BAD - Testing implementation
+// Bad - Testing implementation
 expect(component.state.isEditing).toBe(true);
 
-// ✅ GOOD - Testing user-visible behavior
+// Good - Testing user-visible behavior
 expect(screen.getByRole('textbox')).toBeInTheDocument();
 ```
 
-**Query Priority**:
-
-1. `getByRole` - Accessibility-focused (preferred)
-2. `getByLabelText` - Form controls
-3. `getByPlaceholderText` - Forms only
-4. `getByText` - Non-interactive content
-5. `getByTestId` - Last resort only
-
-### 3. DRY Principle in Tests
+### DRY Principle in Tests
 
 **Always use test utilities** to eliminate duplication:
 
@@ -886,7 +866,7 @@ describe('Type Guards', () => {
 });
 ```
 
-### Coverage Requirements
+### Type Coverage Requirements
 
 **Minimum Coverage Thresholds:**
 
