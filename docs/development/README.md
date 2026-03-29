@@ -8,8 +8,7 @@ representation of the development process.
 
 **🎯 Strategic Context**: For the WHY behind our development practices, see:
 
-- **[Development Principles](../core/principles.md)** - Philosophy and strategic importance of our 5 core principles
-- **[Agentic Coding Framework](../core/framework.md)** - Complete instruction-only development methodology
+- **[Development Principles](../core/principles.md)** - Philosophy, methodology, and strategic importance
 - **[Git Workflows](../core/workflows.md)** - Git workflow, atomic commits, and PR protocol
 
 ## Quick Start

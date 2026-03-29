@@ -92,7 +92,7 @@ Agent-centric development instructions for instruction-only todo application dev
 ## Framework and Workflows
 
 - **Core Principles**: [docs/core/principles.md](docs/core/principles.md)
-- **Methodology**: [docs/core/framework.md](docs/core/framework.md)
+- **Methodology & Principles**: [docs/core/principles.md](docs/core/principles.md)
 - **Git Workflow**: [docs/core/workflows.md](docs/core/workflows.md)
 - **Architecture Overview**: [docs/architecture/overview.md](docs/architecture/overview.md)
 
@@ -179,7 +179,7 @@ For vulnerability reports and security incidents, see [Security Workflow](docs/r
 ```text
 docs/
 ├── agents/              # Agent-specific guidelines and coordination
-├── core/                # Framework, workflows, project context
+├── core/                # Principles, workflows, quality standards
 ├── diagrams/            # Mermaid diagrams for architecture and user flows
 ├── product/             # Product vision and requirements
 ├── reference/           # Labels, priorities, troubleshooting

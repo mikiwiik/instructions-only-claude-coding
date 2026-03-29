@@ -7,10 +7,8 @@ WHY we work the way we do and HOW they support the instruction-only development 
 
 ## Relationship to Other Documentation
 
-- **This Document (principles.md)**: WHY - Philosophy and strategic importance
-- **[framework.md](framework.md)**: WHAT - Methodology, roles, and agent coordination
-- **[workflows.md](workflows.md)**: HOW - Git workflow, commit strategy, PR protocol
-- **[workflows.md](workflows.md)**: HOW - Code quality, testing, daily practices
+- **This Document (principles.md)**: WHY - Philosophy, methodology, and strategic importance
+- **[workflows.md](workflows.md)**: HOW - Git workflow, commit strategy, PR protocol, quality gates
 - **[../adr/](../adr/)**: DECISIONS - Specific technical choices with rationale
 
 ## The Five Core Principles
@@ -31,7 +29,7 @@ In traditional development, humans write code directly. This project demonstrate
 This is not "AI assistance" - it's **complete lifecycle development via instruction**, from planning through production
 deployment.
 
-**Core Components** (from [framework.md](framework.md)):
+**Core Components**:
 
 1. **Pure Instruction Implementation**: All development occurs through natural language rather than manual coding
 2. **Strategic vs. Tactical Separation**: Human provides requirements, AI handles all technical execution
@@ -41,20 +39,6 @@ deployment.
 
 **Role Boundaries**: See [README.md Role Definition](../../README.md#-role-definition-and-boundaries) for the
 authoritative breakdown of human vs. AI responsibilities.
-
-**Documentation**:
-
-- **Role Definition**: [../../README.md](../../README.md#-role-definition-and-boundaries) - Authoritative role boundaries
-- **Strategic**: [framework.md](framework.md) - Complete methodology and agent coordination
-- **Operational**: [workflows.md](workflows.md) - Daily development practices
-- **Visual**: [../diagrams/development-workflow.md](../diagrams/development-workflow.md) - Process visualization
-
-**Related Principles**: This is the WHY for all other principles. Without instruction-only development:
-
-- Atomic commits would just be good practice (not critical for AI traceability)
-- AI attribution would be unnecessary (no AI work to attribute)
-- Quality gates would be standard practice (not proof of AI capability)
-- Automation would be nice-to-have (not essential for scaling)
 
 ---
 
@@ -419,7 +403,6 @@ This is not theoretical - this entire codebase proves it works in practice.
 
 ### Core Documentation
 
-- **[framework.md](framework.md)** - Complete agentic coding methodology
 - **[workflows.md](workflows.md)** - Git workflow, commits, PR protocol
 - **[../../CLAUDE.md](../../CLAUDE.md)** - Essential guiding principles for AI agents
 
