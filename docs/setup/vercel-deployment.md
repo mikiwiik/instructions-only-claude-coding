@@ -173,7 +173,7 @@ Vercel executes the following steps for each deployment:
 
 ### Log Correlation
 
-The application uses Vercel's `x-vercel-id` header for log correlation (see [ADR-036](../adr/036-system-logging-pino.md)).
+The application uses Vercel's `x-vercel-id` header for log correlation (see [ADR-038](../adr/038-system-logging-pino.md)).
 This enables tracing requests across:
 
 - Vercel's edge network logs

@@ -1,4 +1,4 @@
-# ADR-034: LexoRank-Based Todo Ordering
+# ADR-036: LexoRank-Based Todo Ordering
 
 ## Status
 

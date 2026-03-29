@@ -213,7 +213,7 @@ enterprise-level quality** without manual human intervention in implementation.
    - Cognitive complexity ≤15 per function
    - Nesting depth ≤4 levels
    - Cyclomatic complexity ≤15 per function
-   - See [../adr/027-code-complexity-standards.md](../adr/027-code-complexity-standards.md)
+   - See [../adr/028-code-complexity-standards.md](../adr/028-code-complexity-standards.md)
 
 5. **Accessibility Compliance**
    - WCAG 2.2 AA standards adherence
@@ -231,7 +231,7 @@ enterprise-level quality** without manual human intervention in implementation.
 
 - **Strategic**:
   - [../adr/004-test-driven-development.md](../adr/004-test-driven-development.md)
-  - [../adr/027-code-complexity-standards.md](../adr/027-code-complexity-standards.md)
+  - [../adr/028-code-complexity-standards.md](../adr/028-code-complexity-standards.md)
   - [../adr/022-strict-typescript-type-safety.md](../adr/022-strict-typescript-type-safety.md)
 - **Operational**: [workflows.md](workflows.md#quality-gates) - Quality gates and commands
 - **Guidelines**:
@@ -279,7 +279,7 @@ The result: **Human provides strategic instruction, automation handles all tacti
 - ESLint: Zero errors/warnings policy
 - Prettier: Consistent code formatting
 - TypeScript: Strict type checking
-- Complexity Analysis: ADR-027 compliance
+- Complexity Analysis: ADR-028 compliance
 - Markdownlint: Documentation standards
 
 #### Layer 2: CI Pipeline (GitHub Actions)
@@ -440,6 +440,6 @@ This is not theoretical - this entire codebase proves it works in practice.
 - **[../adr/015-ai-agent-attribution-strategy.md](../adr/015-ai-agent-attribution-strategy.md)** - AI attribution
   strategy
 - **[../adr/004-test-driven-development.md](../adr/004-test-driven-development.md)** - TDD adoption
-- **[../adr/027-code-complexity-standards.md](../adr/027-code-complexity-standards.md)** - Complexity standards
+- **[../adr/028-code-complexity-standards.md](../adr/028-code-complexity-standards.md)** - Complexity standards
 - **[../adr/009-pre-commit-linting-strategy.md](../adr/009-pre-commit-linting-strategy.md)** - Pre-commit automation
 - **[../adr/011-github-actions-ci-cd.md](../adr/011-github-actions-ci-cd.md)** - CI/CD pipeline

@@ -3,7 +3,7 @@
 ## Purpose
 
 This guide provides practical patterns for writing and refactoring code to maintain manageable complexity levels. It
-complements [ADR-027: Code Complexity Standards](../adr/027-code-complexity-standards.md) with concrete examples and
+complements [ADR-028: Code Complexity Standards](../adr/028-code-complexity-standards.md) with concrete examples and
 step-by-step refactoring techniques.
 
 ## Related Documentation
@@ -652,7 +652,7 @@ During Code Review:
 - **SonarCloud**: [Cognitive Complexity White Paper](https://www.sonarsource.com/resources/cognitive-complexity/)
 - **ESLint**: [Complexity Rules Documentation](https://eslint.org/docs/latest/rules/complexity)
 - **Related Standards**:
-  - ADR-027: Code Complexity Standards
+  - ADR-028: Code Complexity Standards
   - docs/guidelines/typescript-standards.md: Type Safety
   - ADR-004: Test-Driven Development
 

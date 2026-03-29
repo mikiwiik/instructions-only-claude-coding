@@ -25,4 +25,4 @@ npm run test:e2e:ui      # E2E with visual UI
 
 - [Test Utilities](../../app/__tests__/README.md) - Factory functions, mocks, and assertions
 - [ADR-004](../adr/004-test-driven-development-approach.md) - TDD foundation
-- [ADR-029](../adr/029-e2e-testing-framework-selection.md) - E2E framework selection
+- [ADR-030](../adr/030-e2e-testing-framework-selection.md) - E2E framework selection

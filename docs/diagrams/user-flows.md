@@ -323,7 +323,7 @@ flowchart LR
 
 ## List Lifecycle Flow
 
-This diagram shows how users create, share, and access lists (see [ADR-031](../adr/031-list-lifecycle-architecture.md)).
+This diagram shows how users create, share, and access lists (see [ADR-033](../adr/033-list-lifecycle-architecture.md)).
 
 ```mermaid
 flowchart TD

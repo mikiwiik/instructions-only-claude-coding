@@ -30,7 +30,7 @@
    - **Superseding/Amending**: Use "Status: Superseded by ADR-XXX" or "Amended by ADR-XXX" for architectural changes
    - **Verification Required**: Always run `./scripts/validate-adrs.sh` and check `ls docs/adr/0*.md | sort` before
      creating new ADRs
-   - See `docs/adr/PROCESS.md` for complete ADR evolution guidelines and `docs/adr/026-security-scanning-ci-cd-pipeline.md`
+   - See `docs/adr/PROCESS.md` for complete ADR evolution guidelines and `docs/adr/027-security-scanning-ci-cd-pipeline.md`
      for amendment pattern example
 9. **🚨 DOCUMENT FOR HUMANS**: Always update README.md and relevant markdown files so humans can understand all
    changes and project evolution - this includes updating user flow diagrams ([docs/diagrams/user-flows.md](docs/diagrams/user-flows.md))
@@ -38,7 +38,7 @@
    hooks, components, or system behaviors
 10. **🚨 DOCUMENTATION QUALITY**: Keep all documentation comprehensive, up-to-date, and concise - eliminate outdated
     or verbose content immediately
-11. **🚨 PINNED DEPENDENCIES**: All dependencies must use exact versions - see [ADR-035](docs/adr/035-pinned-dependency-policy.md)
+11. **🚨 PINNED DEPENDENCIES**: All dependencies must use exact versions - see [ADR-037](docs/adr/037-pinned-dependency-policy.md)
     - **New Dependencies**: Always use latest stable version (`npm view <pkg> version` to check)
     - **npm packages**: No `^` or `~` prefixes (e.g., `"react": "19.2.3"` not `"^19.2.3"`)
     - **GitHub Actions**: SHA-pinned with version comment (e.g., `actions/checkout@abc123 # v4`)
@@ -60,7 +60,7 @@ This project uses Claude Code hooks to automatically initialize nvm for npm comm
 
 **Manual fallback** (if hooks don't work): `source ~/.nvm/nvm.sh && npm install`
 
-See [ADR-030](docs/adr/030-claude-code-environment-hooks.md) for details.
+See [ADR-032](docs/adr/032-claude-code-environment-hooks.md) for details.
 
 ### GitHub MCP Server
 
@@ -70,7 +70,7 @@ is in `.mcp.json` (project scope, shared via git).
 **Setup**: Token is passed via a shell alias (`claude` → `GITHUB_PERSONAL_ACCESS_TOKEN="$(gh auth token)" claude`).
 See [Local Dev Setup](docs/setup/local-dev-setup.md#github-mcp-server-setup) for details.
 
-See [ADR-038](docs/adr/038-github-mcp-server.md) for the decision record.
+See [ADR-038](docs/adr/040-github-mcp-server.md) for the decision record.
 
 ---
 
@@ -132,7 +132,7 @@ quality requirements, metrics, and enforcement.
 
 **Code Complexity Standards**:
 
-- **🚨 ADR-027 Compliance**: All code must meet complexity thresholds defined in [ADR-027](docs/adr/027-code-complexity-standards.md)
+- **🚨 ADR-028 Compliance**: All code must meet complexity thresholds defined in [ADR-028](docs/adr/028-code-complexity-standards.md)
 - **Cognitive Complexity**: ≤15 per function (enforced by ESLint + SonarCloud)
 - **Nesting Depth**: ≤4 levels (enforced by ESLint `max-depth`)
 - **Cyclomatic Complexity**: ≤15 per function (enforced by ESLint `complexity`)
@@ -172,7 +172,7 @@ For vulnerability reports and security incidents, see [Security Workflow](docs/r
 - **Troubleshooting**: [docs/reference/troubleshooting.md](docs/reference/troubleshooting.md)
 - **Security Workflow**: [docs/reference/security-workflow.md](docs/reference/security-workflow.md)
 - **AI Attribution Strategy**: [docs/adr/015-ai-agent-attribution-strategy.md](docs/adr/015-ai-agent-attribution-strategy.md)
-- **GitHub Projects Adoption**: [docs/adr/024-github-projects-adoption.md](docs/adr/024-github-projects-adoption.md)
+- **GitHub Projects Adoption**: [docs/adr/025-github-projects-adoption.md](docs/adr/025-github-projects-adoption.md)
 
 ## Project Structure
 

@@ -171,7 +171,7 @@ Follow [Slash Command Best Practices](../development/slash-command-best-practice
 | Ad-hoc GitHub queries in Claude Code | Yes | Fallback if MCP unavailable |
 | `gh pr merge --auto --rebase` | Validate first | Fallback if MCP doesn't support |
 
-See [ADR-038](../adr/038-github-mcp-server.md) for the full decision record.
+See [ADR-040](../adr/040-github-mcp-server.md) for the full decision record.
 
 ### Quality Gate Failures
 

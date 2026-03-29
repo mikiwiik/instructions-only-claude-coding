@@ -113,7 +113,7 @@ The integration includes these pre-configured files:
   - `sonar.tests=app/__tests__` - Test directory within app structure
   - `sonar.exclusions` - Excludes test directory from sources to prevent conflicts
 - **`.github/workflows/build.yml`** - GitHub Actions workflow with SonarCloud step
-  - Uses SHA-pinned action version for security (see [ADR-026](../adr/026-security-scanning-ci-cd-pipeline.md))
+  - Uses SHA-pinned action version for security (see [ADR-027](../adr/027-security-scanning-ci-cd-pipeline.md))
 - **`coverage/lcov.info`** - Jest coverage reports (generated automatically)
 
 ## TypeScript Best Practices

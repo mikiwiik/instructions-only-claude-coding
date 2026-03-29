@@ -8,7 +8,7 @@ across development and production environments.
 ## Related Documentation
 
 - **ADR-036**: System Logging Strategy with Pino (decision rationale)
-- **eslint.config.mjs**: Enforces `no-console` rule (ADR-036 reference)
+- **eslint.config.mjs**: Enforces `no-console` rule (ADR-038 reference)
 - **app/lib/logger.ts**: Logger implementation
 
 ## Core Principle

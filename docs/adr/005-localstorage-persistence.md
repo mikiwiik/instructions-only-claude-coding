@@ -3,7 +3,7 @@
 ## Status
 
 ~~Accepted~~
-**Superseded by [ADR-029: Server-Only Architecture](./029-server-only-architecture.md)** (2025-11-22)
+**Superseded by [ADR-031: Server-Only Architecture](./031-server-only-architecture.md)** (2025-11-22)
 
 localStorage is no longer used as the primary data persistence mechanism. The application now uses
 Upstash Redis backend storage as the single source of truth. This ADR remains for historical reference.

@@ -1,4 +1,4 @@
-# ADR-035: Pinned Dependency Policy with Automated Enforcement
+# ADR-037: Pinned Dependency Policy with Automated Enforcement
 
 ## Status
 

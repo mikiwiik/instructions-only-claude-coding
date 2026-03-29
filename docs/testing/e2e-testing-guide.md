@@ -244,5 +244,5 @@ Current E2E tests cover:
 
 - [Playwright Documentation](https://playwright.dev/)
 - [Playwright Best Practices](https://playwright.dev/docs/best-practices)
-- [ADR-029: E2E Testing Framework Selection](../adr/029-e2e-testing-framework-selection.md)
+- [ADR-030: E2E Testing Framework Selection](../adr/030-e2e-testing-framework-selection.md)
 - [Next.js + Playwright Guide](https://nextjs.org/docs/app/building-your-application/testing/playwright)

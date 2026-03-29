@@ -1,4 +1,4 @@
-# ADR-024: GitHub Projects Adoption for Enhanced Project Management
+# ADR-025: GitHub Projects Adoption for Enhanced Project Management
 
 ## Status
 

@@ -1,4 +1,4 @@
-# ADR-031: List Lifecycle Architecture
+# ADR-033: List Lifecycle Architecture
 
 **Status**: Accepted
 **Date**: 2025-12-26

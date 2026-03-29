@@ -233,6 +233,6 @@ See [Testing Guidelines](testing-guidelines.md) for comprehensive patterns and e
 
 - [ADR-004](../adr/004-test-driven-development-approach.md) - TDD foundation
 - [ADR-009](../adr/009-pre-commit-linting-strategy.md) - Pre-commit enforcement
-- [ADR-026](../adr/026-security-scanning-ci-cd-pipeline.md) - SonarCloud integration
-- [ADR-027](../adr/027-code-complexity-standards.md) - Complexity standards
-- [ADR-029](../adr/029-e2e-testing-framework-selection.md) - E2E framework selection
+- [ADR-027](../adr/027-security-scanning-ci-cd-pipeline.md) - SonarCloud integration
+- [ADR-028](../adr/028-code-complexity-standards.md) - Complexity standards
+- [ADR-030](../adr/030-e2e-testing-framework-selection.md) - E2E framework selection

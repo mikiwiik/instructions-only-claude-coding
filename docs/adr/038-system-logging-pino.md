@@ -1,4 +1,4 @@
-# ADR-036: System Logging Strategy with Pino
+# ADR-038: System Logging Strategy with Pino
 
 ## Status
 

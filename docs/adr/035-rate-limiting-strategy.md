@@ -1,4 +1,4 @@
-# ADR-033: Rate Limiting Strategy with Upstash
+# ADR-035: Rate Limiting Strategy with Upstash
 
 ## Status
 
@@ -242,6 +242,6 @@ if (response.status === 429) {
 - [Upstash Rate Limit Documentation](https://upstash.com/docs/redis/sdks/ratelimit-ts/overview)
 - [Vercel Edge Middleware](https://vercel.com/docs/functions/edge-middleware)
 - [Rate Limiting Algorithms](https://upstash.com/blog/ratelimit-algorithms)
-- [ADR-032: Error Monitoring Solution](./032-error-monitoring-solution.md)
+- [ADR-034: Error Monitoring Solution](./034-error-monitoring-solution.md)
 - Epic #340: Backend Protection
 - Issue #393: Server-side rate limiting (this implementation)

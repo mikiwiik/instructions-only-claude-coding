@@ -1,4 +1,4 @@
-# ADR-025: React 19 Migration Assessment
+# ADR-026: React 19 Migration Assessment
 
 ## Status
 

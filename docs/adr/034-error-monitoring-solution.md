@@ -1,4 +1,4 @@
-# ADR-032: Error Monitoring Solution Selection
+# ADR-034: Error Monitoring Solution Selection
 
 ## Status
 

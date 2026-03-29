@@ -1,4 +1,4 @@
-# ADR-029: Server-Only Architecture with Upstash Redis Backend
+# ADR-031: Server-Only Architecture with Upstash Redis Backend
 
 **Status**: Proposed
 **Date**: 2025-11-22
@@ -262,7 +262,7 @@ This ADR explicitly **excludes**:
 
 ### Relates To
 - **ADR-014**: Anonymous Sharing Architecture (enables future sharing features)
-- **ADR-022**: Real-Time Sync Architecture (SSE now applies to all lists, not just shared)
+- **ADR-023**: Real-Time Sync Architecture (SSE now applies to all lists, not just shared)
 
 ### Enables Future
 - **Issue #123**: Share URL generation (backed by this infrastructure)

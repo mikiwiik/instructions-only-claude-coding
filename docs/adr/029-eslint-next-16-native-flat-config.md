@@ -1,4 +1,4 @@
-# ADR-028: ESLint Native Flat Config for Next.js 16 Compatibility
+# ADR-029: ESLint Native Flat Config for Next.js 16 Compatibility
 
 ## Status
 
@@ -126,7 +126,7 @@ export default [
 
 All existing linting standards maintained:
 
-- **ADR-027 Complexity Standards**: Cyclomatic complexity ≤15, nesting depth ≤4
+- **ADR-028 Complexity Standards**: Cyclomatic complexity ≤15, nesting depth ≤4
 - **Accessibility**: WCAG 2.2 AA via jsx-a11y plugin
 - **TypeScript**: Strict type safety rules
 - **React**: Next.js best practices
@@ -178,7 +178,7 @@ globals: {
 ### Neutral
 
 - **Linting Behavior**: Core rules unchanged, same linting results
-- **Standards Compliance**: All ADR-027 complexity rules preserved
+- **Standards Compliance**: All ADR-028 complexity rules preserved
 - **Test Coverage**: All tests pass without modification
 
 ## Validation

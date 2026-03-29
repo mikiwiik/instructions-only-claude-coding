@@ -51,9 +51,9 @@ Quality standards are prioritized by impact and enforcement level:
 | Standard               | Threshold        | Enforcement     | Reference                                                         |
 | ---------------------- | ---------------- | --------------- | ----------------------------------------------------------------- |
 | TypeScript strict mode | No `any` types   | ESLint error    | [ADR-022](../adr/022-strict-typescript-type-safety.md)            |
-| Cognitive complexity   | ≤15 per function | ESLint error    | [ADR-027](../adr/027-code-complexity-standards.md)                |
-| Nesting depth          | ≤4 levels        | ESLint error    | [ADR-027](../adr/027-code-complexity-standards.md)                |
-| Cyclomatic complexity  | ≤15 per function | ESLint error    | [ADR-027](../adr/027-code-complexity-standards.md)                |
+| Cognitive complexity   | ≤15 per function | ESLint error    | [ADR-028](../adr/028-code-complexity-standards.md)                |
+| Nesting depth          | ≤4 levels        | ESLint error    | [ADR-028](../adr/028-code-complexity-standards.md)                |
+| Cyclomatic complexity  | ≤15 per function | ESLint error    | [ADR-028](../adr/028-code-complexity-standards.md)                |
 | Accessibility          | WCAG 2.2 AA      | ESLint + manual | [Accessibility Requirements](../ux/accessibility-requirements.md) |
 
 ### High (P2) - Required for PR Approval
@@ -185,7 +185,7 @@ Detailed implementation guides for each quality area:
 
 ### Code Complexity
 
-- **ADR**: [ADR-027: Code Complexity Standards](../adr/027-code-complexity-standards.md)
+- **ADR**: [ADR-028: Code Complexity Standards](../adr/028-code-complexity-standards.md)
 - **Guide**: [Code Complexity Guidelines](../guidelines/code-complexity-guidelines.md)
 - **Enforcement**: ESLint `complexity`, `max-depth`, SonarCloud
 
@@ -218,7 +218,7 @@ CI pipeline validates build, lint, type-check, tests, and coverage thresholds.
 
 Reviewers verify:
 
-- [ ] Code meets complexity standards (ADR-027)
+- [ ] Code meets complexity standards (ADR-028)
 - [ ] TypeScript types are correct (no `any`)
 - [ ] Tests cover new functionality
 - [ ] Accessibility requirements met

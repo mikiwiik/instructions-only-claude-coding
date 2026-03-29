@@ -1,4 +1,4 @@
-# ADR-038: GitHub MCP Server Adoption
+# ADR-040: GitHub MCP Server Adoption
 
 ## Status
 
@@ -116,5 +116,5 @@ Phased adoption across 4 issues:
 - [GitHub MCP Server installation guide for Claude](https://github.com/github/github-mcp-server/blob/main/docs/installation-guides/install-claude.md)
 - [GitHub Docs: Using the GitHub MCP Server](https://docs.github.com/en/copilot/how-tos/provide-context/use-mcp/use-the-github-mcp-server)
 - [Claude Code MCP documentation](https://code.claude.com/docs/en/mcp)
-- [ADR-030: Claude Code Environment Hooks](030-claude-code-environment-hooks.md) (prior Claude Code integration pattern)
+- [ADR-032: Claude Code Environment Hooks](032-claude-code-environment-hooks.md) (prior Claude Code integration pattern)
 - Related issues: #478, #479, #480, #481
