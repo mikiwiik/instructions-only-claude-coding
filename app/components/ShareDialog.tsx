@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { X, Share2, Copy, Check, ExternalLink } from 'lucide-react';
 import { useDialogKeyboard } from '../hooks/useDialogKeyboard';
-import { copyToClipboard } from '../lib/list-manager';
+import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
 
 export interface ShareDialogProps {
   /** Whether the dialog is open */
@@ -126,7 +126,7 @@ export default function ShareDialog({
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyToClipboard(shareUrl);
 
   // Focus management
   useEffect(() => {
@@ -141,13 +141,8 @@ export default function ShareDialog({
 
   const handleCopy = useCallback(async () => {
     if (isSharing || error || !shareUrl) return;
-
-    const success = await copyToClipboard(shareUrl);
-    if (success) {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  }, [isSharing, error, shareUrl]);
+    await copy();
+  }, [isSharing, error, shareUrl, copy]);
 
   // Keyboard event handlers - wrap async handleCopy to return void
   useDialogKeyboard({
