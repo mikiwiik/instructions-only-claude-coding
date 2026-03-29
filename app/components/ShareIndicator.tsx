@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { Link2, Copy, Check } from 'lucide-react';
 import { copyToClipboard } from '../lib/list-manager';
 
@@ -13,12 +13,18 @@ export default function ShareIndicator({
   shareUrl,
 }: Readonly<ShareIndicatorProps>) {
   const [copied, setCopied] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+  useEffect(() => {
+    return () => clearTimeout(timeoutRef.current);
+  }, []);
 
   const handleCopy = useCallback(async () => {
     const success = await copyToClipboard(shareUrl);
     if (success) {
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => setCopied(false), 2000);
     }
   }, [shareUrl]);
 
