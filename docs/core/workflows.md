@@ -483,7 +483,7 @@ Current project maintains the following quality targets:
 - **ESLint**: Zero warnings or errors policy
 - **SonarCloud**: Quality gate passing (bugs, code smells, security vulnerabilities)
 - **Accessibility**: WCAG 2.2 AA compliance (see [docs/ux/accessibility-requirements.md](../ux/accessibility-requirements.md))
-- **Code Complexity**: ADR-027 compliance (cognitive ≤15, nesting ≤4, cyclomatic ≤15)
+- **Code Complexity**: ADR-028 compliance (cognitive ≤15, nesting ≤4, cyclomatic ≤15)
 - **Performance**: Optimal React patterns and bundle size management
 
 These metrics are enforced through pre-commit hooks, CI/CD pipelines, SonarCloud analysis, and manual code review.
@@ -523,21 +523,21 @@ These metrics are enforced through pre-commit hooks, CI/CD pipelines, SonarCloud
 
 **Code Complexity Standards:**
 
-- Cognitive complexity ≤15 per function (enforced as error per ADR-027)
+- Cognitive complexity ≤15 per function (enforced as error per ADR-028)
 - Nesting depth ≤4 levels (enforced via ESLint `max-depth`)
 - Cyclomatic complexity ≤15 per function (enforced via ESLint `complexity`)
 - Function length ≤150 lines (warning), ≤300 lines (error)
 - Function parameters ≤4 (warning for maintainability)
 - Refactoring patterns: Extract functions, custom hooks, utility modules
 - See [docs/guidelines/code-complexity-guidelines.md](../guidelines/code-complexity-guidelines.md) for refactoring strategies
-- See [docs/adr/027-code-complexity-standards.md](../adr/027-code-complexity-standards.md) for decision rationale
+- See [docs/adr/028-code-complexity-standards.md](../adr/028-code-complexity-standards.md) for decision rationale
 
 ### Pre-commit Requirements
 
 - ESLint: Zero errors or warnings (includes complexity rules)
 - Prettier: Consistent code formatting
 - TypeScript: Strict mode compliance
-- Code Complexity: All functions meet ADR-027 thresholds
+- Code Complexity: All functions meet ADR-028 thresholds
 - Tests: All tests passing and in version control
 
 ### Pre-merge Requirements

@@ -15,7 +15,7 @@ All dependencies use exact versions without range operators (`^`, `~`) for:
 - **Security control**: Explicit approval of version changes via Dependabot PRs
 - **Clear audit trail**: Every version change is tracked in git history
 
-**Policy**: [ADR-035: Pinned Dependency Policy](../adr/035-pinned-dependency-policy.md)
+**Policy**: [ADR-037: Pinned Dependency Policy](../adr/037-pinned-dependency-policy.md)
 
 ### Automated Updates
 

@@ -132,7 +132,7 @@ interface SharedTodo extends Todo {
 
 ## Migration and Compatibility Strategy
 
-**Note**: This section has been superseded by [ADR-029: Server-Only Architecture](./029-server-only-architecture.md) (2025-11-22), which established server-backed storage as the default for all lists.
+**Note**: This section has been superseded by [ADR-031: Server-Only Architecture](./031-server-only-architecture.md) (2025-11-22), which established server-backed storage as the default for all lists.
 
 ### ~~Backward Compatibility~~ (Superseded)
 
@@ -140,7 +140,7 @@ interface SharedTodo extends Todo {
 ~~- localStorage remains as fallback storage~~
 ~~- Progressive enhancement approach~~
 
-**Current approach (ADR-029):**
+**Current approach (ADR-031):**
 - All todos stored in Upstash Redis backend
 - localStorage no longer used for primary persistence
 - Server-only architecture for all lists
@@ -149,7 +149,7 @@ interface SharedTodo extends Todo {
 
 ~~localStorage todos → SharedList creation → Share URL generation~~
 
-**Current approach (ADR-029):**
+**Current approach (ADR-031):**
 - Manual localStorage clear for existing users
 - Fresh start with backend storage
 - Future migration features in separate icebox issue
@@ -160,7 +160,7 @@ interface SharedTodo extends Todo {
 ~~- Conversion between local ↔ shared available~~
 ~~- No forced migration required~~
 
-**Current approach (ADR-029):**
+**Current approach (ADR-031):**
 - Single backend storage for all todos
 - No hybrid local/shared model
 - Simplified architecture with backend as single source of truth
@@ -253,8 +253,8 @@ interface SharedTodo extends Todo {
 - ADR-017: Real-Time Communication Strategy
 - ADR-020: Share URL Security Architecture
 - ADR-021: Anonymous Access Control Strategy
-- ADR-022: Real-Time Synchronization Architecture
-- ADR-023: Conflict Resolution Strategy
+- ADR-023: Real-Time Synchronization Architecture
+- ADR-024: Conflict Resolution Strategy
 
 ### Security Documentation
 

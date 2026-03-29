@@ -79,7 +79,7 @@ ADRs follow a strict naming pattern with distinct filename and header formats:
 - Examples:
   - `001-nextjs-app-router.md`
   - `015-ai-agent-attribution-strategy.md`
-  - `023-component-isolation-testing.md`
+  - `024-component-isolation-testing.md`
 
 **Header format**: `# ADR-###: Title`
 
@@ -89,7 +89,7 @@ ADRs follow a strict naming pattern with distinct filename and header formats:
 - Examples:
   - `# ADR-001: Use Next.js 14 with App Router`
   - `# ADR-015: AI Agent Attribution Strategy`
-  - `# ADR-023: Component Isolation Testing Strategy`
+  - `# ADR-024: Component Isolation Testing Strategy`
 
 **Important**: Notice the distinction - filenames use simple numbers (`015-`), while headers include the "ADR-" prefix
 (`ADR-015:`). This maintains consistency across the codebase.
@@ -212,8 +212,8 @@ When architecture evolves, create a **new ADR** that:
 **Example**: If ADR-011 (CI/CD) needs updating for security scanning:
 
 - ❌ Don't edit ADR-011 to add security scanning info
-- ✅ Create ADR-026 "Security Scanning in CI/CD Pipeline"
-- ✅ Add "Status: Amended by ADR-026" to ADR-011
+- ✅ Create ADR-027 "Security Scanning in CI/CD Pipeline"
+- ✅ Add "Status: Amended by ADR-027" to ADR-011
 
 ### ADR Status Values
 
@@ -229,7 +229,7 @@ When architecture evolves, create a **new ADR** that:
 **Superseding** (complete replacement):
 
 ```markdown
-Status: Superseded by ADR-025
+Status: Superseded by ADR-026
 ```
 
 Example: Switching from LocalStorage to Backend API (complete architectural change)
@@ -237,7 +237,7 @@ Example: Switching from LocalStorage to Backend API (complete architectural chan
 **Amending** (extension or modification):
 
 ```markdown
-Status: Amended by ADR-026
+Status: Amended by ADR-027
 ```
 
 Example: Adding security scanning to existing CI/CD pipeline (extending existing architecture)

@@ -100,7 +100,7 @@ ranking algorithm that enables efficient single-item sync:
 - `app/lib/lexorank-utils.ts` - Rank generation utilities
 - `app/hooks/useTodoReorder.ts` - Reordering hook
 
-See [ADR-034](../adr/034-lexorank-todo-ordering.md) for the architectural decision.
+See [ADR-036](../adr/036-lexorank-todo-ordering.md) for the architectural decision.
 
 #### Testing Layer
 
@@ -120,7 +120,7 @@ For detailed architecture, see [Real-Time Sync Architecture Diagram](realtime-sy
 
 ### List Architecture
 
-The app supports a two-tier list model with explicit transitions (see [ADR-031](../adr/031-list-lifecycle-architecture.md)):
+The app supports a two-tier list model with explicit transitions (see [ADR-033](../adr/033-list-lifecycle-architecture.md)):
 
 ```text
 ┌─────────────────┐          ┌─────────────────┐
@@ -309,7 +309,7 @@ complete and up-to-date list of all ADRs, see [Architecture Decision Records](..
 - **Vercel Analytics**: Basic traffic and performance metrics
 - **GitHub Integration**: Deployment status in commit history
 
-See [ADR-032](../adr/032-error-monitoring-solution.md) for error monitoring solution details.
+See [ADR-034](../adr/034-error-monitoring-solution.md) for error monitoring solution details.
 
 #### API Rate Limiting
 
@@ -328,7 +328,7 @@ Client-side handling:
 - Auto-retry after `Retry-After` period expires
 - Graceful degradation with user-friendly error messages
 
-See [ADR-033](../adr/033-rate-limiting-strategy.md) for the rate limiting architecture decision.
+See [ADR-035](../adr/035-rate-limiting-strategy.md) for the rate limiting architecture decision.
 
 ## Environments
 

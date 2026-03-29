@@ -1,15 +1,15 @@
-# ADR-037: Supply Chain Hardening for CI/CD Pipeline
+# ADR-039: Supply Chain Hardening for CI/CD Pipeline
 
 ## Status
 
 Accepted
 
-Amends [ADR-026](026-security-scanning-ci-cd-pipeline.md)
+Amends [ADR-027](027-security-scanning-ci-cd-pipeline.md)
 
 ## Context
 
 The CI/CD pipeline already has strong supply chain defenses (SHA-pinned GitHub Actions, lockfile v3
-with `npm ci`, pinned dependency versions via ADR-035, multi-layered scanning via ADR-026). However,
+with `npm ci`, pinned dependency versions via ADR-037, multi-layered scanning via ADR-027). However,
 several gaps remain:
 
 - **Lifecycle scripts run unrestricted during `npm ci`** — a compromised npm package can execute
@@ -78,7 +78,7 @@ If a future dependency requires lifecycle scripts:
 
 ## References
 
-- [ADR-026: Security Scanning in CI/CD Pipeline](026-security-scanning-ci-cd-pipeline.md)
-- [ADR-035: Pinned Dependency Policy](035-pinned-dependency-policy.md)
+- [ADR-027: Security Scanning in CI/CD Pipeline](027-security-scanning-ci-cd-pipeline.md)
+- [ADR-035: Pinned Dependency Policy](037-pinned-dependency-policy.md)
 - [npm lifecycle scripts documentation](https://docs.npmjs.com/cli/v10/using-npm/scripts#life-cycle-scripts)
 - [GitHub Actions security hardening](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions)

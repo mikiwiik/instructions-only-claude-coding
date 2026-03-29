@@ -1,4 +1,4 @@
-# ADR-027: Code Complexity Standards
+# ADR-028: Code Complexity Standards
 
 ## Status
 

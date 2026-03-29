@@ -140,7 +140,7 @@ See [Git Workflows - Auto-Merge Protocol](../core/workflows.md#auto-merge-protoc
 - **[Accessibility Requirements](../ux/accessibility-requirements.md)** - WCAG 2.2 AA compliance
 - **[Code Complexity Guidelines](../guidelines/code-complexity-guidelines.md)** - Refactoring patterns
 - **[TypeScript Standards](../guidelines/typescript-standards.md)** - Type safety best practices
-- **[Logging Guidelines](../guidelines/logging-guidelines.md)** - Structured logging with Pino (ADR-036)
+- **[Logging Guidelines](../guidelines/logging-guidelines.md)** - Structured logging with Pino (ADR-038)
 
 ### Reference
 

@@ -89,7 +89,7 @@ Contents read, Issues read/write, Pull requests read/write, Projects read/write,
 alias claude='GITHUB_PERSONAL_ACCESS_TOKEN="github_pat_your_token_here" claude'
 ```
 
-See [ADR-038](../adr/038-github-mcp-server.md) for the architectural decision.
+See [ADR-040](../adr/040-github-mcp-server.md) for the architectural decision.
 
 ## Project Setup
 
@@ -306,7 +306,7 @@ If you still see `npm: command not found`:
 2. **Manual fallback**: `source ~/.nvm/nvm.sh && npm install`
 3. **Verify hook**: Check `.claude/settings.json` contains the SessionStart hook
 
-See [ADR-030](../adr/030-claude-code-environment-hooks.md) for technical details.
+See [ADR-032](../adr/032-claude-code-environment-hooks.md) for technical details.
 
 ### Dependency Issues
 

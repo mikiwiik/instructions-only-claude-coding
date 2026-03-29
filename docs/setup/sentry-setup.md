@@ -17,7 +17,7 @@ Sentry provides error monitoring with:
 - **EU data residency** (Frankfurt) - matches our Vercel region
 - **Next.js SDK** with automatic instrumentation
 
-See [ADR-032](../adr/032-error-monitoring-solution.md) for the decision rationale.
+See [ADR-034](../adr/034-error-monitoring-solution.md) for the decision rationale.
 
 ## Step-by-Step Setup Instructions
 
@@ -267,4 +267,4 @@ try {
 - **Sentry Docs**: [https://docs.sentry.io/platforms/javascript/guides/nextjs/](https://docs.sentry.io/platforms/javascript/guides/nextjs/)
 - **Sentry Discord**: [https://discord.gg/sentry](https://discord.gg/sentry)
 - **Project Issues**: [GitHub Issues](https://github.com/mikiwiik/instructions-only-claude-coding/issues)
-- **ADR Reference**: [ADR-032: Error Monitoring Solution](../adr/032-error-monitoring-solution.md)
+- **ADR Reference**: [ADR-034: Error Monitoring Solution](../adr/034-error-monitoring-solution.md)

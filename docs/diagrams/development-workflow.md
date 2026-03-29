@@ -320,7 +320,7 @@ graph LR
 - Pre-commit hooks validate code quality
 - ESLint ensures zero errors/warnings
 - TypeScript strict mode compliance
-- Complexity standards (ADR-027) enforcement
+- Complexity standards (ADR-028) enforcement
 - Test coverage minimum 80%
 
 ### Phase 4: Integration

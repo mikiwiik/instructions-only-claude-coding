@@ -1,4 +1,4 @@
-# ADR-030: Claude Code Environment Hooks for nvm Support
+# ADR-032: Claude Code Environment Hooks for nvm Support
 
 **Status**: Accepted
 **Date**: 2025-12-07

@@ -1,4 +1,4 @@
-# ADR-026: Security Scanning in CI/CD Pipeline
+# ADR-027: Security Scanning in CI/CD Pipeline
 
 ## Status
 

@@ -4,7 +4,7 @@
 
 Accepted
 
-**Amended by**: [ADR-026: Security Scanning in CI/CD Pipeline](026-security-scanning-ci-cd-pipeline.md)
+**Amended by**: [ADR-027: Security Scanning in CI/CD Pipeline](027-security-scanning-ci-cd-pipeline.md)
 
 ## Context
 

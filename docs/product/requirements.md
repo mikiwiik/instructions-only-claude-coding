@@ -194,14 +194,14 @@ implementation is performed by human developers or AI agents.
 - Continuous Integration/Continuous Deployment (CI/CD) ✓
 - Automated testing at all levels (unit, integration, E2E) ✓
 - Security scanning and dependency management ✓
-- Pinned dependency versions for reproducibility and security ([ADR-035](../adr/035-pinned-dependency-policy.md)) ✓
+- Pinned dependency versions for reproducibility and security ([ADR-037](../adr/037-pinned-dependency-policy.md)) ✓
 - Automated dependency updates via Dependabot (npm + GitHub Actions) ✓
 - Semantic versioning and changelog maintenance (planned)
 - Infrastructure as code and reproducible deployments ✓
 - Deployed to scalable, cost-effective infrastructure (Vercel + Upstash) ✓
 - Service co-location in same region (Frankfurt) to minimize latency ✓
 - Frontend error detection and monitoring via Sentry ✓
-- Structured logging with Pino for production observability ([ADR-036](../adr/036-system-logging-pino.md)) ✓
+- Structured logging with Pino for production observability ([ADR-038](../adr/038-system-logging-pino.md)) ✓
 - Monitoring and advanced observability (planned)
 - Rolling upgrades with zero-downtime deployments ✓
 - Backward-compatible data migrations (no service outages) ✓
