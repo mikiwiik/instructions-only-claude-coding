@@ -20,7 +20,8 @@ Use the `mcp__github__get_me` tool to retrieve the authenticated GitHub user pro
 email from the structured response.
 
 > **Note**: `gh auth status` has no MCP equivalent — authentication is implicit when MCP tools work successfully.
-> If MCP user lookup fails, fall back to `gh api user --jq '.login + " (" + .name + ")"'`.
+
+> **Fallback**: If MCP user lookup fails, use `gh api user --jq '.login + " (" + .name + ")"'`.
 
 This command helps verify which user identity is active for commits and GitHub operations, which is especially
 important for AI agent attribution in this project.

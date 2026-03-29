@@ -16,8 +16,8 @@ Use the `mcp__github__list_issues` tool to retrieve open issues:
 
 The MCP tool returns structured data with number, title, labels, state, and assignees — no `jq` pipeline needed.
 
-> **Note**: MCP has no project-level tools, so project Status/Lifecycle fields are not available. Use issue labels
-> (priority-\*, complexity-\*) and state (OPEN) as the filtering criteria instead.
+> **Note**: MCP has no project-level tools, so project Status/Lifecycle fields are not available. Use issue
+> labels (priority-\*, complexity-\*) and state (OPEN) as filtering criteria instead.
 
 > **Fallback**: If MCP call fails, use `gh project item-list 1 --owner mikiwiik --format json --limit 1000 |
 > jq '[.items[] | select(.status == "Backlog") | {number: .content.number, title: .title, labels: .labels}]'`.
