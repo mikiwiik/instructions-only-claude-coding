@@ -149,6 +149,12 @@ Follow [Slash Command Best Practices](../development/slash-command-best-practice
 - **Check `.mcp.json`**: Verify the file exists in the repo root and contains valid JSON
 - **Re-authenticate**: If `gh auth token` returns nothing, run `gh auth login`
 
+#### `/doctor` Shows Missing `GITHUB_PERSONAL_ACCESS_TOKEN` Warning
+
+**Problem**: `/doctor` warns about missing `GITHUB_PERSONAL_ACCESS_TOKEN` in `.mcp.json`
+
+**Explanation**: This is a false positive. `/doctor` performs a static check on `.mcp.json` and doesn't evaluate whether the SessionStart hook has already populated the variable. If `gh auth token` works and the MCP tools function correctly, the warning is safe to ignore.
+
 #### MCP Tool Returns Permission Error
 
 **Problem**: MCP tool call fails with 403 or insufficient permissions
