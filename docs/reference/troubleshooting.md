@@ -143,8 +143,8 @@ Follow [Slash Command Best Practices](../development/slash-command-best-practice
 
 **Solutions:**
 
-- **Check env var**: Run `echo $GITHUB_PERSONAL_ACCESS_TOKEN` — if empty, add `export GITHUB_PERSONAL_ACCESS_TOKEN="$(gh auth token)"` to `~/.zshrc`
-- **Re-source profile**: Run `source ~/.zshrc` then restart Claude Code
+- **Check alias**: Run `alias claude` — should show `GITHUB_PERSONAL_ACCESS_TOKEN="$(gh auth token)" claude`
+- **Re-source profile**: Run `source ~/.zshrc` then relaunch Claude Code
 - **Check `gh` auth**: Run `gh auth status` — if not authenticated, run `gh auth login`
 - **Check `.mcp.json`**: Verify the file exists in the repo root and contains valid JSON
 
@@ -156,7 +156,7 @@ Follow [Slash Command Best Practices](../development/slash-command-best-practice
 
 - **Check token scopes**: Run `gh auth status` and verify `repo` scope is present
 - **Add project scope**: Run `gh auth refresh --hostname github.com --scopes project` for GitHub Projects access
-- **Re-source and restart**: Run `source ~/.zshrc` then restart Claude Code
+- **Re-source and relaunch**: Run `source ~/.zshrc` then relaunch Claude Code
 
 #### MCP vs `gh` CLI — When to Use Which
 
