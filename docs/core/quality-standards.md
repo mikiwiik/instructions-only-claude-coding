@@ -100,8 +100,9 @@ See [SonarCloud Setup](../setup/sonarcloud-setup.md) for configuration.
 
 ## Quality Enforcement
 
-Pre-commit hooks (Husky + lint-staged) enforce ESLint, Prettier, TypeScript, and complexity rules.
-CI pipeline validates build, lint, type-check, tests, and coverage thresholds.
+Pre-commit hooks (Husky + lint-staged) enforce ESLint, Prettier, TypeScript, complexity rules,
+and markdownlint for documentation standards. CI pipeline validates build, lint, type-check, tests,
+and coverage thresholds.
 
 For detailed gate configuration and commands, see [Workflows](workflows.md#quality-gates).
 For tooling setup, see [Local Dev Setup](../setup/local-dev-setup.md).
