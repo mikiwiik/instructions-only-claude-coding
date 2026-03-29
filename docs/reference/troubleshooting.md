@@ -155,7 +155,8 @@ Follow [Slash Command Best Practices](../development/slash-command-best-practice
 **Solutions:**
 
 - **Check token scopes**: Run `gh auth status` and verify `repo` scope is present
-- **Add project scope**: Run `gh auth refresh --hostname github.com --scopes project` for GitHub Projects access
+- **Add project scope**: Run `gh auth refresh --hostname github.com --scopes read:project` for GitHub Projects access
+- **Multi-account pitfall**: `gh auth refresh` opens a browser OAuth flow — ensure the correct GitHub account is signed in, or the scope gets added to the wrong token
 - **Re-source and relaunch**: Run `source ~/.zshrc` then relaunch Claude Code
 
 #### MCP vs `gh` CLI — When to Use Which
