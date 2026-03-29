@@ -13,7 +13,7 @@ export default function ShareIndicator({
   shareUrl,
 }: Readonly<ShareIndicatorProps>) {
   const [copied, setCopied] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
     return () => clearTimeout(timeoutRef.current);
