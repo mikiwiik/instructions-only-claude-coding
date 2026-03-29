@@ -21,7 +21,6 @@ export default function HomePage() {
   return (
     <TodoPageLayout
       {...todoState}
-      shareInfo={undefined}
       notice={betaNotice}
       shareAction={{ enabled: true }}
     />

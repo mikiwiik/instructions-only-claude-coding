@@ -148,9 +148,10 @@ export default function TodoPageLayout({
         {notice}
 
         {shareInfo && (
-          <div className='mb-4 md:mb-6'>
-            <ShareIndicator shareUrl={shareInfo.url} />
-          </div>
+          <ShareIndicator
+            shareUrl={shareInfo.url}
+            className='mb-4 md:mb-6'
+          />
         )}
 
         {rateLimitState.isRateLimited && (
