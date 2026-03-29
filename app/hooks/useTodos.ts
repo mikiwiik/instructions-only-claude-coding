@@ -184,6 +184,6 @@ export function useTodos(listId?: string) {
     setFilter,
     rateLimitState,
     clearRateLimitState,
-    ...operations,
+    todoActions: operations,
   };
 }

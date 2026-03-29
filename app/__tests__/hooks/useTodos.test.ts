@@ -50,7 +50,7 @@ describe('useTodos hook - local mode (no listId)', () => {
 
     // Add todo
     await act(async () => {
-      await result.current.addTodo('Local todo');
+      await result.current.todoActions.addTodo('Local todo');
     });
 
     expect(result.current.todos).toHaveLength(1);
@@ -62,7 +62,7 @@ describe('useTodos hook - local mode (no listId)', () => {
     // Toggle todo
     const todoId = result.current.todos[0].id;
     await act(async () => {
-      await result.current.toggleTodo(todoId);
+      await result.current.todoActions.toggleTodo(todoId);
     });
 
     // Still no API calls
@@ -70,7 +70,7 @@ describe('useTodos hook - local mode (no listId)', () => {
 
     // Delete todo
     await act(async () => {
-      await result.current.deleteTodo(todoId);
+      await result.current.todoActions.deleteTodo(todoId);
     });
 
     // Still no API calls
@@ -85,13 +85,13 @@ describe('useTodos hook - local mode (no listId)', () => {
     });
 
     await act(async () => {
-      await result.current.addTodo('Original text');
+      await result.current.todoActions.addTodo('Original text');
     });
 
     const todoId = result.current.todos[0].id;
 
     await act(async () => {
-      await result.current.editTodo(todoId, 'Edited text');
+      await result.current.todoActions.editTodo(todoId, 'Edited text');
     });
 
     expect(result.current.todos[0].text).toBe('Edited text');
@@ -146,7 +146,7 @@ describe('useTodos hook - shared mode (with listId)', () => {
 
     // Add todo
     await act(async () => {
-      await result.current.addTodo('Synced todo');
+      await result.current.todoActions.addTodo('Synced todo');
     });
 
     // Should have called POST with the correct listId
@@ -268,7 +268,7 @@ describe('useTodos hook', () => {
     });
 
     await act(async () => {
-      await result.current.addTodo('Learn React Testing');
+      await result.current.todoActions.addTodo('Learn React Testing');
     });
 
     expect(result.current.todos).toHaveLength(1);
@@ -289,8 +289,8 @@ describe('useTodos hook', () => {
     });
 
     await act(async () => {
-      await result.current.addTodo('First todo');
-      await result.current.addTodo('Second todo');
+      await result.current.todoActions.addTodo('First todo');
+      await result.current.todoActions.addTodo('Second todo');
     });
 
     expect(result.current.todos).toHaveLength(2);
@@ -307,7 +307,7 @@ describe('useTodos hook', () => {
     const beforeTime = new Date();
 
     await act(async () => {
-      await result.current.addTodo('Timestamped todo');
+      await result.current.todoActions.addTodo('Timestamped todo');
     });
 
     const afterTime = new Date();
@@ -330,8 +330,8 @@ describe('useTodos hook', () => {
     });
 
     await act(async () => {
-      await result.current.addTodo('First todo');
-      await result.current.addTodo('Second todo');
+      await result.current.todoActions.addTodo('First todo');
+      await result.current.todoActions.addTodo('Second todo');
     });
 
     expect(result.current.todos[0].text).toBe('Second todo');
@@ -346,7 +346,7 @@ describe('useTodos hook', () => {
     });
 
     await act(async () => {
-      await result.current.addTodo('Persistent todo');
+      await result.current.todoActions.addTodo('Persistent todo');
     });
 
     // Verify fetch was called with POST to sync the new todo
@@ -419,9 +419,9 @@ describe('useTodos hook', () => {
     });
 
     await act(async () => {
-      await result.current.addTodo('');
-      await result.current.addTodo('   ');
-      await result.current.addTodo('\t\n');
+      await result.current.todoActions.addTodo('');
+      await result.current.todoActions.addTodo('   ');
+      await result.current.todoActions.addTodo('\t\n');
     });
 
     expect(result.current.todos).toHaveLength(0);
@@ -435,7 +435,7 @@ describe('useTodos hook', () => {
     });
 
     await act(async () => {
-      await result.current.addTodo('  Trimmed todo  ');
+      await result.current.todoActions.addTodo('  Trimmed todo  ');
     });
 
     expect(result.current.todos[0].text).toBe('Trimmed todo');
@@ -450,13 +450,13 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Todo to toggle');
+        await result.current.todoActions.addTodo('Todo to toggle');
       });
 
       const todoId = result.current.todos[0].id;
 
       await act(async () => {
-        await result.current.toggleTodo(todoId);
+        await result.current.todoActions.toggleTodo(todoId);
       });
 
       // After toggling to complete, the todo is filtered out from active view
@@ -475,19 +475,19 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Todo to toggle back');
+        await result.current.todoActions.addTodo('Todo to toggle back');
       });
 
       const todoId = result.current.todos[0].id;
 
       // Toggle to complete
       await act(async () => {
-        await result.current.toggleTodo(todoId);
+        await result.current.todoActions.toggleTodo(todoId);
       });
 
       // Toggle back to incomplete
       await act(async () => {
-        await result.current.toggleTodo(todoId);
+        await result.current.todoActions.toggleTodo(todoId);
       });
 
       expect(!!result.current.todos[0].completedAt).toBe(false);
@@ -501,14 +501,14 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('First todo');
-        await result.current.addTodo('Second todo');
+        await result.current.todoActions.addTodo('First todo');
+        await result.current.todoActions.addTodo('Second todo');
       });
 
       const secondTodoId = result.current.todos[0].id;
 
       await act(async () => {
-        await result.current.toggleTodo(secondTodoId);
+        await result.current.todoActions.toggleTodo(secondTodoId);
       });
 
       // After toggling, check allTodos to see both todos
@@ -533,13 +533,13 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Existing todo');
+        await result.current.todoActions.addTodo('Existing todo');
       });
 
       const originalTodos = result.current.todos;
 
       await act(async () => {
-        await result.current.toggleTodo('non-existent-id');
+        await result.current.todoActions.toggleTodo('non-existent-id');
       });
 
       expect(result.current.todos).toEqual(originalTodos);
@@ -553,13 +553,13 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Todo to persist');
+        await result.current.todoActions.addTodo('Todo to persist');
       });
 
       const todoId = result.current.todos[0].id;
 
       await act(async () => {
-        await result.current.toggleTodo(todoId);
+        await result.current.todoActions.toggleTodo(todoId);
       });
 
       // Verify fetch was called with POST to sync the toggle
@@ -584,8 +584,8 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Todo to delete');
-        await result.current.addTodo('Todo to keep');
+        await result.current.todoActions.addTodo('Todo to delete');
+        await result.current.todoActions.addTodo('Todo to keep');
       });
 
       expect(result.current.todos).toHaveLength(2);
@@ -593,7 +593,7 @@ describe('useTodos hook', () => {
       const todoToDeleteId = result.current.todos[1].id; // First todo added
 
       await act(async () => {
-        await result.current.deleteTodo(todoToDeleteId);
+        await result.current.todoActions.deleteTodo(todoToDeleteId);
       });
 
       // Soft delete: hidden from filtered todos but kept in allTodos
@@ -613,13 +613,13 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Existing todo');
+        await result.current.todoActions.addTodo('Existing todo');
       });
 
       const originalTodos = result.current.todos;
 
       await act(async () => {
-        await result.current.deleteTodo('non-existent-id');
+        await result.current.todoActions.deleteTodo('non-existent-id');
       });
 
       expect(result.current.todos).toEqual(originalTodos);
@@ -633,9 +633,9 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('First todo');
-        await result.current.addTodo('Second todo');
-        await result.current.addTodo('Third todo');
+        await result.current.todoActions.addTodo('First todo');
+        await result.current.todoActions.addTodo('Second todo');
+        await result.current.todoActions.addTodo('Third todo');
       });
 
       const middleTodoId = result.current.todos[1].id;
@@ -643,7 +643,7 @@ describe('useTodos hook', () => {
       const lastTodoText = result.current.todos[2].text;
 
       await act(async () => {
-        await result.current.deleteTodo(middleTodoId);
+        await result.current.todoActions.deleteTodo(middleTodoId);
       });
 
       // After soft delete, visible todos should be 2 (first and last)
@@ -662,15 +662,15 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Incomplete todo');
-        await result.current.addTodo('Complete todo');
+        await result.current.todoActions.addTodo('Incomplete todo');
+        await result.current.todoActions.addTodo('Complete todo');
       });
 
       const completeTodoId = result.current.todos[0].id;
 
       // Mark one todo as complete
       await act(async () => {
-        await result.current.toggleTodo(completeTodoId);
+        await result.current.todoActions.toggleTodo(completeTodoId);
       });
 
       // Check completed todo in allTodos since it's filtered out from active view
@@ -681,7 +681,7 @@ describe('useTodos hook', () => {
 
       // Delete the completed todo
       await act(async () => {
-        await result.current.deleteTodo(completeTodoId);
+        await result.current.todoActions.deleteTodo(completeTodoId);
       });
 
       expect(result.current.todos).toHaveLength(1);
@@ -697,14 +697,14 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Todo to delete');
-        await result.current.addTodo('Todo to keep');
+        await result.current.todoActions.addTodo('Todo to delete');
+        await result.current.todoActions.addTodo('Todo to keep');
       });
 
       const todoToDeleteId = result.current.todos[1].id;
 
       await act(async () => {
-        await result.current.deleteTodo(todoToDeleteId);
+        await result.current.todoActions.deleteTodo(todoToDeleteId);
       });
 
       // Verify fetch was called with POST to sync the delete
@@ -727,13 +727,13 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Only todo');
+        await result.current.todoActions.addTodo('Only todo');
       });
 
       const todoId = result.current.todos[0].id;
 
       await act(async () => {
-        await result.current.deleteTodo(todoId);
+        await result.current.todoActions.deleteTodo(todoId);
       });
 
       // Soft delete: todos are hidden from filtered view but kept in allTodos
@@ -753,14 +753,14 @@ describe('useTodos hook', () => {
 
       // Add a todo first
       await act(async () => {
-        await result.current.addTodo('Original todo text');
+        await result.current.todoActions.addTodo('Original todo text');
       });
 
       const todoId = result.current.todos[0].id;
 
       // Edit the todo
       await act(async () => {
-        await result.current.editTodo(todoId, 'Updated todo text');
+        await result.current.todoActions.editTodo(todoId, 'Updated todo text');
       });
 
       expect(result.current.todos).toHaveLength(1);
@@ -777,13 +777,13 @@ describe('useTodos hook', () => {
 
       // Add and complete a todo
       await act(async () => {
-        await result.current.addTodo('Completed todo');
+        await result.current.todoActions.addTodo('Completed todo');
       });
 
       const todoId = result.current.todos[0].id;
 
       await act(async () => {
-        await result.current.toggleTodo(todoId);
+        await result.current.todoActions.toggleTodo(todoId);
       });
 
       // Check completed status in allTodos since it's filtered out from active view
@@ -791,7 +791,7 @@ describe('useTodos hook', () => {
 
       // Edit the completed todo
       await act(async () => {
-        await result.current.editTodo(todoId, 'Updated completed todo');
+        await result.current.todoActions.editTodo(todoId, 'Updated completed todo');
       });
 
       // Check the edited todo in allTodos
@@ -807,7 +807,7 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Todo to edit');
+        await result.current.todoActions.addTodo('Todo to edit');
       });
 
       const todoId = result.current.todos[0].id;
@@ -817,7 +817,7 @@ describe('useTodos hook', () => {
       jest.advanceTimersByTime(10);
 
       await act(async () => {
-        await result.current.editTodo(todoId, 'Edited todo');
+        await result.current.todoActions.editTodo(todoId, 'Edited todo');
       });
 
       expect(result.current.todos[0].updatedAt).not.toEqual(originalUpdatedAt);
@@ -834,13 +834,13 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Todo to edit');
+        await result.current.todoActions.addTodo('Todo to edit');
       });
 
       const todoId = result.current.todos[0].id;
 
       await act(async () => {
-        await result.current.editTodo(todoId, 'Edited todo text');
+        await result.current.todoActions.editTodo(todoId, 'Edited todo text');
       });
 
       // Verify fetch was called with POST to sync the edit
@@ -864,14 +864,14 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Existing todo');
+        await result.current.todoActions.addTodo('Existing todo');
       });
 
       const originalTodos = [...result.current.todos];
 
       // Try to edit a non-existent todo
       await act(async () => {
-        await result.current.editTodo('non-existent-id', 'Should not work');
+        await result.current.todoActions.editTodo('non-existent-id', 'Should not work');
       });
 
       // Todos should remain unchanged
@@ -886,7 +886,7 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Original text');
+        await result.current.todoActions.addTodo('Original text');
       });
 
       const todoId = result.current.todos[0].id;
@@ -894,7 +894,7 @@ describe('useTodos hook', () => {
 
       // Try to edit with empty text
       await act(async () => {
-        await result.current.editTodo(todoId, '');
+        await result.current.todoActions.editTodo(todoId, '');
       });
 
       // Todo should remain unchanged
@@ -909,13 +909,13 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Original text');
+        await result.current.todoActions.addTodo('Original text');
       });
 
       const todoId = result.current.todos[0].id;
 
       await act(async () => {
-        await result.current.editTodo(todoId, '  Trimmed text  ');
+        await result.current.todoActions.editTodo(todoId, '  Trimmed text  ');
       });
 
       expect(result.current.todos[0].text).toBe('Trimmed text');
@@ -929,17 +929,17 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('First todo');
-        await result.current.addTodo('Second todo');
-        await result.current.addTodo('Third todo');
+        await result.current.todoActions.addTodo('First todo');
+        await result.current.todoActions.addTodo('Second todo');
+        await result.current.todoActions.addTodo('Third todo');
       });
 
       const firstId = result.current.todos[0].id;
       const thirdId = result.current.todos[2].id;
 
       await act(async () => {
-        await result.current.editTodo(firstId, 'Edited first todo');
-        await result.current.editTodo(thirdId, 'Edited third todo');
+        await result.current.todoActions.editTodo(firstId, 'Edited first todo');
+        await result.current.todoActions.editTodo(thirdId, 'Edited third todo');
       });
 
       expect(result.current.todos[0].text).toBe('Edited first todo');
@@ -1178,7 +1178,7 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('New todo with sortOrder');
+        await result.current.todoActions.addTodo('New todo with sortOrder');
       });
 
       expect(result.current.todos[0].sortOrder).toBeDefined();
@@ -1216,7 +1216,7 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('New todo at top');
+        await result.current.todoActions.addTodo('New todo at top');
       });
 
       // New todo should be at top (index 0)
@@ -1237,7 +1237,7 @@ describe('useTodos hook', () => {
       });
 
       await act(async () => {
-        await result.current.addTodo('Todo with sortOrder sync');
+        await result.current.todoActions.addTodo('Todo with sortOrder sync');
       });
 
       // Find the create POST call
@@ -1263,13 +1263,13 @@ describe('useTodos hook', () => {
 
       // Add todos sequentially with separate act() calls to ensure state updates
       await act(async () => {
-        await result.current.addTodo('First added');
+        await result.current.todoActions.addTodo('First added');
       });
       await act(async () => {
-        await result.current.addTodo('Second added');
+        await result.current.todoActions.addTodo('Second added');
       });
       await act(async () => {
-        await result.current.addTodo('Third added');
+        await result.current.todoActions.addTodo('Third added');
       });
 
       // Each new todo should appear at top with lower sortOrder

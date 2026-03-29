@@ -115,7 +115,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
 
       // Step 1: Create todo
       await act(async () => {
-        await result.current.addTodo('Lifecycle test todo');
+        await result.current.todoActions.addTodo('Lifecycle test todo');
       });
 
       let todo = result.current.todos[0];
@@ -130,7 +130,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       await new Promise((resolve) => setTimeout(resolve, 10)); // Ensure different timestamp
 
       await act(async () => {
-        await result.current.editTodo(todo.id, 'Edited lifecycle test todo');
+        await result.current.todoActions.editTodo(todo.id, 'Edited lifecycle test todo');
       });
 
       todo = result.current.todos[0];
@@ -145,7 +145,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       await new Promise((resolve) => setTimeout(resolve, 10));
 
       await act(async () => {
-        await result.current.toggleTodo(todo.id);
+        await result.current.todoActions.toggleTodo(todo.id);
       });
 
       todo = result.current.allTodos[0];
@@ -161,7 +161,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       await new Promise((resolve) => setTimeout(resolve, 10));
 
       await act(async () => {
-        await result.current.restoreTodo(todo.id);
+        await result.current.todoActions.restoreTodo(todo.id);
       });
 
       todo = result.current.todos[0];
@@ -173,7 +173,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
 
       // Step 5: Delete todo (soft delete)
       await act(async () => {
-        await result.current.deleteTodo(todo.id);
+        await result.current.todoActions.deleteTodo(todo.id);
       });
 
       // Soft delete: hidden from filtered view but still in allTodos
@@ -191,13 +191,13 @@ describe('Timestamp Lifecycle Integration Tests', () => {
 
       // Create and modify a todo
       await act(async () => {
-        await result.current.addTodo('Persistence test todo');
+        await result.current.todoActions.addTodo('Persistence test todo');
       });
 
       const todoId = result.current.todos[0].id;
 
       await act(async () => {
-        await result.current.editTodo(todoId, 'Modified for persistence test');
+        await result.current.todoActions.editTodo(todoId, 'Modified for persistence test');
       });
 
       const originalTodo = result.current.todos[0];
@@ -338,7 +338,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
 
       // Create a todo
       await act(async () => {
-        await result.current.addTodo('Interactive timestamp test');
+        await result.current.todoActions.addTodo('Interactive timestamp test');
       });
 
       let todo = result.current.todos[0];
@@ -346,10 +346,10 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       const MockedTodoItem = () => (
         <TodoItem
           todo={todo}
-          onToggle={(id) => result.current.toggleTodo(id)}
-          onDelete={(id) => result.current.deleteTodo(id)}
-          onEdit={(id, text) => result.current.editTodo(id, text)}
-          onRestore={(id) => result.current.restoreTodo(id)}
+          onToggle={(id) => result.current.todoActions.toggleTodo(id)}
+          onDelete={(id) => result.current.todoActions.deleteTodo(id)}
+          onEdit={(id, text) => result.current.todoActions.editTodo(id, text)}
+          onRestore={(id) => result.current.todoActions.restoreTodo(id)}
         />
       );
 
@@ -396,7 +396,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
       // Create multiple todos with different timestamps
       await act(async () => {
         for (let i = 0; i < 100; i++) {
-          await result.current.addTodo(`Todo ${i}`);
+          await result.current.todoActions.addTodo(`Todo ${i}`);
         }
       });
 
@@ -479,7 +479,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
 
       // Should still work normally for new todos
       await act(async () => {
-        await result.current.addTodo('Recovery test todo');
+        await result.current.todoActions.addTodo('Recovery test todo');
       });
 
       expect(result.current.todos).toHaveLength(1);
@@ -565,7 +565,7 @@ describe('Timestamp Lifecycle Integration Tests', () => {
 
       // Create todos with different date formats
       await act(async () => {
-        await result.current.addTodo('UTC timezone test');
+        await result.current.todoActions.addTodo('UTC timezone test');
       });
 
       const todo = result.current.todos[0];

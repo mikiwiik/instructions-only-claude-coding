@@ -10,6 +10,7 @@ import ShareIndicator from './ShareIndicator';
 import { Todo, TodoFilter as TodoFilterType } from '../types/todo';
 import { RateLimitState } from '../hooks/useTodoSync';
 import { ShareInfo } from '../hooks/useTodos';
+import { TodoActions } from '../hooks/useTodoOperations';
 import { getActivityCount } from '../utils/activity';
 
 interface ShareActionConfig {
@@ -25,16 +26,7 @@ interface TodoPageLayoutProps {
   filter: TodoFilterType;
   isLoading?: boolean;
   rateLimitState: RateLimitState;
-  addTodo: (text: string) => void;
-  toggleTodo: (id: string) => void;
-  restoreTodo: (id: string) => void;
-  deleteTodo: (id: string) => void;
-  permanentlyDeleteTodo: (id: string) => void;
-  restoreDeletedTodo: (id: string) => void;
-  editTodo: (id: string, text: string) => void;
-  reorderTodos: (sourceIndex: number, destinationIndex: number) => void;
-  moveUp: (id: string) => void;
-  moveDown: (id: string) => void;
+  todoActions: TodoActions;
   setFilter: (filter: TodoFilterType) => void;
   /** Optional notice to display above the main content */
   notice?: React.ReactNode;
@@ -96,16 +88,7 @@ export default function TodoPageLayout({
   filter,
   isLoading = false,
   rateLimitState,
-  addTodo,
-  toggleTodo,
-  restoreTodo,
-  deleteTodo,
-  permanentlyDeleteTodo,
-  restoreDeletedTodo,
-  editTodo,
-  reorderTodos,
-  moveUp,
-  moveDown,
+  todoActions,
   setFilter,
   notice,
   shareAction,
@@ -171,7 +154,7 @@ export default function TodoPageLayout({
           aria-label='Todo application'
         >
           <TodoForm
-            onAddTodo={addTodo}
+            onAddTodo={todoActions.addTodo}
             shareButton={
               shareAction?.enabled ? (
                 <ShareButton
@@ -194,15 +177,15 @@ export default function TodoPageLayout({
           ) : (
             <TodoList
               todos={todos}
-              onToggle={toggleTodo}
-              onDelete={deleteTodo}
-              onEdit={editTodo}
-              onRestore={restoreTodo}
-              onPermanentlyDelete={permanentlyDeleteTodo}
-              onRestoreDeleted={restoreDeletedTodo}
-              reorderTodos={reorderTodos}
-              moveUp={moveUp}
-              moveDown={moveDown}
+              onToggle={todoActions.toggleTodo}
+              onDelete={todoActions.deleteTodo}
+              onEdit={todoActions.editTodo}
+              onRestore={todoActions.restoreTodo}
+              onPermanentlyDelete={todoActions.permanentlyDeleteTodo}
+              onRestoreDeleted={todoActions.restoreDeletedTodo}
+              reorderTodos={todoActions.reorderTodos}
+              moveUp={todoActions.moveUp}
+              moveDown={todoActions.moveDown}
             />
           )}
         </main>
