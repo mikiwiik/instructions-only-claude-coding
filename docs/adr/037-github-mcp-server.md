@@ -52,8 +52,9 @@ integration for Claude Code, replacing `gh` CLI usage in slash commands and agen
 
 - **Transport**: HTTP (connects to `https://api.githubcopilot.com/mcp/`, no Docker required)
 - **Scope**: Project-level (`.mcp.json` in repo root, shared via git)
-- **Authentication**: GitHub Personal Access Token via `${GITHUB_PERSONAL_ACCESS_TOKEN}` environment variable
-- **Token type**: Fine-grained PAT recommended, scoped to required permissions
+- **Authentication**: `${GITHUB_PERSONAL_ACCESS_TOKEN}` environment variable, derived from `gh auth token` via
+  SessionStart hook (no separate PAT needed)
+- **Token fallback**: Fine-grained PAT can override the hook for tighter scope control in team environments
 
 ### Migration Strategy
 
@@ -93,9 +94,11 @@ Phased adoption across 4 issues:
 
 ### Neutral
 
-- **PAT management**: Shifts from `gh auth login` (browser OAuth) to PAT environment variable (already familiar
-  pattern from Upstash Redis setup)
-- **Team onboarding**: Each developer must set `GITHUB_PERSONAL_ACCESS_TOKEN` env var (documented in local dev setup)
+- **Token scope**: The `gh` OAuth token has broader scopes (`repo`, `workflow`, `gist`) than MCP strictly needs.
+  This is acceptable because: the token is sent to GitHub's own endpoint (not a third party), and these same
+  scopes are already used by every `gh` CLI call Claude executes today. For tighter security in team environments,
+  a fine-grained PAT can override the hook.
+- **Single auth source**: Both `gh` CLI and MCP now use the same token, simplifying onboarding (just `gh auth login`)
 
 ## Alternatives Considered
 

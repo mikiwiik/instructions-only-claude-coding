@@ -9,7 +9,7 @@ practices, see [Development Documentation](../development/README.md).
 - **npm**: Version 10.x or higher
 - **Git**: For version control
 - **jq**: JSON processor used by Claude commands ([installation](#jq-installation))
-- **GitHub PAT**: Personal Access Token for MCP server ([setup](#github-mcp-server-setup))
+- **GitHub CLI**: Authenticated via `gh auth login` ([MCP server setup](#github-mcp-server-setup))
 - **Modern Browser**: For development and testing
 
 ## Claude Code Setup
@@ -42,37 +42,55 @@ claude
 This project uses GitHub's official MCP server for native GitHub API integration in Claude Code. The project-scope
 configuration is in `.mcp.json` (shared via git).
 
-### 1. Create a GitHub Personal Access Token
+### How It Works
 
-1. Go to [GitHub Settings > Developer settings > Fine-grained tokens](https://github.com/settings/personal-access-tokens/new)
-2. Set a descriptive name (e.g., "Claude Code MCP - instructions-only-claude-coding")
-3. Set expiration as appropriate for your security policy
-4. Under **Repository access**, select "Only select repositories" and choose this repo
-5. Under **Permissions**, grant:
-   - **Repository permissions**: Contents (Read), Issues (Read and write), Pull requests (Read and write),
-     Metadata (Read)
-   - **Organization permissions**: Projects (Read and write) — required for GitHub Projects integration
-6. Click "Generate token" and copy the token value
+The MCP server token is **automatically derived from your `gh` CLI authentication** via the SessionStart hook in
+`.claude/settings.json`. No separate PAT is needed.
 
-### 2. Set the Environment Variable
+The hook runs `gh auth token` on session start and exports the result as `GITHUB_PERSONAL_ACCESS_TOKEN`, which
+`.mcp.json` references via env var expansion.
 
-Add the token to your shell profile (`~/.zshrc`, `~/.bashrc`, or equivalent):
+### Prerequisites
+
+1. **Authenticate with GitHub CLI** (if not already done):
+
+   ```bash
+   gh auth login
+   ```
+
+2. **Verify your token has sufficient scopes**:
+
+   ```bash
+   gh auth status
+   ```
+
+   Required scopes: `repo` (for issues, PRs, contents). If you need GitHub Projects integration, also add
+   `project` scope:
+
+   ```bash
+   gh auth refresh --hostname github.com --scopes project
+   ```
+
+3. **Restart Claude Code** — the SessionStart hook will pick up the token automatically.
+
+### Verification
+
+After restarting Claude Code, the GitHub MCP server should appear in the connected servers list. If you
+encounter issues, see [MCP Troubleshooting](../reference/troubleshooting.md#github-mcp-server-issues).
+
+### Alternative: Fine-Grained PAT
+
+For tighter security (e.g., team environments), you can use a fine-grained PAT instead of the `gh` OAuth token.
+Create one at [GitHub Settings > Fine-grained tokens](https://github.com/settings/personal-access-tokens/new)
+with only the permissions MCP needs (Contents read, Issues read/write, Pull requests read/write, Projects
+read/write), then set it in your shell profile:
 
 ```bash
 export GITHUB_PERSONAL_ACCESS_TOKEN="github_pat_your_token_here"
 ```
 
-Reload your shell: `source ~/.zshrc`
-
-### 3. Verify MCP Connectivity
-
-After setting the env var, restart Claude Code. The MCP server should connect automatically. You can verify
-by checking that GitHub MCP tools appear when Claude Code starts (look for "github" in the MCP server list).
-
-If you encounter issues, see [MCP Troubleshooting](../reference/troubleshooting.md#github-mcp-server-issues).
-
-**Note**: The `.mcp.json` config uses `${GITHUB_PERSONAL_ACCESS_TOKEN}` env var expansion — the token is never
-stored in the repository.
+This overrides the SessionStart hook's `gh auth token` derivation. See [ADR-037](../adr/037-github-mcp-server.md)
+for the security trade-off discussion.
 
 See [ADR-037](../adr/037-github-mcp-server.md) for the architectural decision.
 
