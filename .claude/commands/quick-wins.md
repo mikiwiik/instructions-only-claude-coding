@@ -15,7 +15,7 @@ Find quick win opportunities from open, triaged GitHub issues:
    The MCP tool returns structured data with number, title, labels, state, and assignees — no `jq` pipeline needed.
 
    > **Note**: MCP has no project-level tools, so project Status/Lifecycle fields are not available. Use issue
-   > labels and state (OPEN) as filtering criteria instead. Issues labeled `icebox` or `blocked` are excluded.
+   > labels (priority-\*, complexity-\*) and state (OPEN) as filtering criteria instead.
 
    > **Fallback**: If MCP call fails, use `gh project item-list 1 --owner mikiwiik --format json |
    > jq '{items: [.items[] | {content: {number: .content.number}, title: .title, labels: .labels,

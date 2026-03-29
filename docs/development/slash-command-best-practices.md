@@ -138,51 +138,19 @@ awk '{printf "Estimated tokens: %d\n", $1/3.5}' < <(wc -c < data.json)
 
 ## Examples from Project
 
-### ✅ Good Example: `/export-closed-issues`
+### Current: MCP-First Commands
 
-Already token-efficient with specific field selection:
+All four read-only commands (`/user-info`, `/export-closed-issues`, `/select-next-issue`, `/quick-wins`) now use
+GitHub MCP tools as their primary data source, with `gh` CLI as documented fallbacks. See each command file in
+`.claude/commands/` for the current implementation.
 
-```bash
-gh issue list --state closed \
-  --search "closed:>=$START_DATE" \
-  --json number,title,state,closedAt,createdAt,author,assignees,labels,url \
-  --limit 1000
-```
+### Historical: CLI Token Optimization (#320, #321)
 
-### ✅ Fixed Example: `/select-next-issue`
+Before MCP migration, these commands used `gh` CLI + `jq` pipelines. Token optimization was critical:
 
-Original problem, optimized solution:
-
-```markdown
-**Before (#320):**
-
-- Command: `gh project item-list 1 --owner mikiwiik --format json`
-- Token consumption: 45,486 tokens
-- Result: Read tool failure
-
-**After (#320):**
-
-- Added jq filter to strip issue bodies
-- Token consumption: 2,728 tokens
-- Result: 94% reduction, command works reliably
-```
-
-### ✅ Fixed Example: `/quick-wins`
-
-Applied same optimization pattern:
-
-```markdown
-**Before (#321):**
-
-- Same issue as /select-next-issue
-- Token consumption: 45,486 tokens
-
-**After (#321):**
-
-- Applied identical jq optimization
-- Token consumption: 2,728 tokens
-- Result: 94% reduction
-```
+- **Problem**: `gh project item-list` returned 45,486 tokens (full issue bodies)
+- **Fix**: `jq` filters stripped to metadata-only → 2,728 tokens (94% reduction)
+- **Current state**: MCP returns structured data natively, eliminating both the token problem and `jq` pipelines
 
 ## MCP Query Patterns
 
@@ -225,6 +193,17 @@ Not all `gh` CLI functionality has MCP equivalents. Always document:
 ```markdown
 > **Fallback**: If MCP call fails, use `gh issue list --state closed ...`
 ```
+
+### ✅ Pattern 7: Handle MCP Pagination
+
+MCP `list_issues` returns up to 100 results per page. To paginate:
+
+1. Check `pageInfo.hasNextPage` in the response
+2. If `true`, pass `pageInfo.endCursor` as the `after` parameter in the next call
+3. Stop when `hasNextPage` is `false` or you have enough data for analysis
+
+For most slash commands, a single page of 100 results is sufficient. Only paginate when the command explicitly
+needs comprehensive data (e.g., `/export-closed-issues` for reporting).
 
 ### MCP vs CLI Coverage
 
