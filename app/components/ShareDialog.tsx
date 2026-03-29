@@ -139,16 +139,10 @@ export default function ShareDialog({
     }
   }, [isOpen]);
 
-  const handleCopy = useCallback(async () => {
-    if (isSharing || error || !shareUrl) return;
-    await copy();
-  }, [isSharing, error, shareUrl, copy]);
-
-  // Keyboard event handlers - wrap async handleCopy to return void
   useDialogKeyboard({
     isOpen,
     onClose,
-    onConfirm: () => void handleCopy(),
+    onConfirm: () => void copy(),
     dialogRef,
     isLoading: isSharing,
     isConfirmDisabled: isSharing || !!error,
@@ -222,11 +216,7 @@ export default function ShareDialog({
           </p>
 
           {showUrlInput && (
-            <ShareUrlInput
-              shareUrl={shareUrl}
-              copied={copied}
-              onCopy={handleCopy}
-            />
+            <ShareUrlInput shareUrl={shareUrl} copied={copied} onCopy={copy} />
           )}
 
           {/* Action buttons */}
