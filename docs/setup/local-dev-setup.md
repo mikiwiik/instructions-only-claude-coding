@@ -50,11 +50,11 @@ configuration is in `.mcp.json` (shared via git).
    gh auth login
    ```
 
-2. **Verify scopes** — required: `repo`. For GitHub Projects, also add `project`:
+2. **Verify scopes** — required: `repo`. For GitHub Projects, also add `read:project`:
 
    ```bash
    gh auth status
-   gh auth refresh --hostname github.com --scopes project  # if needed
+   gh auth refresh --hostname github.com --scopes read:project  # if needed
    ```
 
 3. **Add a Claude alias** to your shell profile (`~/.zshrc` or `~/.bashrc`):
