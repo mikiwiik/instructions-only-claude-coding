@@ -5,12 +5,13 @@ import { Link2, Copy, Check } from 'lucide-react';
 import { copyToClipboard } from '../lib/list-manager';
 
 export interface ShareIndicatorProps {
-  /** The shareable URL to display */
   shareUrl: string;
+  className?: string;
 }
 
 export default function ShareIndicator({
   shareUrl,
+  className = '',
 }: Readonly<ShareIndicatorProps>) {
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -30,7 +31,7 @@ export default function ShareIndicator({
 
   return (
     <output
-      className='flex items-center gap-2 text-sm text-muted-foreground bg-blue-50 border border-blue-200 rounded-lg px-3 py-2'
+      className={`flex items-center gap-2 text-sm text-muted-foreground bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 ${className}`.trim()}
       aria-label='Shared list indicator'
     >
       <Link2

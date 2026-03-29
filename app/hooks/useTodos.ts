@@ -12,7 +12,7 @@
  * - useTodos('list-123') - Shared mode: syncs with backend via API
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Todo, TodoState, TodoFilter } from '../types/todo';
 import {
   convertTodoDates,
@@ -21,13 +21,12 @@ import {
   RateLimitState,
 } from './useTodoSync';
 import { useTodoOperations } from './useTodoOperations';
+import { MAIN_LIST_ID } from './useTodoSync';
 import { buildListUrl } from '../lib/list-manager';
 import { logger } from '../lib/logger';
 
-/** Share info for shared lists */
 export interface ShareInfo {
   url: string;
-  listId: string;
 }
 
 /** No-op sync function for local mode - performs no API calls */
@@ -170,9 +169,12 @@ export function useTodos(listId?: string) {
     }));
   }, []);
 
-  // Build share info for shared mode
-  const shareInfo: ShareInfo | undefined =
-    isSharedMode && listId ? { url: buildListUrl(listId), listId } : undefined;
+  // Main list uses a beta notice instead of the share indicator
+  const isUserSharedList = listId !== undefined && listId !== MAIN_LIST_ID;
+  const shareInfo = useMemo<ShareInfo | undefined>(
+    () => (isUserSharedList ? { url: buildListUrl(listId) } : undefined),
+    [isUserSharedList, listId]
+  );
 
   return {
     todos: getFilteredTodos(),
