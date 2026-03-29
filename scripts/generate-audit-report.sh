@@ -10,6 +10,7 @@ set -euo pipefail
 #
 # Sets GitHub Actions output VULNERABILITIES_FOUND=true if threshold exceeded.
 
+# Default to moderate for local/weekly-scan use; callers override for stricter CI gates
 AUDIT_LEVEL="${1:---audit-level=moderate}"
 
 mkdir -p reports
