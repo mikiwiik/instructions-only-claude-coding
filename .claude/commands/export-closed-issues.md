@@ -9,18 +9,32 @@ Export closed GitHub issues to CSV format for analysis and reporting.
 
 **1. Determine Date Range:**
 
-- If `$1` argument provided: Calculate start date as N days ago
+- If `$1` argument provided: Calculate start date as N days ago from today
 - If no argument: Use first day of current month as start date
 
-**2. Fetch Closed Issues:**
-Execute the following command to retrieve closed issues:
+**2. Fetch Closed Issues (via MCP):**
 
-```bash
-gh issue list --state closed --search "closed:>=YYYY-MM-DD" --json number,title,state,closedAt,createdAt,author,assignees,labels,url --limit 1000
-```
+Use the `mcp__github__list_issues` tool to retrieve closed issues:
+
+- `owner`: `mikiwiik`
+- `repo`: `instructions-only-claude-coding`
+- `state`: `CLOSED`
+- `since`: Start date in ISO 8601 format (e.g., `2026-03-01T00:00:00Z`)
+- `orderBy`: `UPDATED_AT`, `direction`: `DESC`
+- `perPage`: `100` (paginate with `after` cursor if more results)
+
+The MCP tool returns structured data with number, title, state, createdAt, closedAt, author, assignees, labels,
+and URL — no `jq` transformation needed.
+
+> **Note**: The `since` filter returns issues updated since that date, which may include issues closed before the
+> date range. Filter the results by `closedAt` date to ensure accuracy.
+
+> **Fallback**: If MCP call fails, use `gh issue list --state closed --search "closed:>=$START_DATE"
+> --json number,title,state,closedAt,createdAt,author,assignees,labels,url --limit 1000`.
 
 **3. Transform to CSV:**
-Use `jq` to convert JSON to CSV format with the following columns:
+
+From the structured MCP response, generate CSV with these columns:
 
 - Number
 - Title
@@ -31,6 +45,8 @@ Use `jq` to convert JSON to CSV format with the following columns:
 - Assignees (semicolon-separated logins)
 - Labels (semicolon-separated names)
 - URL
+
+Write the CSV header and data rows directly — no `jq` pipeline needed since MCP returns structured data.
 
 **4. Generate Output File:**
 
@@ -44,31 +60,6 @@ Display to user:
 - Number of issues exported
 - Date range covered
 - Output filename and location
-
-## Implementation Details
-
-**Date Calculation:**
-
-```bash
-# For current month (no argument)
-START_DATE=$(date '+%Y-%m-01')
-DATE_LABEL=$(date '+%Y-%m')
-
-# For N days ago (with argument)
-START_DATE=$(date -v-${1}d '+%Y-%m-%d')
-DATE_LABEL="past_${1}_days"
-```
-
-**CSV Generation Command:**
-
-```bash
-gh issue list --state closed --search "closed:>=$START_DATE" --json number,title,state,closedAt,createdAt,author,assignees,labels,url --limit 1000 | \
-jq -r '["Number","Title","State","Created At","Closed At","Author","Assignees","Labels","URL"],
-       (.[] | [.number, .title, .state, .createdAt, .closedAt, .author.login,
-               ([.assignees[].login] | join(";")),
-               ([.labels[].name] | join(";")),
-               .url]) | @csv' > "closed_issues_${DATE_LABEL}.csv"
-```
 
 ## Usage Examples
 
