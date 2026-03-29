@@ -22,6 +22,7 @@ import {
   MAIN_LIST_ID,
 } from './useTodoSync';
 import { useTodoOperations } from './useTodoOperations';
+export type { TodoActions } from './useTodoOperations';
 import { buildListUrl } from '../lib/list-manager';
 import { logger } from '../lib/logger';
 
@@ -184,6 +185,6 @@ export function useTodos(listId?: string) {
     setFilter,
     rateLimitState,
     clearRateLimitState,
-    ...operations,
+    todoActions: operations,
   };
 }
