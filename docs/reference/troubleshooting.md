@@ -139,19 +139,14 @@ Follow [Slash Command Best Practices](../development/slash-command-best-practice
 
 #### MCP Server Not Connecting
 
-**Problem**: Claude Code doesn't show GitHub MCP tools or reports MCP connection failure
+**Problem**: Claude Code doesn't show GitHub MCP tools or `/doctor` warns about missing `GITHUB_PERSONAL_ACCESS_TOKEN`
 
 **Solutions:**
 
-- **Check `gh` auth**: Run `gh auth status` — the SessionStart hook derives the MCP token from `gh auth token`
-- **Verify token is set**: Run `[ -n "$GITHUB_PERSONAL_ACCESS_TOKEN" ] && echo "Token set (${#GITHUB_PERSONAL_ACCESS_TOKEN} chars)" || echo "Token NOT set"`
-- **Restart Claude Code**: MCP servers connect on startup; the SessionStart hook runs `gh auth token` at start
+- **Check env var**: Run `echo $GITHUB_PERSONAL_ACCESS_TOKEN` — if empty, add `export GITHUB_PERSONAL_ACCESS_TOKEN="$(gh auth token)"` to `~/.zshrc`
+- **Re-source profile**: Run `source ~/.zshrc` then restart Claude Code
+- **Check `gh` auth**: Run `gh auth status` — if not authenticated, run `gh auth login`
 - **Check `.mcp.json`**: Verify the file exists in the repo root and contains valid JSON
-- **Re-authenticate**: If `gh auth token` returns nothing, run `gh auth login`
-
-#### `/doctor` Warns About Missing `GITHUB_PERSONAL_ACCESS_TOKEN`
-
-False positive — `/doctor` checks `.mcp.json` statically and doesn't see that the SessionStart hook already set the variable. Safe to ignore if `gh auth token` works and MCP tools connect.
 
 #### MCP Tool Returns Permission Error
 
@@ -161,7 +156,7 @@ False positive — `/doctor` checks `.mcp.json` statically and doesn't see that 
 
 - **Check token scopes**: Run `gh auth status` and verify `repo` scope is present
 - **Add project scope**: Run `gh auth refresh --hostname github.com --scopes project` for GitHub Projects access
-- **Restart Claude Code**: After changing scopes, restart so the hook picks up the new token
+- **Re-source and restart**: Run `source ~/.zshrc` then restart Claude Code
 
 #### MCP vs `gh` CLI — When to Use Which
 
