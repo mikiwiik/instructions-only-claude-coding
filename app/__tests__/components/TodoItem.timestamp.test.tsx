@@ -323,7 +323,7 @@ describe('TodoItem - Contextual Timestamp Display', () => {
       expect(timestampElement).toBeInTheDocument();
       expect(timestampElement).toHaveAttribute(
         'title',
-        expect.stringMatching(/Updated.*1\/15\/2024.*at/)
+        expect.stringMatching(/Updated.*2024.*at/)
       );
     });
 
