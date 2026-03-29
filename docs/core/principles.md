@@ -83,19 +83,6 @@ git commit -m "test: add edge cases for feature X (#33)"
 git commit -m "feat: handle edge cases in feature X (#33)"
 ```
 
-**Documentation**:
-
-- **Strategic**: [../adr/010-atomic-commit-strategy.md](../adr/010-atomic-commit-strategy.md) - Decision rationale
-- **Operational**: [workflows.md](workflows.md#atomic-commit-strategy) - Complete workflow integration
-- **Visual**: [../diagrams/development-workflow.md](../diagrams/development-workflow.md#tdd-cycle-detail) - TDD commit
-  pattern
-
-**Related Principles**:
-
-- **Enables**: AI Attribution (#2) - Each atomic commit gets proper attribution
-- **Supports**: Quality First (#3) - Each commit represents tested, working state
-- **Foundation for**: Agentic Methodology (#1) - Makes AI decision-making transparent
-
 ---
 
 ### 3. AI Attribution
@@ -133,26 +120,6 @@ Co-Authored-By: [Human Name] <human.email@domain.com>
 3. **Co-Author**: Human collaborator with proper credit
 4. **Conventional Format**: Standard commit message structure
 
-**What This Achieves**:
-
-- **Git History**: Shows AI authorship on every commit
-- **GitHub Insights**: AI contribution metrics visible in repository statistics
-- **PR Attribution**: Clear indication of AI-generated changes in pull requests
-- **Co-Authorship**: Maintains human strategic ownership while crediting AI implementation
-
-**Documentation**:
-
-- **Strategic**: [../adr/015-ai-agent-attribution-strategy.md](../adr/015-ai-agent-attribution-strategy.md) - Complete
-  rationale and alternatives
-- **Operational**: [workflows.md](workflows.md#ai-agent-attribution) - Attribution requirements and format
-- **Configuration**: `.gitconfig` - Automatic attribution setup
-
-**Related Principles**:
-
-- **Depends on**: Atomic Commits (#2) - Each commit gets individual attribution
-- **Proves**: Agentic Methodology (#1) - Makes 100% AI implementation measurable
-- **Supports**: Transparency in instruction-only development
-
 ---
 
 ### 4. Quality First
@@ -164,71 +131,9 @@ Co-Authored-By: [Human Name] <human.email@domain.com>
 One common concern about AI-generated code is quality. This project **proves AI can maintain professional-grade
 standards** when properly instructed and equipped with quality gates.
 
-Quality First is not just about good code - it's about demonstrating that **instruction-only development can achieve
-enterprise-level quality** without manual human intervention in implementation.
+Quality gates allow safe auto-merge without human verification, proving AI can maintain enterprise standards.
 
-**Why Quality Matters for Instruction-Only Development**:
-
-1. **Builds Confidence**: Proves AI can be trusted with production code
-2. **Enables Automation**: Quality gates allow safe auto-merge without human verification
-3. **Demonstrates Capability**: Shows AI maintains standards across entire lifecycle
-4. **Creates Scalability**: Automated quality enables instruction-only development at scale
-
-**Quality Components**:
-
-1. **Test-Driven Development (TDD)**
-   - Tests written before implementation (Red → Green → Refactor)
-   - 80%+ code coverage, 100% for critical paths
-   - React Testing Library for component testing
-   - See [../adr/004-test-driven-development.md](../adr/004-test-driven-development.md)
-
-2. **Strict TypeScript**
-   - No `any` types (enforced as error per ADR-022)
-   - 100% type coverage for application code
-   - Comprehensive type safety including test code
-   - See [../guidelines/typescript-standards.md](../guidelines/typescript-standards.md)
-
-3. **Zero-Warning ESLint Policy**
-   - All ESLint errors and warnings must be resolved
-   - Pre-commit hooks block non-compliant code
-   - See [../adr/009-pre-commit-linting-strategy.md](../adr/009-pre-commit-linting-strategy.md)
-
-4. **Code Complexity Standards**
-   - Cognitive complexity ≤15 per function
-   - Nesting depth ≤4 levels
-   - Cyclomatic complexity ≤15 per function
-   - See [../adr/028-code-complexity-standards.md](../adr/028-code-complexity-standards.md)
-
-5. **Accessibility Compliance**
-   - WCAG 2.2 AA standards adherence
-   - 44px touch targets, keyboard navigation, screen reader support
-   - See [../ux/accessibility-requirements.md](../ux/accessibility-requirements.md)
-
-**Enforcement Layers**:
-
-1. **Pre-commit Hooks**: ESLint, Prettier, TypeScript, complexity checks (catch issues before version control)
-2. **CI Pipeline**: Build, test suite, lint, security scanning (comprehensive validation)
-3. **SonarCloud**: Code quality analysis, security hotspots, coverage tracking
-4. **Manual Review**: Human verification of quality standards adherence
-
-**Documentation**:
-
-- **Strategic**:
-  - [../adr/004-test-driven-development.md](../adr/004-test-driven-development.md)
-  - [../adr/028-code-complexity-standards.md](../adr/028-code-complexity-standards.md)
-  - [../adr/022-strict-typescript-type-safety.md](../adr/022-strict-typescript-type-safety.md)
-- **Operational**: [workflows.md](workflows.md#quality-gates) - Quality gates and commands
-- **Guidelines**:
-  - [../testing/testing-guidelines.md](../testing/testing-guidelines.md) - Comprehensive testing practices
-  - [../guidelines/code-complexity-guidelines.md](../guidelines/code-complexity-guidelines.md) - Refactoring patterns
-  - [../guidelines/typescript-standards.md](../guidelines/typescript-standards.md) - Type safety best practices
-  - [../ux/accessibility-requirements.md](../ux/accessibility-requirements.md) - WCAG 2.2 AA compliance
-
-**Related Principles**:
-
-- **Enables**: Automated Workflow (#5) - Quality gates allow safe automation
-- **Proves**: Agentic Methodology (#1) - AI can maintain enterprise standards
-- **Requires**: TDD commitment and systematic approach
+For thresholds, enforcement, and definition of done, see [Quality Standards](quality-standards.md).
 
 ---
 
@@ -247,70 +152,11 @@ Automation is the **force multiplier** for instruction-only development. Without
 
 With automation, **AI can handle complete development lifecycle** with minimal human touchpoints.
 
-**Why Automation Enables Scalability**:
-
-1. **Pre-commit hooks** catch issues before they reach version control
-2. **CI pipeline** validates comprehensive quality without human oversight
-3. **Auto-merge** enables continuous delivery with minimal human intervention
-4. **GitHub Projects** tracks status automatically as work progresses
-
 The result: **Human provides strategic instruction, automation handles all tactical verification**.
 
-**Automation Layers**:
-
-#### Layer 1: Pre-commit Validation
-
-- ESLint: Zero errors/warnings policy
-- Prettier: Consistent code formatting
-- TypeScript: Strict type checking
-- Complexity Analysis: ADR-028 compliance
-- Markdownlint: Documentation standards
-
-#### Layer 2: CI Pipeline (GitHub Actions)
-
-- Build verification across platforms
-- Complete test suite execution
-- ESLint and TypeScript validation
-- Security scanning (SonarCloud)
-- Coverage reporting
-
-#### Layer 3: Auto-merge Protocol
-
-- Automatic PR approval when CI passes
-- Rebase merge strategy (preserves atomic commits)
-- Automatic branch cleanup after merge
-- See [workflows.md](workflows.md#auto-merge-protocol)
-
-#### Layer 4: GitHub Projects Automation
-
-- Status: Todo → In Progress (via `/work-on` command)
-- Status: In Progress → Done (when PR merged)
-- Lifecycle tracking (Icebox → Backlog → Active → Done)
-- See [../setup/github-projects-setup.md](../setup/github-projects-setup.md)
-
-**Benefits for Instruction-Only Development**:
-
-- **Confidence**: Automation ensures quality without manual verification
-- **Speed**: No waiting for human to run checks or approve PRs
-- **Consistency**: Same quality gates every time, no human error
-- **Scalability**: Can handle high volume of changes via instruction
-- **Focus**: Human focuses on strategy, not tactical quality checks
-
-**Documentation**:
-
-- **Strategic**:
-  - [../adr/009-pre-commit-linting-strategy.md](../adr/009-pre-commit-linting-strategy.md) - Pre-commit automation
-  - [../adr/011-github-actions-ci-cd.md](../adr/011-github-actions-ci-cd.md) - CI/CD pipeline
-- **Operational**:
-  - [workflows.md](workflows.md#auto-merge-protocol) - Auto-merge workflow
-  - [workflows.md](workflows.md#quality-gates) - Quality gate integration
-  - [../setup/github-projects-setup.md](../setup/github-projects-setup.md) - Projects automation
-
-**Related Principles**:
-
-- **Requires**: Quality First (#3) - Must have quality gates to automate safely
-- **Enables**: Agentic Methodology (#1) - Allows AI to handle complete lifecycle
-- **Supports**: Scalable instruction-only development at enterprise level
+Four automation layers — pre-commit hooks, CI pipeline, auto-merge protocol, and GitHub Projects — ensure quality
+without manual intervention. For configuration details, see [workflows.md](workflows.md#quality-gates) and
+[github-projects-setup.md](../setup/github-projects-setup.md).
 
 ---
 
@@ -387,42 +233,9 @@ graph LR
 This demonstrates: **Natural language instruction → Production-ready feature** with professional standards maintained
 throughout.
 
-## Strategic Importance
-
-These five principles together demonstrate that:
-
-- **100% AI implementation** via natural language is viable for production software
-- **Professional-grade quality** can be maintained entirely through AI execution
-- **Enterprise-level standards** (TDD, CI/CD, documentation) work with instruction-only development
-- **Human strategic focus** combined with **AI tactical execution** creates effective collaboration
-- **Scalable methodology** that can handle complex software development without manual coding
-
-This is not theoretical - this entire codebase proves it works in practice.
-
 ## See Also
 
-### Core Documentation
-
-- **[workflows.md](workflows.md)** - Git workflow, commits, PR protocol
+- **[workflows.md](workflows.md)** - Git workflow, commits, PR protocol, quality gates
+- **[quality-standards.md](quality-standards.md)** - Thresholds, enforcement, definition of done
 - **[../../CLAUDE.md](../../CLAUDE.md)** - Essential guiding principles for AI agents
-
-### Operational Documentation
-
-- **[workflows.md](workflows.md)** - Code quality standards and daily practices
-- **[../development/project-management.md](../development/project-management.md)** - Issue tracking workflow
-- **[../development/README.md](../development/README.md)** - Development documentation overview
-
-### Visual Documentation
-
-- **[../diagrams/development-workflow.md](../diagrams/development-workflow.md)** - Complete workflow visualization
-- **[../diagrams/architecture-flow.md](../diagrams/architecture-flow.md)** - System architecture
-
-### Architecture Decision Records
-
-- **[../adr/010-atomic-commit-strategy.md](../adr/010-atomic-commit-strategy.md)** - Atomic commits rationale
-- **[../adr/015-ai-agent-attribution-strategy.md](../adr/015-ai-agent-attribution-strategy.md)** - AI attribution
-  strategy
-- **[../adr/004-test-driven-development.md](../adr/004-test-driven-development.md)** - TDD adoption
-- **[../adr/028-code-complexity-standards.md](../adr/028-code-complexity-standards.md)** - Complexity standards
-- **[../adr/009-pre-commit-linting-strategy.md](../adr/009-pre-commit-linting-strategy.md)** - Pre-commit automation
-- **[../adr/011-github-actions-ci-cd.md](../adr/011-github-actions-ci-cd.md)** - CI/CD pipeline
+- **[../diagrams/development-workflow.md](../diagrams/development-workflow.md)** - Process visualization
