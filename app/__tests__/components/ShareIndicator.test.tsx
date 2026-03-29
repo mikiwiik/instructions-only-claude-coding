@@ -96,6 +96,29 @@ describe('ShareIndicator', () => {
       jest.useRealTimers();
     });
 
+    it('cleans up timeout on unmount to prevent memory leaks', async () => {
+      jest.useFakeTimers();
+      const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+      const { unmount } = render(<ShareIndicator {...defaultProps} />);
+
+      const copyButton = screen.getByRole('button', { name: /copy.*url/i });
+      await user.click(copyButton);
+
+      await waitFor(() => {
+        expect(screen.getByText(/copied/i)).toBeInTheDocument();
+      });
+
+      // Unmount before timeout fires - should not warn about state update on unmounted component
+      unmount();
+
+      // Advance past the timeout - no React warning should occur
+      await act(async () => {
+        jest.advanceTimersByTime(2000);
+      });
+
+      jest.useRealTimers();
+    });
+
     it('handles copy failure gracefully', async () => {
       mockCopyToClipboard.mockResolvedValue(false);
       const user = userEvent.setup();
