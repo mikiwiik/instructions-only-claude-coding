@@ -19,9 +19,9 @@ import {
   useSyncToBackend,
   SyncToBackendFn,
   RateLimitState,
+  MAIN_LIST_ID,
 } from './useTodoSync';
 import { useTodoOperations } from './useTodoOperations';
-import { MAIN_LIST_ID } from './useTodoSync';
 import { buildListUrl } from '../lib/list-manager';
 import { logger } from '../lib/logger';
 
