@@ -108,7 +108,7 @@ jobs:
         fi
 
     - name: Jest Coverage Comment
-      uses: MishaKav/jest-coverage-comment@174f9cbf582b7cc2a7a3acce14dcfc8362e9d37f # v1.0.29
+      uses: MishaKav/jest-coverage-comment@c480abe47ef4f7bcd87bd8b5e6043fdfb1c4d270 # v1.0.32
       if: github.event_name == 'pull_request' && matrix.os == 'ubuntu-latest' && matrix.node-version == '22.x'
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
