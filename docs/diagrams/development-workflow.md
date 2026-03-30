@@ -10,7 +10,7 @@ graph TB
     Start([New Feature/Issue]) --> IssueCreate[Create GitHub Issue]
     IssueCreate --> IssueLabel[Add Priority & Complexity Labels]
     IssueLabel --> IssueProject[Add to GitHub Project]
-    IssueProject --> WorkOn["work-on Command"]
+    IssueProject --> WorkOn["/work-on Skill"]
 
     WorkOn --> UpdateStatus[Update Status: In Progress]
     UpdateStatus --> ArchDecision{Significant<br/>Architecture<br/>Decision?}
@@ -210,7 +210,7 @@ Issues move through statuses automatically via workflow automation:
 ```mermaid
 graph LR
     Icebox[Icebox<br/>Raw Ideas] --> Backlog[Backlog<br/>Triaged & Labeled]
-    Backlog --> WorkOn["work-on Command"]
+    Backlog --> WorkOn["/work-on Skill"]
     WorkOn --> InProgress[In Progress<br/>Active Development]
     InProgress --> PRCreate[Create PR]
     PRCreate --> Review[In Review<br/>CI + Approval]
@@ -303,7 +303,7 @@ graph LR
 
 - Create GitHub issue with priority/complexity labels
 - Add to GitHub Projects
-- Execute `/work-on` command to start workflow
+- Execute `/work-on` skill to start workflow
 - Create ADR if architectural decision needed
 - Use TodoWrite for complex changes requiring task breakdown
 

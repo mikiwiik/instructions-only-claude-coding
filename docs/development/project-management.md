@@ -52,7 +52,7 @@ scheduled releases—work flows continuously from backlog to production.
 - **On-Demand Releases**: Features are pushed to production immediately upon completion
 - **Priority-Driven**: Next work is selected based on priority labels and complexity assessment
 - **Just-in-Time Planning**: Issue selection and planning happens as current work completes
-- **Automated Status Tracking**: GitHub Projects Status/Lifecycle fields automatically updated via `/work-on` command
+- **Automated Status Tracking**: GitHub Projects Status/Lifecycle fields automatically updated via `/work-on` skill
 
 ### Work-in-Progress (WIP) Management
 
@@ -229,7 +229,7 @@ for comprehensive usage and integration guidelines.
 
 1. **Open**: Issue created and labeled
 2. **Triaged**: Priority and complexity assessed (Lifecycle: Icebox → Backlog)
-3. **Start Work**: `/work-on` command automatically sets Status="In Progress", Lifecycle="Active"
+3. **Start Work**: `/work-on` skill automatically sets Status="In Progress", Lifecycle="Active"
 4. **Implementation**: Work progresses (Status remains "In Progress" until PR merged)
 5. **Review**: Code review and PR approval
 6. **Closed**: PR merged, Status/Lifecycle automatically set to "Done"
