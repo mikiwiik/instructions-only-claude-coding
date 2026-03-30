@@ -214,6 +214,37 @@ needs comprehensive data (e.g., `/export-closed-issues` for reporting).
 | Read single issue | `issue_read` | `gh issue view` |
 | Project items (status, lifecycle) | ❌ Not available | `gh project item-list` |
 | Auth status/scopes | ❌ Not available | `gh auth status` |
+| Create pull request | `create_pull_request` | `gh pr create` |
+| Enable automerge | ❌ Not available | `gh pr merge --auto --rebase` |
+
+## Skills Migration
+
+### Commands → Skills
+
+The project is migrating from `.claude/commands/` (single-file) to `.claude/skills/` (directory-based). Skills
+offer additional capabilities:
+
+- **Dynamic context**: `` !`git branch --show-current` `` injects runtime state before Claude sees the prompt
+- **Supporting files**: Skills can include reference docs, templates, and scripts in the same directory
+- **Frontmatter**: `allowed-tools`, `context: fork`, `agent` for subagent execution
+
+**Migrated so far**:
+
+| Skill | Location | MCP Tools Used | `gh` CLI Fallbacks |
+| --- | --- | --- | --- |
+| `/work-on` | `.claude/skills/work-on/SKILL.md` | `issue_read` | `update-project-status.sh` (no MCP project tools) |
+| `/create-pr` | `.claude/skills/create-pr/SKILL.md` | `create_pull_request`, `issue_read` | `gh pr merge --auto --rebase` (no MCP automerge) |
+
+**Remaining as commands**: `/select-next-issue`, `/quick-wins`, `/export-closed-issues`, `/user-info` — these
+are simpler read-only commands that don't benefit from skills features.
+
+### Hybrid MCP/CLI Pattern
+
+When MCP doesn't cover the full workflow, use a hybrid approach:
+
+1. **MCP for reads and creates**: `issue_read`, `create_pull_request`, `get_me`
+2. **`gh` CLI for operations MCP lacks**: `gh pr merge --auto --rebase`, `gh project item-edit`
+3. **Document clearly**: Each skill specifies which tool is used for each step and why
 
 ## Troubleshooting
 
