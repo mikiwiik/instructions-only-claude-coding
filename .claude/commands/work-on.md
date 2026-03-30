@@ -3,7 +3,7 @@ description: "[DEPRECATED] Use /work-on skill instead — Start working on a spe
 argument-hint: [issue-number]
 ---
 
-> **⚠️ DEPRECATED**: This command has been migrated to a skill at `.claude/skills/work-on/SKILL.md`.
-> Use `/work-on` which now invokes the skill version with MCP support and full workflow compliance.
+> **⚠️ DEPRECATED**: This command has been replaced by the skill at `.claude/skills/work-on/SKILL.md`.
+> The skill version has MCP support and full workflow compliance.
 >
 > This file will be removed in a future cleanup.

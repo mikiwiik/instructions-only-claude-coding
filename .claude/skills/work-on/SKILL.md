@@ -9,30 +9,24 @@ Start working on GitHub issue #$ARGUMENTS following the project's development me
 
 ---
 
-## Phase 1: Issue Analysis & Project Status
+## Step 1: Issue Analysis & Project Status
 
 1. **Read issue** via MCP `mcp__github__issue_read` tool:
    - `owner`: `mikiwiik`, `repo`: `instructions-only-claude-coding`, `issue_number`: $ARGUMENTS
-   - Verify issue state is **OPEN**
-   - Confirm issue has **priority** and **complexity** labels
-   - Extract title for session naming
+   - Verify issue state is **OPEN** with **priority** and **complexity** labels
 
    > **Fallback**: If MCP fails, use `gh issue view $ARGUMENTS`
 
-2. **Check WIP limits**: Run `gh project item-list 1 --owner mikiwiik --format json | jq '[.items[] | select(.status == "In Progress")] | length'`
-   - If >1 issue already In Progress, **warn user** before proceeding
-   - Typical WIP: 1-2 issues at a time
-
-3. **Update GitHub Projects**:
+2. **Update GitHub Projects** (also checks WIP — warns if >1 issue already In Progress):
    - Run: `./.claude/scripts/update-project-status.sh $ARGUMENTS "In Progress"`
    - Continue with workflow even if this fails (graceful degradation)
 
-4. **Requirements traceability**: Check if issue references a requirement in
+3. **Requirements traceability**: Check if issue references a requirement in
    [docs/product/requirements.md](../../docs/product/requirements.md). Note the linked requirement for the PR later.
 
-5. **Session naming**: Suggest to the user: *"You may want to rename this session to `Issue #$ARGUMENTS — <title>`"*
+4. **Session naming**: Suggest to the user: *"You may want to rename this session to `Issue #$ARGUMENTS — <title>`"*
 
-## Phase 2: Task Planning
+## Step 2: Task Planning
 
 1. **Assessment**: Identify affected components and files from the issue requirements
 2. **Task breakdown**: Create TaskCreate task list (required for 3+ files, new features, architecture changes)
@@ -40,7 +34,7 @@ Start working on GitHub issue #$ARGUMENTS following the project's development me
    (`frontend-specialist`, `testing-specialist`, `quality-assurance`, `documentation-agent`)
 4. **Present plan**: Wait for user approval before implementation
 
-## Phase 3: Branch Setup & TDD Strategy
+## Step 3: Branch Setup & Implementation Strategy
 
 1. **Branch setup**:
    - If already on a feature branch for this issue, skip
@@ -60,27 +54,17 @@ Start working on GitHub issue #$ARGUMENTS following the project's development me
    test: add edge cases for <feature> (#$ARGUMENTS)
    ```
 
-4. **Commit requirements**:
-   - Every commit references issue number: `(#$ARGUMENTS)`
-   - AI attribution footer: `🤖 Generated with AI Agent` + `Co-Authored-By:` line
-   - Max 2 bullet items in commit body (commitlint parser bug workaround)
-   - Use conventional commit format (`feat`, `fix`, `test`, `refactor`, `docs`, etc.)
+4. **Commit requirements**: Follow [workflows.md](../../docs/core/workflows.md#atomic-commit-strategy)
+   — every commit references `(#$ARGUMENTS)`, includes AI attribution footer, max 2 bullet items.
 
-## Phase 4: Quality Guidance
+## Step 4: Completion
 
-**Before each commit**, run:
-```bash
-npm run lint && npm run type-check && npm test
-```
+**Before each commit**: `npm run lint && npm run type-check && npm test`
 
-**Standards to maintain**:
-- Zero ESLint errors/warnings
-- TypeScript strict mode (no `any` types)
-- Code complexity: cognitive ≤15, nesting ≤4, cyclomatic ≤15 (ADR-028)
-- Test coverage: 80%+ line, 100% for critical paths
-- Accessibility: WCAG 2.2 AA for UI features (44px touch targets, ARIA, keyboard nav)
+**Quality standards**: See [quality-standards.md](../../docs/core/quality-standards.md) — zero ESLint warnings,
+strict TypeScript, ADR-028 complexity limits, 80%+ coverage, WCAG 2.2 AA for UI features.
 
-**When implementation is complete**:
+**When done**:
 - Include `Closes #$ARGUMENTS` in the final commit
 - Push to remote: `git push -u origin <branch-name>`
 - Use `/create-pr` to create the pull request
