@@ -54,12 +54,15 @@ Start working on GitHub issue #$ARGUMENTS following the project's development me
    test: add edge cases for <feature> (#$ARGUMENTS)
    ```
 
-4. **Commit requirements**: Follow [workflows.md](../../docs/core/workflows.md#atomic-commit-strategy)
-   — every commit references `(#$ARGUMENTS)`, includes AI attribution footer, max 2 bullet items.
+4. **Atomic commits** with [conventional commit format](../../docs/core/workflows.md#atomic-commit-strategy):
+   - Each commit = one focused change, referencing `(#$ARGUMENTS)`
+   - Format: `type(scope): description (#$ARGUMENTS)` — see [allowed types](../../docs/core/workflows.md#atomic-commit-strategy)
+   - AI attribution footer: `🤖 Generated with AI Agent` + `Co-Authored-By:` line
+   - Max 2 bullet items in commit body (commitlint parser bug workaround)
 
 ## Step 4: Completion
 
-**Before each commit**: `npm run lint && npm run type-check && npm test`
+**Before each commit**: `npm run lint && npm run type-check && npm test && npx tsc --noEmit`
 
 **Quality standards**: See [quality-standards.md](../../docs/core/quality-standards.md) — zero ESLint warnings,
 strict TypeScript, ADR-028 complexity limits, 80%+ coverage, WCAG 2.2 AA for UI features.
