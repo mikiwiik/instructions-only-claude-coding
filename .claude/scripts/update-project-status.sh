@@ -138,7 +138,37 @@ gh project item-edit \
 }
 log_success "Updated Status to '$STATUS'"
 
+# Map Status to corresponding Lifecycle value and update if applicable
+LIFECYCLE_MAP_VALUE=""
+case "$STATUS" in
+    "In Progress") LIFECYCLE_MAP_VALUE="Active" ;;
+    "Done")        LIFECYCLE_MAP_VALUE="Done" ;;
+esac
+
+if [[ -n "$LIFECYCLE_MAP_VALUE" ]]; then
+    LIFECYCLE_FIELD_ID=$(echo "$FIELDS_DATA" | jq -r '.fields[] | select(.name == "Lifecycle") | .id // empty')
+    if [[ -n "$LIFECYCLE_FIELD_ID" ]]; then
+        LIFECYCLE_OPTIONS=$(echo "$FIELDS_DATA" | jq -r --arg name "Lifecycle" '.fields[] | select(.name == $name) | .options[]')
+        LIFECYCLE_OPTION_ID=$(echo "$LIFECYCLE_OPTIONS" | jq -r --arg val "$LIFECYCLE_MAP_VALUE" 'select(.name == $val) | .id // empty')
+        if [[ -n "$LIFECYCLE_OPTION_ID" ]]; then
+            log_info "Updating Lifecycle to '$LIFECYCLE_MAP_VALUE'..."
+            gh project item-edit \
+                --project-id "$PROJECT_ID" \
+                --id "$ITEM_ID" \
+                --field-id "$LIFECYCLE_FIELD_ID" \
+                --single-select-option-id "$LIFECYCLE_OPTION_ID" > /dev/null 2>&1 || {
+                log_warning "Failed to update Lifecycle field (non-fatal)"
+            }
+            log_success "Updated Lifecycle to '$LIFECYCLE_MAP_VALUE'"
+        else
+            log_warning "Lifecycle option '$LIFECYCLE_MAP_VALUE' not found (non-fatal)"
+        fi
+    else
+        log_warning "Lifecycle field not found in project (non-fatal)"
+    fi
+fi
+
 # Final success message
 echo ""
 log_success "GitHub Projects updated successfully!"
-log_info "Issue #$ISSUE_NUMBER: Status='$STATUS'"
+log_info "Issue #$ISSUE_NUMBER: Status='$STATUS'${LIFECYCLE_MAP_VALUE:+, Lifecycle='$LIFECYCLE_MAP_VALUE'}"
