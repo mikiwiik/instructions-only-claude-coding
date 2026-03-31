@@ -46,13 +46,11 @@ Implement GitHub issue #$ARGUMENTS following the project's development methodolo
    - If YES → write E2E visibility test BEFORE implementation
    - See [E2E Feature Template](../../docs/testing/e2e-feature-template.md)
 
-3. **TDD Red-Green-Refactor** commit pattern:
-   ```
-   test: add failing test for <feature> (#$ARGUMENTS)
-   feat: implement <feature> (#$ARGUMENTS)
-   refactor: optimize <feature> (#$ARGUMENTS)
-   test: add edge cases for <feature> (#$ARGUMENTS)
-   ```
+3. **TDD Red-Green-Simplify** cycle:
+   - **Red**: `test: add failing test for <feature> (#$ARGUMENTS)`
+   - **Green**: `feat: implement <feature> (#$ARGUMENTS)`
+   - **Simplify**: Run `/simplify` to review for reuse, quality, and efficiency — fix issues found
+   - **Edge cases**: `test: add edge cases for <feature> (#$ARGUMENTS)`
 
 4. **Atomic commits** with [conventional commit format](../../docs/core/workflows.md#atomic-commit-strategy):
    - Each commit = one focused change, referencing `(#$ARGUMENTS)`
