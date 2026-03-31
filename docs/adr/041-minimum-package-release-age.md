@@ -30,12 +30,12 @@ The typical timeline for supply chain attacks:
 The danger window is between steps 1 and 3. During this period, `npm audit` may not flag the
 package, and pinned versions don't help if the attacker targets a new version number.
 
-npm v11.10.0 introduced `minimum-release-age`, which refuses to install any package version
+npm v11.10.0 introduced `min-release-age`, which refuses to install any package version
 published less than N minutes ago. pnpm (v10.16+) and Yarn (v4.10+) offer equivalent support.
 
 ## Decision
 
-Add `minimum-release-age=10080` (7 days) to `.npmrc`.
+Add `min-release-age=10080` (7 days) to `.npmrc`.
 
 ### Why 7 Days
 
@@ -48,7 +48,7 @@ Add `minimum-release-age=10080` (7 days) to `.npmrc`.
 
 When a dependency must be installed before the 7-day window (e.g., urgent security patch):
 
-1. Use `npm install --minimum-release-age=0` for the specific install
+1. Use `npm install --min-release-age=0` for the specific install
 2. Document the override reason in the PR description
 3. Verify the package manually (check publisher, changelog, source)
 
