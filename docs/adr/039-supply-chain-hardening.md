@@ -44,8 +44,22 @@ Commit an `.npmrc` file with:
 - `ignore-scripts=true` — local parity with CI behavior
 - `audit-level=moderate` — default for local audit commands
 - `engine-strict=true` — enforce Node.js version constraints from `package.json`
+- `min-release-age=10080` — refuse packages published less than 7 days ago (see below)
 
-### 4. Apply least-privilege workflow permissions
+### 4. Enforce minimum package release age
+
+npm v11.10.0+ supports `min-release-age`, which refuses to install any package version published
+less than N minutes ago. Set to 10080 minutes (7 days) in `.npmrc`.
+
+**Why 7 days**: Most supply chain attacks are detected and removed within 24-48 hours. A 7-day
+window provides a comfortable margin. This project doesn't use bleeding-edge packages — all
+updates arrive via Dependabot PRs, which naturally add review latency.
+
+**Exception process**: When a dependency must be installed before the 7-day window (e.g., urgent
+security patch), use `npm install --min-release-age=0`, document the override in the PR, and
+verify the package manually.
+
+### 5. Apply least-privilege workflow permissions
 
 Move `pull-requests: write` from workflow-level to job-level in `build.yml`, granting it only to the
 build job that posts coverage comments. Other workflows already have properly scoped permissions.
@@ -58,6 +72,7 @@ build job that posts coverage comments. Other workflows already have properly sc
   `npm ci`
 - **High/critical vulnerabilities block merges** — forces resolution before code reaches main
 - **Consistent security posture** — `.npmrc` ensures local development matches CI defaults
+- **Eliminates zero-day supply chain risk** — 7-day release age skips the detection window
 - **Reduced blast radius** — least-privilege permissions limit damage from token compromise
 
 ### Negative
