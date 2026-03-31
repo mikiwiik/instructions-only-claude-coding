@@ -63,49 +63,53 @@ All input fields and textareas MUST use at least 16px font size:
 
 ### Edge-to-Edge Layout Principle
 
-On mobile devices (< 640px), maximize usable content area by removing unnecessary padding and using
+On mobile devices (< 768px), maximize usable content area by removing unnecessary padding and using
 borders for visual separation.
 
 ### Responsive Padding Patterns
+
+> **Note**: This app uses a two-tier responsive design with `md:` (768px) as the
+> breakpoint — not `sm:` (640px). See
+> [Layout and Spacing Reference](layout-and-spacing-reference.md) for full details.
 
 #### Page Container
 
 ```tsx
 // Remove outer padding on mobile, add on desktop
-<div className="px-0 sm:px-6 py-6 sm:py-8">
+<div className="max-w-sm md:max-w-[800px] lg:max-w-4xl mx-auto px-0 md:px-6 py-6 md:py-8">
 ```
 
 #### Card/Section Components
 
 ```tsx
 // Edge-to-edge on mobile, contained on desktop
-<main className="p-0 sm:p-5 md:p-6 border-x-0 sm:border-x">
+<main className="p-0 md:p-6 border-x-0 md:border-x">
 ```
 
 #### List Items
 
 ```tsx
 // Compact on mobile, spacious on desktop
-<li className="p-2 sm:p-4">
+<li className="p-2 md:p-4">
 ```
 
 #### List Spacing
 
 ```tsx
 // No spacing on mobile (borders separate), spacing on desktop
-<ul className="space-y-0 sm:space-y-3">
+<ul className="space-y-0 md:space-y-3">
 ```
 
 ### Border vs Spacing Strategy
 
-#### Mobile (< 640px)
+#### Mobile (< 768px)
 
 - Use `space-y-0` (no vertical spacing between items)
 - Use `border-t` on items (except first) for visual separation
 - Use `border-x-0` (no horizontal borders)
 - Result: Clean edge-to-edge iOS-native feel
 
-#### Desktop (≥ 640px)
+#### Desktop (≥ 768px)
 
 - Use `space-y-3` (12px spacing between items)
 - Use full borders (`border`) with rounded corners
