@@ -1,4 +1,3 @@
-/* eslint-env jest */
 /**
  * Manual mock for @upstash/ratelimit
  *
