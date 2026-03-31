@@ -44,6 +44,8 @@
     - **GitHub Actions**: SHA-pinned with version comment (e.g., `actions/checkout@abc123 # v4`)
     - **Enforcement**: Pre-commit hooks and CI validation block violations
     - **Updates**: Via Dependabot PRs only (manages both npm and github-actions ecosystems)
+    - **🚨 NEVER delete package-lock.json**: Always use `npm install` to update incrementally — deleting and
+      regenerating drops integrity (SHA) hashes for cached packages, silently degrading supply chain security
 12. **🚨 PR APPROVAL PROTOCOL**: After creating PR, enable automerge with `--rebase` (mandatory per Principle #7), then
     report status to user - NEVER use `--admin`, `--force`, or bypass flags without explicit permission - task completion
     means PR merged and verified with `gh issue view #X`, NOT just PR created (see [PR Workflow](docs/core/workflows.md#pull-request-workflow))
