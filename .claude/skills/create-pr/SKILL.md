@@ -1,5 +1,5 @@
 ---
-description: Create pull request following the agreed workflow in docs/core/workflows.md
+description: Create PR, enable automerge, verify merge, and clean up local branches
 ---
 
 Create a pull request for the current feature branch following the mandatory PR workflow.
