@@ -232,7 +232,7 @@ offer additional capabilities:
 
 | Skill | Location | MCP Tools Used | `gh` CLI Fallbacks |
 | --- | --- | --- | --- |
-| `/work-on` | `.claude/skills/work-on/SKILL.md` | `issue_read` | `update-project-status.sh` (no MCP project tools) |
+| `/implement` | `.claude/skills/implement/SKILL.md` | `issue_read` | `update-project-status.sh` (no MCP project tools) |
 | `/create-pr` | `.claude/skills/create-pr/SKILL.md` | `create_pull_request`, `issue_read` | `gh pr merge --auto --rebase` (no MCP automerge) |
 
 **Remaining as commands**: `/select-next-issue`, `/quick-wins`, `/export-closed-issues`, `/user-info` — these

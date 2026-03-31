@@ -1,9 +1,9 @@
 ---
-description: Start working on a specific GitHub issue with full workflow setup
+description: Implement a GitHub issue — analysis, planning, TDD, and PR-ready delivery
 argument-hint: [issue-number]
 ---
 
-Start working on GitHub issue #$ARGUMENTS following the project's development methodology.
+Implement GitHub issue #$ARGUMENTS following the project's development methodology.
 
 **Current branch**: !`git branch --show-current`
 

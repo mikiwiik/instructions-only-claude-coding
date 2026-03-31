@@ -394,7 +394,7 @@ gh issue view #XXX
 
 **🚨 CRITICAL WORKFLOW**: Follow exact sequence to prevent violations:
 
-1. **Start Work** — Use `/work-on <issue-number>` skill which automatically:
+1. **Start Work** — Use `/implement <issue-number>` skill which automatically:
    - Reads issue via MCP, verifies OPEN state and labels
    - Sets Status: Todo → **In Progress**, Lifecycle: Icebox/Backlog → **Active**
    - Creates task plan and feature branch
@@ -419,18 +419,18 @@ gh issue view #XXX
 
 **Status Field** (tracks current work state):
 
-- **Todo** → **In Progress**: When `/work-on` starts (automated)
+- **Todo** → **In Progress**: When `/implement` starts (automated)
 - **In Progress** → **Done**: When PR merged (automated via GitHub Projects workflow)
 
 **Lifecycle Field** (tracks idea maturity):
 
 - **Icebox** → **Backlog**: When idea is triaged and labeled (manual)
-- **Backlog** → **Active**: When work begins via `/work-on` (automated)
+- **Backlog** → **Active**: When work begins via `/implement` (automated)
 - **Active** → **Done**: When issue closed via PR merge (automated)
 
 **Automation**:
 
-- `/work-on` skill automatically sets Status="In Progress" and Lifecycle="Active"
+- `/implement` skill automatically sets Status="In Progress" and Lifecycle="Active"
 - PR merge automatically sets Status="Done" and Lifecycle="Done" (GitHub Projects workflow)
 - Status field updates are fully automated - no manual updates needed during workflow
 

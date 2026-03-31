@@ -211,7 +211,7 @@ and follow TDD with branch-based development.
 **Issue Management**: Priority labels (🔴 critical → 🟢 low) and complexity labels (🟢 minimal → 🔴 epic) guide
 development planning. See [project management guide](docs/development/project-management.md).
 
-**Custom Skills & Commands**: The project includes custom skills (`/work-on`, `/create-pr` in `.claude/skills/`) and
+**Custom Skills & Commands**: The project includes custom skills (`/implement`, `/create-pr` in `.claude/skills/`) and
 commands (`/select-next-issue`, `/quick-wins`, `/export-closed-issues` in `.claude/commands/`) for enhanced workflow.
 
 ## Features
