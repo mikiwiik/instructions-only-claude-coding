@@ -117,7 +117,7 @@ export default function TodoPageLayout({
   if (isLoading) {
     return (
       <div className='min-h-screen bg-background safe-area-inset'>
-        <div className='max-w-sm md:max-w-2xl lg:max-w-4xl mx-auto px-0 md:px-6 py-6 md:py-8'>
+        <div className='max-w-sm md:max-w-[800px] lg:max-w-4xl mx-auto px-0 md:px-6 py-6 md:py-8'>
           <PageHeader />
           <output
             className='flex items-center justify-center py-12'
@@ -136,7 +136,7 @@ export default function TodoPageLayout({
 
   return (
     <div className='min-h-screen bg-background safe-area-inset'>
-      <div className='max-w-sm md:max-w-2xl lg:max-w-4xl mx-auto px-0 md:px-6 py-6 md:py-8'>
+      <div className='max-w-sm md:max-w-[800px] lg:max-w-4xl mx-auto px-0 md:px-6 py-6 md:py-8'>
         <PageHeader />
 
         {notice}

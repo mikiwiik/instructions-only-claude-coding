@@ -363,12 +363,15 @@ Responsive spacing values showing how layouts differ between mobile and desktop:
 
 **File**: `app/page.tsx`
 
-| Property           | Mobile (default)          | Desktop (≥768px) |
-| ------------------ | ------------------------- | ---------------- |
-| Horizontal padding | `px-0` (0px edge-to-edge) | `px-6` (24px)    |
-| Vertical padding   | `py-6` (24px)             | `py-8` (32px)    |
+| Property           | Mobile (default)          | Medium (≥768px)         | Large (≥1024px)  |
+| ------------------ | ------------------------- | ----------------------- | ---------------- |
+| Max width          | `max-w-sm` (384px)        | `max-w-[800px]` (800px) | `max-w-4xl` (896px) |
+| Horizontal padding | `px-0` (0px edge-to-edge) | `px-6` (24px)           | (same)           |
+| Vertical padding   | `py-6` (24px)             | `py-8` (32px)           | (same)           |
 
-**Purpose**: Edge-to-edge on mobile for maximum content area; contained on desktop
+**Purpose**: Edge-to-edge on mobile for maximum content area; contained on desktop.
+The 800px medium max-width ensures TodoFilter buttons fit in a single row at the
+`md:` breakpoint (needs ~688px content width)
 
 ### 2. Header
 
