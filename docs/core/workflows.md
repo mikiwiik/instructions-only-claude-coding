@@ -394,40 +394,43 @@ gh issue view #XXX
 
 **🚨 CRITICAL WORKFLOW**: Follow exact sequence to prevent violations:
 
-1. **Start Work** - Update GitHub Projects status (automated via `/work-on`)
-   - Status: Todo → **In Progress**
-   - Lifecycle: Icebox/Backlog → **Active**
-2. **Complete Implementation** - Code, tests, documentation
-3. **Run Quality Checks** - Ensure all tests pass, lint, typecheck
-4. **Verify Test Coverage** - All tests in version control and passing
-5. **Commit for Issue Closure** - Local commit with "Closes #X"
-6. **Push to Remote** - `git push -u origin feature/XX-description`
-7. **Verify Push Success** - Confirm remote branch tracking and all tests pushed
-8. **Create PR** - Always required by methodology (ONLY after all tests pass and pushed)
-   - **🚨 REQUIRED**: Include "Closes #X" in PR description for automatic issue closure
-9. **🚨 REQUIRED**: Enable automerge: `gh pr merge --auto --rebase`
-10. **Wait for Merge** - CI passes + reviewer approval (automerge handles the merge)
-11. **Verify Issue Closure** - Use `gh issue view #X` to confirm
-    - Status automatically set to **Done** (via GitHub Projects automation)
-    - Lifecycle automatically set to **Done** (via GitHub Projects automation)
-12. **Confirm Completion** - All requirements satisfied
+1. **Start Work** — Use `/implement <issue-number>` skill which automatically:
+   - Reads issue via MCP, verifies OPEN state and labels
+   - Sets Status: Todo → **In Progress**, Lifecycle: Icebox/Backlog → **Active**
+   - Creates task plan and feature branch
+2. **Complete Implementation** — Code, tests, documentation (TDD, atomic commits)
+3. **Run Quality Checks** — `npm run lint && npm run type-check && npm test`
+4. **Verify Test Coverage** — All tests in version control and passing
+5. **Commit for Issue Closure** — Local commit with "Closes #X"
+6. **Push to Remote** — `git push -u origin feature/XX-description`
+7. **Create PR** — Use `/create-pr` skill which automatically:
+   - Creates PR via MCP with "Closes #X" in body
+   - Enables automerge: `gh pr merge --auto --rebase`
+   - Reports PR URL and status
+8. **Wait for Merge** — CI passes + reviewer approval (automerge handles the merge)
+9. **Verify Issue Closure** — `/create-pr` verifies via MCP that issue is CLOSED
+10. **Post-Merge Cleanup** — `/create-pr` cleans up local branches:
+    - `git checkout main && git pull`
+    - `git branch -d <feature-branch>` (safe delete)
+    - `git remote prune origin`
+11. **Confirm Completion** — All requirements satisfied
 
 ### GitHub Projects Status Transitions
 
 **Status Field** (tracks current work state):
 
-- **Todo** → **In Progress**: When `/work-on` starts (automated)
+- **Todo** → **In Progress**: When `/implement` starts (automated)
 - **In Progress** → **Done**: When PR merged (automated via GitHub Projects workflow)
 
 **Lifecycle Field** (tracks idea maturity):
 
 - **Icebox** → **Backlog**: When idea is triaged and labeled (manual)
-- **Backlog** → **Active**: When work begins via `/work-on` (automated)
+- **Backlog** → **Active**: When work begins via `/implement` (automated)
 - **Active** → **Done**: When issue closed via PR merge (automated)
 
 **Automation**:
 
-- `/work-on` command automatically sets Status="In Progress" and Lifecycle="Active"
+- `/implement` skill automatically sets Status="In Progress" and Lifecycle="Active"
 - PR merge automatically sets Status="Done" and Lifecycle="Done" (GitHub Projects workflow)
 - Status field updates are fully automated - no manual updates needed during workflow
 

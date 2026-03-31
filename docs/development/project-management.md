@@ -52,7 +52,7 @@ scheduled releases—work flows continuously from backlog to production.
 - **On-Demand Releases**: Features are pushed to production immediately upon completion
 - **Priority-Driven**: Next work is selected based on priority labels and complexity assessment
 - **Just-in-Time Planning**: Issue selection and planning happens as current work completes
-- **Automated Status Tracking**: GitHub Projects Status/Lifecycle fields automatically updated via `/work-on` command
+- **Automated Status Tracking**: GitHub Projects Status/Lifecycle fields automatically updated via `/implement` skill
 
 ### Work-in-Progress (WIP) Management
 
@@ -82,7 +82,7 @@ scheduled releases—work flows continuously from backlog to production.
    - Complexity (prefer quick wins: high priority + simple/minimal complexity)
    - Dependencies (blocking issues take precedence)
    - Context switching costs (related work may be more efficient)
-4. **Start implementation**: Use `/work-on <issue-number>` which automatically:
+4. **Start implementation**: Use `/implement <issue-number>` which automatically:
    - Sets GitHub Projects Status to "In Progress"
    - Sets Lifecycle to "Active"
    - Begins workflow (issue analysis, task planning, branch setup)
@@ -229,12 +229,12 @@ for comprehensive usage and integration guidelines.
 
 1. **Open**: Issue created and labeled
 2. **Triaged**: Priority and complexity assessed (Lifecycle: Icebox → Backlog)
-3. **Start Work**: `/work-on` command automatically sets Status="In Progress", Lifecycle="Active"
+3. **Start Work**: `/implement` skill automatically sets Status="In Progress", Lifecycle="Active"
 4. **Implementation**: Work progresses (Status remains "In Progress" until PR merged)
 5. **Review**: Code review and PR approval
 6. **Closed**: PR merged, Status/Lifecycle automatically set to "Done"
 
-**Note**: GitHub Projects Status and Lifecycle fields are automatically updated at workflow start (via `/work-on`)
+**Note**: GitHub Projects Status and Lifecycle fields are automatically updated at workflow start (via `/implement`)
 and completion (via PR merge). No manual status updates needed - workflow is fully automated.
 
 ### Issue Linking and Tracking
@@ -596,7 +596,7 @@ Document dependencies in sub-issue descriptions:
 **Daily**:
 
 1. Check Board view for In Progress items
-2. Use `/work-on <issue-number>` to start new work (auto-updates Status/Lifecycle)
+2. Use `/implement <issue-number>` to start new work (auto-updates Status/Lifecycle)
 3. When PR merges, Status/Lifecycle automatically set to "Done"
 4. Use Backlog view or `/select-next-issue` to choose next work
 
