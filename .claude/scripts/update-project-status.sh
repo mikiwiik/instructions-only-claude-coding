@@ -152,14 +152,15 @@ if [[ -n "$LIFECYCLE_MAP_VALUE" ]]; then
         LIFECYCLE_OPTION_ID=$(echo "$LIFECYCLE_OPTIONS" | jq -r --arg val "$LIFECYCLE_MAP_VALUE" 'select(.name == $val) | .id // empty')
         if [[ -n "$LIFECYCLE_OPTION_ID" ]]; then
             log_info "Updating Lifecycle to '$LIFECYCLE_MAP_VALUE'..."
-            gh project item-edit \
+            if gh project item-edit \
                 --project-id "$PROJECT_ID" \
                 --id "$ITEM_ID" \
                 --field-id "$LIFECYCLE_FIELD_ID" \
-                --single-select-option-id "$LIFECYCLE_OPTION_ID" > /dev/null 2>&1 || {
+                --single-select-option-id "$LIFECYCLE_OPTION_ID" > /dev/null 2>&1; then
+                log_success "Updated Lifecycle to '$LIFECYCLE_MAP_VALUE'"
+            else
                 log_warning "Failed to update Lifecycle field (non-fatal)"
-            }
-            log_success "Updated Lifecycle to '$LIFECYCLE_MAP_VALUE'"
+            fi
         else
             log_warning "Lifecycle option '$LIFECYCLE_MAP_VALUE' not found (non-fatal)"
         fi
