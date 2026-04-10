@@ -10,7 +10,7 @@ graph TB
     Start([New Feature/Issue]) --> IssueCreate[Create GitHub Issue]
     IssueCreate --> IssueLabel[Add Priority & Complexity Labels]
     IssueLabel --> IssueProject[Add to GitHub Project]
-    IssueProject --> Implement["/implement Skill"]
+    IssueProject --> Implement["implement Skill"]
 
     Implement --> UpdateStatus[Update Status: In Progress]
     UpdateStatus --> ArchDecision{Significant<br/>Architecture<br/>Decision?}
@@ -210,7 +210,7 @@ Issues move through statuses automatically via workflow automation:
 ```mermaid
 graph LR
     Icebox[Icebox<br/>Raw Ideas] --> Backlog[Backlog<br/>Triaged & Labeled]
-    Backlog --> Implement["/implement Skill"]
+    Backlog --> Implement["implement Skill"]
     Implement --> InProgress[In Progress<br/>Active Development]
     InProgress --> PRCreate[Create PR]
     PRCreate --> Review[In Review<br/>CI + Approval]

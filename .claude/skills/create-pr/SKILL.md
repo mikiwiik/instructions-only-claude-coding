@@ -23,7 +23,12 @@ Use `mcp__github__create_pull_request` tool:
 - `owner`: `mikiwiik`, `repo`: `instructions-only-claude-coding`
 - `title`: Descriptive title following conventional commit format
 - `head`: Current branch name, `base`: `main`
-- `body`: Include `Closes #XX` for automatic issue closure
+- `body`: Use this structure:
+  ```
+  ## Summary
+  [Brief description]
+  Closes #XX
+  ```
 
 > **Fallback**: If MCP fails, use `gh pr create --title "..." --body "..."`.
 

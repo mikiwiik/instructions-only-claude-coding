@@ -17,7 +17,7 @@ Implement GitHub issue #$ARGUMENTS following the project's development methodolo
 
    > **Fallback**: If MCP fails, use `gh issue view $ARGUMENTS`
 
-2. **Update GitHub Projects** (also checks WIP — warns if >1 issue already In Progress):
+2. **Update GitHub Projects**:
    - Run: `./.claude/scripts/update-project-status.sh $ARGUMENTS "In Progress"`
    - Continue with workflow even if this fails (graceful degradation)
 
@@ -60,7 +60,7 @@ Implement GitHub issue #$ARGUMENTS following the project's development methodolo
 
 ## Step 4: Completion
 
-**Before each commit**: `npm run lint && npm run type-check && npm test && npx tsc --noEmit`
+**Before each commit**: `npm run lint && npm run type-check && npm test`
 
 **Quality standards**: See [quality-standards.md](../../docs/core/quality-standards.md) — zero ESLint warnings,
 strict TypeScript, ADR-028 complexity limits, 80%+ coverage, WCAG 2.2 AA for UI features.
