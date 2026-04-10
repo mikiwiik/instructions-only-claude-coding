@@ -211,8 +211,8 @@ and follow TDD with branch-based development.
 **Issue Management**: Priority labels (🔴 critical → 🟢 low) and complexity labels (🟢 minimal → 🔴 epic) guide
 development planning. See [project management guide](docs/development/project-management.md).
 
-**Custom Slash Commands**: The project includes custom slash commands (`/work-on`, `/select-next-issue`, `/quick-wins`,
-`/create-pr`, `/export-closed-issues`) for enhanced workflow. Commands are defined in `.claude/commands/`.
+**Custom Skills & Commands**: The project includes custom skills (`/implement`, `/create-pr` in `.claude/skills/`) and
+commands (`/select-next-issue`, `/quick-wins`, `/export-closed-issues` in `.claude/commands/`) for enhanced workflow.
 
 ## Features
 
