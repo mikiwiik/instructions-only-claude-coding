@@ -81,6 +81,9 @@ function PageFooter() {
   );
 }
 
+const PAGE_CONTAINER_CLASSES =
+  'max-w-sm md:max-w-[800px] lg:max-w-4xl mx-auto px-0 md:px-6 py-6 md:py-8';
+
 export default function TodoPageLayout({
   todos,
   allTodos,
@@ -117,7 +120,7 @@ export default function TodoPageLayout({
   if (isLoading) {
     return (
       <div className='min-h-screen bg-background safe-area-inset'>
-        <div className='max-w-sm md:max-w-2xl lg:max-w-4xl mx-auto px-0 md:px-6 py-6 md:py-8'>
+        <div className={PAGE_CONTAINER_CLASSES}>
           <PageHeader />
           <output
             className='flex items-center justify-center py-12'
@@ -136,7 +139,7 @@ export default function TodoPageLayout({
 
   return (
     <div className='min-h-screen bg-background safe-area-inset'>
-      <div className='max-w-sm md:max-w-2xl lg:max-w-4xl mx-auto px-0 md:px-6 py-6 md:py-8'>
+      <div className={PAGE_CONTAINER_CLASSES}>
         <PageHeader />
 
         {notice}
