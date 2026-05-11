@@ -28,24 +28,24 @@
     "audit:production": "npm audit --production --audit-level=moderate"
   },
   "dependencies": {
-    "@atlaskit/pragmatic-drag-and-drop": "1.7.9",
+    "@atlaskit/pragmatic-drag-and-drop": "1.8.1",
     "@atlaskit/pragmatic-drag-and-drop-hitbox": "1.1.0",
-    "@sentry/nextjs": "10.46.0",
-    "@tailwindcss/postcss": "4.2.2",
+    "@sentry/nextjs": "10.52.0",
+    "@tailwindcss/postcss": "4.3.0",
     "@upstash/ratelimit": "2.0.8",
-    "@upstash/redis": "1.37.0",
+    "@upstash/redis": "1.38.0",
     "@vercel/speed-insights": "1.3.1",
     "lexorank": "1.0.5",
     "lucide-react": "0.562.0",
-    "next": "16.2.1",
+    "next": "16.2.6",
     "pino": "10.3.1",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
     "react-markdown": "10.1.0",
     "remark-breaks": "4.0.0",
     "remark-gfm": "4.0.1",
     "tiny-invariant": "1.3.3",
-    "zod": "4.3.6"
+    "zod": "4.4.3"
   },
   "engines": {
     "node": ">=22.0.0",
