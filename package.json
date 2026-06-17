@@ -30,7 +30,7 @@
   "dependencies": {
     "@atlaskit/pragmatic-drag-and-drop": "1.7.9",
     "@atlaskit/pragmatic-drag-and-drop-hitbox": "1.1.0",
-    "@sentry/nextjs": "10.46.0",
+    "@sentry/nextjs": "10.58.0",
     "@tailwindcss/postcss": "4.2.2",
     "@upstash/ratelimit": "2.0.8",
     "@upstash/redis": "1.37.0",
